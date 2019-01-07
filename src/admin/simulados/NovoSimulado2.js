@@ -16,7 +16,17 @@ const tableData = [
     {id: 7, description: 'Tecnologia em Processos Químicos'},
     {id: 8, description: 'Tecnologia em Produção Multimídia'},
     {id: 9, description: 'Tecnologia em Saneamento Ambiental'},
-    {id: 10, description: 'Química'}
+    {id: 10, description: 'Química'},
+    {id: 11, description: 'Tecnologia em Alimentos'},
+    {id: 12, description: 'Tecnologia em Construção de Edifícios'},
+    {id: 13, description: 'Tecnologia em Fabricação Mecânica'},
+    {id: 14, description: 'Tecnologia em Fotografia'},
+    {id: 15, description: 'Tecnologia em Gastronomia'},
+    {id: 16, description: 'Tecnologia em Jogos Digitais'},
+    {id: 17, description: 'Tecnologia em Processos Químicos'},
+    {id: 18, description: 'Tecnologia em Produção Multimídia'},
+    {id: 19, description: 'Tecnologia em Saneamento Ambiental'},
+    {id: 20, description: 'Química'}
 ]
 
 class NovoSimulado2 extends Component {

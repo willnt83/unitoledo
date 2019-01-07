@@ -233,7 +233,7 @@ class NovoSimulado4 extends Component {
                         </Col>
                     </Row>*/}
                     <Row type="flex">
-                        <Col span={8}>
+                        {/*<Col span={8}>
                             <Card
                                 title="Filtro de Cursos"
                                 bordered={false}
@@ -277,8 +277,8 @@ class NovoSimulado4 extends Component {
                                     </Select>
                                 </FormItem>
                             </Card>
-                        </Col>
-                        <Col span={16}>
+                        </Col>*/}
+                        <Col span={24}>
                             <Card
                                 title="Questões Adicionadas: 4"
                                 bordered={false}
@@ -307,14 +307,21 @@ class NovoSimulado4 extends Component {
                                 }}
                             >
                                 <Row>
-                                    <Col span="12" align="start">
+                                    <Col span={12} align="start">
                                         <Link to="/admin/simulados/novo/step-3"><Button type="primary">Anterior</Button></Link>
                                     </Col>
-                                    <Col span="12" align="end">
+                                    <Col span={12} align="end">
                                         <Button
                                             type="primary"
                                             onClick={this.handleFinalizarButton}
                                             style={{backgroundColor: '#73d13d', borderColor: '#73d13d'}}
+                                        >
+                                            Salvar Como Rascunho
+                                        </Button>
+                                        <Button
+                                            type="primary"
+                                            onClick={this.handleFinalizarButton}
+                                            style={{marginLeft: '30px', backgroundColor: '#73d13d', borderColor: '#73d13d'}}
                                         >
                                             Finalizar
                                         </Button>
