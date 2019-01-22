@@ -1,5 +1,5 @@
 import React, { Component } from "react"
-import { Layout, Row, Col, Button, Card, Form, Input, TimePicker, DatePicker, Select } from "antd"
+import { Layout, Row, Col, Button, Card, Form, Input, TimePicker, DatePicker } from "antd"
 import { Link } from "react-router-dom"
 import SimuladoSteps from './SimuladoSteps'
 import { connect } from 'react-redux'
@@ -12,6 +12,7 @@ moment.locale('pt-br');
 
 const { Content } = Layout
 const FormItem = Form.Item
+/*
 const Option = Select.Option
 
 const simNaoOptions = [
@@ -24,6 +25,7 @@ const simNaoOptions = [
 		description: "Não"
 	}
 ]
+
 
 const cursos = [
 	{
@@ -43,6 +45,7 @@ const cursos = [
 		description: "Curso 4"
 	}
 ]
+*/
 
 class NovoSimulado4 extends Component {
     constructor(props) {

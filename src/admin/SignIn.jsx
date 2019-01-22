@@ -74,23 +74,31 @@ class SignIn extends Component {
 		});
 	}
 	
-	handleSubmit(event) {
-		axios.post(`http://localhost:5000/api/login/user`, {
-			usuario: this.state.usuario,
-			senha: this.state.senha
-		})
-		.then(res => {
-			if(res.data === '{Status: success}') { // Alterar
-				this.setState({'logado': true});
-			}
-			else
-				this.setState({invalidLogin: 'Usuário ou senha inválidos!'});
 	
-		})
+	
+
+
+
+	handleSubmit(event) {
+		let url = 'https://servicos.toledo.br/sistema/login';
+		let config = {
+			headers: {
+				'Content-Type': 'application/x-www-form-urlencoded'
+			}
+		}
+		let data = {
+			username: 'appprova',
+			password: 'qw90PO@!'
+		}
+
+		axios.post(url, data, config)
+		.then(res => {
+			console.log('res', res)
+			})
 		.catch(error =>{
 				console.log(error)
 		})
-    event.preventDefault();
+		event.preventDefault();
 	}
 	
 	render () {
