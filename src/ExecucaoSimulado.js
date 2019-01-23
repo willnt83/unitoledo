@@ -58,8 +58,9 @@ class ExecucaoSimulado extends Component {
                         </Col>
                     </Row>
                     <Row style={{ marginTop: 30 }}>
-                        <Col span="12" align="begining"><Button type="primary"><Icon type="left" />Anterior</Button></Col>
-                        <Col span="12" align="end"><Button type="success" style={{color: '#fff', backgroundColor: '#73d13d', borderColor: '#73d13d'}}>Próximo<Icon type="right" /></Button></Col>
+                        <Col span="8" align="begining"><Button type="primary"><Icon type="left" />Anterior</Button></Col>
+                        <Col span="8" align="center"><Button type="primary"><Icon type="save" />Responder</Button></Col>
+                        <Col span="8" align="end"><Button type="success" style={{color: '#fff', backgroundColor: '#73d13d', borderColor: '#73d13d'}}>Próximo<Icon type="right" /></Button></Col>
                     </Row>
                 </Content>
 
