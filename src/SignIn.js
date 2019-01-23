@@ -18,22 +18,11 @@ class SignIn extends Component {
 			senha: '',
 			grupos: [],
 			entrarButtonLoading: false,
-			enviarButtonLoading: false
+			enviarButtonLoading: false,
+			responseLogin: null
 		};
 	}
 
-	/*
-	handleChange(event) {
-		const target = event.target;
-		const name = target.name;
-		const value = target.value;
-		
-		this.setState({
-			[name]: value
-		});
-	}
-	*/
-	
 	handleLoginSubmit = (event) => {
 		event.preventDefault();
 
@@ -43,16 +32,31 @@ class SignIn extends Component {
 				/*
 				usuario: values.userName,
 				senha: values.password
+				
+
+				var config = {
+					withCredentials: true
+				};
 				*/
+
 				axios.post(`http://localhost:5000/api/login/user`, {
 					usuario: 'appprova',
 					senha: 'qw90PO@!'
-				}, {})
+				})
 				.then(res => {
-					console.log('axios request header', axios.default.header)
-					console.log('res', res)
-					console.log('xxxxxx', res.headers['Access-Token']);
+					console.log('cookie', res.headers['cookie'])
+					console.log('Token', res.headers['access-token'])
+					console.log('data', res.data)
+
+					if(res.headers['access-token'])
+						this.props.setToken(res.headers['access-token'])
+					if(res.headers['cookie'])
+						this.props.setCookie(res.headers['cookie'])
+
 					if(res.data){
+						this.setState({
+							responseLogin: res.data.grupos
+						})
 						var grupos = []
 						var i = 0
 						res.data.grupos.forEach((grupo) => {
@@ -67,7 +71,6 @@ class SignIn extends Component {
 							step: 2
 						})
 						//this.props.history.push('/alunos')
-
 					}
 					else
 						console.log('login invalido')
@@ -87,12 +90,40 @@ class SignIn extends Component {
 
 	handleGrupoSubmit = (event) => {
 		event.preventDefault();
-
+		this.setState({ enviarButtonLoading : true})
 		this.props.form.validateFieldsAndScroll((err, values) => {
             if (!err) {
-				console.log('values', values)
+				var contexto = ''
+				console.log('values', values.grupo)
+				console.log('state responseLogin', this.state.responseLogin)
+				this.state.responseLogin.forEach(grupo => {
+					if(grupo.tipo === values.grupo){
+						if(grupo.contextos.length > 1){
+							contexto = grupo.contextos[(grupo.contextos.length - 1)]
+						}
+						else{
+							contexto = grupo.contextos[0]
+						}
+					}
+				})
+
+				var config = {
+					header: {
+						Authorization: this.props.token,
+						Cookie: this.props.cookie
+					}
+				}
+
+				axios.post(`http://localhost:5000/api/contexto`, contexto, config)
+				.then(res => {
+					console.log('response contexto', res.data)
+					this.setState({ enviarButtonLoading : false})
+				})
+				.catch(error =>{
+					console.log(error)
+					this.setState({ enviarButtonLoading : false})
+				})
 			}
-				
         })
 	}
 
@@ -168,6 +199,7 @@ class SignIn extends Component {
 				>
 					<Row>
 						<Col span={24} align="center">
+							{this.state.contexto}
 							<Card
 								style={{ width: 400, minHeight: 461, marginTop: 50 }}
 							>
@@ -219,13 +251,18 @@ class SignIn extends Component {
 
 const MapStateToProps = (state) => {
 	return {
-		logged: state.logged
+		logged: state.logged,
+		token: state.token,
+		cookie: state.cookie
 	}
 }
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        setLogged: (logged) => { dispatch({ type: 'SET_LOGGED', logged }) }
+		setLogged: (logged) => { dispatch({ type: 'SET_LOGGED', logged }) },
+		setToken: (token) => { dispatch({ type: 'SET_TOKEN', token }) },
+		setCookie: (cookie) => { dispatch({ type: 'SET_COOKIE', cookie }) },
+		
     }
 }
 

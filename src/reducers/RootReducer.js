@@ -1,5 +1,7 @@
 const initState = {
     logged: 'inicio',
+    token: '',
+    cookie: '',
     pageTitle: [],
     habilidades: [],
     conteudos: [],
@@ -12,8 +14,19 @@ const initState = {
 }
 
 const RootReducer = (state = initState, action) => {
-    if(action.type === 'SET_LOGGED'){
-        console.log('reducer SET_LOGADO')
+    if(action.type === 'SET_TOKEN'){
+        return {
+            ...state,
+            token: action.token
+        }
+    }
+    else if(action.type === 'SET_COOKIE'){
+        return {
+            ...state,
+            cookie: action.cookie
+        }
+    }
+    else if(action.type === 'SET_LOGGED'){
         return {
             ...state,
             logged: action.logged
