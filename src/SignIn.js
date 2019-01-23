@@ -108,9 +108,9 @@ class SignIn extends Component {
 				})
 
 				var config = {
-					header: {
-						Authorization: this.props.token,
-						Cookie: this.props.cookie
+					headers: {
+						'Authorization': this.props.token,
+						'CookieZ': this.props.cookie
 					}
 				}
 

@@ -49,11 +49,11 @@ class ExecucaoSimulado extends Component {
                     <Row>
                         <Col span="24">
                             <RadioGroup onChange={this.onChange} value={this.state.value}>
-                                <Radio style={radioStyle} value={1}>A</Radio>
-                                <Radio style={radioStyle} value={2}>B</Radio>
-                                <Radio style={radioStyle} value={3}>C</Radio>
-                                <Radio style={radioStyle} value={4}>D</Radio>
-                                <Radio style={radioStyle} value={5}>E</Radio>
+                                <Radio style={radioStyle} value={1}>A) -3</Radio>
+                                <Radio style={radioStyle} value={2}>B) 2</Radio>
+                                <Radio style={radioStyle} value={3}>C) 1</Radio>
+                                <Radio style={radioStyle} value={4}>D) 5</Radio>
+                                <Radio style={radioStyle} value={5}>E) 109</Radio>
                             </RadioGroup>
                         </Col>
                     </Row>
