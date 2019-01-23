@@ -1,4 +1,5 @@
 const initState = {
+    logged: 'inicio',
     pageTitle: [],
     habilidades: [],
     conteudos: [],
@@ -11,7 +12,14 @@ const initState = {
 }
 
 const RootReducer = (state = initState, action) => {
-    if(action.type === 'SET_PAGETITLE'){
+    if(action.type === 'SET_LOGGED'){
+        console.log('reducer SET_LOGADO')
+        return {
+            ...state,
+            logged: action.logged
+        }
+    }
+    else if(action.type === 'SET_PAGETITLE'){
         return {
             ...state,
             pageTitle: action.pageTitle

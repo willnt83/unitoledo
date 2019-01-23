@@ -1,5 +1,5 @@
 import React, { Component } from "react"
-import { Layout, Row, Col, Form, Input, Button, Card } from "antd"
+import { Layout, Row, Col, Form, Input, Button, Card, Icon } from "antd"
 import { Link, withRouter } from "react-router-dom"
 import SimuladoSteps from './SimuladoSteps'
 import { connect } from 'react-redux'
@@ -35,8 +35,6 @@ class NovoSimulado1 extends Component {
 
     render(){
         const { getFieldDecorator } = this.props.form;
-
-        console.log(this.props)
         return(
             <React.Fragment>
                 <SimuladoSteps step={0} />
@@ -81,10 +79,10 @@ class NovoSimulado1 extends Component {
                 >
                     <Row>
                         <Col span="12">
-                            <Link to="/admin/simulados/"><Button type="primary">Cancelar</Button></Link>
+                            <Link to="/admin/simulados/"><Button type="primary"><Icon type="left" />Cancelar</Button></Link>
                         </Col>
                         <Col span="12" align="end">
-                            <Button type="primary" onClick={this.handleProximoButton}>Próximo</Button>
+                            <Button type="primary" onClick={this.handleProximoButton}>Próximo<Icon type="right" /></Button>
                         </Col>
                     </Row>
                 </Content>

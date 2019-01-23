@@ -1,6 +1,6 @@
 import React, { Component } from "react"
-import { Layout, Form, Input, Button, Table, Row, Col } from "antd"
-import { Link } from "react-router-dom";
+import { Layout, Form, Input, Button, Table, Row, Col, Icon } from "antd"
+import { Link } from "react-router-dom"
 import { connect } from 'react-redux'
 
 const { Content } = Layout
@@ -79,7 +79,7 @@ class Simulados extends Component {
 				render: (text, record) => {
 					return (
                         <React.Fragment>
-                            <Button type="primary">Republicar</Button>
+                            <Button type="primary"><Icon type="reload" />Republicar</Button>
                         </React.Fragment>
 					);
 				}
@@ -104,7 +104,7 @@ class Simulados extends Component {
                             <Input placeholder="Digite o nome do simulado" />
                         </FormItem>
                         <FormItem>
-                            <Button type="primary">Buscar</Button>
+                            <Button type="primary"><Icon type="search" />Buscar</Button>
                         </FormItem>
                     </Form>
                 </Content>
@@ -123,7 +123,7 @@ class Simulados extends Component {
                     />
                     <Row>
                         <Col span="24" align="middle">
-                            <Link to="/admin/simulados/novo/step-1"><Button type="primary">Novo Simulado</Button></Link>
+                            <Link to="/admin/simulados/novo/step-1"><Button type="primary"><Icon type="plus" />Novo Simulado</Button></Link>
                         </Col>
                     </Row>
                 </Content>

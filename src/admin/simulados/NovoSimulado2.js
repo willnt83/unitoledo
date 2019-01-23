@@ -1,5 +1,5 @@
 import React, { Component } from "react"
-import { Layout, Row, Col, Button, Table, Card } from "antd"
+import { Layout, Row, Col, Button, Table, Card, Icon } from "antd"
 import { Link, withRouter } from "react-router-dom"
 import SimuladoSteps from './SimuladoSteps'
 import WarningMessage from './WarningMessage'
@@ -163,10 +163,10 @@ class NovoSimulado2 extends Component {
                     >
                         <Row>
                             <Col span="12" align="start">
-                                <Link to="/admin/simulados/novo/step-1"><Button type="primary">Anterior</Button></Link>
+                                <Link to="/admin/simulados/novo/step-1"><Button type="primary"><Icon type="left" />Anterior</Button></Link>
                             </Col>
                             <Col span="12" align="end">
-                                <Button type="primary" onClick={this.handleProximoButton}>Próximo</Button>
+                                <Button type="primary" onClick={this.handleProximoButton}>Próximo<Icon type="right" /></Button>
                             </Col>
                         </Row>
                     </Content>

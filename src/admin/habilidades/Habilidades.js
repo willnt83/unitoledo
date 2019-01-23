@@ -299,9 +299,9 @@ class Habilidades extends Component {
                     visible={visible}
                     onCancel={this.handleCancel}
                     footer={[
-                        <Button key="back" onClick={this.handleCancel}>Cancelar</Button>,
+                        <Button key="back" onClick={this.handleCancel}><Icon type="close" />Cancelar</Button>,
                         <Button key="submit" type="primary" loading={buttonConfirmHabilidadeState} onClick={this.handleCreateUpdateHabilidade}>
-                            Confirmar
+                            <Icon type="check" />Confirmar
                         </Button>
                     ]}
                 >

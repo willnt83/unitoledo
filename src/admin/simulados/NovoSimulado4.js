@@ -1,5 +1,5 @@
 import React, { Component } from "react"
-import { Layout, Row, Col, Button, Card, Form, Input, TimePicker, DatePicker } from "antd"
+import { Layout, Row, Col, Button, Card, Form, Input, TimePicker, DatePicker, Icon } from "antd"
 import { Link } from "react-router-dom"
 import SimuladoSteps from './SimuladoSteps'
 import { connect } from 'react-redux'
@@ -311,7 +311,7 @@ class NovoSimulado4 extends Component {
                             >
                                 <Row>
                                     <Col span={12} align="start">
-                                        <Link to="/admin/simulados/novo/step-3"><Button type="primary">Anterior</Button></Link>
+                                        <Link to="/admin/simulados/novo/step-3"><Button type="primary"><Icon type="left" />Anterior</Button></Link>
                                     </Col>
                                     <Col span={12} align="end">
                                         <Button
@@ -319,14 +319,14 @@ class NovoSimulado4 extends Component {
                                             onClick={this.handleFinalizarButton}
                                             style={{backgroundColor: '#73d13d', borderColor: '#73d13d'}}
                                         >
-                                            Salvar Como Rascunho
+                                            <Icon type="save" />Salvar Como Rascunho
                                         </Button>
                                         <Button
                                             type="primary"
                                             onClick={this.handleFinalizarButton}
                                             style={{marginLeft: '30px', backgroundColor: '#73d13d', borderColor: '#73d13d'}}
                                         >
-                                            Finalizar
+                                            <Icon type="check" />Finalizar
                                         </Button>
                                     </Col>
                                 </Row>

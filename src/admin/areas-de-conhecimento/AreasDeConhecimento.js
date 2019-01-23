@@ -288,9 +288,9 @@ class AreasDeConhecimento extends Component {
                     visible={visible}
                     onCancel={this.hideAreasDeConhecimentoModal}
                     footer={[
-                        <Button key="back" onClick={this.hideAreasDeConhecimentoModal}>Cancelar</Button>,
+                        <Button key="back" onClick={this.hideAreasDeConhecimentoModal}><Icon type="close" />Cancelar</Button>,
                         <Button key="submit" type="primary" loading={buttonConfirmAreaDeConhecimentoState} onClick={this.handleCreateUpdateAreaDeConhecimento}>
-                            Confirmar
+                            <Icon type="check" />Confirmar
                         </Button>
                     ]}
                 >

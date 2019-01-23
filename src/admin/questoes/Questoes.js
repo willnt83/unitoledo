@@ -1002,7 +1002,7 @@ class Questoes extends Component {
 					width={900}
 					footer={[
 					<Button key="back" onClick={this.hideQuestoesModal}>
-						Cancelar
+						<Icon type="close" />Cancelar
 					</Button>,
 					<Button
 						key="submit"
@@ -1010,7 +1010,7 @@ class Questoes extends Component {
 						loading={buttonConfirmQuestoesState}
 						onClick={this.handleButtonConfirmQuestoes}
 					>
-						Confirmar
+						<Icon type="check" />Confirmar
 					</Button>
 					]}
 				>
@@ -1271,7 +1271,7 @@ class Questoes extends Component {
 								onClick={this.showModalAlternativa}
 								style={{float: "right"}}
 								>
-								Alternativas
+								<Icon type="ordered-list" />Alternativas
 							</Button>
 						</Col>
 					</Row>
@@ -1286,14 +1286,14 @@ class Questoes extends Component {
 							key="back"
 							onClick={this.handleCancelAlternativa}
 						>
-							Cancelar
+							<Icon type="close" />Cancelar
 						</Button>,
 						<Button
 							key="submit"
 							type="primary"
 							onClick={this.handleButtonConfirmAlternativa}
 						>
-							Confirmar
+							<Icon type="check" />Confirmar
 						</Button>
 					]}
 				>

@@ -1,5 +1,5 @@
 import React, { Component } from "react"
-import { Layout, Row, Col, Button, Form, Input, Card, Select } from "antd"
+import { Layout, Row, Col, Button, Form, Input, Card, Select, Icon } from "antd"
 import { Link } from "react-router-dom"
 import SimuladoSteps from './SimuladoSteps'
 import { connect } from 'react-redux'
@@ -193,7 +193,7 @@ class NovoSimulado3 extends Component {
                                         type="primary"
                                         htmlType="submit"
                                     >
-                                        Buscar
+                                        <Icon type="search" />Buscar
                                     </Button>
                                 </FormItem>
                             </Form>
@@ -226,10 +226,10 @@ class NovoSimulado3 extends Component {
                         
                             <Row>
                                 <Col span="12" align="start">
-                                    <Link to="/admin/simulados/novo/step-2"><Button type="primary">Anterior</Button></Link>
+                                    <Link to="/admin/simulados/novo/step-2"><Button type="primary"><Icon type="left" />Anterior</Button></Link>
                                 </Col>
                                 <Col span="12" align="end">
-                                    <Link to="/admin/simulados/novo/step-4"><Button type="primary">Próximo</Button></Link>
+                                    <Link to="/admin/simulados/novo/step-4"><Button type="primary">Próximo<Icon type="right" /></Button></Link>
                                 </Col>
                             </Row>
                         </Content>
