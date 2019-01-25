@@ -1,9 +1,9 @@
 import React, { Component } from 'react'
-import { Layout, Card, Row, Col, Form, Icon, Input, Select, Button, Modal } from 'antd'
+import { Layout, Card, Row, Col, Form, Icon, Input, Select, Button } from 'antd'
 import axios from 'axios'
-//import AdminIndex from './admin/AdminIndex'
 import { connect } from 'react-redux'
 import { withRouter } from "react-router-dom"
+import PersonificacaoSelecaoAluno from './components/PersonificacaoSelecaoAluno'
 
 const { Content } = Layout;
 const Option = Select.Option;
@@ -99,33 +99,6 @@ class SignIn extends Component {
         })
 	}
 
-	handleSearchUserSubmit = (event) => {
-		event.preventDefault();
-		console.log('handleSearchUserSubmit')
-		this.props.form.validateFieldsAndScroll((err, values) => {
-            if (!err) {
-				var data = {
-					params: {
-						user: 'joao'
-					}
-				}
-				
-				axios.defaults.headers = {
-					'Authorization': this.props.token,
-						'CookieZ': this.props.cookie
-				}
-				
-				axios.get(`http://localhost:5000/api/getUser`, data)
-				.then(res => {
-					console.log('loginContexto response:', res)
-				})
-				.catch(error =>{
-					console.log('Error:', error)
-				})
-			}
-		})
-	}
-
 	handleGrupoSubmit = (event) => {
 		event.preventDefault();
 		this.setState({ enviarButtonLoading : true})
@@ -175,7 +148,30 @@ class SignIn extends Component {
 
     handleModalCancel = () => {
         this.showModal(false);
-    }
+	}
+
+	getContexto = (usuarioId) => {
+		console.log('getContexto... usuario:', usuarioId)
+		var config = {
+			headers: {
+				'Authorization': this.props.token,
+				'CookieZ': this.props.cookie
+			}
+		}
+
+		var data = {
+			id: usuarioId
+		}
+		axios.post(`http://localhost:5000/api/contexto`, data, config)
+		.then(res => {
+			console.log('response contexto', res.data)
+			//this.setState({ enviarButtonLoading : false})
+		})
+		.catch(error =>{
+			console.log(error)
+			//this.setState({ enviarButtonLoading : false})
+		})
+	}
 
 	componentWillUpdate(nextProps, nextState) {
 		if(this.state.grupos.length !== nextState.grupos.length && nextState.grupos.length > 0){
@@ -236,33 +232,8 @@ class SignIn extends Component {
 								</Card>
 							</Col>
 						</Row>
+						<PersonificacaoSelecaoAluno visible={this.state.showModalBuscarUsuarios} showModal={this.showModal} getContexto={this.getContexto} />
 					</Content>
-					<Modal
-						title="Selecionar usuário"
-						visible={this.state.showModalBuscarUsuarios}
-						onCancel={() => this.showModal(false)}
-						footer={[
-							<Button key="back" onClick={() => this.showModal(false)}><Icon type="close" />Cancelar</Button>,
-							<Button key="submit" className="buttonGreen" onClick={() => this.showModal(false)}><Icon type="check" />Selecionar</Button>
-						]}
-					>
-						<Form layout="vertical" onSubmit={this.handleSearchUserSubmit}>
-							<Row>
-								<Col span={18}>
-									<Form.Item>
-										<Input
-											id="usuário"
-											placeholder="Buscar usuário"
-											onChange={this.handleInput}
-										/>
-									</Form.Item>
-								</Col>
-								<Col span={6} align="end">
-									<Button type="primary" htmlType="submit" loading={this.state.buscarUsuarioLoading}><Icon type="search" />Buscar</Button>
-								</Col>
-							</Row>
-						</Form>
-					</Modal>
 				</React.Fragment>
 			)
 		}
