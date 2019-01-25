@@ -9,7 +9,6 @@ import ExecucaoSimulado from './ExecucaoSimulado'
 import "antd/dist/antd.css"
 import "./static/style.css"
 
-
 const { Header, Content, Footer } = Layout
 
 const routes = [
@@ -25,61 +24,48 @@ const routes = [
 ];
 
 class AlunosIndex extends Component {
-  state = {
-    collapsed: false
-  };
+	state = {
+		collapsed: false
+	};
+	/*
+	toggle = () => {
+		this.setState({
+			collapsed: !this.state.collapsed
+		});
+	};
+	*/
+	render() {
+		return (
+			<Router>
+			<Layout className="layout">
+				<Header>
+					<div className="mainLogo">UNITOLEDO</div>
+					<div style={{float: 'right', color: '#fff'}}><Icon type="user" /> Nome do Aluno</div>
+				</Header>
+				<Content style={{
+					padding: 12,
+					background: "#fff"
+				}}>
+					<Row>
+						<Col span="12"><PageTitle pageTitle="Execução do Simulado" /></Col>
+					</Row>
+				</Content>
 
-  toggle = () => {
-    this.setState({
-      collapsed: !this.state.collapsed
-    });
-  };
-  render() {
-    return (
-      <Router>
-        <Layout className="layout">
-			<Header>
-				<div className="mainLogo">UNITOLEDO</div>
-				<Menu
-					theme="dark"
-					mode="horizontal"
-					defaultSelectedKeys={['1']}
-					style={{ lineHeight: '64px' }}
-				>
-					{/*
-					<Menu.Item key="1">Home</Menu.Item>
-					<Menu.Item key="2">nav 2</Menu.Item>
-					<Menu.Item key="3">nav 3</Menu.Item>
-					*/}
-					
-				</Menu>
-				<div style={{float: 'right'}}><Icon type="user" /> Nome do Aluno</div>
-			</Header>
-			<Content style={{
-				padding: 24,
-				background: "#fff"
-			}}>
-				<Row>
-					<Col span="12"><PageTitle pageTitle="Execução do Simulado" /></Col>
-					<Col span="12" align="end"><h3><Icon type="clock-circle" /> Tempo restante: 60 minutos</h3></Col>
-				</Row>
-			</Content>
-
-				{routes.map((route, index) => (
-					<Route
-						key={index}
-						path={route.path}
-						exact={route.exact}
-						component={route.main}
-					/>
-				))}
-			<Footer style={{ textAlign: 'center' }}>
-				UNITOLEDO ©2018
-			</Footer>
-		</Layout>
-      </Router>
-    );
-  }
+					{routes.map((route, index) => (
+						<Route
+							key={index}
+							path={route.path}
+							exact={route.exact}
+							component={route.main}
+						/>
+					))}
+				<Footer style={{ textAlign: 'center' }}>
+					UNITOLEDO ©2018
+				</Footer>
+			</Layout>
+			</Router>
+		)
+	}
 }
 
 const MapStateToProps = (state) => {

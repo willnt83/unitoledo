@@ -71,15 +71,19 @@ class Simulados extends Component {
 				sorter: (a, b) => a.id - b.id
             },
             {
-				title: "Operação",
+				title: "Ações",
 				colSpan: 2,
-				dataIndex: "operacao",
+				dataIndex: "actions",
 				align: "center",
-				width: 150,
+                width: 300,
+                className: "actionCol",
 				render: (text, record) => {
 					return (
                         <React.Fragment>
-                            <Button type="primary"><Icon type="reload" />Republicar</Button>
+                            <Button className="actionButton buttonGreen" title="Publicar"><Icon type="global" /></Button>
+                            <Button className="actionButton buttonOrange" title="Mover para Rascunho"><Icon type="file-text" /></Button>
+                            <Button className="actionButton" title="Editar" type="primary"><Icon type="edit" /></Button>
+                            <Button className="actionButton buttonRed" title="Excluir"><Icon type="delete" /></Button>
                         </React.Fragment>
 					);
 				}

@@ -226,7 +226,7 @@ class NovoSimulado3 extends Component {
                         
                             <Row>
                                 <Col span="12" align="start">
-                                    <Link to="/admin/simulados/novo/step-2"><Button type="primary"><Icon type="left" />Anterior</Button></Link>
+                                    <Link to="/admin/simulados/novo/step-2"><Button type="default"><Icon type="left" />Anterior</Button></Link>
                                 </Col>
                                 <Col span="12" align="end">
                                     <Link to="/admin/simulados/novo/step-4"><Button type="primary">Próximo<Icon type="right" /></Button></Link>

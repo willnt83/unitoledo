@@ -82,7 +82,6 @@ class NovoSimulado4 extends Component {
                     <Row>
                         <Col span={24}>
                             <Content
-                                bordered={false}
                                 style={{
                                     margin: "4px 16px 4px 16px",
                                     padding: 24,
@@ -218,75 +217,13 @@ class NovoSimulado4 extends Component {
                             </Card>
                         </Col>
                     </Row>
-                    {/*<Row>
-                        <Col span={24}>
-                            <Content
-                                bordered={false}
-                                style={{
-                                    margin: "4px 16px 4px 16px",
-                                    padding: 24,
-                                    background: "#fff",
-                                    minHeight: 30
-                                }}
-                            >
-                                <FormItem>
-                                    <Checkbox>Gostaria de exibir ao aluno as questões corrigidas imediatamente após a entrega?</Checkbox>
-                                </FormItem>
-                            </Content>
-                        </Col>
-                    </Row>*/}
                     <Row type="flex">
-                        {/*<Col span={8}>
-                            <Card
-                                title="Filtro de Cursos"
-                                bordered={false}
-                                style={{
-                                    margin: "4px 4px 4px 16px",
-                                    padding: 24,
-                                    background: "#fff",
-                                    minHeight: 300
-                                }}
-                            >
-                                <FormItem label="Exibir simulado para todos os cursos?">
-                                    {getFieldDecorator('exibirParaTodosOsCursos', {
-                                        rules: [{ required: true, message: 'Por favor informe se o simulado deve ser exibido para todos os cursos' }]
-                                    })(
-                                        <Select
-                                            style={{ width: '100%' }}
-                                            placeholder="Selecione"
-                                            defaultValue={[]}
-                                            onChange={this.handleChange}
-                                        >
-                                            {
-                                                simNaoOptions.map((item) => {
-                                                    return (<Option key={item.key}>{item.description}</Option>)
-                                                })
-                                            }
-                                        </Select>
-                                    )}
-                                </FormItem>
-                                <FormItem label="Cursos">
-                                    <Select
-                                        mode="multiple"
-                                        style={{ width: '100%' }}
-                                        placeholder="Selecione os Cursos"
-                                        onChange={this.handleChange}
-                                    >
-                                        {
-                                            cursos.map((item) => {
-                                                return (<Option key={item.key}>{item.description}</Option>)
-                                            })
-                                        }
-                                    </Select>
-                                </FormItem>
-                            </Card>
-                        </Col>*/}
                         <Col span={24}>
                             <Card
                                 title="Questões Adicionadas: 4"
                                 bordered={false}
                                 style={{
-                                    margin: "4px 16px 4px 4px",
+                                    margin: "4px 16px 4px 16px",
                                     padding: 24,
                                     background: "#fff",
                                     minHeight: 'calc(100% - 8px)'
@@ -311,20 +248,19 @@ class NovoSimulado4 extends Component {
                             >
                                 <Row>
                                     <Col span={12} align="start">
-                                        <Link to="/admin/simulados/novo/step-3"><Button type="primary"><Icon type="left" />Anterior</Button></Link>
+                                        <Link to="/admin/simulados/novo/step-3"><Button type="default"><Icon type="left" />Anterior</Button></Link>
                                     </Col>
                                     <Col span={12} align="end">
                                         <Button
                                             type="primary"
                                             onClick={this.handleFinalizarButton}
-                                            style={{backgroundColor: '#73d13d', borderColor: '#73d13d'}}
                                         >
                                             <Icon type="save" />Salvar Como Rascunho
                                         </Button>
                                         <Button
-                                            type="primary"
+                                            className="buttonGreen"
                                             onClick={this.handleFinalizarButton}
-                                            style={{marginLeft: '30px', backgroundColor: '#73d13d', borderColor: '#73d13d'}}
+                                            style={{marginLeft: '30px'}}
                                         >
                                             <Icon type="check" />Finalizar
                                         </Button>
