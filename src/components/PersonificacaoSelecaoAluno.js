@@ -122,6 +122,7 @@ class PersonificacaoSelecaoAluno extends Component {
 					rowKey="id"
 					style={{display: this.state.displayTable}}
 					locale={{ emptyText: 'Sem resultados' }}
+					scroll={{y: 400}}
                 />
 			</Modal>
 		)
