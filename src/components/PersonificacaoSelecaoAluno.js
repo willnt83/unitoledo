@@ -4,24 +4,25 @@ import { connect } from 'react-redux'
 import axios from 'axios'
 
 class PersonificacaoSelecaoAluno extends Component {
-	constructor(props) {
-        super(props);
-	}
-	
 	state = {
 		usuarios: [],
-		tableLoading: false,
-		showTable: false
+		buscarButtonLoading: false,
+		displayTable: 'none',
+		tableLoading: false
 	}
 
     handleSearchUserSubmit = (event) => {
 		event.preventDefault();
+		this.setState({
+			buscarButtonLoading: true,
+			tableLoading: true
+		})
 		this.props.form.validateFieldsAndScroll((err, values) => {
 			console.log(values)
             if (!err) {
 				var data = {
 					params: {
-						user: values.usuario
+						user: encodeURI(values.usuario)
 					}
 				}
 				
@@ -29,13 +30,23 @@ class PersonificacaoSelecaoAluno extends Component {
 					'Authorization': this.props.token,
 						'CookieZ': this.props.cookie
 				}
+
+				console.log('request data: ', data)
 				
 				axios.get(`http://localhost:5000/api/getUser`, data)
 				.then(res => {
-					console.log(res.data)
-					this.setState({ usuarios: res.data })
+					this.setState({
+						buscarButtonLoading: false,
+						tableLoading: false,
+						usuarios: res.data,
+						displayTable: 'block'
+					})
 				})
 				.catch(error =>{
+					this.setState({
+						buscarButtonLoading: false,
+						tableLoading: false
+					})
 					console.log('Error:', error)
 				})
 			}
@@ -66,7 +77,7 @@ class PersonificacaoSelecaoAluno extends Component {
 				render: (text, record) => {
 					return(
 						<React.Fragment>
-							<Button className="actionButton buttonGreen" title="Selecionar Usuário" onClick={() => this.props.getContexto(record.id)}><Icon type="check" /></Button>
+							<Button type="primary" className="actionButton" title="Selecionar Usuário" onClick={() => this.props.getContexto(record.id)}><Icon type="login" /></Button>
 						</React.Fragment>
 					);
 				}
@@ -80,7 +91,6 @@ class PersonificacaoSelecaoAluno extends Component {
 				onCancel={() => this.props.showModal(false)}
 				footer={[
 					<Button key="back" onClick={() => this.props.showModal(false)}><Icon type="close" />Cancelar</Button>,
-					<Button key="submit" className="buttonGreen" onClick={() => this.props.showModal(false)}><Icon type="check" />Selecionar</Button>
 				]}
 				width={800}
 			>
@@ -100,7 +110,7 @@ class PersonificacaoSelecaoAluno extends Component {
 							</Form.Item>
 						</Col>
 						<Col span={6} align="end">
-							<Button type="primary" htmlType="submit" loading={this.state.buscarUsuarioLoading}><Icon type="search" />Buscar</Button>
+							<Button type="primary" htmlType="submit" loading={this.state.buscarButtonLoading}><Icon type="search" />Buscar</Button>
 						</Col>
 					</Row>
 				</Form>
@@ -110,6 +120,8 @@ class PersonificacaoSelecaoAluno extends Component {
 					loading={this.state.tableLoading}
 					visible={this.state.showTable}
 					rowKey="id"
+					style={{display: this.state.displayTable}}
+					locale={{ emptyText: 'Sem resultados' }}
                 />
 			</Modal>
 		)

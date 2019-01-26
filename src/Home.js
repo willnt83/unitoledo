@@ -1,6 +1,5 @@
 import React, { Component } from 'react'
 import { Layout, Table, Button, Icon, Row, Col, Modal } from 'antd'
-import { Link } from "react-router-dom"
 import Countdown from 'react-countdown-now';
 import "./static/style.css"
 

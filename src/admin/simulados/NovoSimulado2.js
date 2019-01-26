@@ -55,6 +55,7 @@ class NovoSimulado2 extends Component {
         })
         this.setState({ selectedRowKeys });
     }
+
     onSelectedRowKeysChange = (selectedRowKeys) => {
         this.setState({ selectedRowKeys });
     }
@@ -95,7 +96,7 @@ class NovoSimulado2 extends Component {
 				dataIndex: "description"
             }
         ]
-        const { selectedRowKeys } = this.state;
+        const { selectedRowKeys } = this.state
         const rowSelection = {
             selectedRowKeys,
             onChange: this.onSelectedRowKeysChange

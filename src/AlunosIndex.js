@@ -1,5 +1,5 @@
 import React, { Component } from "react"
-import { Layout, Icon, Menu, Row, Col } from "antd"
+import { Layout, Icon, Row, Col } from "antd"
 import { BrowserRouter as Router, Route } from "react-router-dom"
 import { connect } from 'react-redux'
 import PageTitle from "./layout/PageTitle"
