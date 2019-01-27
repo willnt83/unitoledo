@@ -72,8 +72,7 @@ class PersonificacaoSelecaoAluno extends Component {
 
 		axios.post(`http://localhost:5000/api/contexto`, data, config)
 		.then(res => {
-			console.log('response contexto: ', res.data)
-			this.props.handleUserSelection(res.data)
+			this.props.handleUserSelection(res.data.body)
 		})
 		.catch(error =>{
 			console.log(error)
