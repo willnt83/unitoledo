@@ -19,11 +19,19 @@ class PersonificacaoSelecaoAluno extends Component {
 		})
 		this.props.form.validateFieldsAndScroll((err, values) => {
             if (!err) {
+				/*
 				var data = {
 					params: {
 						user: encodeURI(values.usuario)
 					}
 				}
+				*/
+				var data = {
+					params: {
+						user: encodeURI('ronnie')
+					}
+				}
+
 
 				axios.defaults.headers = {
 					'Authorization': this.props.authHeaders.authorization,
@@ -64,11 +72,11 @@ class PersonificacaoSelecaoAluno extends Component {
 
 		axios.post(`http://localhost:5000/api/contexto`, data, config)
 		.then(res => {
+			console.log(res.data)
 			this.props.handleUserSelection(res.data)
 		})
 		.catch(error =>{
 			console.log(error)
-			//this.setState({ enviarButtonLoading : false})
 		})
 	}
     

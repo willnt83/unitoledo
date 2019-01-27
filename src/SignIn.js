@@ -3,7 +3,7 @@ import { connect } from 'react-redux'
 import { withRouter } from "react-router-dom"
 import LoginForm from './components/login/LoginForm'
 import PersonificacaoSelecaoAluno from './components/login/PersonificacaoSelecaoAluno'
-import GruposSelection from './components/login/GruposSelection'
+import SelecaoContexto from './components/login/SelecaoContexto'
 
 class SignIn extends Component {
 	constructor(props) {
@@ -13,7 +13,7 @@ class SignIn extends Component {
 			invalidLogin: null,
 			selectedUser: null,
 			userInfos: [],
-			grupos: [],
+			contextos: [],
 			buscarButtonLoading: false,
 			buscarUsuarioLoading: false,
 			responseUserLogin: null,
@@ -23,18 +23,18 @@ class SignIn extends Component {
 
 	handleUserSelection = (response) => {
 		this.showModal(false)
-		var grupos = []
+		var contextos = []
 		var i = 0
-		response.grupos.forEach((grupo) => {
-			grupos.push({
+		response.grupos.forEach((contexto) => {
+			contextos.push({
 				key: i,
-				description: grupo.tipo
+				description: contexto.tipo
 			})
 			i++
 		})
 		this.setState({
 			userInfos: response.grupos,
-			grupos: grupos,
+			contextos: contextos,
 			step: 2
 		})
 	}
@@ -52,9 +52,9 @@ class SignIn extends Component {
 	}
 
 	componentWillUpdate(nextProps, nextState) {
-		if(this.state.grupos.length !== nextState.grupos.length && nextState.grupos.length > 0){
+		if(this.state.contextos.length !== nextState.contextos.length && nextState.contextos.length > 0){
 			this.setState({
-				displayGruposSelect: 'block'
+				displaycontextosSelect: 'block'
 			})
 		}
 	}
@@ -70,7 +70,7 @@ class SignIn extends Component {
 		}
 		else{
 			return (
-				<GruposSelection grupos={this.state.grupos} userInfos={this.state.userInfos} />
+				<SelecaoContexto contextos={this.state.contextos} userInfos={this.state.userInfos} />
 			)
 		}
 	}
