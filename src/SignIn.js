@@ -26,7 +26,7 @@ class SignIn extends Component {
 		this.showModal(false)
 		var contextos = []
 		var i = 0
-		response.grupos.forEach((contexto) => {
+		response.body.grupos.forEach((contexto) => {
 			contextos.push({
 				key: i,
 				description: contexto.tipo
