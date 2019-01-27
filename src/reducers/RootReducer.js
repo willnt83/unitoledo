@@ -1,7 +1,6 @@
 const initState = {
     logged: 'inicio',
-    token: '',
-    cookie: '',
+    authHeaders: null,
     pageTitle: [],
     habilidades: [],
     conteudos: [],
@@ -14,16 +13,13 @@ const initState = {
 }
 
 const RootReducer = (state = initState, action) => {
-    if(action.type === 'SET_TOKEN'){
+    if(action.type === 'SET_HEADERS'){
         return {
             ...state,
-            token: action.token
-        }
-    }
-    else if(action.type === 'SET_COOKIE'){
-        return {
-            ...state,
-            cookie: action.cookie
+            authHeaders: {
+                authorization: action.headerFields.token,
+                cookie: action.headerFields.cookie
+            }
         }
     }
     else if(action.type === 'SET_LOGGED'){

@@ -18,21 +18,18 @@ class PersonificacaoSelecaoAluno extends Component {
 			tableLoading: true
 		})
 		this.props.form.validateFieldsAndScroll((err, values) => {
-			console.log(values)
             if (!err) {
 				var data = {
 					params: {
 						user: encodeURI(values.usuario)
 					}
 				}
-				
+
 				axios.defaults.headers = {
-					'Authorization': this.props.token,
-						'CookieZ': this.props.cookie
+					'Authorization': this.props.authHeaders.authorization,
+					'CookieZ': this.props.authHeaders.cookie
 				}
 
-				console.log('request data: ', data)
-				
 				axios.get(`http://localhost:5000/api/getUser`, data)
 				.then(res => {
 					this.setState({
@@ -47,11 +44,33 @@ class PersonificacaoSelecaoAluno extends Component {
 						buscarButtonLoading: false,
 						tableLoading: false
 					})
-					console.log('Error:', error)
+					console.log(error)
 				})
 			}
 		})
-    }
+	}
+	
+	getContexto = (usuarioId) => {
+		var data = {
+			id: usuarioId
+		}
+
+		var config = {
+			headers: {
+				'Authorization': this.props.authHeaders.authorization,
+				'CookieZ': this.props.authHeaders.cookie
+			}
+		}
+
+		axios.post(`http://localhost:5000/api/contexto`, data, config)
+		.then(res => {
+			this.props.handleUserSelection(res.data)
+		})
+		.catch(error =>{
+			console.log(error)
+			//this.setState({ enviarButtonLoading : false})
+		})
+	}
     
 	render () {
 		const { getFieldDecorator } = this.props.form;
@@ -77,7 +96,7 @@ class PersonificacaoSelecaoAluno extends Component {
 				render: (text, record) => {
 					return(
 						<React.Fragment>
-							<Button type="primary" className="actionButton" title="Selecionar Usuário" onClick={() => this.props.getContexto(record.id)}><Icon type="login" /></Button>
+							<Button type="primary" className="actionButton" title="Selecionar Usuário" onClick={() => this.getContexto(record.id)}><Icon type="login" /></Button>
 						</React.Fragment>
 					);
 				}
@@ -131,19 +150,8 @@ class PersonificacaoSelecaoAluno extends Component {
 
 const MapStateToProps = (state) => {
 	return {
-		logged: state.logged,
-		token: state.token,
-		cookie: state.cookie
+		authHeaders: state.authHeaders
 	}
 }
 
-const mapDispatchToProps = (dispatch) => {
-    return {
-		setLogged: (logged) => { dispatch({ type: 'SET_LOGGED', logged }) },
-		setToken: (token) => { dispatch({ type: 'SET_TOKEN', token }) },
-		setCookie: (cookie) => { dispatch({ type: 'SET_COOKIE', cookie }) },
-		
-    }
-}
-
-export default connect(MapStateToProps, mapDispatchToProps)(Form.create()(PersonificacaoSelecaoAluno))
+export default connect(MapStateToProps, null)(Form.create()(PersonificacaoSelecaoAluno))
