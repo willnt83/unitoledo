@@ -22,6 +22,7 @@ class SignIn extends Component {
 	}
 
 	handleUserSelection = (response) => {
+		console.log('handleUserSelection input', response)
 		this.showModal(false)
 		var contextos = []
 		var i = 0
