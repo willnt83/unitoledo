@@ -100,7 +100,6 @@ class Simulados extends Component {
                     }}
                 >
                     <h3>Buscar Simulados</h3>
-
                     <Form layout="vertical">
                         <FormItem
                             label="Nome"
@@ -126,7 +125,7 @@ class Simulados extends Component {
                         dataSource={ tableData }
                     />
                     <Row>
-                        <Col span="24" align="middle">
+                        <Col span={24} align="middle">
                             <Link to="/admin/simulados/novo/step-1"><Button type="primary"><Icon type="plus" />Novo Simulado</Button></Link>
                         </Col>
                     </Row>

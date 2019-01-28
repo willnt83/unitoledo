@@ -16,7 +16,7 @@ const SimuladoSteps = (props) => {
         >
             <Steps current={props.step} style={{ marginBottom: 30 }}>
                 <Step title="Dados Iniciais" />
-                <Step title="Turma / Disciplina" />
+                <Step title="Público Alvo" />
                 <Step title="Questões" />
                 <Step title="Finalizar" />
             </Steps>

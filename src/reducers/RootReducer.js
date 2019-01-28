@@ -1,6 +1,6 @@
 const initState = {
-    logged: 'inicio',
     authHeaders: null,
+    mainData: null,
     pageTitle: [],
     habilidades: [],
     conteudos: [],
@@ -8,7 +8,7 @@ const initState = {
     questoes: [],
     simulado: {
         nome: null,
-        turmasDisciplinas: []
+        alvos: []
     }
 }
 
@@ -22,10 +22,11 @@ const RootReducer = (state = initState, action) => {
             }
         }
     }
-    else if(action.type === 'SET_LOGGED'){
+    else if(action.type === 'SET_MAINDATA'){
+        console.log('SET_MAINDATA')
         return {
             ...state,
-            logged: action.logged
+            mainData: action.mainData
         }
     }
     else if(action.type === 'SET_PAGETITLE'){
@@ -63,35 +64,35 @@ const RootReducer = (state = initState, action) => {
             ...state,
             simulado: {
                 nome: action.simuladoNome,
-                turmasDisciplinas: [...state.simulado.turmasDisciplinas]
+                alvos: [...state.simulado.alvos]
             }
         }
     }
     else if(action.type === 'SET_SIMULADO_CURSODISCIPLINA'){
         // Verificando se é remoção de item ou inserção
-        const id = action.simuladoTurmaDisciplina.id
+        const id = action.simuladoAlvo.id
         let hit = false
-        let turmasDisciplinas = []
-        state.simulado.turmasDisciplinas.forEach((turmaDisciplina) => {
-            if(turmaDisciplina.id === id)
+        let alvos = []
+        state.simulado.alvos.forEach((alvo) => {
+            if(alvo.id === id)
                 hit = true
         })
 
         // Se for remoção
         if(hit){
-            turmasDisciplinas = state.simulado.turmasDisciplinas.filter(turmaDisciplina => {
-                return (turmaDisciplina.id !== id)
+            alvos = state.simulado.alvos.filter(alvo => {
+                return (alvo.id !== id)
             })
         }
         else{
-            turmasDisciplinas = [...state.simulado.turmasDisciplinas, action.simuladoTurmaDisciplina]
+            alvos = [...state.simulado.alvos, action.simuladoAlvo]
         }
 
         return{
             ...state,
             simulado: {
                 nome: state.simulado.nome,
-                turmasDisciplinas
+                alvos
             }
         }
     }

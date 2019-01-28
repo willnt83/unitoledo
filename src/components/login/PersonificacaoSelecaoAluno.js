@@ -55,6 +55,8 @@ class PersonificacaoSelecaoAluno extends Component {
 					console.log(error)
 				})
 			}
+			else
+				this.setState({buscarButtonLoading: false})
 		})
 	}
 	

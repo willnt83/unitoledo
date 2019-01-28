@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import { Layout, Row, Col, Form, Icon, Button, Card, Select,  } from 'antd'
+import { withRouter } from "react-router-dom"
 import { connect } from 'react-redux'
 import axios from 'axios'
 
@@ -26,7 +27,6 @@ class ContextoSelection extends Component {
 				if(userInfo.tipo === value)
 					selectedContexto = userInfo.contextos[0]
 			})
-			console.log('atualizando contextoData')
 			this.setState({contextoData: selectedContexto})
 
 			var config = {
@@ -78,13 +78,8 @@ class ContextoSelection extends Component {
 			// Identificando o contexto do tipo e periodo
 			this.props.userInfos.forEach(userInfo => {
 				if(userInfo.tipo === this.state.contexto){
-					console.log(userInfo.tipo+' = '+this.state.contexto)
 					userInfo.contextos.forEach(contexto => {
-						console.log('idPeriodoLetivo', contexto.idPeriodoLetivo)
-						console.log('value', value)
 						if(contexto.idPeriodoLetivo === parseInt(value)){
-							console.log(contexto.idPeriodoLetivo+' = '+value)
-							console.log('atualizando contextoData')
 							this.setState({contextoData: contexto})
 						}
 					})
@@ -121,11 +116,17 @@ class ContextoSelection extends Component {
 			requestData = this.state.contextoData
 		}
 
-		console.log('requestData:', requestData)
-
 		axios.post('http://localhost:5000/api/getData', requestData, config)
 		.then(res => {
-			console.log('response: ', res.data)
+			console.log('mainData: ', res.data)
+			this.props.setMainData(res.data)
+			if(this.state.contexto === 'ALUNO'){
+				this.props.history.push('/alunos')
+			}
+			else{
+				this.props.history.push('/admin')
+			}
+			
 		})
 		.catch(error =>{
 			console.log(error)
@@ -220,4 +221,10 @@ const MapStateToProps = (state) => {
 	}
 }
 
-export default connect(MapStateToProps, null)(Form.create()(ContextoSelection))
+const mapDispatchToProps = (dispatch) => {
+    return {
+		setMainData: (mainData) => { dispatch({ type: 'SET_MAINDATA', mainData }) }
+    }
+}
+
+export default connect(MapStateToProps, mapDispatchToProps)(withRouter(Form.create()(ContextoSelection)))

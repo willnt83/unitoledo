@@ -232,6 +232,7 @@ function BackEndRequestsWrapper(WrappedComponent) {
 		getQuestoes = () => {
 			axios.get(`http://localhost:5000/api/getQuestoes`)
 			.then(res => {
+				console.log('questoes', res.data)
 				let tempArray = [];
 				let key = 0;
 				let labelStatus = null;

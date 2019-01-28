@@ -78,10 +78,10 @@ class NovoSimulado1 extends Component {
                     }}
                 >
                     <Row>
-                        <Col span="12">
+                        <Col span={12}>
                             <Link to="/admin/simulados/"><Button type="default"><Icon type="left" />Cancelar</Button></Link>
                         </Col>
-                        <Col span="12" align="end">
+                        <Col span={12} align="end">
                             <Button type="primary" onClick={this.handleProximoButton}>Próximo<Icon type="right" /></Button>
                         </Col>
                     </Row>

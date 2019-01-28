@@ -3,6 +3,7 @@ import { Layout, Row, Col, Button, Form, Input, Card, Select, Icon } from "antd"
 import { Link } from "react-router-dom"
 import SimuladoSteps from './SimuladoSteps'
 import { connect } from 'react-redux'
+import SelecaoQuestoes from './SelecaoQuestoes'
 import BackEndRequests from '../hocs/BackEndRequests'
 
 const { Content } = Layout
@@ -73,12 +74,20 @@ class NovoSimulado3 extends Component {
         props.getQuestoes();
     }
 
+    state = {
+        buttonLoadingBuscar: false
+    }
+
     handleChange = (value) => {
         console.log(`selected ${value}`);
     }
 
+    handleSearchSubmit = (event) => {
+        event.preventDefault()
+        this.props.getQuestoes()
+    }
+
     render(){
-        console.log(this.props)
         return(
             <React.Fragment>
                 <SimuladoSteps step={2} />
@@ -91,10 +100,10 @@ class NovoSimulado3 extends Component {
                                 margin: "4px 4px 4px 16px",
                                 padding: 24,
                                 background: "#fff",
-                                minHeight: 620
+                                maxHeight: '100%'
                             }}
                         >
-                            <Form layout="vertical" onSubmit={this.handleSubmit}>
+                            <Form layout="vertical" onSubmit={this.handleSearchSubmit}>
                                 <FormItem label="Código">
                                     <Input
                                         placeholder="Informe o código da questão"
@@ -192,6 +201,7 @@ class NovoSimulado3 extends Component {
                                     <Button
                                         type="primary"
                                         htmlType="submit"
+                                        loading={this.state.buttonLoadingBuscar}
                                     >
                                         <Icon type="search" />Buscar
                                     </Button>
@@ -207,9 +217,10 @@ class NovoSimulado3 extends Component {
                                 margin: "4px 16px 4px 4px",
                                 padding: 24,
                                 background: "#fff",
-                                minHeight: 'calc(100% - 8px)'
+                                height: 'calc(100% - 8px)'
                             }}
                         >
+                            <SelecaoQuestoes />
                         </Card>
                     </Col>
                 </Row>
@@ -225,10 +236,10 @@ class NovoSimulado3 extends Component {
                         >
                         
                             <Row>
-                                <Col span="12" align="start">
+                                <Col span={12} align="start">
                                     <Link to="/admin/simulados/novo/step-2"><Button type="default"><Icon type="left" />Anterior</Button></Link>
                                 </Col>
-                                <Col span="12" align="end">
+                                <Col span={12} align="end">
                                     <Link to="/admin/simulados/novo/step-4"><Button type="primary">Próximo<Icon type="right" /></Button></Link>
                                 </Col>
                             </Row>

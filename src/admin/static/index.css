@@ -76,3 +76,16 @@
     background-color: #ec9d6f;
     border-color: #ec9d6f
 }
+
+.tableSelect thead, .tableSelect .ant-table-selection-column {
+    display: none
+}
+
+code {
+    margin: 0 3px 0 3px;
+    background: #f2f4f5;
+    padding: .2em .4em;
+    border-radius: 3px;
+    font-size: .9em;
+    border: 1px solid #eee
+}

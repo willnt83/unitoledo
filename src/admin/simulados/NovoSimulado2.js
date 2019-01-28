@@ -6,38 +6,17 @@ import WarningMessage from './WarningMessage'
 import { connect } from 'react-redux'
 
 const { Content } = Layout
-const tableData = [
-    {id: 1, description: 'Tecnologia em Alimentos'},
-    {id: 2, description: 'Tecnologia em Construção de Edifícios'},
-    {id: 3, description: 'Tecnologia em Fabricação Mecânica'},
-    {id: 4, description: 'Tecnologia em Fotografia'},
-    {id: 5, description: 'Tecnologia em Gastronomia'},
-    {id: 6, description: 'Tecnologia em Jogos Digitais'},
-    {id: 7, description: 'Tecnologia em Processos Químicos'},
-    {id: 8, description: 'Tecnologia em Produção Multimídia'},
-    {id: 9, description: 'Tecnologia em Saneamento Ambiental'},
-    {id: 10, description: 'Química'},
-    {id: 11, description: 'Tecnologia em Alimentos'},
-    {id: 12, description: 'Tecnologia em Construção de Edifícios'},
-    {id: 13, description: 'Tecnologia em Fabricação Mecânica'},
-    {id: 14, description: 'Tecnologia em Fotografia'},
-    {id: 15, description: 'Tecnologia em Gastronomia'},
-    {id: 16, description: 'Tecnologia em Jogos Digitais'},
-    {id: 17, description: 'Tecnologia em Processos Químicos'},
-    {id: 18, description: 'Tecnologia em Produção Multimídia'},
-    {id: 19, description: 'Tecnologia em Saneamento Ambiental'},
-    {id: 20, description: 'Química'}
-]
 
 class NovoSimulado2 extends Component {
     constructor(props) {
         super()
-        props.setPageTitle('Simulados - Seleção de Curso')
+        props.setPageTitle('Simulados - Seleção de Público Alvo')
     }
 
     state = {
         selectedRowKeys: [],
-        showWarning: false
+        showWarning: false,
+        alvos: null,
     };
 
     selectRow = (record) => {
@@ -48,10 +27,11 @@ class NovoSimulado2 extends Component {
         } else {
             selectedRowKeys.push(record.id);
         }
-        // Incluindo turmaDisciplina no redux store
-        this.props.setSimuladoTurmaDisciplina({
+        // Incluindo alvo no redux store
+        this.props.setSimuladoAlvo({
             id: record.id,
-            descricao: record.description
+            descricao: record.description,
+            tipo: record.tipo
         })
         this.setState({ selectedRowKeys });
     }
@@ -71,14 +51,52 @@ class NovoSimulado2 extends Component {
     }
 
     componentWillMount(){
-        if(this.props.simulado.turmasDisciplinas.length > 0){
+        if(this.props.simulado.alvos.length > 0){
             let tempArray = []
-            tempArray = this.props.simulado.turmasDisciplinas.map((item) => {
+            tempArray = this.props.simulado.alvos.map((item) => {
                 return item.id
             })
             this.setState({
                 selectedRowKeys: tempArray
             })
+        }
+
+        // Dados da tabela de seleção do alvo
+        // Se mainData possuir cursos
+        var cursos = []
+        if(this.props.mainData.cursos && this.props.mainData.cursos.length > 0){
+            cursos = this.props.mainData.cursos.map(curso => {
+                return ({
+                    id: curso.id,
+                    description: curso.nome,
+                    tipo: 'CURSO'
+                })
+            })
+            this.setState({
+                alvos: cursos
+            })
+        }
+
+        // Se mainData possuir turmas
+        if(this.props.mainData.turmas && this.props.mainData.turmas.length > 0){
+            var turmas = this.props.mainData.turmas.map(turma => {
+                return ({
+                    id: turma.id,
+                    description: turma.nome,
+                    tipo: 'TURMA'
+                })
+            })
+
+            if(cursos.length > 0){
+                this.setState({
+                    alvos: cursos.concat(turmas)
+                })
+            }
+            else{
+                this.setState({
+                    alvos: turmas
+                })
+            }
         }
     }
 
@@ -90,10 +108,19 @@ class NovoSimulado2 extends Component {
     }
 
     render(){
+        console.log('props', this.props)
         const columns = [
+            {
+				title: "Id",
+				dataIndex: "id"
+            },
 			{
-				title: "Turma / Disciplina",
+				title: "Alvo",
 				dataIndex: "description"
+            },
+            {
+				title: "Tipo",
+				dataIndex: "tipo"
             }
         ]
         const { selectedRowKeys } = this.state
@@ -108,7 +135,7 @@ class NovoSimulado2 extends Component {
                     <Row type="flex">
                         <Col span={16}>
                             <Card
-                                title="Selecione a Turma / Disciplina"
+                                title="Selecione a Público Alvo"
                                 bordered={false}
                                 style={{
                                     margin: "4px 4px 4px 16px",
@@ -119,9 +146,11 @@ class NovoSimulado2 extends Component {
                                 <Row style={{ marginBottom: 20 }}>
                                     <Col span={24}>
                                         <Table
+                                            className="tableSelect"
+                                            bordered={true}
                                             rowSelection={ rowSelection }
                                             columns={ columns }
-                                            dataSource={ tableData }
+                                            dataSource={ this.state.alvos }
                                             rowKey={ record => record.id }
                                             onRow={(record) => ({
                                                 onClick: () => {
@@ -145,9 +174,9 @@ class NovoSimulado2 extends Component {
                             }}>
                                 <WarningMessage message="Nenhuma Turma / Disciplina selecionada" type="error" visible={this.state.showWarning} />
                                 {
-                                    this.props.simulado.turmasDisciplinas.map(turmaDisciplina => {
+                                    this.props.simulado.alvos.map(alvo => {
                                         return (
-                                            <p key={ turmaDisciplina.id }>{ turmaDisciplina.descricao }</p>
+                                            <p key={ alvo.id }>{ alvo.descricao }</p>
                                         )
                                     })
                                 }
@@ -163,10 +192,10 @@ class NovoSimulado2 extends Component {
                         }}
                     >
                         <Row>
-                            <Col span="12" align="start">
+                            <Col span={12} align="start">
                                 <Link to="/admin/simulados/novo/step-1"><Button type="default"><Icon type="left" />Anterior</Button></Link>
                             </Col>
-                            <Col span="12" align="end">
+                            <Col span={12} align="end">
                                 <Button type="primary" onClick={this.handleProximoButton}>Próximo<Icon type="right" /></Button>
                             </Col>
                         </Row>
@@ -178,6 +207,7 @@ class NovoSimulado2 extends Component {
 
 const MapStateToProps = (state) => {
 	return {
+        mainData: state.mainData,
 		simulado: state.simulado
 	}
 }
@@ -185,7 +215,7 @@ const MapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
     return {
         setPageTitle: (pageTitle) => { dispatch({ type: 'SET_PAGETITLE', pageTitle }) },
-        setSimuladoTurmaDisciplina: (simuladoTurmaDisciplina) => { dispatch({ type: 'SET_SIMULADO_CURSODISCIPLINA', simuladoTurmaDisciplina }) },
+        setSimuladoAlvo: (simuladoAlvo) => { dispatch({ type: 'SET_SIMULADO_CURSODISCIPLINA', simuladoAlvo }) },
     }
 }
 

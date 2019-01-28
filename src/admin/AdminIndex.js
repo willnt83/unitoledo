@@ -8,6 +8,7 @@ import "./static/index.css"
 
 import PageTitle from "./layout/PageTitle"
 import ListMenu from "./layout/ListMenu"
+import Dashboard from "./Dashboard";
 import Conteudos from "./conteudos/Conteudos";
 import Habilidades from "./habilidades/Habilidades"
 import AreasDeConhecimento from "./areas-de-conhecimento/AreasDeConhecimento"
@@ -26,7 +27,7 @@ const routes = [
     path: "/admin",
     exact: true,
     sidebar: () => <div>Cadastro/Conteudo</div>,
-    main: () => <h1>Dashboard</h1>
+    main: () => <Dashboard />
   },
   {
     path: "/admin/cadastros/habilidades",
