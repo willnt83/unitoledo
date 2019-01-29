@@ -77,7 +77,7 @@
     border-color: #ec9d6f
 }
 
-.tableSelect thead, .tableSelect .ant-table-selection-column {
+.tableSelect .ant-table-thead .ant-checkbox {
     display: none
 }
 

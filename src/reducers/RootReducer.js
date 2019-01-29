@@ -68,7 +68,8 @@ const RootReducer = (state = initState, action) => {
             }
         }
     }
-    else if(action.type === 'SET_SIMULADO_CURSODISCIPLINA'){
+    else if(action.type === 'SET_SIMULADOALVO'){
+        /*
         // Verificando se é remoção de item ou inserção
         const id = action.simuladoAlvo.id
         let hit = false
@@ -86,13 +87,15 @@ const RootReducer = (state = initState, action) => {
         }
         else{
             alvos = [...state.simulado.alvos, action.simuladoAlvo]
-        }
+        }*/
+
+
 
         return{
             ...state,
             simulado: {
                 nome: state.simulado.nome,
-                alvos
+                alvos: action.simuladoAlvos
             }
         }
     }

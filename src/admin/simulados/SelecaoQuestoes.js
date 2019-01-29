@@ -1,9 +1,7 @@
 import React, { Component } from "react"
-import { Layout, Row, Col, Card } from "antd"
+import { Row, Col, Card } from "antd"
 import { connect } from 'react-redux'
 import BackEndRequests from '../hocs/BackEndRequests'
-
-const { Content } = Layout
 
 class SelecaoQuestoes extends Component {
     state = {
@@ -30,7 +28,7 @@ class SelecaoQuestoes extends Component {
                                 <Col span={24}>
                                     <Card
                                         title={questao.description}
-                                        extra={<a href="#">Selecionar</a>}
+                                        extra='Selecionar'
                                     >
                                         {
                                             questao.alternativas.map(alternativa => {
