@@ -1,8 +1,9 @@
 import React, { Component } from "react"
 import { Layout, Row, Col, Button, Form, Input, Card, Select, Icon } from "antd"
 import { Link } from "react-router-dom"
-import SimuladoSteps from './SimuladoSteps'
+import axios from "axios";
 import { connect } from 'react-redux'
+import SimuladoSteps from './SimuladoSteps'
 import SelecaoQuestoes from './SelecaoQuestoes'
 import BackEndRequests from '../hocs/BackEndRequests'
 
@@ -12,11 +13,11 @@ const Option = Select.Option;
 
 const simNaoOptions = [
 	{
-		key: true,
+		key: "S",
 		description: "Sim"
 	},
 	{
-		key: false,
+		key: "N",
 		description: "Não"
 	}
 ]
@@ -71,23 +72,101 @@ class NovoSimulado3 extends Component {
         props.getHabilidades();
         props.getConteudos();
         props.getAreasDeConhecimento();
-        props.getQuestoes();
     }
 
     state = {
-        buttonLoadingBuscar: false
-    }
-
-    handleChange = (value) => {
-        console.log(`selected ${value}`);
+        buttonLoadingBuscar: false,
+        questoes: null
     }
 
     handleSearchSubmit = (event) => {
+        this.setState({buttonLoadingBuscar: true})
         event.preventDefault()
-        this.props.getQuestoes()
+        var request = null
+        this.props.form.validateFieldsAndScroll((err, values) => {
+            if(!err){
+                var codigo = null
+                var habilidades = []
+                var conteudos = []
+                var areasDeConhecimento = []
+                var padraoEnade = null
+                var anos = []
+                var fonte = null
+                var discursiva = null
+
+                codigo = values.codigo ? values.codigo : ''
+                if(values.habilidades){
+                    habilidades = values.habilidades.map(habilidade =>{
+                        return({id: parseInt(habilidade)})
+                    })
+                }
+                if(values.conteudos){
+                    conteudos = values.conteudos.map(conteudo =>{
+                        return({id: parseInt(conteudo)})
+                    })
+                }
+                if(values.areasDeConhecimento){
+                    areasDeConhecimento = values.areasDeConhecimento.map(areaDeConhecimento =>{
+                        return({id: parseInt(areaDeConhecimento)})
+                    })
+                }
+
+                if(values.padraoEnade)
+                    padraoEnade = values.padraoEnade
+                else
+                    padraoEnade = ''
+
+                if(values.anos){
+                    anos = values.anos.map(ano =>{
+                        return({ano: ano})
+                    })
+                }
+                fonte = values.fonte ? values.fonte : ''
+                
+                if(values.discursiva)
+                    discursiva = values.discursiva
+                else
+                    discursiva = ''
+                
+
+
+                request = {
+                    codigo: codigo,
+                    enade: padraoEnade,
+                    discursiva: discursiva,
+                    fonte: fonte,
+                    habilidades: habilidades,
+                    conteudos: conteudos,
+                    areaConhecimentos: areasDeConhecimento,
+                    anos: anos
+                }
+
+                /*
+                var config = {
+                    headers: {
+                        'Authorization': this.props.authHeaders.authorization,
+                        'CookieZ': this.props.authHeaders.cookie
+                    }
+                }
+                */
+        
+                axios.post(`http://localhost:5000/api/getQuestoesSimulado`, request)
+                .then(res => {
+                    this.setState({questoes: res.data, buttonLoadingBuscar: false})
+                })
+                .catch(error =>{
+                    console.log(error)
+                })
+            }
+            else{
+                console.log('erro', err)
+                this.setState({buttonLoadingBuscar: false})
+            }
+        })
     }
 
     render(){
+        const { getFieldDecorator } = this.props.form;
         return(
             <React.Fragment>
                 <SimuladoSteps step={2} />
@@ -105,97 +184,104 @@ class NovoSimulado3 extends Component {
                         >
                             <Form layout="vertical" onSubmit={this.handleSearchSubmit}>
                                 <FormItem label="Código">
-                                    <Input
-                                        placeholder="Informe o código da questão"
-                                    />
+                                    {getFieldDecorator('codigo')(
+                                        <Input placeholder="Informe o código da questão" />
+                                    )}
                                 </FormItem>
                                 <FormItem label="Habilidades">
-                                    <Select
-                                        mode="multiple"
-                                        style={{ width: '100%' }}
-                                        placeholder="Selecione as Habilidades"
-                                        onChange={this.handleChange}
-                                    >
-                                        {
-                                            this.props.habilidades.map((item) => {
-                                                return (<Option key={item.key}>{item.description}</Option>)
-                                            })
-                                        }
-                                    </Select>
+                                    {getFieldDecorator('habilidades')(
+                                        <Select
+                                            mode="multiple"
+                                            style={{ width: '100%' }}
+                                            placeholder="Selecione as Habilidades"
+                                        >
+                                            {
+                                                this.props.habilidades.map((item) => {
+                                                    return (<Option key={item.id}>{item.description}</Option>)
+                                                })
+                                            }
+                                        </Select>
+                                    )}
                                 </FormItem>
                                 <FormItem label="Conteúdos">
-                                    <Select
-                                        mode="multiple"
-                                        style={{ width: '100%' }}
-                                        placeholder="Selecione os Conteúdos"
-                                        onChange={this.handleChange}
-                                    >
-                                        {
-                                            this.props.conteudos.map((item) => {
-                                                return (<Option key={item.key}>{item.description}</Option>)
-                                            })
-                                        }
-                                    </Select>
+                                    {getFieldDecorator('conteudos')(
+                                        <Select
+                                            mode="multiple"
+                                            style={{ width: '100%' }}
+                                            placeholder="Selecione os Conteúdos"
+                                        >
+                                            {
+                                                this.props.conteudos.map((item) => {
+                                                    return (<Option key={item.id}>{item.description}</Option>)
+                                                })
+                                            }
+                                        </Select>
+                                    )}
                                 </FormItem>
                                 <FormItem label="Áreas de Conhecimento">
-                                    <Select
-                                        mode="multiple"
-                                        style={{ width: '100%' }}
-                                        placeholder="Selecione as Áreas de Conhecimento"
-                                        onChange={this.handleChange}
-                                    >
-                                        {
-                                            this.props.areasDeConhecimento.map((item) => {
-                                                return (<Option key={item.key}>{item.description}</Option>)
-                                            })
-                                        }
-                                    </Select>
+                                    {getFieldDecorator('areasDeConhecimento')(
+                                        <Select
+                                            mode="multiple"
+                                            style={{ width: '100%' }}
+                                            placeholder="Selecione as Áreas de Conhecimento"
+                                        >
+                                            {
+                                                this.props.areasDeConhecimento.map((item) => {
+                                                    return (<Option key={item.id}>{item.description}</Option>)
+                                                })
+                                            }
+                                        </Select>
+                                    )}
                                 </FormItem>
                                 <FormItem label="Padrão ENADE">
-                                    <Select
-                                        style={{ width: '100%' }}
-                                        placeholder="Padrão ENADE"
-                                        onChange={this.handleChange}
-                                    >
-                                        {
-                                            simNaoOptions.map((item) => {
-                                                return (<Option key={item.key}>{item.description}</Option>)
-                                            })
-                                        }
-                                    </Select>
+                                    {getFieldDecorator('padraoEnade')(
+                                        <Select
+                                            style={{ width: '100%' }}
+                                            placeholder="Padrão ENADE"
+                                            allowClear={true}
+                                        >
+                                            {
+                                                simNaoOptions.map((item) => {
+                                                    return (<Option key={item.key}>{item.description}</Option>)
+                                                })
+                                            }
+                                        </Select>
+                                    )}
                                 </FormItem>
-                                <FormItem label="Ano">
-                                    <Select
-                                        mode="multiple"
-                                        style={{ width: '100%' }}
-                                        placeholder="Ano"
-                                        onChange={this.handleChange}
-                                    >
-                                        {
-                                            anoOptions.map((item) => {
-                                                return (<Option key={item.key}>{item.description}</Option>)
-                                            })
-                                        }
-                                    </Select>
+                                <FormItem label="Anos">
+                                    {getFieldDecorator('anos')(
+                                        <Select
+                                            mode="multiple"
+                                            style={{ width: '100%' }}
+                                            placeholder="Anos"
+                                        >
+                                            {
+                                                anoOptions.map((item) => {
+                                                    return (<Option key={item.key}>{item.description}</Option>)
+                                                })
+                                            }
+                                        </Select>
+                                    )}
                                 </FormItem>
                                 <FormItem label="Fonte">
-                                    <Input
-                                        placeholder="Fonte"
-                                    />
+                                    {getFieldDecorator('fonte')(
+                                        <Input placeholder="Fonte"/>
+                                    )}
                                 </FormItem>
                                 <FormItem label="Discursiva">
-                                    <Select
-                                        style={{ width: '100%' }}
-                                        placeholder="Discursiva"
-                                        defaultValue={[]}
-                                        onChange={this.handleChange}
-                                    >
-                                        {
-                                            simNaoOptions.map((item) => {
-                                                return (<Option key={item.key}>{item.description}</Option>)
-                                            })
-                                        }
-                                    </Select>
+                                    {getFieldDecorator('discursiva')(
+                                        <Select
+                                            style={{ width: '100%' }}
+                                            placeholder="Discursiva"
+                                            allowClear={true}
+                                        >
+                                            {
+                                                simNaoOptions.map((item) => {
+                                                    return (<Option key={item.key}>{item.description}</Option>)
+                                                })
+                                            }
+                                        </Select>
+                                    )}
                                 </FormItem>
                                 <FormItem>
                                     <Button
@@ -220,7 +306,7 @@ class NovoSimulado3 extends Component {
                                 height: 'calc(100% - 8px)'
                             }}
                         >
-                            <SelecaoQuestoes />
+                            <SelecaoQuestoes questoes={this.state.questoes} />
                         </Card>
                     </Col>
                 </Row>
@@ -257,7 +343,9 @@ const MapStateToProps = (state) => {
 		conteudos: state.conteudos,
 		areasDeConhecimento: state.areasDeConhecimento,
         questoes: state.questoes,
-        simulado: state.simulado
+        simulado: state.simulado,
+        authHeaders: state.authHeaders
+
 	}
 }
 const mapDispatchToProps = (dispatch) => {
@@ -266,4 +354,4 @@ const mapDispatchToProps = (dispatch) => {
     }
 }
 
-export default connect(MapStateToProps, mapDispatchToProps)(BackEndRequests(NovoSimulado3));
+export default connect(MapStateToProps, mapDispatchToProps)(BackEndRequests(Form.create()(NovoSimulado3)));

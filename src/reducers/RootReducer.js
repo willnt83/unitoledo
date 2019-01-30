@@ -89,8 +89,6 @@ const RootReducer = (state = initState, action) => {
             alvos = [...state.simulado.alvos, action.simuladoAlvo]
         }*/
 
-
-
         return{
             ...state,
             simulado: {

@@ -1,5 +1,5 @@
 import React, { Component } from "react"
-import { Row, Col, Card } from "antd"
+import { Row, Col, Card, Button, Icon } from "antd"
 import { connect } from 'react-redux'
 import BackEndRequests from '../hocs/BackEndRequests'
 
@@ -8,35 +8,37 @@ class SelecaoQuestoes extends Component {
         questoes: []
     }
 
-    componentWillReceiveProps() {
-        if(this.props.questoes.length > 0){
+    componentWillReceiveProps(props) {
+        if(props.questoes !== null){
             this.setState({
-                questoes: this.props.questoes
+                questoes: props.questoes
             })
         }
     }
 
     render(){
-        console.log(this.props)
         return(
             <React.Fragment>
                 {
                     this.state.questoes.map(questao => {
-                        console.log(questao)
                         return(
                             <Row key={questao.id} style={{marginBottom: 20}}>
                                 <Col span={24}>
-                                    <Card
-                                        title={questao.description}
-                                        extra='Selecionar'
-                                    >
+                                    <Card>
+                                        <h4>({questao.fonte})</h4>
+                                        <h4 style={{marginBottom: 20}}>{questao.id} - {questao.descricao}</h4>
                                         {
                                             questao.alternativas.map(alternativa => {
                                                 return(
-                                                    <p><code key={alternativa.id}>{alternativa.descricao}</code></p>
+                                                    <p key={alternativa.id}><code>{alternativa.descricao}</code></p>
                                                 )
                                             })
                                         }
+                                        <Row>
+                                            <Col span={24} align="end">
+                                                <Button className="buttonGreen"><Icon type="check" />Selecionar</Button>
+                                            </Col>
+                                        </Row>
                                     </Card>
                                 </Col>
                             </Row>
@@ -50,7 +52,6 @@ class SelecaoQuestoes extends Component {
 
 const MapStateToProps = (state) => {
 	return {
-        questoes: state.questoes
 	}
 }
 
