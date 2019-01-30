@@ -16,7 +16,7 @@ const statusOptions = [{
 {
     value: false,
     label: 'Inativo'
-}];
+}]
 
 const styles = ({
     customFilterDropdown: {
@@ -53,7 +53,7 @@ class AreasDeConhecimento extends Component {
         inDescricao: '',
         inStatus: true,
         searchText: ''
-    };
+    }
 
     resetInputStates = () => {
 		this.setState({
@@ -84,18 +84,18 @@ class AreasDeConhecimento extends Component {
 
         this.setState({
             visible: true
-        });
+        })
     }
 
     hideAreasDeConhecimentoModal = () => {
         this.setState({
             visible: false,
-        });
+        })
     }
 
     handleGetAreasDeConhecimento = () => {
         this.setState({ tableLoading: true })
-        this.props.getAreasDeConhecimento();
+        this.props.getAreasDeConhecimento()
     }
 
     handleCreateUpdateAreaDeConhecimento = () => {
@@ -109,11 +109,11 @@ class AreasDeConhecimento extends Component {
     }
     
     handleFormInput = (event) => {
-		const target = event.target;
+		const target = event.target
 		
 		this.setState({
 			[target.name]: target.value
-        });
+        })
     }
     
     handleDeleteAreaDeConhecimento = (id) => {
@@ -122,26 +122,26 @@ class AreasDeConhecimento extends Component {
 
     compareByAlph = (a, b) => {
         if (a > b)
-            return -1;
+            return -1
         if (a < b)
-            return 1;
-        return 0;
+            return 1
+        return 0
     }
 
     handleSearch = (selectedKeys, confirm) => () => {
-        confirm();
-        this.setState({ searchText: selectedKeys[0] });
+        confirm()
+        this.setState({ searchText: selectedKeys[0] })
     }
 
     handleReset = clearFilters => () => {
-        clearFilters();
-        this.setState({ searchText: '' });
+        clearFilters()
+        this.setState({ searchText: '' })
     }
 
     handleChange = name => event => {
         this.setState({
             [name]: event.target.value,
-        });
+        })
     }
 
     componentDidMount() {
@@ -162,7 +162,7 @@ class AreasDeConhecimento extends Component {
 				this.handleGetAreasDeConhecimento()
 			}
 			else{
-				this.resetInputStates();
+				this.resetInputStates()
 				this.hideAreasDeConhecimentoModal()
 			}
         }
@@ -176,9 +176,9 @@ class AreasDeConhecimento extends Component {
     }
 
     render(){
-        const { classes } = this.props;
-        const {selectedRowKeys, visible, buttonConfirmAreaDeConhecimentoState } = this.state;
-        const hasSelected = selectedRowKeys.length > 0;
+        const { classes } = this.props
+        const {selectedRowKeys, visible, buttonConfirmAreaDeConhecimentoState } = this.state
+        const hasSelected = selectedRowKeys.length > 0
 
         const columns = [{
             title: 'ID',
@@ -207,12 +207,12 @@ class AreasDeConhecimento extends Component {
             onFilterDropdownVisibleChange: (visible) => {
                 if (visible) {
                     setTimeout(() => {
-                        this.searchInput.focus();
-                    });
+                        this.searchInput.focus()
+                    })
                 }
             },
             render: (text) => {
-                const { searchText } = this.state;
+                const { searchText } = this.state
                 return searchText ? (
                     <span>
                         {text.split(new RegExp(`(?<=${searchText})|(?=${searchText})`, 'i')).map((fragment, i) => (
@@ -220,7 +220,7 @@ class AreasDeConhecimento extends Component {
                             ? <span key={i} className="highlight">{fragment}</span> : fragment // eslint-disable-line
                         ))}
                     </span>
-                ) : text;
+                ) : text
             }
         }, {
             title: 'Status',
@@ -250,9 +250,9 @@ class AreasDeConhecimento extends Component {
                             <a href="/admin/cadastros/areas-de-conhecimento" style={{marginLeft: 20}}><Icon type="delete" style={{color: 'red'}} /></a>
                         </Popconfirm>
                     </React.Fragment>
-                );
+                )
             }
-        }];
+        }]
 
         return(
             <Content
@@ -336,7 +336,7 @@ class AreasDeConhecimento extends Component {
 
 AreasDeConhecimento.propTypes = {
     classes: PropTypes.object.isRequired,
-};
+}
 
 const MapStateToProps = (state) => {
 	return {
@@ -349,4 +349,4 @@ const mapDispatchToProps = (dispatch) => {
     }
 }
 
-export default connect(MapStateToProps, mapDispatchToProps)(BackEndRequests(withStyles(styles)(AreasDeConhecimento)));
+export default connect(MapStateToProps, mapDispatchToProps)(BackEndRequests(withStyles(styles)(AreasDeConhecimento)))

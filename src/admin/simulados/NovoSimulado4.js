@@ -1,51 +1,16 @@
 import React, { Component } from "react"
 import { Layout, Row, Col, Button, Card, Form, Input, TimePicker, DatePicker, Icon } from "antd"
 import { Link } from "react-router-dom"
-import SimuladoSteps from './SimuladoSteps'
 import { connect } from 'react-redux'
-
-import ptBr from 'antd/lib/locale-provider/pt_BR';
-import moment from 'moment';
-import 'moment/locale/pt-br';
-moment.locale('pt-br');
+import ptBr from 'antd/lib/locale-provider/pt_BR'
+import moment from 'moment'
+import 'moment/locale/pt-br'
+import SimuladoSteps from './SimuladoSteps'
+import SelecaoQuestoes from './SelecaoQuestoes'
+moment.locale('pt-br')
 
 
 const { Content } = Layout
-const FormItem = Form.Item
-/*
-const Option = Select.Option
-
-const simNaoOptions = [
-	{
-		key: true,
-		description: "Sim"
-	},
-	{
-		key: false,
-		description: "Não"
-	}
-]
-
-
-const cursos = [
-	{
-		key: 1,
-		description: "Curso 1"
-	},
-	{
-		key: 2,
-		description: "Curso 2"
-	},
-	{
-		key: 3,
-		description: "Curso 3"
-	},
-	{
-		key: 4,
-		description: "Curso 4"
-	}
-]
-*/
 
 class NovoSimulado4 extends Component {
     constructor(props) {
@@ -53,32 +18,53 @@ class NovoSimulado4 extends Component {
         props.setPageTitle('Simulados - Finalização')
     }
 
-    handleFinalizarButton = () => {
+    state = {
+        quantidadeQuestoesSelecionadas: 'Questões Selecionadas'
+    }
+
+    componentWillReceiveProps(props) {
+        if(props.simulado.questoes.length > 0){
+            this.setState({
+                quantidadeQuestoesSelecionadas: 'Questoes Selecionadas ('+props.simulado.questoes.length+')'
+            })
+        }
+    }
+
+    handleFinalizarButton = (mode) => {
         this.props.form.validateFieldsAndScroll((err, values) => {
+            let dataInicial = values.dataInicial.format('YYYY-MM-DD')
+            let horarioInicial = values.horarioInicial.format('HH:mm')
+            let dateTimeInicial = moment(dataInicial + ' ' + horarioInicial, 'YYYY/MM/DD HH:mm')
+
+            let dataFinal = values.dataFinal.format('YYYY-MM-DD')
+            let horarioFinal = values.horarioFinal.format('HH:mm')
+            let dateTimeFinal = moment(dataFinal + ' ' + horarioFinal, 'YYYY/MM/DD HH:mm')
+
             if (!err) {
-              this.props.setSimuladoNome(values.nome)
-              console.log('Gravando simulado...')
+                this.props.setStartFinish({dateTimeInicial: dateTimeInicial.format(), dateTimeFinal: dateTimeFinal.format()})
             }
             else{
-
+                console.log(err)
             }
         })
+
     }
 
     componentDidMount(){
         if(this.props.simulado.nome !== null || this.props.simulado.nome !== ''){
             this.props.form.setFieldsValue({
                 nome: this.props.simulado.nome
-            });
+            })
         }
     }
 
     render(){
-        const { getFieldDecorator } = this.props.form;
+        console.log('props', this.props)
+        const { getFieldDecorator } = this.props.form
         return(
             <React.Fragment>
                 <SimuladoSteps step={3} />
-                <Form layout="vertical">
+                <Form layout="vertical" >
                     <Row>
                         <Col span={24}>
                             <Content
@@ -89,7 +75,7 @@ class NovoSimulado4 extends Component {
                                     minHeight: 30
                                 }}
                             >
-                                <FormItem
+                                <Form.Item
                                     label="Nome"
                                 >
                                     {getFieldDecorator('nome', {
@@ -98,17 +84,16 @@ class NovoSimulado4 extends Component {
                                         <Input
                                             id="nome"
                                             placeholder="Digite o nome do simulado"
-                                            onChange={this.handleInput}
                                         />
                                     )}
-                                </FormItem>
+                                </Form.Item>
                             </Content>
                         </Col>
                     </Row>
                     <Row type="flex">
                         <Col span={8}>
                             <Card
-                                title="Início"
+                                title="Período para Resolução"
                                 bordered={false}
                                 style={{
                                     margin: "4px 4px 4px 16px",
@@ -116,7 +101,7 @@ class NovoSimulado4 extends Component {
                                     background: "#fff"
                                 }}
                             >
-                                <FormItem
+                                <Form.Item
                                     label="Data Inicial"
                                 >
                                     {getFieldDecorator('dataInicial', {
@@ -129,8 +114,8 @@ class NovoSimulado4 extends Component {
                                             style={ {width: '100%'} }
                                         />
                                     )}
-                                </FormItem>
-                                <FormItem
+                                </Form.Item>
+                                <Form.Item
                                     label="Horário Inicial"
                                 >
                                     {getFieldDecorator('horarioInicial', {
@@ -144,20 +129,8 @@ class NovoSimulado4 extends Component {
                                             style={ {width: '100%'} }
                                         />
                                     )}
-                                </FormItem>
-                            </Card>
-                        </Col>
-                        <Col span={8}>
-                            <Card
-                                title="Fim"
-                                bordered={false}
-                                style={{
-                                    margin: "4px 4px 4px 4px",
-                                    padding: 24,
-                                    background: "#fff"
-                                }}
-                            >
-                                <FormItem
+                                </Form.Item>
+                                <Form.Item
                                     label="Data Final"
                                 >
                                     {getFieldDecorator('dataFinal', {
@@ -170,8 +143,8 @@ class NovoSimulado4 extends Component {
                                             style={ {width: '100%'} }
                                         />
                                     )}
-                                </FormItem>
-                                <FormItem
+                                </Form.Item>
+                                <Form.Item
                                     label="Horário Final"
                                 >
                                     {getFieldDecorator('horarioFinal', {
@@ -185,54 +158,21 @@ class NovoSimulado4 extends Component {
                                             style={ {width: '100%'} }
                                         />
                                     )}
-                                </FormItem>
+                                </Form.Item>
                             </Card>
                         </Col>
-                        <Col span={8}>
+                        <Col span={16}>
                             <Card
-                                title="Tempo Para Responder à Atividade"
+                                title={this.state.quantidadeQuestoesSelecionadas}
                                 bordered={false}
                                 style={{
                                     margin: "4px 16px 4px 4px",
                                     padding: 24,
                                     background: "#fff",
-                                    minHeight: 'calc(100% - 8px)'
+                                    height: 'calc(100% - 8px)'
                                 }}
                             >
-                                <FormItem
-                                    label="Tempo de atividade"
-                                >
-                                    {getFieldDecorator('tempoDeAtividade', {
-                                        rules: [{ required: true, message: 'Por favor informe o tempo de atividade' }]
-                                    })(
-                                        <TimePicker
-                                            locale={ptBr}
-                                            format="HH:mm"
-                                            defaultOpenValue={moment('00:00', 'HH:mm')}
-                                            placeholder="Informe o tempo"
-                                            style={ {width: '100%'} }
-                                        />
-                                    )}
-                                </FormItem>
-                            </Card>
-                        </Col>
-                    </Row>
-                    <Row type="flex">
-                        <Col span={24}>
-                            <Card
-                                title="Questões Adicionadas: 4"
-                                bordered={false}
-                                style={{
-                                    margin: "4px 16px 4px 16px",
-                                    padding: 24,
-                                    background: "#fff",
-                                    minHeight: 'calc(100% - 8px)'
-                                }}
-                            >
-                                <p>Questão 1</p>
-                                <p>Questão 2</p>
-                                <p>Questão 3</p>
-                                <p>Questão 4</p>
+                                {<SelecaoQuestoes questoes={this.props.selectedQuestoes} mode='read' />}
                             </Card>
                         </Col>
                     </Row>
@@ -253,14 +193,14 @@ class NovoSimulado4 extends Component {
                                     <Col span={12} align="end">
                                         <Button
                                             type="primary"
-                                            onClick={this.handleFinalizarButton}
+                                            onClick={() => this.handleFinalizarButton('rascunho')}
                                         >
                                             <Icon type="save" />Salvar Como Rascunho
                                         </Button>
                                         <Button
                                             className="buttonGreen"
-                                            onClick={this.handleFinalizarButton}
                                             style={{marginLeft: '30px'}}
+                                            onClick={() => this.handleFinalizarButton('publico')}
                                         >
                                             <Icon type="check" />Finalizar
                                         </Button>
@@ -277,13 +217,16 @@ class NovoSimulado4 extends Component {
 
 const MapStateToProps = (state) => {
 	return {
-		simulado: state.simulado
+        simulado: state.simulado,
+        selectedQuestoes: state.selectedQuestoes
 	}
 }
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        setPageTitle: (pageTitle) => { dispatch({ type: 'SET_PAGETITLE', pageTitle }) }
+        setPageTitle: (pageTitle) => { dispatch({ type: 'SET_PAGETITLE', pageTitle }) },
+        setStartFinish: (startFinish) => { dispatch({ type: 'SET_SIMULADOSTARTFINISH', startFinish }) },
+
     }
 }
 

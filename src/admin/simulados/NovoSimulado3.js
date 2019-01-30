@@ -1,15 +1,15 @@
 import React, { Component } from "react"
 import { Layout, Row, Col, Button, Form, Input, Card, Select, Icon } from "antd"
 import { Link } from "react-router-dom"
-import axios from "axios";
+import axios from "axios"
 import { connect } from 'react-redux'
 import SimuladoSteps from './SimuladoSteps'
 import SelecaoQuestoes from './SelecaoQuestoes'
 import BackEndRequests from '../hocs/BackEndRequests'
 
 const { Content } = Layout
-const FormItem = Form.Item;
-const Option = Select.Option;
+const FormItem = Form.Item
+const Option = Select.Option
 
 const simNaoOptions = [
 	{
@@ -69,14 +69,23 @@ class NovoSimulado3 extends Component {
     constructor(props) {
         super()
         props.setPageTitle('Simulados - Seleção de Conteúdo')
-        props.getHabilidades();
-        props.getConteudos();
-        props.getAreasDeConhecimento();
+        props.getHabilidades()
+        props.getConteudos()
+        props.getAreasDeConhecimento()
     }
 
     state = {
         buttonLoadingBuscar: false,
-        questoes: null
+        questoes: null,
+        quantidadeQuestoesSelecionadas: 'Questões'
+    }
+
+    componentWillReceiveProps(props) {
+        if(props.simulado.questoes.length > 0){
+            this.setState({
+                quantidadeQuestoesSelecionadas: 'Questoes | Selecionadas ('+props.simulado.questoes.length+')'
+            })
+        }
     }
 
     handleSearchSubmit = (event) => {
@@ -150,7 +159,7 @@ class NovoSimulado3 extends Component {
                 }
                 */
         
-                axios.post(`http://localhost:5000/api/getQuestoesSimulado`, request)
+                axios.post('http://localhost:5000/api/getQuestoesSimulado', request)
                 .then(res => {
                     this.setState({questoes: res.data, buttonLoadingBuscar: false})
                 })
@@ -166,7 +175,7 @@ class NovoSimulado3 extends Component {
     }
 
     render(){
-        const { getFieldDecorator } = this.props.form;
+        const { getFieldDecorator } = this.props.form
         return(
             <React.Fragment>
                 <SimuladoSteps step={2} />
@@ -297,7 +306,7 @@ class NovoSimulado3 extends Component {
                     </Col>
                     <Col span={16}>
                         <Card
-                            title="Questões"
+                            title={this.state.quantidadeQuestoesSelecionadas}
                             bordered={false}
                             style={{
                                 margin: "4px 16px 4px 4px",
@@ -306,7 +315,7 @@ class NovoSimulado3 extends Component {
                                 height: 'calc(100% - 8px)'
                             }}
                         >
-                            <SelecaoQuestoes questoes={this.state.questoes} />
+                            <SelecaoQuestoes questoes={this.state.questoes} mode='edit' />
                         </Card>
                     </Col>
                 </Row>
@@ -354,4 +363,4 @@ const mapDispatchToProps = (dispatch) => {
     }
 }
 
-export default connect(MapStateToProps, mapDispatchToProps)(BackEndRequests(Form.create()(NovoSimulado3)));
+export default connect(MapStateToProps, mapDispatchToProps)(BackEndRequests(Form.create()(NovoSimulado3)))

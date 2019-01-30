@@ -1,7 +1,7 @@
-import React, { Component} from 'react';
+import React, { Component} from 'react'
 import { AreaChart, XAxis, YAxis, CartesianGrid, Tooltip, Area, 
     BarChart, Bar, Legend
-} from 'recharts';
+} from 'recharts'
 export default class AreaGestor extends Component {
     render(){
         const data = [
@@ -12,7 +12,7 @@ export default class AreaGestor extends Component {
             {name: 'Page E', uv: 1890, pv: 4800, amt: 2181},
             {name: 'Page F', uv: 2390, pv: 3800, amt: 2500},
             {name: 'Page G', uv: 3490, pv: 4300, amt: 2100},
-      ];
+      ]
         return(
             <div style={{marginLeft: 100}}>
             <AreaChart width={730} height={250} data={data}

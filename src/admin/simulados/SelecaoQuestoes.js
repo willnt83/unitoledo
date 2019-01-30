@@ -17,36 +17,38 @@ class SelecaoQuestoes extends Component {
     }
 
     render(){
-        console.log('simulado', this.props.simulado)
+        console.log('props', this.props)
         return(
             <React.Fragment>
                 {
                     this.state.questoes.map(questao => {
                         var hit = false
                         var selectButton = null
+                        var alternativas = null
                         // Verificando se a questao já está selecionada
                         if(this.props.simulado.questoes){
-                            console.log('questoes selecionadas:', this.props.simulado.questoes)
                             if(this.props.simulado.questoes.indexOf(questao.id) > -1) hit = true
                         }
-                        
-                        selectButton = hit ?
-                            <Button  className="buttonOrange" onClick={() => this.props.removeSimuladoQuestao(questao.id)}><Icon type="check" />Remover Seleção</Button>
-                            :<Button className="buttonGreen" onClick={() => this.props.setSimuladoQuestao(questao.id)}><Icon type="check" />Selecionar</Button>
+                        if(this.props.mode === 'edit'){
+                            selectButton = (hit) ?
+                                <Button  className="buttonOrange" onClick={() => this.props.removeSimuladoQuestao(questao)}><Icon type="check" />Remover Seleção</Button>
+                                :<Button className="buttonGreen" onClick={() => this.props.setSimuladoQuestao(questao)}><Icon type="check" />Selecionar</Button>
+                            alternativas = (
+                                questao.alternativas.map(alternativa => {
+                                    var correta = alternativa.correta ? 'correta' : 'errada'
+                                    return(
+                                        <p key={alternativa.id}><code className={correta}>{alternativa.descricao}</code></p>
+                                    )
+                                })
+                            )
+                        }
                         return(
                             <Row key={questao.id} style={{marginBottom: 20}}>
                                 <Col span={24}>
                                     <Card>
                                         <h4>({questao.fonte})</h4>
                                         <h4 style={{marginBottom: 20}}>{questao.id} - {questao.descricao}</h4>
-                                        {
-                                            questao.alternativas.map(alternativa => {
-                                                var correta = alternativa.correta ? 'correta' : 'errada'
-                                                return(
-                                                    <p key={alternativa.id}><code className={correta}>{alternativa.descricao}</code></p>
-                                                )
-                                            })
-                                        }
+                                            {alternativas}
                                         <Row>
                                             <Col span={24} align="end">
                                                 {selectButton}
@@ -71,9 +73,9 @@ const MapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        setSimuladoQuestao: (questaoId) => { dispatch({ type: 'SET_SIMULADOQUESTAO', questaoId }) },
-        removeSimuladoQuestao: (questaoId) => { dispatch({ type: 'REMOVE_SIMULADOQUESTAO', questaoId }) }
+        setSimuladoQuestao: (questao) => { dispatch({ type: 'SET_SIMULADOQUESTAO', questao }) },
+        removeSimuladoQuestao: (questao) => { dispatch({ type: 'REMOVE_SIMULADOQUESTAO', questao }) }
     }
 }
 
-export default connect(MapStateToProps, mapDispatchToProps)(BackEndRequests(SelecaoQuestoes));
+export default connect(MapStateToProps, mapDispatchToProps)(BackEndRequests(SelecaoQuestoes))

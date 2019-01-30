@@ -8,8 +8,18 @@ const initState = {
     questoes: [],
     simulado: {
         nome: null,
-        alvos: []
-    }
+        alvos: [],
+        questoes: [],
+        inicio: {
+            data: null,
+            hora: null
+        },
+        fim: {
+            data: null,
+            hora: null
+        }
+    },
+    selectedQuestoes: []
 }
 
 const RootReducer = (state = initState, action) => {
@@ -98,30 +108,53 @@ const RootReducer = (state = initState, action) => {
         }
     }
     else if(action.type === 'SET_SIMULADOQUESTAO'){
-        var questoes = state.questoes
-        questoes.push(action.questaoId)
+        var questoes = state.simulado.questoes
+        var selectedQuestoes = state.selectedQuestoes
+        questoes.push(action.questao.id)
+        selectedQuestoes.push(action.questao)
+
         return{
             ...state,
             simulado: {
                 nome: state.simulado.nome,
                 alvos: state.simulado.alvos,
                 questoes
-            }
+            },
+            selectedQuestoes
         }
     }
     else if(action.type === 'REMOVE_SIMULADOQUESTAO'){
-        questoes = state.questoes
-        questoes.splice(questoes.indexOf(action.questaoId), 1)
+        questoes = state.simulado.questoes
+        questoes.splice(questoes.indexOf(action.questao.id), 1)
+
+        selectedQuestoes = state.selectedQuestoes.filter(questao =>{
+            return (questao.id !== action.questao.id)
+        })
+
         return{
             ...state,
             simulado: {
                 nome: state.simulado.nome,
                 alvos: state.simulado.alvos,
                 questoes
+            },
+            selectedQuestoes
+        }
+    }
+    else if(action.type === 'SET_SIMULADOSTARTFINISH'){
+        return{
+            ...state,
+            simulado: {
+                nome: state.simulado.nome,
+                alvos: state.simulado.alvos,
+                questoes: state.simulado.questoes,
+                inicio: action.startFinish.dateTimeInicial,
+                fim: action.startFinish.dateTimeFinal
             }
         }
     }
-    return state;
+
+    return state
 }
 
-export default RootReducer;
+export default RootReducer
