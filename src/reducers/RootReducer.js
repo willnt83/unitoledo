@@ -97,6 +97,30 @@ const RootReducer = (state = initState, action) => {
             }
         }
     }
+    else if(action.type === 'SET_SIMULADOQUESTAO'){
+        var questoes = state.questoes
+        questoes.push(action.questaoId)
+        return{
+            ...state,
+            simulado: {
+                nome: state.simulado.nome,
+                alvos: state.simulado.alvos,
+                questoes
+            }
+        }
+    }
+    else if(action.type === 'REMOVE_SIMULADOQUESTAO'){
+        questoes = state.questoes
+        questoes.splice(questoes.indexOf(action.questaoId), 1)
+        return{
+            ...state,
+            simulado: {
+                nome: state.simulado.nome,
+                alvos: state.simulado.alvos,
+                questoes
+            }
+        }
+    }
     return state;
 }
 

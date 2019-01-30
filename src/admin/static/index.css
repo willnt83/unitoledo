@@ -67,14 +67,14 @@
 
 .buttonOrange {
     color: #fff;
-    background-color: #f0752e;
-    border-color: #f0752e
+    background-color: #f88b0e;
+    border-color: #f88b0e
 }
 
 .buttonOrange:hover, .buttonOrange:focus {
     color: #fff;
-    background-color: #ec9d6f;
-    border-color: #ec9d6f
+    background-color: #f3a449;
+    border-color: #f3a449
 }
 
 .tableSelect .ant-table-thead .ant-checkbox {
@@ -88,4 +88,13 @@ code {
     border-radius: 3px;
     font-size: .9em;
     border: 1px solid #eee
+}
+
+.correta {
+    margin: 0 3px 0 3px;
+    background: #54b87a;
+    padding: .2em .4em;
+    border-radius: 3px;
+    font-size: .9em;
+    border: 1px solid #54b87a;
 }
