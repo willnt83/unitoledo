@@ -54,7 +54,7 @@ class NovoSimulado4 extends Component {
                     if(alvo.tipo === 'Curso'){
                         return({
                             id: alvo.key,
-                            nome: alvo.nome,
+                            nome: alvo.name,
                             idPeriodoLetivo: this.props.periodoLetivo
                         })
                     }
@@ -70,7 +70,7 @@ class NovoSimulado4 extends Component {
                     if(alvo.tipo === 'Turma'){
                         return({
                             id: alvo.key,
-                            nome: alvo.nome,
+                            nome: alvo.name,
                             idPeriodoLetivo: this.props.periodoLetivo,
                             idCurso: alvo.parentKey
                         })
@@ -85,7 +85,7 @@ class NovoSimulado4 extends Component {
                     if(alvo.tipo === 'Disciplina'){
                         return({
                             id: alvo.key,
-                            nome: alvo.nome,
+                            nome: alvo.name,
                             idPeriodoLetivo: this.props.periodoLetivo,
                             idTurma: alvo.parentKey
                         })
@@ -108,7 +108,7 @@ class NovoSimulado4 extends Component {
                 }
                 console.log('request', request)
 
-                axios.post('http://localhost:5000/api/getSimuladoPeriodo', request)
+                axios.post('http://localhost:5000/api/createUpdateSimulado', request)
                 .then(res => {
                     console.log('response: ', res.data)
                 })

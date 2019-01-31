@@ -1,37 +1,13 @@
 import React, { Component } from "react"
 import { Layout, Form, Input, Button, Table, Row, Col, Icon } from "antd"
 import { Link } from "react-router-dom"
+import axios from "axios"
 import { connect } from 'react-redux'
+import moment from 'moment'
+//moment.locale('pt-br')
 
 const { Content } = Layout
 const FormItem = Form.Item
-const tableData = [
-    {
-        key: 1,
-        nome: 'Análise e Desenvolvimento de Sistemas - 06/2017',
-        status: 1,
-        instituicao: 'Unitoledo - Araçatuba - SP',
-        comecou: '30/10/2017',
-        finaliza: '30/10/2017'
-    },
-    {
-        key: 2,
-        nome: 'Simulado - Teste',
-        status: 0,
-        instituicao: 'Unitoledo - Araçatuba - SP',
-        comecou: '02/03/2018',
-        finaliza: '02/03/2018'
-    },
-    {
-        key: 3,
-        nome: 'Análise e Desenvolvimento de Sistemas - 10/2017',
-        status: 1,
-        instituicao: 'Unitoledo - Araçatuba - SP',
-        comecou: '15/20/2018',
-        finaliza: '15/20/2018'
-    }
-]
-
 
 class Simulados extends Component {
     constructor(props) {
@@ -39,12 +15,85 @@ class Simulados extends Component {
         props.setPageTitle('Simulados')
     }
 
+    state = {
+        tableData: null,
+        tableLoading: false
+    }
+
     handleSubmit = () => {
         console.log('submit')
     }
 
+    componentWillMount(){
+        this.setState({tableLoading: true})
+        console.log('props', this.props)
+        var cursos = this.props.mainData.cursos.map(curso => {
+            return({
+                id: curso.id,
+                nome: curso.nome,
+                idPeriodoLetivo: curso.idPeriodoLetivo
+            })
+        })
+
+        var turmas = this.props.mainData.turmas.map(turma => {
+            return({
+                id: turma.id,
+                nome: turma.nome,
+                idPeriodoLetivo: turma.idPeriodoLetivo,
+                idCurso: turma.idCurso
+            })
+        })
+
+        var disciplinas = this.props.mainData.disciplinas.map(disciplina => {
+            return({
+                id: disciplina.id,
+                nome: disciplina.nome,
+                idPeriodoLetivo: disciplina.idPeriodoLetivo,
+                idTurma: disciplina.idTurma
+            })
+        })
+
+        var request = {
+            cursos: cursos,
+            turmas: turmas,
+            disciplinas: disciplinas
+        }
+
+        console.log('request', request)
+
+        axios.post('http://localhost:5000/api/getSimuladoPeriodo', request)
+        .then(res => {
+            console.log('response: ', res.data)
+
+            var tableData = res.data.map(simulado => {
+                var status = (simulado.rascunho) ? 'Rascunho' : 'Público'
+                var inicio = moment(simulado.dataHoraInicial).format('DD/MM/YYYY')
+                var termino = moment(simulado.dataHoraFinal).format('DD/MM/YYYY')
+                return({
+                    id: simulado.id,
+                    nome: simulado.nome,
+                    status: status,
+                    inicio: inicio,
+                    termino: termino
+                })
+            })
+            this.setState({tableLoading: false})
+            console.log('tableData', tableData)
+            this.setState({tableData})
+        })
+        .catch(error =>{
+            console.log('error: ', error)
+            this.setState({tableLoading: false})
+        })
+    }
+
     render(){
         const columns = [
+            {
+				title: "ID",
+				dataIndex: "id",
+				sorter: (a, b) => a.id - b.id
+            },
 			{
 				title: "Nome",
 				dataIndex: "nome",
@@ -55,19 +104,14 @@ class Simulados extends Component {
 				dataIndex: "status",
 				sorter: (a, b) => a.id - b.id
 			},
-            {
-				title: "Instituição",
-				dataIndex: "instituicao",
+			{
+				title: "Início em",
+				dataIndex: "inicio",
 				sorter: (a, b) => a.id - b.id
 			},
 			{
-				title: "Começou em",
-				dataIndex: "comecou",
-				sorter: (a, b) => a.id - b.id
-			},
-			{
-				title: "Finaliza em",
-				dataIndex: "finaliza",
+				title: "Término em",
+				dataIndex: "termino",
 				sorter: (a, b) => a.id - b.id
             },
             {
@@ -91,6 +135,7 @@ class Simulados extends Component {
         ]
         return(
             <React.Fragment>
+                {/*
                 <Content
                     style={{
                         margin: "12px 16px 0 16px",
@@ -111,6 +156,7 @@ class Simulados extends Component {
                         </FormItem>
                     </Form>
                 </Content>
+                */}
 
                 <Content
                     style={{
@@ -120,9 +166,10 @@ class Simulados extends Component {
                         minHeight: 200
                     }}
                 >
-                    <Table 
-                        columns={ columns } 
-                        dataSource={ tableData }
+                    <Table
+                        columns={ columns }
+                        dataSource={ this.state.tableData }
+                        loading={ this.state.tableLoading }
                     />
                     <Row>
                         <Col span={24} align="middle">
@@ -135,10 +182,16 @@ class Simulados extends Component {
     }
 }
 
+const MapStateToProps = (state) => {
+	return {
+        mainData: state.mainData
+	}
+}
+
 const mapDispatchToProps = (dispatch) => {
     return {
         setPageTitle: (pageTitle) => { dispatch({ type: 'SET_PAGETITLE', pageTitle }) }
     }
 }
 
-export default connect(null, mapDispatchToProps)(Simulados)
+export default connect(MapStateToProps, mapDispatchToProps)(Simulados)
