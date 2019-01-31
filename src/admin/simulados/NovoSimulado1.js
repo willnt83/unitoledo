@@ -93,7 +93,8 @@ class NovoSimulado1 extends Component {
 
 const MapStateToProps = (state) => {
 	return {
-		simulado: state.simulado
+        simulado: state.simulado,
+        periodoLetivo: state.periodoLetivo
 	}
 }
 

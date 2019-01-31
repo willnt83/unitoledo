@@ -118,8 +118,11 @@ class ContextoSelection extends Component {
 
 		axios.post('http://localhost:5000/api/getData', requestData, config)
 		.then(res => {
-			console.log('mainData: ', res.data)
 			this.props.setMainData(res.data)
+
+			if(this.state.periodo)
+				this.props.setPeriodoLetivo(this.state.periodo)
+
 			if(this.state.contexto === 'ALUNO'){
 				this.props.history.push('/alunos')
 			}
@@ -223,7 +226,8 @@ const MapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
     return {
-		setMainData: (mainData) => { dispatch({ type: 'SET_MAINDATA', mainData }) }
+		setMainData: (mainData) => { dispatch({ type: 'SET_MAINDATA', mainData }) },
+		setPeriodoLetivo: (periodo) => { dispatch({ type: 'SET_PERIODOLETIVO', periodo }) }
     }
 }
 

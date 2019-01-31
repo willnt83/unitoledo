@@ -1,6 +1,7 @@
 import React, { Component } from "react"
 import { Layout, Row, Col, Button, Card, Form, Input, TimePicker, DatePicker, Icon } from "antd"
 import { Link } from "react-router-dom"
+import axios from "axios"
 import { connect } from 'react-redux'
 import ptBr from 'antd/lib/locale-provider/pt_BR'
 import moment from 'moment'
@@ -32,16 +33,88 @@ class NovoSimulado4 extends Component {
 
     handleFinalizarButton = (mode) => {
         this.props.form.validateFieldsAndScroll((err, values) => {
-            let dataInicial = values.dataInicial.format('YYYY-MM-DD')
-            let horarioInicial = values.horarioInicial.format('HH:mm')
-            let dateTimeInicial = moment(dataInicial + ' ' + horarioInicial, 'YYYY/MM/DD HH:mm')
-
-            let dataFinal = values.dataFinal.format('YYYY-MM-DD')
-            let horarioFinal = values.horarioFinal.format('HH:mm')
-            let dateTimeFinal = moment(dataFinal + ' ' + horarioFinal, 'YYYY/MM/DD HH:mm')
-
             if (!err) {
+                let dataInicial = values.dataInicial.format('YYYY-MM-DD')
+                let horarioInicial = values.horarioInicial.format('HH:mm')
+                let dateTimeInicial = moment(dataInicial + ' ' + horarioInicial, 'YYYY/MM/DD HH:mm')
+                let dataFinal = values.dataFinal.format('YYYY-MM-DD')
+                let horarioFinal = values.horarioFinal.format('HH:mm')
+                let dateTimeFinal = moment(dataFinal + ' ' + horarioFinal, 'YYYY/MM/DD HH:mm')
                 this.props.setStartFinish({dateTimeInicial: dateTimeInicial.format(), dateTimeFinal: dateTimeFinal.format()})
+                
+                let rascunho = mode === rascunho ? true : false
+                let questoes = this.props.simulado.questoes.map(questao => {
+                    return(
+                        {id: questao}
+                    )
+                })
+
+                let cursos = this.props.simulado.alvos
+                .map(alvo => {
+                    if(alvo.tipo === 'Curso'){
+                        return({
+                            id: alvo.key,
+                            nome: alvo.nome,
+                            idPeriodoLetivo: this.props.periodoLetivo
+                        })
+                    }
+                    else
+                        return false
+                })
+                .filter(alvo => {
+                    return(alvo) // retorna somente se existir alvo
+                })
+
+                let turmas = this.props.simulado.alvos
+                .map(alvo =>{
+                    if(alvo.tipo === 'Turma'){
+                        return({
+                            id: alvo.key,
+                            nome: alvo.nome,
+                            idPeriodoLetivo: this.props.periodoLetivo,
+                            idCurso: alvo.parentKey
+                        })
+                    }
+                    else return false
+                })
+                .filter(alvo => {
+                    return(alvo) // retorna somente se existir alvo
+                })
+
+                let disciplinas = this.props.simulado.alvos.map(alvo =>{
+                    if(alvo.tipo === 'Disciplina'){
+                        return({
+                            id: alvo.key,
+                            nome: alvo.nome,
+                            idPeriodoLetivo: this.props.periodoLetivo,
+                            idTurma: alvo.parentKey
+                        })
+                    }
+                    else return false
+                })
+                .filter(alvo => {
+                    return(alvo) // retorna somente se existir alvo
+                })
+
+                var request = {
+                        nome: this.props.simulado.nome,
+                        rascunho: rascunho,
+                        dataHoraInicial: dateTimeInicial.format(),
+                        dataHoraFinal: dateTimeFinal.format(),
+                        questoes: questoes,
+                        cursos: cursos,
+                        turmas: turmas,
+                        disciplinas: disciplinas
+                }
+                console.log('request', request)
+
+                axios.post('http://localhost:5000/api/getSimuladoPeriodo', request)
+                .then(res => {
+                    console.log('response: ', res.data)
+                })
+                .catch(error =>{
+                    console.log('error: ', error)
+                })
             }
             else{
                 console.log(err)
@@ -218,7 +291,8 @@ class NovoSimulado4 extends Component {
 const MapStateToProps = (state) => {
 	return {
         simulado: state.simulado,
-        selectedQuestoes: state.selectedQuestoes
+        selectedQuestoes: state.selectedQuestoes,
+        periodoLetivo: state.periodoLetivo
 	}
 }
 

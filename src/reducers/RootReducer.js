@@ -1,6 +1,7 @@
 const initState = {
     authHeaders: null,
     mainData: null,
+    periodoLetivo: null,
     pageTitle: [],
     habilidades: [],
     conteudos: [],
@@ -33,10 +34,15 @@ const RootReducer = (state = initState, action) => {
         }
     }
     else if(action.type === 'SET_MAINDATA'){
-        console.log('SET_MAINDATA')
         return {
             ...state,
             mainData: action.mainData
+        }
+    }
+    else if(action.type === 'SET_PERIODOLETIVO'){
+        return{
+            ...state,
+            periodoLetivo: action.periodo
         }
     }
     else if(action.type === 'SET_PAGETITLE'){
@@ -74,7 +80,16 @@ const RootReducer = (state = initState, action) => {
             ...state,
             simulado: {
                 nome: action.simuladoNome,
-                alvos: [...state.simulado.alvos]
+                alvos: [...state.simulado.alvos],
+                questoes: state.simulado.questoes,
+                inicio: {
+                    data: state.simulado.inicio.data,
+                    hora: state.simulado.inicio.hora
+                },
+                fim: {
+                    data: state.simulado.fim.data,
+                    hora: state.simulado.fim.hora
+                }
             }
         }
     }
@@ -103,28 +118,45 @@ const RootReducer = (state = initState, action) => {
             ...state,
             simulado: {
                 nome: state.simulado.nome,
-                alvos: action.simuladoAlvos
+                alvos: action.simuladoAlvos,
+                questoes: state.simulado.questoes,
+                inicio: {
+                    data: state.simulado.inicio.data,
+                    hora: state.simulado.inicio.hora
+                },
+                fim: {
+                    data: state.simulado.fim.data,
+                    hora: state.simulado.fim.hora
+                }
             }
         }
     }
     else if(action.type === 'SET_SIMULADOQUESTAO'){
-        var questoes = state.simulado.questoes
         var selectedQuestoes = state.selectedQuestoes
-        questoes.push(action.questao.id)
         selectedQuestoes.push(action.questao)
+
+        console.log('state', state)
 
         return{
             ...state,
             simulado: {
                 nome: state.simulado.nome,
                 alvos: state.simulado.alvos,
-                questoes
+                questoes: [...state.simulado.questoes, action.questao.id],
+                inicio: {
+                    data: state.simulado.inicio.data,
+                    hora: state.simulado.inicio.hora
+                },
+                fim: {
+                    data: state.simulado.fim.data,
+                    hora: state.simulado.fim.hora
+                }
             },
             selectedQuestoes
         }
     }
     else if(action.type === 'REMOVE_SIMULADOQUESTAO'){
-        questoes = state.simulado.questoes
+        var questoes = state.simulado.questoes
         questoes.splice(questoes.indexOf(action.questao.id), 1)
 
         selectedQuestoes = state.selectedQuestoes.filter(questao =>{
@@ -136,7 +168,15 @@ const RootReducer = (state = initState, action) => {
             simulado: {
                 nome: state.simulado.nome,
                 alvos: state.simulado.alvos,
-                questoes
+                questoes,
+                inicio: {
+                    data: state.simulado.inicio.data,
+                    hora: state.simulado.inicio.hora
+                },
+                fim: {
+                    data: state.simulado.fim.data,
+                    hora: state.simulado.fim.hora
+                }
             },
             selectedQuestoes
         }

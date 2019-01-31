@@ -16,6 +16,7 @@ class NovoSimulado2 extends Component {
     state = {
         selectedRowKeys: [],
         showWarning: false,
+        tableData: null,
         alvos: null,
     };
 
@@ -46,6 +47,7 @@ class NovoSimulado2 extends Component {
         // Lógica para comportamento de seleção hierárquica
 
         // Incluindo alvo no redux store
+        console.log('selectedRows', selectedRows)
         this.props.setSimuladoAlvo(selectedRows)
 
         this.setState({ selectedRowKeys });
@@ -72,45 +74,105 @@ class NovoSimulado2 extends Component {
             })
         }
 
-        /*
+
         // Dados da tabela de seleção do alvo
+        var alvos = []
+        var turmas = []
+        var disciplinas = []
         // Se mainData possuir cursos
-        var cursos = []
         if(this.props.mainData.cursos && this.props.mainData.cursos.length > 0){
-            cursos = this.props.mainData.cursos.map(curso => {
-                return ({
-                    id: curso.id,
-                    description: curso.nome,
-                    tipo: 'CURSO'
-                })
+            alvos = this.props.mainData.cursos.map(curso => {
+
+                /************************** Turmas  /**************************/
+                // Verifica se existem Turmas em mainData
+                if(this.props.mainData.turmas && this.props.mainData.turmas.length > 0){
+                    // Percorre mainData.turmas a procura de Turmas filhas do Curso
+                    turmas = this.props.mainData.turmas.map(turma => {
+                        // Verifica se a turma corrente pertence ao curso corrente
+                        if(turma.idCurso === curso.id){
+                            // Se achou turma pertencente ao curso corrente
+
+
+                            /************************** Disciplinas  /**************************/
+                            // Verifica se existem disciplinas em mainData
+                            if(this.props.mainData.disciplinas && this.props.mainData.disciplinas.length > 0){
+                                // Percorre maindata.disciplinas a procura de disciplinas filhas da turma
+                                disciplinas = this.props.mainData.disciplinas
+                                .map(disciplina => {
+                                    // retorno de map disciplinas
+                                    return({
+                                        key: disciplina.id,
+                                        parentKey: disciplina.idTurma,
+                                        name: disciplina.nome,
+                                        tipo: 'Disciplina'
+                                    })
+                                })
+                                .filter(disciplina => {
+                                    // Verifica se a disciplina corrente pertence à turma corrente
+                                    return (disciplina.parentKey === turma.id)
+                                })
+                                
+                            }
+
+                            if(disciplinas.length > 0){
+                                // Se disciplinas da turma foram encontradas
+                                // retorno de map turmas
+                                return({
+                                    key: turma.id,
+                                    parentKey: curso.id,
+                                    name: turma.nome,
+                                    tipo: 'Turma',
+                                    children: disciplinas
+                                })
+                            }
+                            else{
+                                // Não encontrou nenhuma turma pertencente ao curso corrente
+                                // retorno de map turmas
+                                return({
+                                    key: turma.id,
+                                    parentKey: curso.id,
+                                    name: turma.nome,
+                                    tipo: 'Turma'
+                                })
+                            }
+                        }
+                        else {
+                            // Não achou nenhuma turma que pertença ao curso corrente
+                            // retorno de map turmas
+                            return []
+                        }
+                    })
+                }
+
+                if(turmas.length > 0){
+                    // Se turmas foram encontradas para o curso
+                    // retorno de map cursos
+                    return ({
+                        key: curso.id,
+                        name: curso.nome,
+                        tipo: 'Curso',
+                        children: turmas
+                    })
+                }
+                else{
+                    // Não achou nenhuma turma que pertença ao curso
+                    return ({
+                        key: curso.id,
+                        name: curso.nome,
+                        tipo: 'Curso'
+                    })
+                }
             })
-            this.setState({
-                alvos: cursos
-            })
+
+            
+        }
+        else {
+            // Não possui cursos em mainData, fazer esse caso....
         }
 
-        // Se mainData possuir turmas
-        if(this.props.mainData.turmas && this.props.mainData.turmas.length > 0){
-            var turmas = this.props.mainData.turmas.map(turma => {
-                return ({
-                    id: turma.id,
-                    description: turma.nome,
-                    tipo: 'TURMA'
-                })
-            })
-
-            if(cursos.length > 0){
-                this.setState({
-                    alvos: cursos.concat(turmas)
-                })
-            }
-            else{
-                this.setState({
-                    alvos: turmas
-                })
-            }
-        }
-        */
+        this.setState({
+            tableData:alvos
+        })
     }
 
     componentWillUpdate(nextProps, nextState){
@@ -121,7 +183,7 @@ class NovoSimulado2 extends Component {
     }
 
     render(){
-        //console.log(this.props.simulado)
+        console.log('PROPS',this.props)
         const { selectedRowKeys } = this.state
         /*
         const columns = [
@@ -158,6 +220,8 @@ class NovoSimulado2 extends Component {
             }
         ];
 
+        
+        /*
         const data = [
             {
                 key: 1,
@@ -198,7 +262,7 @@ class NovoSimulado2 extends Component {
                 name: 'Engenharia Elétrica',
                 tipo: 'Curso',
             }
-        ];
+        ];*/
       
 
         const rowSelection = {
@@ -214,10 +278,9 @@ class NovoSimulado2 extends Component {
                     selectedRows.forEach(row => {
                         // Se a row selecionada for do tipo Curso
                         if(row.tipo === 'Curso'){
-                            console.log('row '+row.key+' é curso')
+
                             // Procurar todos os filhos (turmas e disciplinas) desse curso e selecionar também
-                            console.log('data', data)
-                            data.forEach(item =>{
+                            this.state.tableData.forEach(item =>{
                                 // O item de data é o item sendo procurado?
                                 if(item.key === row.key){
                                     console.log('item '+item.key+ ' é o item procurado')
@@ -304,7 +367,7 @@ class NovoSimulado2 extends Component {
                                             className="tableSelect"
                                             columns={columns}
                                             rowSelection={rowSelection}
-                                            dataSource={data}
+                                            dataSource={this.state.tableData}
                                         />
                                         {/*
                                         <Table
