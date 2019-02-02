@@ -32,6 +32,7 @@ class NovoSimulado4 extends Component {
     }
 
     handleFinalizarButton = (mode) => {
+        let rascunho = null
         this.props.form.validateFieldsAndScroll((err, values) => {
             if (!err) {
                 let dataInicial = values.dataInicial.format('YYYY-MM-DD')
@@ -42,7 +43,7 @@ class NovoSimulado4 extends Component {
                 let dateTimeFinal = moment(dataFinal + ' ' + horarioFinal, 'YYYY/MM/DD HH:mm')
                 this.props.setStartFinish({dateTimeInicial: dateTimeInicial.format(), dateTimeFinal: dateTimeFinal.format()})
                 
-                let rascunho = mode === rascunho ? true : false
+                rascunho = mode === rascunho ? true : false
                 let questoes = this.props.simulado.questoes.map(questao => {
                     return(
                         {id: questao}

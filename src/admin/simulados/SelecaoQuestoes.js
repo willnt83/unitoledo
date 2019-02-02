@@ -5,7 +5,7 @@ import BackEndRequests from '../hocs/BackEndRequests'
 
 class SelecaoQuestoes extends Component {
     state = {
-        questoes: [],
+        questoes: []
     }
 
     componentWillReceiveProps(props) {

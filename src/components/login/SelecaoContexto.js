@@ -38,6 +38,7 @@ class ContextoSelection extends Component {
 
 			axios.post('http://localhost:5000/api/getPeriodo', selectedContexto, config)
 			.then(res => {
+				console.log('getPeriodo response', res.data)
 				var periodos = res.data.periodos.map((item) => {
 					return ({
 						key: item.id,
@@ -118,7 +119,10 @@ class ContextoSelection extends Component {
 
 		axios.post('http://localhost:5000/api/getData', requestData, config)
 		.then(res => {
+			console.log('getData response', res.data)
 			this.props.setMainData(res.data)
+
+			console.log('this.state.periodo', this.state.periodo)
 
 			if(this.state.periodo)
 				this.props.setPeriodoLetivo(this.state.periodo)

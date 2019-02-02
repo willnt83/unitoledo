@@ -1,5 +1,5 @@
 import React, { Component } from "react"
-import { Layout, Form, Input, Button, Table, Row, Col, Icon } from "antd"
+import { Layout, Button, Table, Row, Col, Icon } from "antd"
 import { Link } from "react-router-dom"
 import axios from "axios"
 import { connect } from 'react-redux'
@@ -7,7 +7,6 @@ import moment from 'moment'
 //moment.locale('pt-br')
 
 const { Content } = Layout
-const FormItem = Form.Item
 
 class Simulados extends Component {
     constructor(props) {
@@ -20,8 +19,21 @@ class Simulados extends Component {
         tableLoading: false
     }
 
+    /*
     handleSubmit = () => {
         console.log('submit')
+    }
+    */
+
+    rascunhoPublicoChange = (rascunho) => {
+
+        /*
+        localhost:5000/api/updateStatus
+        {
+            "id": 40,
+            "rascunho": true
+        }
+        */
     }
 
     componentWillMount(){
@@ -31,10 +43,10 @@ class Simulados extends Component {
             return({
                 id: curso.id,
                 nome: curso.nome,
-                idPeriodoLetivo: curso.idPeriodoLetivo
+                idPeriodoLetivo: this.props.periodoLetivo
             })
         })
-
+        /*
         var turmas = this.props.mainData.turmas.map(turma => {
             return({
                 id: turma.id,
@@ -52,6 +64,46 @@ class Simulados extends Component {
                 idTurma: disciplina.idTurma
             })
         })
+        */
+
+        var turmas = this.props.mainData.turmas
+        .map(turma => {
+            return({
+                id: turma.id,
+                nome: turma.nome,
+                idPeriodoLetivo: turma.idPeriodoLetivo,
+                idCurso: turma.idCurso
+            })
+        })
+        .filter(turma => {
+            console.log('turma.idCurso', turma.idCurso)
+            var hit = true
+            this.props.mainData.cursos.forEach(curso => {
+                console.log('curso.id', curso.id)
+                if(turma.idCurso === curso.id)
+                    hit = false
+            })
+            return hit
+        })
+
+
+        var disciplinas = this.props.mainData.disciplinas
+        .map(disciplina => {
+            return({
+                id: disciplina.id,
+                nome: disciplina.nome,
+                idPeriodoLetivo: disciplina.idPeriodoLetivo,
+                idTurma: disciplina.idTurma
+            })
+        })
+        .filter(disciplina => {
+            var hit = true
+            this.props.mainData.turmas.forEach(turma => {
+                if(disciplina.idTurma === turma.id)
+                    hit = false
+            })
+            return hit
+        })
 
         var request = {
             cursos: cursos,
@@ -63,16 +115,16 @@ class Simulados extends Component {
 
         axios.post('http://localhost:5000/api/getSimuladoPeriodo', request)
         .then(res => {
-            console.log('response: ', res.data)
-
+            console.log('response',res.data)
             var tableData = res.data.map(simulado => {
-                var status = (simulado.rascunho) ? 'Rascunho' : 'Público'
                 var inicio = moment(simulado.dataHoraInicial).format('DD/MM/YYYY')
                 var termino = moment(simulado.dataHoraFinal).format('DD/MM/YYYY')
+                var status = (simulado.rascunho) ? 'Rascunho' : 'Público'
                 return({
-                    id: simulado.id,
+                    key: simulado.id,
                     nome: simulado.nome,
                     status: status,
+                    rascunho: simulado.rascunho,
                     inicio: inicio,
                     termino: termino
                 })
@@ -91,7 +143,7 @@ class Simulados extends Component {
         const columns = [
             {
 				title: "ID",
-				dataIndex: "id",
+				dataIndex: "key",
 				sorter: (a, b) => a.id - b.id
             },
 			{
@@ -122,10 +174,13 @@ class Simulados extends Component {
                 width: 300,
                 className: "actionCol",
 				render: (text, record) => {
+                    console.log('record', record)
+                    var publicarButtonDisabled = record.rascunho ? false : true
+                    var moverRascunhoButtonDisabled = record.rascunho ? true : false
 					return (
                         <React.Fragment>
-                            <Button className="actionButton buttonGreen" title="Publicar"><Icon type="global" /></Button>
-                            <Button className="actionButton buttonOrange" title="Mover para Rascunho"><Icon type="file-text" /></Button>
+                            <Button className="actionButton buttonGreen" title="Publicar" disabled={publicarButtonDisabled}><Icon type="global" /></Button>
+                            <Button className="actionButton buttonOrange" title="Mover para Rascunho" disabled={moverRascunhoButtonDisabled}><Icon type="file-text" /></Button>
                             <Button className="actionButton" title="Editar" type="primary"><Icon type="edit" /></Button>
                             <Button className="actionButton buttonRed" title="Excluir"><Icon type="delete" /></Button>
                         </React.Fragment>
@@ -184,7 +239,8 @@ class Simulados extends Component {
 
 const MapStateToProps = (state) => {
 	return {
-        mainData: state.mainData
+        mainData: state.mainData,
+        periodoLetivo: state.periodoLetivo
 	}
 }
 
