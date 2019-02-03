@@ -14,44 +14,11 @@ class NovoSimulado2 extends Component {
     }
 
     state = {
-        selectedRowKeys: [],
         showWarning: false,
-        tableData: null,
         alvos: null,
+        tableData: [],
+        selectedRowKeys: []
     };
-
-    /*
-    selectRow = (record) => {
-        console.log(record)
-        const selectedRowKeys = [...this.state.selectedRowKeys];
-        if (selectedRowKeys.indexOf(record.id) >= 0) {
-            selectedRowKeys.splice(selectedRowKeys.indexOf(record.id), 1);
-        } else {
-            selectedRowKeys.push(record.id);
-        }
-        // Incluindo alvo no redux store
-        this.props.setSimuladoAlvo({
-            id: record.id,
-            descricao: record.description,
-            tipo: record.tipo
-        })
-        this.setState({ selectedRowKeys });
-    }
-    */
-
-    onSelectedRowKeysChange = (selectedRowKeys, selectedRows) => {
-        console.log('--==onSelectedRowKeysChange==--')
-        console.log('selectedRowKeys', selectedRowKeys)
-        console.log('selectedRows', selectedRows)
-
-        // Lógica para comportamento de seleção hierárquica
-
-        // Incluindo alvo no redux store
-        console.log('selectedRows', selectedRows)
-        this.props.setSimuladoAlvo(selectedRows)
-
-        this.setState({ selectedRowKeys });
-    }
 
     handleProximoButton = () => {
         if(this.state.selectedRowKeys.length === 0){
@@ -65,7 +32,7 @@ class NovoSimulado2 extends Component {
 
     componentWillMount(){
         if(this.props.simulado.alvos.length > 0){
-            let tempArray = []
+            var tempArray = []
             tempArray = this.props.simulado.alvos.map((item) => {
                 return item.id
             })
@@ -73,7 +40,6 @@ class NovoSimulado2 extends Component {
                 selectedRowKeys: tempArray
             })
         }
-
 
         // Dados da tabela de seleção do alvo
         var alvos = []
@@ -103,7 +69,7 @@ class NovoSimulado2 extends Component {
                                     return({
                                         key: disciplina.id,
                                         parentKey: disciplina.idTurma,
-                                        name: disciplina.nome,
+                                        name: disciplina.id+' - '+disciplina.nome,
                                         tipo: 'Disciplina'
                                     })
                                 })
@@ -120,7 +86,7 @@ class NovoSimulado2 extends Component {
                                 return({
                                     key: turma.id,
                                     parentKey: curso.id,
-                                    name: turma.nome,
+                                    name: turma.id+' - '+turma.nome,
                                     tipo: 'Turma',
                                     children: disciplinas
                                 })
@@ -131,7 +97,7 @@ class NovoSimulado2 extends Component {
                                 return({
                                     key: turma.id,
                                     parentKey: curso.id,
-                                    name: turma.nome,
+                                    name: turma.id+' - '+turma.nome,
                                     tipo: 'Turma'
                                 })
                             }
@@ -149,7 +115,7 @@ class NovoSimulado2 extends Component {
                     // retorno de map cursos
                     return ({
                         key: curso.id,
-                        name: curso.nome,
+                        name: curso.id+' - '+curso.nome,
                         tipo: 'Curso',
                         children: turmas
                     })
@@ -158,7 +124,7 @@ class NovoSimulado2 extends Component {
                     // Não achou nenhuma turma que pertença ao curso
                     return ({
                         key: curso.id,
-                        name: curso.nome,
+                        name: curso.id+' - '+curso.nome,
                         tipo: 'Curso'
                     })
                 }
@@ -169,44 +135,208 @@ class NovoSimulado2 extends Component {
         else {
             // Não possui cursos em mainData, fazer esse caso....
         }
-
         this.setState({
-            tableData:alvos
+            tableData: alvos
         })
     }
 
+    /*
     componentWillUpdate(nextProps, nextState){
         if(nextState.selectedRowKeys.length !== this.state.selectedRowKeys.length)
             this.setState({
                 showWarning: false
             })
     }
+    */
+
+    // Função que recebe a key da row seleciona, procura a row na tableData e remove seus filhos
+    // Retorna a key dos filhos removidos
+    searchKeyRemoveChildren = (key) => {
+        var tempTableData = this.state.tableData
+        var keysToBeRemoved = []
+        var hit = false
+        var countCurso = 0
+        var countTurma = 0
+
+        // Buscando a key, percorre cursos
+        this.state.tableData.forEach(curso =>{
+            if(curso.children){
+                // Se o curso possuir turmas
+                // Percorre suas turmas (nível Turmas)
+                countTurma = 0
+                curso.children.forEach(turma => {
+                    // Neste ponto, sabe-se que a key que buscamos possui filhos, então não há a necessidade de buscar nos filhos dos filhos, pois nenhum deles será a key buscada
+                    if(turma.key === key){
+                        // Setta flag pra indicar que o registro foi encontado
+                        hit = true
+                        // Se encontrou o registro
+                        // Percorre suas disciplinas pra pegar suas keys e alimentar o vetor de keys a serem removidas
+                        turma.children.forEach(disciplina => {
+                            keysToBeRemoved.push(disciplina.key)
+                        })
+                        // Removendo da tabela de seleção
+                        delete tempTableData[countCurso].children[countTurma].children
+                        this.setState({tableData: tempTableData})
+
+                    }
+                    countTurma++
+                })
+
+                if(!hit){
+                    // Se não encontrou o registro em Turmas, verifica-se se o pai (Curso) é a key buscada
+                    if(curso.key === key){
+                        // O curso é a key buscada
+                        // Percorre seus filhos (nível Turmas) para recolher as keys a serem removidas
+                        curso.children.forEach(turma => {
+                            if(turma.children){
+                                // Se turmas tem disciplinas, precorre as disciplinas
+                                turma.children.forEach(disciplina => {
+                                    keysToBeRemoved.push(disciplina.key)
+                                })
+                            }
+
+                            // Coleta-se a key da turma também tendo ela disciplinas ou não, pois ela será removida também
+                            keysToBeRemoved.push(turma.key)
+                        })
+
+                        // Removendo da tabela de seleção
+                        delete tempTableData[countCurso].children
+                        this.setState({tableData: tempTableData})
+                    }
+                    else {
+                        // O pai não é a key buscada, nenhuma ação é realizada
+                    }
+                }
+            }
+            else{
+                // Sabe-se que a key buscada possui filhos, então ela não será nenhuma dessas que não possui filhos
+                // Nenhuma ação é realizada
+            }
+            countCurso++
+        })
+        return keysToBeRemoved
+    }
+
+    // Função que recebe selectedRows e um vetor de chaves a serem removidas da selectedRows
+    // Retorna selectedRows atualizada com as chaves removidas
+    removeSelectedRows = (selectedRows, keys) => {
+        var newSelectedRows = selectedRows.filter(row => {
+            // Removendo as keys que estão na lista de keys a serem removidas
+            return(keys.indexOf(row.key) < 0)
+        })
+        return newSelectedRows
+    }
+
+    // Função que recebe key e percorre o vedor de state.selectedRowKeys para remover caso esteja lá
+    removeSelectedRowKeys = (selectedRowKeys, keysToBeRemoved) => {
+        var newSelectedRowKeys = selectedRowKeys.filter(selectedRowKey => {
+            if(keysToBeRemoved.indexOf(selectedRowKey) > -1){
+                return false
+            }
+            else{
+                return true
+            }
+        })
+        return newSelectedRowKeys
+    }
+
+    // Função que recebe a key dermarcada, verifica se a mesma possuia filhos e os restaura se houver
+    // Não há retorno na função, apenas a tableData é atualizada com os filhos restaurados
+    searchKeyRestoreChildren = (key) => {
+        //var hit = false
+        var countCursos = 0
+        var countTurmas = 0
+        var tempTableData = this.state.tableData
+        var tempDisciplinas = []
+        var tempTurmas = []
+        var hit = false
+        // Percorre os cursos
+        this.state.tableData.forEach(curso => {
+            if(curso.children){
+                // Se o curso possuir turmas
+                // Percorre turmas
+                curso.children.forEach(turma => {
+                    if(turma.key === key){
+                        hit = true
+                        // Se encontrar a key buscada em turma
+                        // Verifica se existem disciplinas em mainData
+                        if(this.props.mainData.disciplinas){
+                            // mainData possui disciplinas, percorre para encontrar filhos da turma
+                            this.props.mainData.disciplinas.forEach(disciplina =>{
+                                if(disciplina.idTurma === key){
+                                    tempDisciplinas.push({
+                                        key: disciplina.id,
+                                        name: disciplina.nome,
+                                        parentKey: disciplina.idTurma,
+                                        tipo: 'Disciplina'
+                                    })
+                                }
+                            })
+                        }
+                        
+                        tempTableData[countCursos].children[countTurmas].children = tempDisciplinas
+                        this.setState({tableData: tempTableData})
+                    }
+                    countTurmas++
+                })
+            }
+            else{
+                // Desmarcando curso
+                if(curso.key === key){
+                    // Verifica se existem turmas em mainData
+                    if(this.props.mainData.turmas){
+                        // mainData possui turmas, percorre as turmas para encontrar os filhos do curso
+                        this.props.mainData.turmas.forEach(turma => {
+                            tempDisciplinas = []
+                            if(turma.idCurso === key){
+                                // Turma filho do curso encontrada
+                                // Verifica se existem disciplinas em mainData
+                                if(this.props.mainData.disciplinas){
+
+                                    // mainData possui disciplinas, percorre para encontrar filhos da turma
+                                    this.props.mainData.disciplinas.forEach(disciplina =>{
+                                        if(disciplina.idTurma === turma.id){
+                                            tempDisciplinas.push({
+                                                key: disciplina.id,
+                                                name: disciplina.nome,
+                                                parentKey: disciplina.idTurma,
+                                                tipo: 'Disciplina'
+                                            })
+                                        }
+                                    })
+                                }
+
+                                if(tempDisciplinas.length > 0) {
+                                    tempTurmas.push({
+                                        key: turma.id,
+                                        name: turma.nome,
+                                        parentKey: turma.idCurso,
+                                        tipo: 'Disciplina',
+                                        children: tempDisciplinas
+                                    })
+                                }
+                                else{
+                                    tempTurmas.push({
+                                        key: turma.id,
+                                        name: turma.nome,
+                                        parentKey: turma.idCurso,
+                                        tipo: 'Disciplina'
+                                    })
+                                }
+
+                                tempTableData[countCursos].children = tempTurmas
+                                this.setState({tableData: tempTableData})
+                            }
+                        })
+                    }
+                }
+            }
+            countCursos++
+        })
+    }
 
     render(){
-        console.log('PROPS',this.props)
         const { selectedRowKeys } = this.state
-        /*
-        const columns = [
-            {
-				title: "Id",
-				dataIndex: "id"
-            },
-			{
-				title: "Alvo",
-				dataIndex: "description"
-            },
-            {
-				title: "Tipo",
-				dataIndex: "tipo"
-            }
-        ]
-        const { selectedRowKeys } = this.state
-        const rowSelection = {
-            selectedRowKeys,
-            onChange: this.onSelectedRowKeysChange
-        };
-        */
-
         const columns = [
             {
                 title: 'Público Alvo',
@@ -220,132 +350,39 @@ class NovoSimulado2 extends Component {
             }
         ];
 
-        
-        /*
-        const data = [
-            {
-                key: 1,
-                name: 'Análise de Sistemas',
-                tipo: 'Curso',
-                children: [
-                    {
-                        key: 11,
-                        name: 'Análise de Sistemas Turma I',
-                        tipo: 'Turma',
-                    }, {
-                        key: 12,
-                        name: 'Análise de Sistemas Turma II',
-                        tipo: 'Turma',
-                        children: [
-                            {
-                                key: 121,
-                                name: 'Intrudução à Lógica de Programação',
-                                tipo: 'Disciplina',
-                            }, {
-                                key: 122,
-                                name: 'Linguagens Formais e Autômatos',
-                                tipo: 'Disciplina'
-                            }, {
-                                key: 123,
-                                name: 'Cálculo I',
-                                tipo: 'Disciplina'
-                            }
-                        ],
-                    }, {
-                        key: 13,
-                        name: 'Análise de Sistemas Iniciantes',
-                        tipo: 'Turma',
-                    }
-                ],
-            }, {
-                key: 2,
-                name: 'Engenharia Elétrica',
-                tipo: 'Curso',
-            }
-        ];*/
-      
-
         const rowSelection = {
             selectedRowKeys,
-            onChange: (selectedRowKeys, selectedRows) => {
+            onSelect: (record, selected, selectedRows) => {
+                var selectedRowKeys = this.state.selectedRowKeys
+                var rowsToBeRemoved = []
 
-                console.log('--==onChange==--')
-                console.log('selectedRowKeys:', selectedRowKeys)
-                console.log('selectedRows: ', selectedRows)
+                // Seleção
+                if(selected){
+                    // Se a row possuir filhos, remove-os da seleção
+                    if(record.children){
+                        rowsToBeRemoved = this.searchKeyRemoveChildren(record.key)
+                        selectedRows = this.removeSelectedRows(selectedRows, rowsToBeRemoved)
+                        selectedRowKeys = this.removeSelectedRowKeys(selectedRowKeys, rowsToBeRemoved)
+                    }
 
-                // Seleção de filhos
-                if(selectedRows.length > 0){
-                    selectedRows.forEach(row => {
-                        // Se a row selecionada for do tipo Curso
-                        if(row.tipo === 'Curso'){
+                    // Incluindo alvo no redux store
+                    this.props.setSimuladoAlvo(selectedRows)
 
-                            // Procurar todos os filhos (turmas e disciplinas) desse curso e selecionar também
-                            this.state.tableData.forEach(item =>{
-                                // O item de data é o item sendo procurado?
-                                if(item.key === row.key){
-                                    console.log('item '+item.key+ ' é o item procurado')
-                                    // Verifica se tem filho
-                                    if(item.children){
-                                        console.log('Ele possui children!')
-                                        //Percorre as children
-                                        item.children.forEach(child => {
-                                            // Verifica se o filho possui filhos
-                                            if(child.children){
-                                                if(selectedRowKeys.indexOf(child.key) === -1){
-                                                    selectedRowKeys.push(child.key)
-                                                    selectedRows.push(child)
-                                                }
-                                                // Percorre os filhos do filho
-                                                child.children.forEach(childChildren => {
-                                                    // Se a child ainda não estiver selecionada
-                                                    if(selectedRowKeys.indexOf(childChildren.key) === -1){
-                                                        console.log('childChildren key '+childChildren.key+' ainda não foi selecionada, inserindo em selectedRowKeys')
-                                                        // Insere em selectedRowKeys
-                                                        selectedRowKeys.push(childChildren.key)
-                                                        // Insere objeto em selectedRows
-                                                        selectedRows.push(childChildren)
-                                                    }
-                                                })
-                                            }
-                                            else{
-                                                // Filho não possui filhos
-                                                // Se a child ainda não estiver selecionada
-                                                if(selectedRowKeys.indexOf(child.key) === -1){
-                                                    console.log('child key '+child.key+' ainda não foi selecionada, inserindo em selectedRowKeys')
-                                                    // Insere em selectedRowKeys
-                                                    selectedRowKeys.push(child.key)
-                                                    // Insere objeto em selectedRows
-                                                    selectedRows.push(child)
-                                                }
-                                            }
-                                        })
-                                    }
-                                }
-                            })
-                        }
-                    })
+                    selectedRowKeys.push(record.key)
+                    this.setState({ selectedRowKeys });
                 }
+                // Dermarcação
+                else{
+                    // Incluindo alvo no redux store
+                    this.props.setSimuladoAlvo(selectedRows)
 
+                    selectedRowKeys.splice(selectedRowKeys.indexOf(record.key), 1)
+                    this.setState({ selectedRowKeys });
 
-
-
-
-
-                this.onSelectedRowKeysChange(selectedRowKeys, selectedRows)
-            },
-            /*onSelect: (record, selected, selectedRows) => {
-                console.log('onSelect')
-                console.log('record', record)
-                console.log('selected', selected)
-                console.log('selectedRows', selectedRows)
-            },
-            onSelectAll: (selected, selectedRows, changeRows) => {
-                console.log('onSelectAll')
-                console.log(selected, selectedRows, changeRows);
-            },*/
+                    this.searchKeyRestoreChildren(record.key)
+                }
+            }
         };
-
-
 
         return(
             <React.Fragment>
@@ -434,14 +471,14 @@ class NovoSimulado2 extends Component {
 const MapStateToProps = (state) => {
 	return {
         mainData: state.mainData,
-		simulado: state.simulado
+        simulado: state.simulado
 	}
 }
 
 const mapDispatchToProps = (dispatch) => {
     return {
         setPageTitle: (pageTitle) => { dispatch({ type: 'SET_PAGETITLE', pageTitle }) },
-        setSimuladoAlvo: (simuladoAlvos) => { dispatch({ type: 'SET_SIMULADOALVO', simuladoAlvos }) },
+        setSimuladoAlvo: (simuladoAlvos) => { dispatch({ type: 'SET_SIMULADOALVO', simuladoAlvos }) }
     }
 }
 

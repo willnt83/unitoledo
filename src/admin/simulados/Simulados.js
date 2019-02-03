@@ -113,9 +113,50 @@ class Simulados extends Component {
 
         console.log('request', request)
 
-        axios.post('http://localhost:5000/api/getSimuladoPeriodo', request)
+        axios.post('http://localhost:5000/api/getSimulados', request)
         .then(res => {
             console.log('response',res.data)
+            var inicio = null
+            var termino = null
+            var status = null
+            var simulados = []
+            tableData = res.data.map(curso => {
+                if(curso.simulados && curso.simulados.length > 0){
+                    curso.simulados.forEach(simulado => {
+                        // Simulados para Cursos
+                        inicio = moment(simulado.dataHoraInicial)
+                        termino = moment(simulado.dataHoraFinal).format('DD/MM/YYYY')
+                        status = (simulado.rascunho) ? 'Rascunho' : 'Público'
+                        simulados.push({
+                            key: simulado.id,
+                            nome: simulado.nome,
+                            alvos: curso.id,
+                            questoes: simulado.questoes,
+                            status: status,
+                            rascunho: simulado.rascunho,
+                            inicio: {
+                                data: inicio.format('DD/MM/YYYY'),
+                                hora: inicio.format('HH:mm')
+                            },
+                            fim: {
+                                data: termino.format('DD/MM/YYYY'),
+                                hora: termino.format('HH:mm')
+                            }
+                        })
+                    })
+                    return simulados
+                }
+
+                if(curso.turmas.simulados && curso.turmas.simulados.length > 0){
+                    // Simulados para Turmas
+                }
+
+                if(curso.turmas.disciplinas.simulados && curso.turmas.disciplinas.simulados.length > 0){
+                    // Simulados para Disciplinas
+                }
+            })
+
+
             var tableData = res.data.map(simulado => {
                 var inicio = moment(simulado.dataHoraInicial).format('DD/MM/YYYY')
                 var termino = moment(simulado.dataHoraFinal).format('DD/MM/YYYY')
