@@ -125,7 +125,7 @@ class Simulados extends Component {
                     curso.simulados.forEach(simulado => {
                         // Simulados para Cursos
                         inicio = moment(simulado.dataHoraInicial)
-                        termino = moment(simulado.dataHoraFinal).format('DD/MM/YYYY')
+                        termino = moment(simulado.dataHoraFinal)
                         status = (simulado.rascunho) ? 'Rascunho' : 'Público'
                         simulados.push({
                             key: simulado.id,
