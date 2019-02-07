@@ -41,6 +41,10 @@
     padding-left: 21px !important
 }
 
+.colorGreen {
+    color: #13a54b;
+}
+
 .buttonRed {
     color: #fff;
     background-color: #ea2c2c;

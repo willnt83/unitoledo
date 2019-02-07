@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
-import { Layout, Table, Button, Icon, Row, Col, Modal } from 'antd'
-import Countdown from 'react-countdown-now';
+import { Layout, Table, Button, Icon, Modal } from 'antd'
+import { withRouter } from "react-router-dom"
 import "./static/style.css"
 
 const { Content } = Layout;
@@ -42,6 +42,7 @@ class Home extends Component {
     
     handleModalOk = () => {
         this.showModal(false);
+        this.props.history.push('/alunos/execucao-simulado')
     }
 
     handleModalCancel = () => {
@@ -90,20 +91,6 @@ class Home extends Component {
         return (
             <React.Fragment>
                 <Content style={{
-                    margin: "0",
-                    padding: "0 30px 0 24px",
-                    background: "#13a54b",
-                    color: '#fff'
-                }}>
-                    <Row>
-                        <Col span={24} align="end" style={{fontWeight: 500}}>
-                            <Icon type="clock-circle"  style={{ marginRight: 10 }}/>
-                            <span style={{ marginRight: 10 }}>Tempo restante:</span>
-                            <Countdown date={Date.now() + 90 * 60000} />
-                        </Col>
-                    </Row>
-                </Content>
-                <Content style={{
                     margin: "20px 25px 0 25px",
                     padding: 24,
                     background: "#fff"
@@ -115,16 +102,22 @@ class Home extends Component {
                     />
                 </Content>
                 <Modal
-                    title="Basic Modal"
+                    title="Atenção!"
                     visible={this.state.showModal}
                     onOk={this.handleModalOk}
                     onCancel={this.handleModalCancel}
+                    footer={[
+                        <Button key="back" onClick={this.handleModalCancel}>Cancelar</Button>,
+                        <Button key="submit" type="primary" onClick={this.handleModalOk}>
+                            Quero iniciar!
+                        </Button>,
+                    ]}
                 >
-                    <p>Modal mensagem...</p>
+                    <p>Você está prestes a inicar a resolução do simulado XXX. Ao iniciar o simulado, o tempo para execução do simulado começará a contar e não poderá mais ser parado. </p>
                 </Modal>
             </React.Fragment>
         );
     }
 }
  
-export default Home;
+export default withRouter(Home);

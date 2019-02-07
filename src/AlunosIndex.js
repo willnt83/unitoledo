@@ -17,7 +17,7 @@ const routes = [
 		exact: true,
 		main: () => <Home />
 	},{
-		path: "/execucao-simulado",
+		path: "/alunos/execucao-simulado",
 		exact: true,
 		main: () => <ExecucaoSimulado />
 	}
@@ -47,7 +47,7 @@ class AlunosIndex extends Component {
 					background: "#fff"
 				}}>
 					<Row>
-						<Col span="12"><PageTitle pageTitle="Execução do Simulado" /></Col>
+						<Col span={12}><PageTitle pageTitle="Execução do Simulado" /></Col>
 					</Row>
 				</Content>
 

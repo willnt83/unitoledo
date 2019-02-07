@@ -81,7 +81,6 @@ class NovoSimulado3 extends Component {
     }
 
     componentWillReceiveProps(props) {
-        console.log('XXX', props)
         if(props.simulado.questoes && props.simulado.questoes.length > 0){
             this.setState({
                 quantidadeQuestoesSelecionadas: 'Questoes | Selecionadas ('+props.simulado.questoes.length+')'

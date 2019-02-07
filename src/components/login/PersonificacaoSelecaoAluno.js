@@ -19,18 +19,19 @@ class PersonificacaoSelecaoAluno extends Component {
 		})
 		this.props.form.validateFieldsAndScroll((err, values) => {
             if (!err) {
-				/*
+
 				var data = {
 					params: {
 						user: encodeURI(values.usuario)
 					}
 				}
-				*/
+				/*
 				var data = {
 					params: {
 						user: encodeURI('ronnie')
 					}
 				}
+				*/
 
 
 				axios.defaults.headers = {

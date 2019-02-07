@@ -1,6 +1,6 @@
 import React, { Component } from "react"
 import { Layout, Button, Table, Row, Col, Icon } from "antd"
-import { Link } from "react-router-dom"
+import { Link, withRouter } from "react-router-dom"
 import axios from "axios"
 import { connect } from 'react-redux'
 import moment from 'moment'
@@ -25,20 +25,7 @@ class Simulados extends Component {
     }
     */
 
-    rascunhoPublicoChange = (rascunho) => {
-
-        /*
-        localhost:5000/api/updateStatus
-        {
-            "id": 40,
-            "rascunho": true
-        }
-        */
-    }
-
-    componentWillMount(){
-        this.setState({tableLoading: true})
-        console.log('props', this.props)
+    getSimulados = () => {
         var cursos = this.props.mainData.cursos.map(curso => {
             return({
                 id: curso.id,
@@ -46,26 +33,6 @@ class Simulados extends Component {
                 idPeriodoLetivo: this.props.periodoLetivo
             })
         })
-        /*
-        var turmas = this.props.mainData.turmas.map(turma => {
-            return({
-                id: turma.id,
-                nome: turma.nome,
-                idPeriodoLetivo: turma.idPeriodoLetivo,
-                idCurso: turma.idCurso
-            })
-        })
-
-        var disciplinas = this.props.mainData.disciplinas.map(disciplina => {
-            return({
-                id: disciplina.id,
-                nome: disciplina.nome,
-                idPeriodoLetivo: disciplina.idPeriodoLetivo,
-                idTurma: disciplina.idTurma
-            })
-        })
-        */
-
         var turmas = this.props.mainData.turmas
         .map(turma => {
             return({
@@ -76,10 +43,8 @@ class Simulados extends Component {
             })
         })
         .filter(turma => {
-            console.log('turma.idCurso', turma.idCurso)
             var hit = true
             this.props.mainData.cursos.forEach(curso => {
-                console.log('curso.id', curso.id)
                 if(turma.idCurso === curso.id)
                     hit = false
             })
@@ -111,73 +76,190 @@ class Simulados extends Component {
             disciplinas: disciplinas
         }
 
-        console.log('request', request)
-
-        axios.post('http://localhost:5000/api/getSimulados', request)
+        axios.post('http://localhost:5000/api/getAllSimulado', request)
         .then(res => {
-            console.log('response',res.data)
+            console.log('response', res.data)
             var inicio = null
             var termino = null
             var status = null
-            var simulados = []
-            tableData = res.data.map(curso => {
-                if(curso.simulados && curso.simulados.length > 0){
-                    curso.simulados.forEach(simulado => {
-                        // Simulados para Cursos
-                        inicio = moment(simulado.dataHoraInicial)
-                        termino = moment(simulado.dataHoraFinal)
-                        status = (simulado.rascunho) ? 'Rascunho' : 'Público'
-                        simulados.push({
-                            key: simulado.id,
-                            nome: simulado.nome,
-                            alvos: curso.id,
-                            questoes: simulado.questoes,
-                            status: status,
-                            rascunho: simulado.rascunho,
-                            inicio: {
-                                data: inicio.format('DD/MM/YYYY'),
-                                hora: inicio.format('HH:mm')
-                            },
-                            fim: {
-                                data: termino.format('DD/MM/YYYY'),
-                                hora: termino.format('HH:mm')
-                            }
+            var alvos = []
+            var tableData = []
+            tableData = res.data.map(simulado => {
+                inicio = moment(simulado.dataHoraInicial)
+                termino = moment(simulado.dataHoraFinal)
+                status = (simulado.rascunho) ? 'Rascunho' : 'Público'
+
+                alvos = []
+                if(simulado.cursos && simulado.cursos.length > 0){
+                    simulado.cursos.forEach(curso => {
+                        alvos.push({
+                            key: curso.id,
+                            name: curso.nome,
+                            tipo: 'Curso'
                         })
                     })
-                    return simulados
                 }
 
-                if(curso.turmas.simulados && curso.turmas.simulados.length > 0){
-                    // Simulados para Turmas
+                if(simulado.turmas && simulado.turmas.length > 0){
+                    simulado.turmas.forEach(turma => {
+                        alvos.push({
+                            key: turma.id,
+                            name: turma.nome,
+                            tipo: 'Turma'
+                        })
+                    })
                 }
 
-                if(curso.turmas.disciplinas.simulados && curso.turmas.disciplinas.simulados.length > 0){
-                    // Simulados para Disciplinas
+                if(simulado.disciplinas && simulado.disciplinas.length > 0){
+                    simulado.disciplinas.forEach(disciplina => {
+                        alvos.push({
+                            key: disciplina.id,
+                            name: disciplina.nome,
+                            tipo: 'Disciplina'
+                        })
+                    })
                 }
-            })
 
-
-            var tableData = res.data.map(simulado => {
-                var inicio = moment(simulado.dataHoraInicial).format('DD/MM/YYYY')
-                var termino = moment(simulado.dataHoraFinal).format('DD/MM/YYYY')
-                var status = (simulado.rascunho) ? 'Rascunho' : 'Público'
-                return({
+                return ({
                     key: simulado.id,
                     nome: simulado.nome,
+                    alvos: alvos,
+                    questoes: simulado.questoes,
                     status: status,
                     rascunho: simulado.rascunho,
-                    inicio: inicio,
-                    termino: termino
+                    inicio: inicio.format('DD/MM/YYYY HH:mm'),
+                    termino: termino.format('DD/MM/YYYY HH:mm'),
+                    inicioObj: inicio,
+                    terminoObj: termino
                 })
             })
+
             this.setState({tableLoading: false})
-            console.log('tableData', tableData)
             this.setState({tableData})
         })
         .catch(error =>{
             console.log('error: ', error)
             this.setState({tableLoading: false})
         })
+    }
+
+    newSimulado = () => {
+        this.props.resetSimulado()
+        this.props.history.push('/admin/simulados/novo/step-1')
+    }
+
+    changeSimuladoStatus = (id, rascunho) => {
+        console.log('--==changeSimuladoStatus==--')
+        console.log('id', id)
+        console.log('rascunho', rascunho)
+
+        /*
+        localhost:5000/api/updateStatus
+        {
+            "id": 38,
+            "rascunho": true
+        }
+        */
+    }
+
+    editSimulados = (record) => {
+
+        axios.get('http://localhost:5000/api/getSimuladoId/'+record.key)
+        .then(res => {
+            var response = res.data[0]
+            console.log('response edit', response)
+                // Transformando record para o formato de redux simulado
+                var alvos = []
+                var cursos = []
+                var turmas = []
+                var disciplinas = []
+
+                // Cursos
+                if(response.cursos && response.cursos.length > 0){
+                    cursos = response.cursos.map(curso => {
+                        return{
+                            key: curso.id,
+                            name: curso.nome,
+                            tipo: 'Curso'
+                        }
+                    })
+                    cursos.forEach(curso => {
+                        alvos.push(curso)
+                    })
+                }
+
+                // Turmas
+                if(response.turmas && response.turmas.length > 0){
+                    turmas = response.turmas.map(turma => {
+                        return{
+                            key: turma.id,
+                            name: turma.nome,
+                            parentKey: turma.idCurso,
+                            tipo: 'Turma'
+                        }
+                    })
+                    turmas.forEach(turma => {
+                        alvos.push(turma)
+                    })
+                }
+
+                // Disciplinas
+                if(response.disciplinas && response.disciplinas.length > 0){
+                    disciplinas = response.disciplinas.map(disciplina => {
+                        return{
+                            key: disciplina.id,
+                            name: disciplina.nome,
+                            parentKey: disciplina.idTurma,
+                            tipo: 'Disciplina'
+                        }
+                    })
+                    disciplinas.forEach(disciplina => {
+                        alvos.push(disciplina)
+                    })
+                }
+
+                console.log('alvos...', alvos)
+
+                this.setState({selectedRows: alvos})
+
+                // Questões
+                var questoes = []
+                if(response.questoes.length > 0){
+
+                    questoes = response.questoes.map(questao => {
+                        return questao.id
+                    })
+                }
+
+                // Datas
+                var inicioObj = moment(response.dataHoraInicial)
+                var terminoObj = moment(response.dataHoraFinal)
+                var simulado = {
+                    id: response.id,
+                    nome: response.nome,
+                    alvos: alvos,
+                    questoes: questoes,
+                    inicio: {
+                        data: inicioObj.format('DD/MM/YYYY'),
+                        hora: inicioObj.format('HH:mm')
+                    },
+                    fim: {
+                        data: terminoObj.format('DD/MM/YYYY'),
+                        hora: terminoObj.format('HH:mm')
+                    }
+                }
+
+                this.props.setFullSimulado(simulado)
+                this.props.history.push('/admin/simulados/novo/step-1')
+        })
+        .catch(error =>{
+            console.log(error)
+        })
+    }
+
+    componentWillMount(){
+        this.setState({tableLoading: true})
+        this.getSimulados()
     }
 
     render(){
@@ -215,14 +297,13 @@ class Simulados extends Component {
                 width: 300,
                 className: "actionCol",
 				render: (text, record) => {
-                    console.log('record', record)
                     var publicarButtonDisabled = record.rascunho ? false : true
                     var moverRascunhoButtonDisabled = record.rascunho ? true : false
 					return (
                         <React.Fragment>
-                            <Button className="actionButton buttonGreen" title="Publicar" disabled={publicarButtonDisabled}><Icon type="global" /></Button>
-                            <Button className="actionButton buttonOrange" title="Mover para Rascunho" disabled={moverRascunhoButtonDisabled}><Icon type="file-text" /></Button>
-                            <Button className="actionButton" title="Editar" type="primary"><Icon type="edit" /></Button>
+                            <Button className="actionButton buttonGreen" title="Publicar" onClick={() => this.changeSimuladoStatus(record.id, record.rascunho)} disabled={publicarButtonDisabled}><Icon type="global" /></Button>
+                            <Button className="actionButton buttonOrange" title="Mover para Rascunho" onClick={() => this.changeSimuladoStatus(record.id, record.rascunho)} disabled={moverRascunhoButtonDisabled}><Icon type="file-text" /></Button>
+                            <Button className="actionButton" title="Editar" type="primary" onClick={() => this.editSimulados(record)}><Icon type="edit" /></Button>
                             <Button className="actionButton buttonRed" title="Excluir"><Icon type="delete" /></Button>
                         </React.Fragment>
 					);
@@ -269,7 +350,7 @@ class Simulados extends Component {
                     />
                     <Row>
                         <Col span={24} align="middle">
-                            <Link to="/admin/simulados/novo/step-1"><Button type="primary"><Icon type="plus" />Novo Simulado</Button></Link>
+                            <Button type="primary" onClick={() => this.newSimulado()}><Icon type="plus" />Novo Simulado</Button>
                         </Col>
                     </Row>
                 </Content>
@@ -281,14 +362,17 @@ class Simulados extends Component {
 const MapStateToProps = (state) => {
 	return {
         mainData: state.mainData,
-        periodoLetivo: state.periodoLetivo
+        periodoLetivo: state.periodoLetivo,
+        simulado: state.simulado
 	}
 }
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        setPageTitle: (pageTitle) => { dispatch({ type: 'SET_PAGETITLE', pageTitle }) }
+        setPageTitle: (pageTitle) => { dispatch({ type: 'SET_PAGETITLE', pageTitle }) },
+        resetSimulado: () => { dispatch({ type: 'RESET_SIMULADO' }) },
+        setFullSimulado: (simulado) => { dispatch({ type: 'SET_SIMULADOSFULL', simulado }) }
     }
 }
 
-export default connect(MapStateToProps, mapDispatchToProps)(Simulados)
+export default connect(MapStateToProps, mapDispatchToProps)(withRouter(Simulados))

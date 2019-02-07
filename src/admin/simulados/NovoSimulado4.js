@@ -1,6 +1,6 @@
 import React, { Component } from "react"
-import { Layout, Row, Col, Button, Card, Form, Input, TimePicker, DatePicker, Icon } from "antd"
-import { Link } from "react-router-dom"
+import { Layout, Row, Col, Button, Card, Form, Input, TimePicker, DatePicker, Icon, Modal } from "antd"
+import { Link, withRouter } from "react-router-dom"
 import axios from "axios"
 import { connect } from 'react-redux'
 import ptBr from 'antd/lib/locale-provider/pt_BR'
@@ -98,6 +98,7 @@ class NovoSimulado4 extends Component {
                 })
 
                 var request = {
+                        id: this.props.simulado.id,
                         nome: this.props.simulado.nome,
                         rascunho: rascunho,
                         dataHoraInicial: dateTimeInicial.format(),
@@ -112,6 +113,7 @@ class NovoSimulado4 extends Component {
                 axios.post('http://localhost:5000/api/createUpdateSimulado', request)
                 .then(res => {
                     console.log('response: ', res.data)
+                    this.successModal(this.props)
                 })
                 .catch(error =>{
                     console.log('error: ', error)
@@ -121,19 +123,54 @@ class NovoSimulado4 extends Component {
                 console.log(err)
             }
         })
-
     }
 
     componentDidMount(){
-        if(this.props.simulado.nome !== null || this.props.simulado.nome !== ''){
+        if(this.props.simulado.nome !== null && this.props.simulado.nome !== ''){
             this.props.form.setFieldsValue({
                 nome: this.props.simulado.nome
             })
         }
+
+        console.log('this.props.simulado.inicio.data', this.props.simulado.inicio.data)
+        if(this.props.simulado.inicio.data !== null && this.props.simulado.inicio.data !== ''){
+            this.props.form.setFieldsValue({
+                dataInicial: moment(this.props.simulado.inicio.data, 'DD/MM/YYYY')
+            })
+        }
+
+
+        if(this.props.simulado.inicio.hora !== null && this.props.simulado.inicio.hora !== ''){
+            this.props.form.setFieldsValue({
+                horarioInicial: moment(this.props.simulado.inicio.hora, 'HH:mm')
+            })
+        }
+
+        if(this.props.simulado.fim.data !== null && this.props.simulado.fim.data !== ''){
+            this.props.form.setFieldsValue({
+                dataFinal: moment(this.props.simulado.fim.data, 'DD/MM/YYYY')
+            })
+        }
+
+        if(this.props.simulado.fim.hora !== null && this.props.simulado.fim.hora !== ''){
+            this.props.form.setFieldsValue({
+                horarioFinal: moment(this.props.simulado.fim.hora, 'HH:mm')
+            })
+        }
+        
+    }
+
+    successModal(props){
+        Modal.success({
+            title: 'Simulado criado com sucesso',
+            onOk() {
+                props.history.push('/admin/simulados/')
+            }
+        });
     }
 
     render(){
-        console.log('props', this.props)
+        console.log('props simulado', this.props.simulado)
         const { getFieldDecorator } = this.props.form
         return(
             <React.Fragment>
@@ -305,4 +342,4 @@ const mapDispatchToProps = (dispatch) => {
     }
 }
 
-export default connect(MapStateToProps, mapDispatchToProps)(Form.create()(NovoSimulado4))
+export default connect(MapStateToProps, mapDispatchToProps)(withRouter(Form.create()(NovoSimulado4)))

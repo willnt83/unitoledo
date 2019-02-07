@@ -136,6 +136,7 @@ const initState = {
     areasDeConhecimento: [],
     questoes: [],
     simulado: {
+        id: '',
         nome: null,
         alvos: [],
         questoes: [],
@@ -203,10 +204,30 @@ const RootReducer = (state = initState, action) => {
             questoes: action.questoes
         }
     }
+    else if(action.type === 'RESET_SIMULADO'){
+        return{
+            ...state,
+            simulado: {
+                id: '',
+                nome: null,
+                alvos: [],
+                questoes: [],
+                inicio: {
+                    data: null,
+                    hora: null
+                },
+                fim: {
+                    data: null,
+                    hora: null
+                }
+            }
+        }
+    }
     else if(action.type === 'SET_SIMULADO_NOME'){
         return{
             ...state,
             simulado: {
+                id: state.simulado.id,
                 nome: action.simuladoNome,
                 alvos: [...state.simulado.alvos],
                 questoes: state.simulado.questoes,
@@ -245,6 +266,7 @@ const RootReducer = (state = initState, action) => {
         return{
             ...state,
             simulado: {
+                id: state.simulado.id,
                 nome: state.simulado.nome,
                 alvos: action.simuladoAlvos,
                 questoes: state.simulado.questoes,
@@ -263,11 +285,10 @@ const RootReducer = (state = initState, action) => {
         var selectedQuestoes = state.selectedQuestoes
         selectedQuestoes.push(action.questao)
 
-        console.log('state', state)
-
         return{
             ...state,
             simulado: {
+                id: state.simulado.id,
                 nome: state.simulado.nome,
                 alvos: state.simulado.alvos,
                 questoes: [...state.simulado.questoes, action.questao.id],
@@ -294,6 +315,7 @@ const RootReducer = (state = initState, action) => {
         return{
             ...state,
             simulado: {
+                id: state.simulado.id,
                 nome: state.simulado.nome,
                 alvos: state.simulado.alvos,
                 questoes,
@@ -313,12 +335,19 @@ const RootReducer = (state = initState, action) => {
         return{
             ...state,
             simulado: {
+                id: state.simulado.id,
                 nome: state.simulado.nome,
                 alvos: state.simulado.alvos,
                 questoes: state.simulado.questoes,
                 inicio: action.startFinish.dateTimeInicial,
                 fim: action.startFinish.dateTimeFinal
             }
+        }
+    }
+    else if(action.type ==='SET_SIMULADOSFULL'){
+        return{
+            ...state,
+            simulado: action.simulado
         }
     }
 

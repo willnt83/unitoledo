@@ -122,10 +122,8 @@ class ContextoSelection extends Component {
 			console.log('getData response', res.data)
 			this.props.setMainData(res.data)
 
-			console.log('this.state.periodo', this.state.periodo)
-
 			if(this.state.periodo)
-				this.props.setPeriodoLetivo(this.state.periodo)
+				this.props.setPeriodoLetivo(parseInt(this.state.periodo))
 
 			if(this.state.contexto === 'ALUNO'){
 				this.props.history.push('/alunos')
