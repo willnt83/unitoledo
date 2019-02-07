@@ -33,16 +33,13 @@ class NovoSimulado2 extends Component {
     }
 
     componentWillMount(){
-        console.log('--==Simulado2 - componentWillMont==--')
-        console.log('alvos', this.props.simulado.alvos)
-
         // Se tiver this.props.simulado.alvos, atualiza state.selectedRowKeys
         if(this.props.simulado.alvos.length > 0){
             var tempArray = []
             tempArray = this.props.simulado.alvos.map((item) => {
                 return item.key
             })
-            console.log('tempArray', tempArray)
+
             this.setState({
                 selectedRowKeys: tempArray
             })
@@ -137,7 +134,6 @@ class NovoSimulado2 extends Component {
                 }
             })
 
-            console.log('tableData', alvos)
             this.setState({tableData: alvos})
         }
         else {
@@ -147,52 +143,27 @@ class NovoSimulado2 extends Component {
     }
 
     componentWillUpdate(nextProps, nextState){
-        console.log('--==componentWillUpdate==--')
         if(this.state.firstTime){
             
             if(nextState.selectedRowKeys.length != this.state.newSelectedRowKeys && !nextState.selectAction){
-                console.log('nextProps.simulado...', nextProps.simulado)
-                console.log('state.selectedRowKeys...', this.state.selectedRowKeys)
-                console.log('state.selectedRows...', this.props.simulado.alvos)
-                console.log('state.tableData...', this.state.tableData)
-
-                
                 var selectedRowKeys = this.state.selectedRowKeys
                 var alvos = this.props.simulado.alvos
                 var rowsToBeRemoved = []
                 var selectedRows = this.props.simulado.alvos
 
-
-                console.log('alvos...', alvos)
                 alvos.forEach(alvo => {
                     if(this.rowHasChildren(alvo.key)){
-                        console.log('alvo '+alvo.key+' possui children...')
                         rowsToBeRemoved = this.searchKeyRemoveChildren(alvo.key)
-                        console.log('rowsToBeRemoved', rowsToBeRemoved)
                         selectedRows = this.removeSelectedRows(selectedRows, rowsToBeRemoved)
-                        console.log('selectedRows after', selectedRows)
                         selectedRowKeys = this.removeSelectedRowKeys(selectedRowKeys, rowsToBeRemoved)
-                        console.log('selectedRowKeys after', selectedRowKeys)
-
                     }
                 })
             }
         }
     }
 
-    /*
-    componentWillUpdate(nextProps, nextState){
-        if(nextState.selectedRowKeys.length !== this.state.selectedRowKeys.length)
-            this.setState({
-                showWarning: false
-            })
-    }
-    */
-
-
     // Função que recebe a key da row seleciona, procura a row na tableData e a retorna
     rowHasChildren = (key) => {
-        console.log('--==rowHasChildren==-- key', key)
         var hit = false
         var hasChild = false
 
@@ -201,7 +172,6 @@ class NovoSimulado2 extends Component {
             if(curso.children){
                 if(curso.key === key){
                     hit = true
-                    console.log('curso '+key+ ' é a row buscada')
                     // O curso é a key buscada
                     hasChild = true
                 }
@@ -211,7 +181,6 @@ class NovoSimulado2 extends Component {
                     curso.children.forEach(turma => {
                         if(turma.key === key){
                             hit = true
-                            console.log('turma '+key+ ' é a row buscada')
                             if(turma.children){
                                 hasChild = true
                             }
@@ -223,14 +192,12 @@ class NovoSimulado2 extends Component {
                 }
             }
         })
-        console.log('hasChild', hasChild)
         return hasChild
     }
 
     // Função que recebe a key da row seleciona, procura a row na tableData e remove seus filhos
     // Retorna a key dos filhos removidos
     searchKeyRemoveChildren = (key) => {
-        console.log('--==searchKeyRemoveChildren==--')
         var tempTableData = this.state.tableData
         var keysToBeRemoved = []
         var hit = false
@@ -299,7 +266,6 @@ class NovoSimulado2 extends Component {
     // Função que recebe selectedRows e um vetor de chaves a serem removidas da selectedRows
     // Retorna selectedRows atualizada com as chaves removidas
     removeSelectedRows = (selectedRows, keys) => {
-        console.log('--==removeSelectedRows==--')
         var newSelectedRows = selectedRows.filter(row => {
             // Removendo as keys que estão na lista de keys a serem removidas
             return(keys.indexOf(row.key) < 0)
@@ -309,7 +275,6 @@ class NovoSimulado2 extends Component {
 
     // Função que recebe key e percorre o vedor de state.selectedRowKeys para remover caso esteja lá
     removeSelectedRowKeys = (selectedRowKeys, keysToBeRemoved) => {
-        console.log('--==removeSelectedRowKeys==--')
         var newSelectedRowKeys = selectedRowKeys.filter(selectedRowKey => {
             if(keysToBeRemoved.indexOf(selectedRowKey) > -1){
                 return false
@@ -324,7 +289,6 @@ class NovoSimulado2 extends Component {
     // Função que recebe a key dermarcada, verifica se a mesma possuia filhos e os restaura se houver
     // Não há retorno na função, apenas a tableData é atualizada com os filhos restaurados
     searchKeyRestoreChildren = (key) => {
-        console.log('--==searchKeyRestoreChildren==--')
         var countCursos = 0
         var countTurmas = 0
         var tempTableData = this.state.tableData
@@ -417,7 +381,6 @@ class NovoSimulado2 extends Component {
     }
 
     render(){
-        console.log('props simulado', this.props.simulado)
         const { selectedRowKeys } = this.state
         const columns = [
             {
@@ -438,7 +401,6 @@ class NovoSimulado2 extends Component {
                 var selectedRowKeys = this.state.selectedRowKeys
                 var rowsToBeRemoved = []
 
-                console.log('selectedRows', selectedRows)
                 this.setState({selectAction: true}) // Para indicar que o componentUpdate vem de uma ação de seleção
                 // Seleção
                 if(selected){
@@ -462,7 +424,6 @@ class NovoSimulado2 extends Component {
 
                     selectedRowKeys.splice(selectedRowKeys.indexOf(record.key), 1)
                     this.setState({ selectedRowKeys });
-
                     this.searchKeyRestoreChildren(record.key)
                 }
             }

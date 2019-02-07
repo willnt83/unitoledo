@@ -12,11 +12,11 @@ class PersonificacaoSelecaoAluno extends Component {
 	}
 
     handleSearchUserSubmit = (event) => {
-		event.preventDefault();
-		this.setState({
-			buscarButtonLoading: true,
-			tableLoading: true
-		})
+			event.preventDefault();
+			this.setState({
+				buscarButtonLoading: true,
+				tableLoading: true
+			})
 		this.props.form.validateFieldsAndScroll((err, values) => {
             if (!err) {
 
@@ -62,6 +62,7 @@ class PersonificacaoSelecaoAluno extends Component {
 	}
 	
 	getContexto = (usuarioId) => {
+		this.props.setUsuario(usuarioId)
 		var data = {
 			id: usuarioId
 		}
@@ -144,15 +145,15 @@ class PersonificacaoSelecaoAluno extends Component {
 					</Row>
 				</Form>
 				<Table
-                    columns={columns}
-                    dataSource={this.state.usuarios}
+					columns={columns}
+					dataSource={this.state.usuarios}
 					loading={this.state.tableLoading}
 					visible={this.state.showTable}
 					rowKey="id"
 					style={{display: this.state.displayTable}}
 					locale={{ emptyText: 'Sem resultados' }}
 					scroll={{y: 400}}
-                />
+        />
 			</Modal>
 		)
 	}
@@ -164,4 +165,11 @@ const MapStateToProps = (state) => {
 	}
 }
 
-export default connect(MapStateToProps, null)(Form.create()(PersonificacaoSelecaoAluno))
+const mapDispatchToProps = (dispatch) => {
+	return {
+			setUsuario: (usuario) => { dispatch({ type: 'SET_USUARIO', usuario }) },
+	}
+}
+
+
+export default connect(MapStateToProps, mapDispatchToProps)(Form.create()(PersonificacaoSelecaoAluno))

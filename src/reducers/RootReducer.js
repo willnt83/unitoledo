@@ -1,5 +1,6 @@
 const initState = {
-    access: null,
+    /*
+    contexto: null,
     authHeaders: null,
     mainData: {
         "disciplinas": [{
@@ -129,7 +130,7 @@ const initState = {
             "idProximaTurma": "049.05SA"
         }]
     },
-    periodoLetivo: 201,
+    periodoLetivo: 202,
     pageTitle: [],
     habilidades: [],
     conteudos: [],
@@ -150,6 +151,32 @@ const initState = {
         }
     },
     selectedQuestoes: []
+    */
+   contexto: null,
+   usuarioId: null,
+   authHeaders: null,
+   mainData: null,
+   periodoLetivo: null,
+   pageTitle: [],
+   habilidades: [],
+   conteudos: [],
+   areasDeConhecimento: [],
+   questoes: [],
+   simulado: {
+       id: '',
+       nome: null,
+       alvos: [],
+       questoes: [],
+       inicio: {
+           data: null,
+           hora: null
+       },
+       fim: {
+           data: null,
+           hora: null
+       }
+   },
+   selectedQuestoes: []
 }
 
 const RootReducer = (state = initState, action) => {
@@ -160,6 +187,18 @@ const RootReducer = (state = initState, action) => {
                 authorization: action.headerFields.token,
                 cookie: action.headerFields.cookie
             }
+        }
+    }
+    else if(action.type === 'SET_USUARIO'){
+        return {
+            ...state,
+            usuarioId: action.usuario
+        }
+    }
+    else if(action.type === 'SET_CONTEXTO'){
+        return {
+            ...state,
+            contexto: action.contexto
         }
     }
     else if(action.type === 'SET_MAINDATA'){
@@ -345,6 +384,12 @@ const RootReducer = (state = initState, action) => {
         }
     }
     else if(action.type ==='SET_SIMULADOSFULL'){
+        return{
+            ...state,
+            simulado: action.simulado
+        }
+    }
+    else if(action.type === 'SET_SIMULADORESOLUCAO'){
         return{
             ...state,
             simulado: action.simulado

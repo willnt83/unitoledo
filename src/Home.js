@@ -1,38 +1,31 @@
 import React, { Component } from 'react'
 import { Layout, Table, Button, Icon, Modal } from 'antd'
 import { withRouter } from "react-router-dom"
+import { connect } from 'react-redux'
+import moment from 'moment'
+import axios from 'axios'
 import "./static/style.css"
 
 const { Content } = Layout;
 
-const tableData = [
-    {
-        key: 1,
-        nome: 'Análise e Desenvolvimento de Sistemas - 06/2017',
-        inicio: '30/10/2017',
-        fim: '30/10/2017',
-        duracao: '1h'
-    },
-    {
-        key: 2,
-        nome: 'Simulado - Teste',
-        inicio: '02/03/2018',
-        fim: '02/03/2018',
-        duracao: '2hs'
-    },
-    {
-        key: 3,
-        nome: 'Análise e Desenvolvimento de Sistemas - 10/2017',
-        inicio: '15/20/2018',
-        fim: '15/20/2018',
-        duracao: '1hr'
-    }
-]
-
 class Home extends Component {
     state = {
-        showModal: false
+        showModal: false,
+        tableData: []
     };
+
+    getSimulado = (simuladoId) => {
+        //axios.get('http://localhost:5000/api/getSimuladoIdAluno/'+simuladoId)
+        axios.get('http://localhost:5000/api/getSimuladoId/'+simuladoId)
+        .then(res => {
+            console.log('response', res.data)
+            this.props.setSimulado(res.data[0])
+            this.showModal(true)
+        })
+        .catch(error =>{
+            console.log(error)
+        })
+    }
 
     showModal = (showModal) => {
 		this.setState({
@@ -49,10 +42,33 @@ class Home extends Component {
         this.showModal(false);
     }
 
+    componentWillMount(){
+        var tableData = this.props.mainData.simulados.map(simulado => {
+            var inicioObj = moment(simulado.dataHoraInicial)
+            var inicio = inicioObj.format('DD/MM/YYYY HH:mm')
+
+            var terminoObj = moment(simulado.dataHoraFinal)
+            var termino = terminoObj.format('DD/MM/YYYY HH:mm')
+
+            //var duracaoObj = terminoObj - inicioObj
+            //var duracao = duracaoObj.format('HH:mm')
+
+            return({
+                key: simulado.id,
+                nome: simulado.nome,
+                inicio: inicio,
+                fim: termino,
+                duracao: '-'
+            })
+        })
+
+        this.setState({tableData})
+    }
+
     render() {
         const columns = [
 			{
-				title: "Nome",
+				title: "Descrição",
 				dataIndex: "nome",
 				sorter: (a, b) => a.id - b.id
             },
@@ -73,7 +89,7 @@ class Home extends Component {
 				sorter: (a, b) => a.id - b.id
 			},
             {
-				title: "Ação",
+				title: "Executar",
 				colSpan: 2,
 				dataIndex: "acao",
 				align: "center",
@@ -82,7 +98,7 @@ class Home extends Component {
 				render: (text, record) => {
 					return (
                         <React.Fragment>
-                            <Button className="actionButton buttonGreen" title="Executar" onClick={() => this.showModal(true)}><Icon type="caret-right" /></Button>
+                            <Button className="actionButton buttonGreen" title="Executar" onClick={() => this.getSimulado(record.key)}><Icon type="caret-right" /></Button>
                         </React.Fragment>
 					);
 				}
@@ -98,7 +114,7 @@ class Home extends Component {
                     <h3>Simulados Disponíveis</h3>
                     <Table 
                         columns={ columns } 
-                        dataSource={ tableData }
+                        dataSource={ this.state.tableData }
                     />
                 </Content>
                 <Modal
@@ -119,5 +135,17 @@ class Home extends Component {
         );
     }
 }
- 
-export default withRouter(Home);
+
+const MapStateToProps = (state) => {
+	return {
+		mainData: state.mainData
+	}
+}
+
+const mapDispatchToProps = (dispatch) => {
+    return {
+        setSimulado: (simulado) => { dispatch({ type: 'SET_SIMULADORESOLUCAO', simulado }) },
+    }
+}
+
+export default connect(MapStateToProps, mapDispatchToProps)(withRouter(Home))

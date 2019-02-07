@@ -76,6 +76,7 @@ class Simulados extends Component {
             disciplinas: disciplinas
         }
 
+        console.log('getAllSimulado request', request)
         axios.post('http://localhost:5000/api/getAllSimulado', request)
         .then(res => {
             console.log('response', res.data)
@@ -149,17 +150,27 @@ class Simulados extends Component {
     }
 
     changeSimuladoStatus = (id, rascunho) => {
+        this.setState({tableLoading: true})
         console.log('--==changeSimuladoStatus==--')
         console.log('id', id)
-        console.log('rascunho', rascunho)
 
-        /*
-        localhost:5000/api/updateStatus
-        {
-            "id": 38,
-            "rascunho": true
+        var turnTo = rascunho ? false : true
+        console.log('turnTo', turnTo)
+
+        var request =  {
+            "id": id,
+            "rascunho": turnTo
         }
-        */
+
+        axios.post('http://localhost:5000/api/updateStatus', request)
+        .then(res => {
+            console.log('response', res.data)
+            this.getSimulados()
+        })
+        .catch(error =>{
+            console.log('error: ', error)
+            this.setState({tableLoading: false})
+        })
     }
 
     editSimulados = (record) => {
@@ -263,6 +274,7 @@ class Simulados extends Component {
     }
 
     render(){
+        console.log('props', this.props)
         const columns = [
             {
 				title: "ID",
@@ -297,12 +309,19 @@ class Simulados extends Component {
                 width: 300,
                 className: "actionCol",
 				render: (text, record) => {
-                    var publicarButtonDisabled = record.rascunho ? false : true
-                    var moverRascunhoButtonDisabled = record.rascunho ? true : false
+                    if(this.props.contexto === 'COORDENADOR'){
+                        var publicarButtonDisabled = record.rascunho ? false : true
+                        var moverRascunhoButtonDisabled = record.rascunho ? true : false
+                    }
+                    else{
+                        var publicarButtonDisabled = true
+                        var moverRascunhoButtonDisabled = true
+                    }
+                    
 					return (
                         <React.Fragment>
-                            <Button className="actionButton buttonGreen" title="Publicar" onClick={() => this.changeSimuladoStatus(record.id, record.rascunho)} disabled={publicarButtonDisabled}><Icon type="global" /></Button>
-                            <Button className="actionButton buttonOrange" title="Mover para Rascunho" onClick={() => this.changeSimuladoStatus(record.id, record.rascunho)} disabled={moverRascunhoButtonDisabled}><Icon type="file-text" /></Button>
+                            <Button className="actionButton buttonGreen" title="Publicar" onClick={() => this.changeSimuladoStatus(record.key, record.rascunho)} disabled={publicarButtonDisabled}><Icon type="global" /></Button>
+                            <Button className="actionButton buttonOrange" title="Mover para Rascunho" onClick={() => this.changeSimuladoStatus(record.key, record.rascunho)} disabled={moverRascunhoButtonDisabled}><Icon type="file-text" /></Button>
                             <Button className="actionButton" title="Editar" type="primary" onClick={() => this.editSimulados(record)}><Icon type="edit" /></Button>
                             <Button className="actionButton buttonRed" title="Excluir"><Icon type="delete" /></Button>
                         </React.Fragment>
@@ -361,6 +380,7 @@ class Simulados extends Component {
 
 const MapStateToProps = (state) => {
 	return {
+        contexto: state.contexto,
         mainData: state.mainData,
         periodoLetivo: state.periodoLetivo,
         simulado: state.simulado

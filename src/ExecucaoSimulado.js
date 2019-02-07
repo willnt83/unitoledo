@@ -1,15 +1,18 @@
 import React, { Component } from 'react'
-import { Layout, Row, Col, Radio, Button, Icon } from 'antd'
+import { Layout, Row, Col, Icon } from 'antd'
 import Countdown from 'react-countdown-now';
+import { connect } from 'react-redux'
+import axios from 'axios'
 import "./static/style.css"
 
-const { Content } = Layout
-const RadioGroup = Radio.Group
+import QuestaoSimulado from './QuestaoSimulado'
 
+const { Content } = Layout
 
 class ExecucaoSimulado extends Component {
     state = {
         value: null,
+        questaoNo: 0
     }
     onChange = (e) => {
         console.log('radio checked', e.target.value);
@@ -17,7 +20,43 @@ class ExecucaoSimulado extends Component {
             value: e.target.value,
         });
     }
+
+    handleProximo = () => {
+        var questaoNo = this.state.questaoNo + 1
+        this.setState({questaoNo})
+    }
+
+    handleAnterior = () => {
+        var questaoNo = this.state.questaoNo - 1
+        this.setState({questaoNo})
+    }
+
+    handleResponder = (idAlternativa) => {
+        console.log('--==handleResponder==--')
+        // AQUI //// AQUI //// AQUI //// AQUI //// AQUI //// AQUI //// AQUI //// AQUI //// AQUI //// AQUI //// AQUI //// AQUI //// AQUI //// AQUI //// AQUI //// AQUI //// AQUI //// AQUI //
+        // AQUI //// AQUI //// AQUI //// AQUI //// AQUI //// AQUI //// AQUI //// AQUI //// AQUI //// AQUI //// AQUI //// AQUI //// AQUI //// AQUI //// AQUI //// AQUI //// AQUI //// AQUI //
+
+        var questao = this.state.simulado.questoes[this.state.questaoNo]
+        var request = {
+            id: 0,
+            idSimulado: this.props.simulado.id,
+            idQuestao: questao,
+            idAlternativa: idAlternativa,
+            idAluno: this.props.usuarioId
+        }
+        console.log('request', request)
+        axios.post('http://localhost:5000/api/simuladoResposta', request)
+        .then(res => {
+            console.log('response', res.data)
+        })
+        .catch(error =>{
+            console.log('error: ', error)
+            this.setState({tableLoading: false})
+        })
+    }
+
     render() {
+        console.log('props', this.props)
         const radioStyle = {
             display: 'block',
             height: '30px',
@@ -40,48 +79,22 @@ class ExecucaoSimulado extends Component {
                         </Col>
                     </Row>
                 </Content>
-                <Content style={{
-                    margin: "20px 25px 0 25px",
-                    padding: 24,
-                    background: "#fff"
-                }}>
-                    <Row>
-                        <Col span={24}>Turma / Disciplina: Matemática</Col>
-                    </Row>
-                    <Row>
-                        <Col span={24}>Tempo total: 90 minutos</Col>
-                    </Row>
-                    <Row style={{ marginTop: 20 }}>
-                        <Col span={24}>
-                            <h4>Questão X</h4>
-                        </Col>
-                    </Row>
-                    <Row>
-                        <Col span={24}>
-                            Dividindo o polinômio p(x) por d(x) = x² + 1, encontram-se o quociente q(x) = x + 3 e o resto r(x) = -7x - 11. Então a soma de todas as soluções da equação p(x) = 0 é igual a:
-                        </Col>
-                    </Row>
-                    <Row>
-                        <Col span={24}>
-                            <RadioGroup size={'large'} onChange={this.onChange} value={this.state.value}>
-                                <Radio style={radioStyle} value={1}>A) -3</Radio>
-                                <Radio style={radioStyle} value={2}>B) 2</Radio>
-                                <Radio style={radioStyle} value={3}>C) 1</Radio>
-                                <Radio style={radioStyle} value={4}>D) 5</Radio>
-                                <Radio style={radioStyle} value={5}>E) 109</Radio>
-                            </RadioGroup>
-                        </Col>
-                    </Row>
-                    <Row style={{ marginTop: 30 }}>
-                        <Col span={8} align="begining"><Button type="primary"><Icon type="left" />Anterior</Button></Col>
-                        <Col span={8} align="center"><Button type="primary"><Icon type="save" />Responder</Button></Col>
-                        <Col span={8} align="end"><Button type="success" style={{color: '#fff', backgroundColor: '#73d13d', borderColor: '#73d13d'}}>Próximo<Icon type="right" /></Button></Col>
-                    </Row>
-                </Content>
-
+                <QuestaoSimulado questaoNo={this.state.questaoNo} handleProximo={this.handleProximo} handleAnterior={this.handleAnterior} />
             </Layout>
         );
     }
 }
+
+const MapStateToProps = (state) => {
+	return {
+        simulado: state.simulado,
+        usuarioId: state.usuarioId
+	}
+}
+
+const mapDispatchToProps = (dispatch) => {
+    return {
+    }
+}
  
-export default ExecucaoSimulado;
+export default connect(MapStateToProps, mapDispatchToProps)(ExecucaoSimulado)

@@ -19,6 +19,7 @@ class ContextoSelection extends Component {
 	}
 
 	handleSelectContextoChange = (value) => {
+		console.log('this.props.userInfos', this.props.userInfos)
 		this.setState({contexto: value})
 		if(value === 'COORDENADOR'){
 			var selectedContexto = null
@@ -38,7 +39,6 @@ class ContextoSelection extends Component {
 
 			axios.post('http://localhost:5000/api/getPeriodo', selectedContexto, config)
 			.then(res => {
-				console.log('getPeriodo response', res.data)
 				var periodos = res.data.periodos.map((item) => {
 					return ({
 						key: item.id,
@@ -59,6 +59,7 @@ class ContextoSelection extends Component {
 			var periodos = []
 			this.props.userInfos.forEach(userInfo => {
 				if(userInfo.tipo === value){
+					console.log('entrou aluno')
 					userInfo.contextos.forEach(contexto => {
 						periodos.push({
 							key: contexto.idPeriodoLetivo,
@@ -67,6 +68,8 @@ class ContextoSelection extends Component {
 					})
 				}
 			})
+
+			console.log('periodos', periodos)
 			this.setState({
 				periodos: periodos,
 				showPeriodosSelect: 'block'
@@ -75,7 +78,7 @@ class ContextoSelection extends Component {
 	}
 
 	handleSelectPeriodoChange = (value) => {
-		if(this.state.contexto === 'PROFESSOR'){
+		if(this.state.contexto === 'PROFESSOR' || this.state.contexto === 'ALUNO'){
 			// Identificando o contexto do tipo e periodo
 			this.props.userInfos.forEach(userInfo => {
 				if(userInfo.tipo === this.state.contexto){
@@ -117,6 +120,8 @@ class ContextoSelection extends Component {
 			requestData = this.state.contextoData
 		}
 
+		console.log('getDataRequest', requestData)
+
 		axios.post('http://localhost:5000/api/getData', requestData, config)
 		.then(res => {
 			console.log('getData response', res.data)
@@ -124,6 +129,8 @@ class ContextoSelection extends Component {
 
 			if(this.state.periodo)
 				this.props.setPeriodoLetivo(parseInt(this.state.periodo))
+
+			this.props.setContexto(this.state.contexto)
 
 			if(this.state.contexto === 'ALUNO'){
 				this.props.history.push('/alunos')
@@ -228,8 +235,9 @@ const MapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
     return {
-		setMainData: (mainData) => { dispatch({ type: 'SET_MAINDATA', mainData }) },
-		setPeriodoLetivo: (periodo) => { dispatch({ type: 'SET_PERIODOLETIVO', periodo }) }
+			setContexto: (contexto) => { dispatch({ type: 'SET_CONTEXTO', contexto }) },
+			setMainData: (mainData) => { dispatch({ type: 'SET_MAINDATA', mainData }) },
+			setPeriodoLetivo: (periodo) => { dispatch({ type: 'SET_PERIODOLETIVO', periodo }) }
     }
 }
 
