@@ -17,8 +17,7 @@ class Home extends Component {
 
     getSimulado = (simuladoId) => {
         this.setState({tableLoading: true})
-        //axios.get('http://localhost:5000/api/getSimuladoIdAluno/'+simuladoId)
-        axios.get('http://localhost:5000/api/getSimuladoId/'+simuladoId)
+        axios.get('http://localhost:5000/api/getSimuladoIdAluno/'+simuladoId)
         .then(res => {
             this.setState({tableLoading: false})
             console.log('response', res.data)

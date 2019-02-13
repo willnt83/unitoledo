@@ -231,6 +231,7 @@ function BackEndRequestsWrapper(WrappedComponent) {
 		getQuestoes = () => {
 			axios.get('http://localhost:5000/api/getQuestoes')
 			.then(res => {
+				console.log('response', res.data)
 				let tempArray = []
 				let key = 0
 				let labelStatus = null
@@ -278,6 +279,7 @@ function BackEndRequestsWrapper(WrappedComponent) {
 						conteudo: record.conteudo.description,
 						areaConhecimentoId: record.areaConhecimento.id,
 						areaConhecimento: record.areaConhecimento.description,
+						tipoId: record.tipo.id,
 						valueAlternativaCorreta:  record.alterCorreta,
 						alternativas : arrayAlternativas
 					})

@@ -32,7 +32,7 @@ class ModalAlternativas extends Component {
             this.props.form.resetFields()
         }
 
-        if(this.props.alternativaCorreta !== nextProps.alternativaCorreta){
+        if(this.props.alternativaCorreta !== nextProps.alternativaCorreta && nextProps.alternativas.length > 0){
             this.props.form.setFieldsValue({
                 alternativaCorreta: nextProps.alternativaCorreta,
                 alternativaA: nextProps.alternativas[0].descricao,
@@ -49,6 +49,7 @@ class ModalAlternativas extends Component {
         this.props.form.validateFieldsAndScroll((err, values) => {
             if(!err){
                 var alternativas = []
+                var alternativaIds = []
                 var corretaA = false, corretaB = false, corretaC = false, corretaD = false, corretaE = false
                 switch(values.alternativaCorreta){
                     case 'A': {
@@ -74,11 +75,20 @@ class ModalAlternativas extends Component {
                     default:
                         break
                 }
-                alternativas.push({id: '', descricao: values.alternativaA, correta: corretaA})
-                alternativas.push({id: '', descricao: values.alternativaB, correta: corretaB})
-                alternativas.push({id: '', descricao: values.alternativaC, correta: corretaC})
-                alternativas.push({id: '', descricao: values.alternativaD, correta: corretaD})
-                alternativas.push({id: '', descricao: values.alternativaE, correta: corretaE})
+                if(this.props.alternativas.length === 0){
+                    alternativaIds = ['', '', '', '', '']
+                }
+                else{
+                    this.props.alternativas.forEach(alternativa => {
+                        alternativaIds.push(alternativa.id)
+                    })
+                }
+
+                alternativas.push({id: alternativaIds[0], descricao: values.alternativaA, correta: corretaA})
+                alternativas.push({id: alternativaIds[1], descricao: values.alternativaB, correta: corretaB})
+                alternativas.push({id: alternativaIds[2], descricao: values.alternativaC, correta: corretaC})
+                alternativas.push({id: alternativaIds[3], descricao: values.alternativaD, correta: corretaD})
+                alternativas.push({id: alternativaIds[4], descricao: values.alternativaE, correta: corretaE})
                 this.props.updateAlternativas(values.alternativaCorreta, alternativas)
                 this.props.showHideModalAlternativas(false)
             }

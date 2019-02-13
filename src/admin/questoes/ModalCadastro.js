@@ -3,6 +3,7 @@ import { Icon, Modal, Form, Input, Button, Upload, Row, Col, Select } from "antd
 import { connect } from 'react-redux'
 import ModalAlternativas from './ModalAlternativas'
 import BackEndRequests from '../hocs/BackEndRequests'
+import moment from 'moment'
 
 const statusOptions = [
 	{
@@ -37,49 +38,6 @@ const discursivaOptions = [
 	}
 ]
 
-const anoOptions = [
-	{
-		value: "2018",
-		label: "2018"
-	},
-	{
-		value: "2017",
-		label: "2017"
-	},
-	{
-		value: "2016",
-		label: "2016"
-	},
-	{
-		value: "2015",
-		label: "2015"
-	},
-	{
-		value: "2014",
-		label: "2014"
-	},
-	{
-		value: "2013",
-		label: "2013"
-	},
-	{
-		value: "2012",
-		label: "2012"
-	},
-	{
-		value: "2011",
-		label: "2011"
-	},
-	{
-		value: "2010",
-		label: "2010"
-	},
-	{
-		value: "2009",
-		label: "2009"
-	}
-]
-
 const tipoOptions = [
 	{
 		value: 1,
@@ -97,7 +55,9 @@ class ModalCadastro extends Component {
         showModalAlternativas: false,
         alternativaCorreta: null,
         alternativas: [],
-        buttonConfirmarLoading: false
+        buttonConfirmarLoading: false,
+        anoOptions: [],
+        questaoId: ''
     }
 
     stringToBool = (str) => {
@@ -133,7 +93,10 @@ class ModalCadastro extends Component {
                     "areaConhecimento": {
                         "id": values.areaDeConhecimento
                     },
-                    "alternativas" : this.state.alternativas
+                    "alternativas" : this.state.alternativas,
+                    "tipo": {
+                        "id": values.tipo
+                    }
                 }
                 this.props.createUpdateQuestao(request)
             }
@@ -151,13 +114,56 @@ class ModalCadastro extends Component {
         })
     }
 
+    handleModalClosure = () => {
+        console.log('handleModalClosure...')
+        // Resetando form
+        this.props.form.resetFields()
+
+        // Limpando state
+        this.setState({
+            questaoId: '',
+            alternativaCorreta: null,
+            alternativas: []
+        })
+
+        this.props.hideModalCadastro()
+    }
+
     showHideModalAlternativas = (bool) => {
 		this.setState({showModalAlternativas: bool})
     }
 
+    componentWillMount(){
+        // Construindo opções de seleção do campo Ano
+        var currDate = moment()
+        var anoOptions = []
+        var i = 0
+        while(i < 10){
+            anoOptions.push({
+                key: i,
+                value: currDate.format('YYYY'),
+                description: currDate.format('YYYY')
+                
+            })
+            currDate = currDate.subtract(1, 'years')
+            i++
+        }
+        this.setState({anoOptions})
+    }
+
     componentWillReceiveProps(nextProps){
-        if(nextProps.mode === 'create'){
+        if(nextProps.mode === 'create' && nextProps.mode !== this.props.mode){
+            /*
+            // Resetando form
             this.props.form.resetFields()
+
+            // Limpando state
+            this.setState({
+                questaoId: '',
+                alternativaCorreta: null,
+                alternativas: []
+            })
+            */
         }
         else{
             if(nextProps.questao !== null && nextProps.questao !== this.props.questao){
@@ -172,7 +178,8 @@ class ModalCadastro extends Component {
                     ano: nextProps.questao.valueAno,
                     descricao: nextProps.questao.description,
                     fonte: nextProps.questao.fonte,
-                    discursiva: discursiva
+                    discursiva: discursiva,
+                    tipo: nextProps.questao.tipoId
                 })
                 this.setState({
                     questaoId: nextProps.questao.id,
@@ -187,7 +194,8 @@ class ModalCadastro extends Component {
         // Tratando response da requisição createUpdateQuestao
 		if(nextProps.createUpdateQuestaoResponse && nextProps.createUpdateQuestaoResponse !== this.props.createUpdateQuestaoResponse){
 			if(nextProps.createUpdateQuestaoResponse.success){
-				//this.resetInputStates()
+                //this.resetInputStates()
+                this.handleModalClosure() // Limpa todas as variáveis e o formulário
 				this.props.hideModalCadastro()
 				this.props.handleGetQuestoes()
 			}
@@ -206,10 +214,11 @@ class ModalCadastro extends Component {
                 <Modal
                     title="Questão"
                     visible={this.props.showModalCadastro}
-                    onCancel={this.props.hideModalCadastro}
+                    
+                    onCancel={this.handleModalClosure}
                     width={900}
                     footer={[
-                        <Button key="back" onClick={this.props.hideModalCadastro}>
+                        <Button key="back" onClick={this.handleModalClosure}>
                             <Icon type="close" />Cancelar
                         </Button>,
                         <Button
@@ -356,8 +365,8 @@ class ModalCadastro extends Component {
                                             placeholder="Selecione o ano"
                                         >
                                             {
-                                                anoOptions.map((item) => {
-                                                    return (<Select.Option key={item.value} value={item.value}>{item.label}</Select.Option>)
+                                                this.state.anoOptions.map((item) => {
+                                                    return (<Select.Option key={item.key} value={item.value}>{item.description}</Select.Option>)
                                                 })
                                             }
                                         </Select>
