@@ -279,7 +279,7 @@ class Questoes extends Component {
 	// /Filtros
 
 	componentWillReceiveProps(nextProps){
-		console.log('atualizando table...')
+		// Atualização da table
 		if(nextProps.questoes){
 			this.setState({
 				questoes: nextProps.questoes
@@ -288,16 +288,6 @@ class Questoes extends Component {
 	}
 
 	componentWillUpdate(nextProps, nextState) {
-		if(nextProps.questoes.length > 0 && (nextProps.questoes.length !== this.props.questoes.length)){
-			/*
-			console.log('atualizando table...')
-			this.setState({
-				questoes: nextProps.questoes
-			})
-			*/
-		}
-
-		// Atualização da table
         if(nextProps.questoes.length && nextProps.questoes !== this.props.questoes){
 			this.setState({tableLoading: false})
 			let habilidadeOptions = []

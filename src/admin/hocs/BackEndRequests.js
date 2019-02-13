@@ -231,7 +231,6 @@ function BackEndRequestsWrapper(WrappedComponent) {
 		getQuestoes = () => {
 			axios.get('http://localhost:5000/api/getQuestoes')
 			.then(res => {
-				console.log('response getQuestoes', res.data)
 				let tempArray = []
 				let key = 0
 				let labelStatus = null
@@ -292,10 +291,8 @@ function BackEndRequestsWrapper(WrappedComponent) {
 		}
 
 		createUpdateQuestao = (request) => {
-			console.log('createUpdateQuestao request', request)
 			axios.post('http://localhost:5000/api/createUpdateQuestao', request)
 			.then(res => {
-				console.log('createUpdateQuestao response', res.data)
 				this.setState({
 					createUpdateQuestaoResponse: {
 						success: true,

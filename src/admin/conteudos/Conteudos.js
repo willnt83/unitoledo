@@ -90,6 +90,12 @@ class Conteudos extends Component {
         });
     }
 
+    handleCancel = () => {
+        this.setState({
+            visible: false,
+        });
+    }
+
     handleGetConteudos = () => {
         this.setState({tableLoading: true})
         this.props.getConteudos();
