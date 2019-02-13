@@ -115,7 +115,6 @@ class ModalCadastro extends Component {
     }
 
     handleModalClosure = () => {
-        console.log('handleModalClosure...')
         // Resetando form
         this.props.form.resetFields()
 

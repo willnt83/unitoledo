@@ -113,7 +113,6 @@ const RootReducer = (state = initState, action) => {
         }
     }
     else if(action.type === 'SET_QUESTOES'){
-        console.log('reducer SET_QUESTOES')
         return{
             ...state,
             questoes: action.questoes
