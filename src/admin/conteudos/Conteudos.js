@@ -1,9 +1,7 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import { Layout, Table, Icon, Popconfirm, Modal, Input, Button } from 'antd'
-import { TextField, MenuItem, Tooltip } from '@material-ui/core/'
-import ButtonUI from '@material-ui/core/Button'
-import AddIcon from '@material-ui/icons/Add'
+import { Layout, Table, Icon, Popconfirm, Modal, Input, Button, Row, Col } from 'antd'
+import { TextField, MenuItem } from '@material-ui/core/'
 import { withStyles } from '@material-ui/core/styles'
 import BackEndRequests from '../hocs/BackEndRequests'
 import { connect } from 'react-redux'
@@ -44,7 +42,6 @@ class Conteudos extends Component {
     }
 
     state = {
-        selectedRowKeys: [], // Check here to configure the default column
         loading: false,
         visible: false,
         buttonConfirmConteudoState: false,
@@ -177,8 +174,7 @@ class Conteudos extends Component {
 
     render(){
         const { classes } = this.props;
-        const {selectedRowKeys, visible, buttonConfirmConteudoState } = this.state;
-        const hasSelected = selectedRowKeys.length > 0;
+        const { visible, buttonConfirmConteudoState } = this.state;
 
         const columns = [{
             title: 'ID',
@@ -263,20 +259,11 @@ class Conteudos extends Component {
                 minHeight: 280
                 }}
             >
-                <div style={{ marginBottom: 16 }}>
-                <Tooltip title="Adicionar Conteudo" placement="right">
-                    <ButtonUI 
-                        variant="fab" 
-                        aria-label="Add" 
-                        onClick={() => this.showConteudosModal()}
-                        style={{backgroundColor: '#228B22', color: '#fff'}}>
-                        <AddIcon />
-                    </ButtonUI>
-                    </Tooltip>
-                    <span style={{ marginLeft: 8 }}>
-                        {hasSelected ? `Selected ${selectedRowKeys.length} items` : ''}
-                    </span>
-                </div>
+                <Row>
+					<Col span={24} align="end" style={{marginTop: '10px', marginBottom: '10px'}}>
+						<Button className="actionButton buttonGreen" title="Novo conteúdo" onClick={() => this.showConteudosModal()}><Icon type="plus" /> Novo Conteúdo</Button>
+					</Col>
+				</Row>
                 
                 <Table
                     columns={columns}

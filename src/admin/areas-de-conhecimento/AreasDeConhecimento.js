@@ -1,9 +1,7 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import { Layout, Table, Icon, Popconfirm, Modal, Input, Button } from 'antd'
-import { TextField, MenuItem, Tooltip } from '@material-ui/core/'
-import ButtonUI from '@material-ui/core/Button'
-import AddIcon from '@material-ui/icons/Add'
+import { Layout, Table, Icon, Popconfirm, Modal, Input, Button, Row, Col } from 'antd'
+import { TextField, MenuItem } from '@material-ui/core/'
 import { withStyles } from '@material-ui/core/styles'
 import BackEndRequests from '../hocs/BackEndRequests'
 import { connect } from 'react-redux'
@@ -44,7 +42,6 @@ class AreasDeConhecimento extends Component {
     }
 
     state = {
-        selectedRowKeys: [], // Check here to configure the default column
         loading: false,
         visible: false,
         buttonConfirmAreaDeConhecimentoState: false,
@@ -177,8 +174,7 @@ class AreasDeConhecimento extends Component {
 
     render(){
         const { classes } = this.props
-        const {selectedRowKeys, visible, buttonConfirmAreaDeConhecimentoState } = this.state
-        const hasSelected = selectedRowKeys.length > 0
+        const { visible, buttonConfirmAreaDeConhecimentoState } = this.state
 
         const columns = [{
             title: 'ID',
@@ -263,20 +259,11 @@ class AreasDeConhecimento extends Component {
                 minHeight: 280
                 }}
             >
-                <div style={{ marginBottom: 16 }}>
-                <Tooltip title="Adicionar Área de Conhecimento" placement="right">
-                    <ButtonUI 
-                        variant="fab" 
-                        aria-label="Add" 
-                        onClick={() => this.showAreaDeConhecimentoModal()}
-                        style={{backgroundColor: '#228B22', color: '#fff'}}>
-                        <AddIcon />
-                    </ButtonUI>
-                    </Tooltip>
-                    <span style={{ marginLeft: 8 }}>
-                        {hasSelected ? `Selected ${selectedRowKeys.length} items` : ''}
-                    </span>
-                </div>
+                <Row>
+					<Col span={24} align="end" style={{marginTop: '10px', marginBottom: '10px'}}>
+						<Button className="actionButton buttonGreen" title="Nova área de conhecimento" onClick={() => this.showAreaDeConhecimentoModal()}><Icon type="plus" /> Nova Área de Conhecimento</Button>
+					</Col>
+				</Row>
                 
                 <Table
                     columns={columns}

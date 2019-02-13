@@ -1,6 +1,6 @@
 import React, { Component } from "react"
 import { Layout, Button, Table, Row, Col, Icon } from "antd"
-import { Link, withRouter } from "react-router-dom"
+import { withRouter } from "react-router-dom"
 import axios from "axios"
 import { connect } from 'react-redux'
 import moment from 'moment'
@@ -309,13 +309,15 @@ class Simulados extends Component {
                 width: 300,
                 className: "actionCol",
 				render: (text, record) => {
+                    var publicarButtonDisabled = null
+                    var moverRascunhoButtonDisabled = null
                     if(this.props.contexto === 'COORDENADOR'){
-                        var publicarButtonDisabled = record.rascunho ? false : true
-                        var moverRascunhoButtonDisabled = record.rascunho ? true : false
+                        publicarButtonDisabled = record.rascunho ? false : true
+                        moverRascunhoButtonDisabled = record.rascunho ? true : false
                     }
                     else{
-                        var publicarButtonDisabled = true
-                        var moverRascunhoButtonDisabled = true
+                        publicarButtonDisabled = true
+                        moverRascunhoButtonDisabled = true
                     }
                     
 					return (

@@ -1,135 +1,8 @@
 const initState = {
-    /*
+
     contexto: null,
     authHeaders: null,
-    mainData: {
-        "disciplinas": [{
-            "idColigada": 1,
-            "idFilial": 1,
-            "idPeriodoLetivo": 201,
-            "idTurma": "049.01SA",
-            "id": "12841",
-            "nome": "ALGORÍTMO E LÓGICA DE PROGRAMAÇÃO",
-            "idTurno": 2,
-            "idNivelEnsino": 1
-        }, {
-            "idColigada": 1,
-            "idFilial": 1,
-            "idPeriodoLetivo": 201,
-            "idTurma": "049.05SA",
-            "id": "12846",
-            "nome": "ANÁLISE E PROJETOS DE SIST.DISTRIBUIDOS",
-            "idTurno": 2,
-            "idNivelEnsino": 1
-        }, {
-            "idColigada": 1,
-            "idFilial": 1,
-            "idPeriodoLetivo": 201,
-            "idTurma": "049.05SA",
-            "id": "12845",
-            "nome": "ESTRUTURAS DE DADOS",
-            "idTurno": 2,
-            "idNivelEnsino": 1
-        }, {
-            "idColigada": 1,
-            "idFilial": 1,
-            "idPeriodoLetivo": 201,
-            "idTurma": "049.05SA",
-            "id": "12844",
-            "nome": "INOVAÇÕES TECNOLÓGICAS",
-            "idTurno": 2,
-            "idNivelEnsino": 1
-        }, {
-            "idColigada": 1,
-            "idFilial": 1,
-            "idPeriodoLetivo": 201,
-            "idTurma": "049.05SA",
-            "id": "12847",
-            "nome": "LING. PROGRAMAÇÃO ORIENTADA A OBJETO DISTRIBUÍDOS",
-            "idTurno": 2,
-            "idNivelEnsino": 1
-        }, {
-            "idColigada": 1,
-            "idFilial": 1,
-            "idPeriodoLetivo": 201,
-            "idTurma": "049.05SA",
-            "id": "12842",
-            "nome": "METODOLOGIA DA PESQUISA CIENTÍFICA",
-            "idTurno": 2,
-            "idNivelEnsino": 1
-        }, {
-            "idColigada": 1,
-            "idFilial": 1,
-            "idPeriodoLetivo": 201,
-            "idTurma": "049.05SA",
-            "id": "12848",
-            "nome": "PROJETO: SISTEMAS DISTRIBUIDOS",
-            "idTurno": 2,
-            "idNivelEnsino": 1
-        }, {
-            "idColigada": 1,
-            "idFilial": 1,
-            "idPeriodoLetivo": 201,
-            "idTurma": "049.05SA",
-            "id": "12843",
-            "nome": "SISTEMAS OPERACIONAIS",
-            "idTurno": 2,
-            "idNivelEnsino": 1
-        }],
-        "cursos": [{
-            "idColigada": 1,
-            "id": "49",
-            "nome": "ANÁLISE E DESENVOLVIMENTO DE SISTEMAS",
-            "idNivelEnsino": 1,
-            "idPeriodoLetivo": 0
-        }],
-        "turmas": [{
-            "idColigada": 1,
-            "idFilial": 1,
-            "idPeriodoLetivo": 201,
-            "id": "049.01SA",
-            "nome": "ANÁLISE E DESENVOLVIMENTO DE SISTEMAS - 01SA",
-            "idNivelEnsino": 1,
-            "idCurso": "49",
-            "idProximaTurma": "049.02SA"
-        }, {
-            "idColigada": 1,
-            "idFilial": 1,
-            "idPeriodoLetivo": 201,
-            "id": "049.02SA",
-            "nome": "ANÁLISE E DESENVOLVIMENTO DE SISTEMAS - 02SA",
-            "idNivelEnsino": 1,
-            "idCurso": "49",
-            "idProximaTurma": "049.03SA"
-        }, {
-            "idColigada": 1,
-            "idFilial": 1,
-            "idPeriodoLetivo": 201,
-            "id": "049.03SA",
-            "nome": "ANÁLISE E DESENVOLVIMENTO DE SISTEMAS - 03SA",
-            "idNivelEnsino": 1,
-            "idCurso": "49",
-            "idProximaTurma": "049.04SA"
-        }, {
-            "idColigada": 1,
-            "idFilial": 1,
-            "idPeriodoLetivo": 201,
-            "id": "049.04SA",
-            "nome": "ANÁLISE E DESENVOLVIMENTO DE SISTEMAS - 04SA",
-            "idNivelEnsino": 1,
-            "idCurso": "49",
-            "idProximaTurma": "049.05SA"
-        }, {
-            "idColigada": 1,
-            "idFilial": 1,
-            "idPeriodoLetivo": 201,
-            "id": "049.05SA",
-            "nome": "ANÁLISE E DESENVOLVIMENTO DE SISTEMAS - 05SA",
-            "idNivelEnsino": 1,
-            "idCurso": "49",
-            "idProximaTurma": "049.05SA"
-        }]
-    },
+    mainData: {"disciplinas":[{"idColigada":1,"idFilial":1,"idPeriodoLetivo":201,"idTurma":"049.01SA","id":"12841","nome":"ALGORÍTMO E LÓGICA DE PROGRAMAÇÃO","idTurno":2,"idNivelEnsino":1},{"idColigada":1,"idFilial":1,"idPeriodoLetivo":201,"idTurma":"049.05SA","id":"12846","nome":"ANÁLISE E PROJETOS DE SIST.DISTRIBUIDOS","idTurno":2,"idNivelEnsino":1},{"idColigada":1,"idFilial":1,"idPeriodoLetivo":201,"idTurma":"049.05SA","id":"12845","nome":"ESTRUTURAS DE DADOS","idTurno":2,"idNivelEnsino":1},{"idColigada":1,"idFilial":1,"idPeriodoLetivo":201,"idTurma":"049.05SA","id":"12844","nome":"INOVAÇÕES TECNOLÓGICAS","idTurno":2,"idNivelEnsino":1},{"idColigada":1,"idFilial":1,"idPeriodoLetivo":201,"idTurma":"049.05SA","id":"12847","nome":"LING. PROGRAMAÇÃO ORIENTADA A OBJETO DISTRIBUÍDOS","idTurno":2,"idNivelEnsino":1},{"idColigada":1,"idFilial":1,"idPeriodoLetivo":201,"idTurma":"049.05SA","id":"12842","nome":"METODOLOGIA DA PESQUISA CIENTÍFICA","idTurno":2,"idNivelEnsino":1},{"idColigada":1,"idFilial":1,"idPeriodoLetivo":201,"idTurma":"049.05SA","id":"12848","nome":"PROJETO: SISTEMAS DISTRIBUIDOS","idTurno":2,"idNivelEnsino":1},{"idColigada":1,"idFilial":1,"idPeriodoLetivo":201,"idTurma":"049.05SA","id":"12843","nome":"SISTEMAS OPERACIONAIS","idTurno":2,"idNivelEnsino":1}],"cursos":[{"idColigada":1,"id":"49","nome":"ANÁLISE E DESENVOLVIMENTO DE SISTEMAS","idNivelEnsino":1,"idPeriodoLetivo":0}],"turmas":[{"idColigada":1,"idFilial":1,"idPeriodoLetivo":201,"id":"049.01SA","nome":"ANÁLISE E DESENVOLVIMENTO DE SISTEMAS - 01SA","idNivelEnsino":1,"idCurso":"49","idProximaTurma":"049.02SA"},{"idColigada":1,"idFilial":1,"idPeriodoLetivo":201,"id":"049.02SA","nome":"ANÁLISE E DESENVOLVIMENTO DE SISTEMAS - 02SA","idNivelEnsino":1,"idCurso":"49","idProximaTurma":"049.03SA"},{"idColigada":1,"idFilial":1,"idPeriodoLetivo":201,"id":"049.03SA","nome":"ANÁLISE E DESENVOLVIMENTO DE SISTEMAS - 03SA","idNivelEnsino":1,"idCurso":"49","idProximaTurma":"049.04SA"},{"idColigada":1,"idFilial":1,"idPeriodoLetivo":201,"id":"049.04SA","nome":"ANÁLISE E DESENVOLVIMENTO DE SISTEMAS - 04SA","idNivelEnsino":1,"idCurso":"49","idProximaTurma":"049.05SA"},{"idColigada":1,"idFilial":1,"idPeriodoLetivo":201,"id":"049.05SA","nome":"ANÁLISE E DESENVOLVIMENTO DE SISTEMAS - 05SA","idNivelEnsino":1,"idCurso":"49","idProximaTurma":"049.05SA"}]},
     periodoLetivo: 202,
     pageTitle: [],
     habilidades: [],
@@ -151,7 +24,8 @@ const initState = {
         }
     },
     selectedQuestoes: []
-    */
+
+   /*
    contexto: null,
    usuarioId: null,
    authHeaders: null,
@@ -177,6 +51,7 @@ const initState = {
        }
    },
    selectedQuestoes: []
+   */
 }
 
 const RootReducer = (state = initState, action) => {
@@ -238,6 +113,7 @@ const RootReducer = (state = initState, action) => {
         }
     }
     else if(action.type === 'SET_QUESTOES'){
+        console.log('reducer SET_QUESTOES')
         return{
             ...state,
             questoes: action.questoes

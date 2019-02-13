@@ -57,11 +57,6 @@ class ExecucaoSimulado extends Component {
 
     render() {
         console.log('props', this.props)
-        const radioStyle = {
-            display: 'block',
-            height: '30px',
-            lineHeight: '30px',
-        };
 
         return (
             <Layout className="layout">

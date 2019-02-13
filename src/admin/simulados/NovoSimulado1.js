@@ -29,7 +29,7 @@ class NovoSimulado1 extends Component {
         if(this.props.simulado.nome !== null || this.props.simulado.nome !== ''){
             this.props.form.setFieldsValue({
                 nome: this.props.simulado.nome
-            });
+            })
         }
     }
 

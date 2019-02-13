@@ -11,18 +11,22 @@ const { Content } = Layout;
 class Home extends Component {
     state = {
         showModal: false,
-        tableData: []
+        tableData: [],
+        tableLoading: false
     };
 
     getSimulado = (simuladoId) => {
+        this.setState({tableLoading: true})
         //axios.get('http://localhost:5000/api/getSimuladoIdAluno/'+simuladoId)
         axios.get('http://localhost:5000/api/getSimuladoId/'+simuladoId)
         .then(res => {
+            this.setState({tableLoading: false})
             console.log('response', res.data)
             this.props.setSimulado(res.data[0])
             this.showModal(true)
         })
         .catch(error =>{
+            this.setState({tableLoading: false})
             console.log(error)
         })
     }
@@ -115,6 +119,7 @@ class Home extends Component {
                     <Table 
                         columns={ columns } 
                         dataSource={ this.state.tableData }
+                        loading={this.state.tableLoading}
                     />
                 </Content>
                 <Modal

@@ -1,130 +1,15 @@
 import React, { Component } from "react"
-import PropTypes from "prop-types"
-import { Layout, Table, Icon, Popconfirm, Modal, Form, Input, Button, Upload, Row, Col, Select } from "antd"
-import { TextField, MenuItem, Tooltip } from "@material-ui/core/"
-import ButtonUI from "@material-ui/core/Button"
-import AddIcon from "@material-ui/icons/Add"
+import { Layout, Table, Icon, Popconfirm, Form, Input, Button, Row, Col, Select } from "antd"
 import { withStyles } from "@material-ui/core/styles"
 import BackEndRequests from '../hocs/BackEndRequests'
 import { connect } from 'react-redux'
 
-//import moment from "moment";
+import ModalCadastro from './ModalCadastro'
 
 const { Content } = Layout
 const Option = Select.Option
-const FormItem = Form.Item
 
-const statusOptions = [
-	{
-		value: true,
-		label: "Ativo"
-	},
-	{
-		value: false,
-		label: "Inativo"
-	}
-];
-
-const enadeOptions = [
-	{
-		value: true,
-		label: "Sim"
-	},
-	{
-		value: false,
-		label: "Não"
-	}
-];
-
-const discursivaOptions = [
-	{
-		value: true,
-		label: "Sim"
-	},
-	{
-		value: false,
-		label: "Não"
-	}
-];
-
-const alternativaOptions = [
-	{
-		value: "A",
-		label: "A"
-	},
-	{
-		value: "B",
-		label: "B"
-	},
-	{
-		value: "C",
-		label: "C"
-	},
-	{
-		value: "D",
-		label: "D"
-	},
-	{
-		value: "E",
-		label: "E"
-	}
-];
-
-const anoOptions = [
-	{
-		value: "2018",
-		label: "2018"
-	},
-	{
-		value: "2017",
-		label: "2017"
-	},
-	{
-		value: "2016",
-		label: "2016"
-	},
-	{
-		value: "2015",
-		label: "2015"
-	},
-	{
-		value: "2014",
-		label: "2014"
-	},
-	{
-		value: "2013",
-		label: "2013"
-	},
-	{
-		value: "2012",
-		label: "2012"
-	},
-	{
-		value: "2011",
-		label: "2011"
-	},
-	{
-		value: "2010",
-		label: "2010"
-	},
-	{
-		value: "2009",
-		label: "2009"
-	}
-];
-
-const tipoOptions = [
-	{
-		value: 1,
-		label: 'Informação geral'
-	},
-	{
-		value: 2,
-		label: 'Conhecimento específico'
-	}
-]
-
-const styles = theme => ({
+const styles = () => ({
 	customFilterDropdown: {
 		padding: 8,
 		borderRadius: 6,
@@ -152,7 +37,7 @@ const styles = theme => ({
 		marginTop: 20,
 		width: 200
 	}
-});
+})
 
 class Questoes extends Component {
 	constructor(props) {
@@ -164,47 +49,8 @@ class Questoes extends Component {
 		selectedRowKeys: [], // Check here to configure the default column
 		loading: false,
 		tableLoading: false,
-		visible: false,
-		visibleAlternativa: false,
-		buttonConfirmQuestoesState: false,
-		alternativaCorretaDisabled: false,
-
-		inId: "",
-		inStatus: true,
-		inHabilidade: "",
-		inHabilidadeError: false,
-		inConteudo: "",
-		inConteudoError: false,
-		inAreaConhecimento: "",
-		inAreaConhecimentoError: false,
-		inPadraoEnade: true,
-		inPadraoEnadeError: false,
-		inAno: "",
-		inAnoError: false,
-		inDescricao: "",
-		inDescricaoError: false,
-		inFonte: "",
-		inFonteError: false,
-		inDiscursiva: false,
-		inTipo: "",
-		inTipoError: false,
-		inAlternativa: "",
-		inAlternativaError: false,
-		inAlternativaA: "",
-		inAlternativaAError: false,
-		inAlternativaB: "",
-		inAlternativaBError: false,
-		inAlternativaC: "",
-		inAlternativaCError: false,
-		inAlternativaD: "",
-		inAlternativaDError: false,
-		inAlternativaE: "",
-		inAlternativaEError: false,
-		idAlternativaA: "",
-		idAlternativaB: "",
-		idAlternativaC: "",
-		idAlternativaD: "",
-		idAlternativaE: "",
+		showModalCadastro: false,
+		questao: null,
 		searchText: "",
 		questoes: null,
 		filterHabilidadeOptions: null,
@@ -212,9 +58,11 @@ class Questoes extends Component {
 		filterAreaDeConhecimentoOptions: null,
 		filterHabilidades: [],
 		filterConteudos: [],
-		filterAreasDeConhecimento: []
-	};
+		filterAreasDeConhecimento: [],
+		mode: null
+	}
 
+	/*
 	resetInputStates = () => {
 		this.setState({
 			inId: "",
@@ -229,65 +77,32 @@ class Questoes extends Component {
 			inAreaConhecimento: "",
 			inDiscursiva: "",
 			alternativaCorretaDisabled: false,
-			buttonConfirmQuestoesState: false
-		});
+		})
 	}
+	*/
 
-	showModal = rowId => {
-		this.props.getHabilidades();
-		this.props.getConteudos();
-		this.props.getAreasDeConhecimento();
-		if (typeof rowId == "undefined") {
+	showModalCadastro = (row) => {
+		this.props.getHabilidades()
+		this.props.getConteudos()
+		this.props.getAreasDeConhecimento()
+
+		if (typeof row == "undefined") {
 			// Create
-			this.setState({
-			inId: "",
-			inHabilidade: "",
-			inConteudo: "",
-			inAreaConhecimento: "",
-			inStatus: true,
-			inPadraoEnade: "",
-			inAno: "",
-			inDescricao: "",
-			inFonte: "",
-			inDiscursiva: false,
-			inAlternativa: ""
-			});
+			this.setState({mode: 'create'})
 		} else {
 			// Edit
-			this.setState({
-			inId: this.props.questoes[rowId].id,
-			inHabilidade: this.props.questoes[rowId].habilidadeId,
-			inConteudo: this.props.questoes[rowId].conteudoId,
-			inAreaConhecimento: this.props.questoes[rowId].areaConhecimentoId,
-			inStatus: this.props.questoes[rowId].valueStatus,
-			inPadraoEnade: this.props.questoes[rowId].valueEnade,
-			inAno: this.props.questoes[rowId].valueAno,
-			inDescricao: this.props.questoes[rowId].description,
-			inFonte: this.props.questoes[rowId].fonte,
-			inDiscursiva: this.props.questoes[rowId].valueDiscursiva,
-			inAlternativa: this.props.questoes[rowId].valueAlternativaCorreta,
-			inAlternativaA: this.props.questoes[rowId].alternativas[0].descricao,
-			inAlternativaB: this.props.questoes[rowId].alternativas[1].descricao,
-			inAlternativaC: this.props.questoes[rowId].alternativas[2].descricao,
-			inAlternativaD: this.props.questoes[rowId].alternativas[3].descricao,
-			inAlternativaE: this.props.questoes[rowId].alternativas[4].descricao,
-			idAlternativaA: this.props.questoes[rowId].alternativas[0].id,
-			idAlternativaB: this.props.questoes[rowId].alternativas[1].id,
-			idAlternativaC: this.props.questoes[rowId].alternativas[2].id,
-			idAlternativaD: this.props.questoes[rowId].alternativas[3].id,
-			idAlternativaE: this.props.questoes[rowId].alternativas[4].id
-			});
-	
+			this.setState({mode: 'edit'})
+			this.setState({questao: row})
 		}
 		this.setState({
-			visible: true
-		});
+			showModalCadastro: true
+		})
 	}
 
-	showModalAlternativa = () => {
+	hideModalCadastro = () => {
 		this.setState({
-			visibleAlternativa: true
-		});
+			showModalCadastro: false
+		})
 	}
 
 	handleGetQuestoes = () => {
@@ -296,278 +111,127 @@ class Questoes extends Component {
 	}
 
 	// Handlers
-	handleCreateUpdateQuestao = () => {
-		let corretaA = false, corretaB = false, corretaC = false, corretaD = false, corretaE = false;
-		switch(this.state.inAlternativa){
-			case 'A': {
-				corretaA = true;
-				break;
-			}
-			case 'B': {
-				corretaB = true;
-				break;
-			}
-			case 'C': {
-				corretaC = true;
-				break;
-			}
-			case 'D': {
-				corretaD = true;
-				break;
-			}
-			case 'E': {
-				corretaE = true;
-				break;
-			}
-			default:
-				break;
-		}
-
-		let request = {
-			"id": this.state.inId,
-			"descricao": this.state.inDescricao,
-			"status": this.state.inStatus,
-			"enade": this.state.inPadraoEnade,
-			"discursiva": this.state.inDiscursiva,
-			"fonte": this.state.inFonte,
-			"ano": this.state.inAno,
-			"alterCorreta": this.state.inAlternativa,
-			"imagem": "caminho da imagem",
-			"conteudo": {
-				"id": this.state.inConteudo
-			},
-			"habilidade": {
-				"id": this.state.inHabilidade
-			},
-			"areaConhecimento": {
-				"id": this.state.inAreaConhecimento
-			},
-			"alternativas" : [
-				{
-					"id": this.state.idAlternativaA,
-					"descricao": this.state.inAlternativaA,
-					"correta": corretaA
-				},
-				{
-					"id": this.state.idAlternativaB,
-					"descricao": this.state.inAlternativaB,
-					"correta": corretaB
-				},
-				{
-					"id": this.state.idAlternativaC,
-					"descricao": this.state.inAlternativaC,
-					"correta": corretaC
-				},
-				{
-					"id": this.state.idAlternativaD,
-					"descricao": this.state.inAlternativaD,
-					"correta": corretaD
-				},
-				{
-					"id": this.state.idAlternativaE,
-					"descricao": this.state.inAlternativaE,
-					"correta": corretaE
-				}
-			]
-		};
-
-		this.props.createUpdateQuestao(request);
-	}
-
 	handleDeleteQuestao = (id) => {
+		this.setState({tableLoading: true})
 		this.props.deleteQuestao(id)
 	}
 
 	handleCancelAlternativa = () => {
 		this.setState({
 			visibleAlternativa: false
-		});
-	}
-
-	handleButtonConfirmQuestoes = () => {
-		let validationError = false;
-		// Validações
-		if(this.state.inHabilidade === ''){
-			this.setState({ inHabilidadeError: true })
-			validationError = true;
-		}
-		else {
-			this.setState({ inHabilidadeError: false })
-		}
-
-		if(this.state.inConteudo === ''){
-			this.setState({ inConteudoError: true })
-			validationError = true;
-		}
-		else {
-			this.setState({ inConteudoError: false })
-		}
-
-		if(this.state.inAreaConhecimento === ''){
-			this.setState({ inAreaConhecimentoError: true })
-			validationError = true;
-		}
-		else {
-			this.setState({ inAreaConhecimentoError: false })
-		}
-
-		if(this.state.inPadraoEnade === ''){
-			this.setState({ inPadraoEnadeError: true })
-			validationError = true;
-		}
-		else {
-			this.setState({ inPadraoEnadeError: false })
-		}
-
-		if(this.state.inAno === ''){
-			this.setState({ inAnoError: true })
-			validationError = true;
-		}
-		else {
-			this.setState({ inAnoError: false })
-		}
-
-		if(this.state.inDescricao === ''){
-			this.setState({ inDescricaoError: true })
-			validationError = true;
-		}
-		else {
-			this.setState({ inDescricaoError: false })
-		}
-
-		if(this.state.inFonte === ''){
-			this.setState({ inFonteError: true })
-			validationError = true;
-		}
-		else {
-			this.setState({ inFonteError: false })
-		}
-
-		if(!validationError){
-			this.setState({
-				buttonConfirmQuestoesState: true
-			});
-			this.handleCreateUpdateQuestao();
-		}
+		})
 	}
 
 	handleButtonConfirmAlternativa = () => {
-	let validationError = false;
+		let validationError = false
 
-	if(this.state.inAlternativa === '') {
-		this.setState({
-		inAlternativaError: true
-		});
-		validationError = true;
-	}
-	else {
-		this.setState({
-		inAlternativaError: false
-		});
-	}
+		if(this.state.inAlternativa === '') {
+			this.setState({
+			inAlternativaError: true
+			})
+			validationError = true
+		}
+		else {
+			this.setState({
+			inAlternativaError: false
+			})
+		}
 
-	if(this.state.inAlternativaA === '') {
-		this.setState({
-		inAlternativaAError: true
-		});
-		validationError = true;
-	}
-	else {
-		this.setState({
-		inAlternativaAError: false
-		});
-	}
+		if(this.state.inAlternativaA === '') {
+			this.setState({
+			inAlternativaAError: true
+			})
+			validationError = true
+		}
+		else {
+			this.setState({
+			inAlternativaAError: false
+			})
+		}
 
-	if(this.state.inAlternativaB === '') {
-		this.setState({
-		inAlternativaBError: true
-		});
-		validationError = true;
-	}
-	else {
-		this.setState({
-		inAlternativaBError: false
-		});
-	}
+		if(this.state.inAlternativaB === '') {
+			this.setState({
+			inAlternativaBError: true
+			})
+			validationError = true
+		}
+		else {
+			this.setState({
+			inAlternativaBError: false
+			})
+		}
 
-	if(this.state.inAlternativaC === '') {
-		this.setState({
-		inAlternativaCError: true
-		});
-		validationError = true;
-	}
-	else {
-		this.setState({
-		inAlternativaCError: false
-		});
-	}
+		if(this.state.inAlternativaC === '') {
+			this.setState({
+			inAlternativaCError: true
+			})
+			validationError = true
+		}
+		else {
+			this.setState({
+			inAlternativaCError: false
+			})
+		}
 
-	if(this.state.inAlternativaD === '') {
-		this.setState({
-		inAlternativaDError: true
-		});
-		validationError = true;
-	}
-	else {
-		this.setState({
-		inAlternativaDError: false
-		});
-	}
+		if(this.state.inAlternativaD === '') {
+			this.setState({
+			inAlternativaDError: true
+			})
+			validationError = true
+		}
+		else {
+			this.setState({
+			inAlternativaDError: false
+			})
+		}
 
-	if(this.state.inAlternativaE === '') {
-		this.setState({
-		inAlternativaEError: true
-		});
-		validationError = true;
-	}
-	else {
-		this.setState({
-		inAlternativaEError: false
-		});
-	}
+		if(this.state.inAlternativaE === '') {
+			this.setState({
+			inAlternativaEError: true
+			})
+			validationError = true
+		}
+		else {
+			this.setState({
+			inAlternativaEError: false
+			})
+		}
 
-	if(!validationError){
-		this.handleCancelAlternativa();
-	}
-	}
-
-	hideQuestoesModal = () => {
-		this.setState({
-			visible: false
-		});
+		if(!validationError){
+			this.handleCancelAlternativa()
+		}
 	}
 
 	handleFormInput = event => {
-	const target = event.target;
+	const target = event.target
 
 	this.setState({
 		[target.name]: target.value
-	});
+	})
 	}
 
 	// Filtros e Ordenação
 	compareByAlph = (a, b) => {
-		if (a > b) return -1;
-		if (a < b) return 1;
-		return 0;
+		if (a > b) return -1
+		if (a < b) return 1
+		return 0
 	}
 
 	handleSearch = (selectedKeys, confirm) => () => {
-	confirm();
-	this.setState({ searchText: selectedKeys[0] });
+		confirm()
+		this.setState({ searchText: selectedKeys[0] })
 	}
 
 	handleReset = clearFilters => () => {
-	clearFilters();
-	this.setState({ searchText: "" });
+		clearFilters()
+		this.setState({ searchText: "" })
 	}
 
 	handleChange = name => event => {
-	this.setState({
-		[name]: event.target.value
-	});
+		this.setState({
+			[name]: event.target.value
+		})
 	}
-
 
 	// Filtros
 	handleChangeHabilidadesFilter = (values) => {
@@ -614,19 +278,23 @@ class Questoes extends Component {
 	}
 	// /Filtros
 
-	componentWillUpdate(nextProps, nextState) {
-		let bool = null;
-		if(nextState.inDiscursiva !== this.state.inDiscursiva){
-			bool = nextState.inDiscursiva;
-			this.setState({
-				alternativaCorretaDisabled: bool
-			})
-		}
-		
-		if(nextProps.questoes.length > 0 && (nextProps.questoes.length !== this.props.questoes.length)){
+	componentWillReceiveProps(nextProps){
+		console.log('atualizando table...')
+		if(nextProps.questoes){
 			this.setState({
 				questoes: nextProps.questoes
 			})
+		}
+	}
+
+	componentWillUpdate(nextProps, nextState) {
+		if(nextProps.questoes.length > 0 && (nextProps.questoes.length !== this.props.questoes.length)){
+			/*
+			console.log('atualizando table...')
+			this.setState({
+				questoes: nextProps.questoes
+			})
+			*/
 		}
 
 		// Atualização da table
@@ -750,31 +418,16 @@ class Questoes extends Component {
 			}
 		}
 
-		// Tratando response da requisição createUpdateQuestao
-		if(nextProps.createUpdateQuestaoResponse && nextProps.createUpdateQuestaoResponse !== this.props.createUpdateQuestaoResponse){
-			if(nextProps.createUpdateQuestaoResponse.success){
-				this.resetInputStates();
-				this.hideQuestoesModal();
-				this.handleGetQuestoes();
-			}
-			else{
-				this.resetInputStates();
-				this.hideQuestoesModal();
-			}
-		}
-
 		// Tratando response da requisição deleteQuestao
 		if(nextProps.deleteQuestaoResponse && nextProps.deleteQuestaoResponse !== this.props.deleteQuestaoResponse){
 			if(nextProps.deleteQuestaoResponse.success){
-				this.handleGetQuestoes();
-			}
+				this.handleGetQuestoes()
+            }
 		}
 	}
 
 	render() {
-		const { classes } = this.props;
-		const { selectedRowKeys, visible, buttonConfirmQuestoesState,  visibleAlternativa} = this.state;
-		const hasSelected = selectedRowKeys.length > 0;
+		const { classes } = this.props
 		const columns = [
 			{
 				title: "ID",
@@ -828,12 +481,12 @@ class Questoes extends Component {
 				onFilterDropdownVisibleChange: visible => {
 					if (visible) {
 						setTimeout(() => {
-							this.searchInput.focus();
-						});
+							this.searchInput.focus()
+						})
 					}
 				},
 				render: text => {
-					const { searchText } = this.state;
+					const { searchText } = this.state
 					return searchText ? (
 					<span>
 						{text
@@ -851,7 +504,7 @@ class Questoes extends Component {
 					</span>
 					) : (
 					text
-					);
+					)
 				}
 			},
 			{
@@ -899,21 +552,21 @@ class Questoes extends Component {
 						<Icon
 							type="edit"
 							style={{ cursor: "pointer" }}
-							onClick={() => this.showModal(record.key)}
+							onClick={() => this.showModalCadastro(record)}
 						/>
 						<Popconfirm
 							title="Confirmar remoção?"
 							onConfirm={() => this.handleDeleteQuestao(record.id)}
-							>
+						>
 							<a href="/admin/cadastros/questoes" style={{ marginLeft: 20 }}>
 								<Icon type="delete" style={{ color: "red" }} />
 							</a>
 						</Popconfirm>
 					</React.Fragment>
-					);
+					)
 				}
 			}
-		];
+		]
 
 		return (
 			<Content
@@ -933,7 +586,7 @@ class Questoes extends Component {
 				<Row>
 					<Col span={24}>
 						<Form layout="vertical">
-							<FormItem label="Habilidades" style={{marginBottom: '5px'}}>
+							<Form.Item label="Habilidades" style={{marginBottom: '5px'}}>
 								<Select
 									id="filterHabilidades"
 									mode="multiple"
@@ -945,8 +598,8 @@ class Questoes extends Component {
 								>
 									{this.state.filterHabilidadeOptions}
 								</Select>
-							</FormItem>
-							<FormItem label="Conteúdos" style={{marginBottom: '5px'}}>
+							</Form.Item>
+							<Form.Item label="Conteúdos" style={{marginBottom: '5px'}}>
 								<Select
 									mode="multiple"
 									style={{ width: '100%' }}
@@ -956,8 +609,8 @@ class Questoes extends Component {
 								>
 									{this.state.filterConteudoOptions}
 								</Select>
-							</FormItem>
-							<FormItem label="Áreas de Conhecimento" style={{marginBottom: '5px'}}>
+							</Form.Item>
+							<Form.Item label="Áreas de Conhecimento" style={{marginBottom: '5px'}}>
 								<Select
 									mode="multiple"
 									style={{ width: '100%' }}
@@ -967,26 +620,15 @@ class Questoes extends Component {
 								>
 									{this.state.filterAreaDeConhecimentoOptions}
 								</Select>
-							</FormItem>
+							</Form.Item>
 						</Form>
 					</Col>
 				</Row>
-
-				<div style={{ marginBottom: 16 }}>
-					<Tooltip title="Adicionar Questão" placement="right">
-						<ButtonUI
-							variant="fab"
-							aria-label="Add"
-							onClick={() => this.showModal()}
-							style={{ backgroundColor: "#228B22", color: "#fff" }}
-						>
-							<AddIcon />
-						</ButtonUI>
-					</Tooltip>
-					<span style={{ marginLeft: 8 }}>
-						{hasSelected ? `Selected ${selectedRowKeys.length} items` : ""}
-					</span>
-				</div>
+				<Row>
+					<Col span={24} align="end" style={{marginTop: '10px', marginBottom: '10px'}}>
+						<Button className="actionButton buttonGreen" title="Nova questão" onClick={() => this.showModalCadastro()}><Icon type="plus" /> Nova Questão</Button>
+					</Col>
+				</Row>
 
 				<Table 
 					columns={ columns } 
@@ -994,398 +636,17 @@ class Questoes extends Component {
 					loading={ this.state.tableLoading }
 				/>
 
-				<Modal
-					title="Questão"
-					visible={visible}
-					buttonConfirmQuestoesState={buttonConfirmQuestoesState}
-					onCancel={this.hideQuestoesModal}
-					width={900}
-					footer={[
-					<Button key="back" onClick={this.hideQuestoesModal}>
-						<Icon type="close" />Cancelar
-					</Button>,
-					<Button
-						key="submit"
-						type="primary"
-						loading={buttonConfirmQuestoesState}
-						onClick={this.handleButtonConfirmQuestoes}
-					>
-						<Icon type="check" />Confirmar
-					</Button>
-					]}
-				>
-					<Row gutter={32}>
-						<Col span={8}>
-							<TextField
-								id="habilidade"
-								select
-								label="Habilidade"
-								fullWidth={true}
-								className={classes.textField}
-								value={this.state.inHabilidade}
-								onChange={this.handleChange("inHabilidade")}
-								InputLabelProps={{ shrink: true }}
-								SelectProps={{
-									MenuProps: {
-										className: classes.menu
-									}
-								}}
-								margin="normal"
-								required
-								error={this.state.inHabilidadeError}
-							>
-								{this.props.habilidades.map(option => (
-									<MenuItem key={option.id} value={option.id}>
-										{option.description}
-									</MenuItem>
-								))}
-							</TextField>
-						</Col>
-						<Col span={8}>
-							<TextField
-								id="conteudo"
-								select
-								label="Conteudo"
-								fullWidth={true}
-								className={classes.textField}
-								value={this.state.inConteudo}
-								onChange={this.handleChange("inConteudo")}
-								InputLabelProps={{ shrink: true }}
-								SelectProps={{
-									MenuProps: {
-										className: classes.menu
-									}
-								}}
-								margin="normal"
-								required
-								error={this.state.inConteudoError}
-							>
-								{this.props.conteudos.map(option => (
-									<MenuItem key={option.id} value={option.id}>
-										{option.description}
-									</MenuItem>
-								))}
-							</TextField>
-						</Col>
-						<Col span={8}>
-							<TextField
-								id="areaConhecimento"
-								select
-								label="Área de Conhecimento"
-								fullWidth={true}
-								className={classes.textField}
-								value={this.state.inAreaConhecimento}
-								onChange={this.handleChange("inAreaConhecimento")}
-								InputLabelProps={{ shrink: true }}
-								SelectProps={{
-									MenuProps: {
-										className: classes.menu
-									}
-								}}
-								margin="normal"
-								required
-								error={this.state.inAreaConhecimentoError}
-							>
-								{this.props.areasDeConhecimento.map(option => (
-									<MenuItem key={option.id} value={option.id}>
-										{option.description}
-									</MenuItem>
-								))}
-							</TextField>
-						</Col>
-					</Row>
-					<Row gutter={32}>
-						<Col span={8}>
-							<TextField
-								id="status"
-								select
-								label="Status"
-								fullWidth={true}
-								className={classes.textField}
-								value={this.state.inStatus}
-								onChange={this.handleChange("inStatus")}
-								InputLabelProps={{ shrink: true }}
-								SelectProps={{
-									MenuProps: {
-										className: classes.menu
-									}
-								}}
-								margin="normal"
-								required
-							>
-								{statusOptions.map(option => (
-									<MenuItem key={option.value} value={option.value}>
-										{option.label}
-									</MenuItem>
-								))}
-							</TextField>
-						</Col>
-						<Col span={8}>
-							<TextField
-								id="status"
-								select
-								label="Padrão Enade"
-								fullWidth={true}
-								className={classes.textField}
-								value={this.state.inPadraoEnade}
-								onChange={this.handleChange("inPadraoEnade")}
-								InputLabelProps={{ shrink: true }}
-								SelectProps={{
-									MenuProps: {
-										className: classes.menu
-									}
-								}}
-								margin="normal"
-								required
-								error={this.state.inPadraoEnadeError}
-							>
-								{enadeOptions.map(option => (
-									<MenuItem key={option.value} value={option.value}>
-										{option.label}
-									</MenuItem>
-								))}
-							</TextField>
-						</Col>
-						<Col span={8}>
-							<TextField
-								id="ano"
-								select
-								label="Ano"
-								fullWidth={true}
-								className={classes.textField}
-								value={this.state.inAno}
-								onChange={this.handleChange("inAno")}
-								InputLabelProps={{ shrink: true }}
-								SelectProps={{
-									MenuProps: {
-										className: classes.menu
-									}
-								}}
-								margin="normal"
-								required
-								error={this.state.inAnoError}
-							>
-								{anoOptions.map(option => (
-									<MenuItem key={option.value} value={option.value}>
-										{option.label}
-									</MenuItem>
-								))}
-							</TextField>
-						</Col>
-					</Row>
-					
-					<TextField
-						id="descricao"
-						name="inDescricao"
-						value={this.state.inDescricao}
-						label="Descrição"
-						placeholder="Descrição"
-						multiline
-						rows="4"
-						fullWidth={true}
-						onChange={this.handleFormInput}
-						required
-						error={this.state.inDescricaoError}
-					/>
-					<Row gutter={32}>
-						<Col span={8}>
-							<TextField
-								id="fonte"
-								name="inFonte"
-								value={this.state.inFonte}
-								label="Fonte"
-								placeholder="Fonte"
-								fullWidth={true}
-								onChange={this.handleFormInput}
-								style={{marginTop: 17}}
-								required
-								error={this.state.inFonteError}
-							/>
-						</Col>
-						<Col span={8}>
-							<TextField
-								id="tipo"
-								select
-								label="Tipo"
-								fullWidth={true}
-								className={classes.textField}
-								value={this.state.inTipo}
-								onChange={this.handleChange("inTipo")}
-								InputLabelProps={{ shrink: true }}
-								SelectProps={{
-									MenuProps: {
-										className: classes.menu
-									}
-								}}
-								margin="normal"
-								required
-								error={this.state.inTipoError}
-							>
-								{tipoOptions.map(option => (
-									<MenuItem key={option.value} value={option.value}>
-										{option.label}
-									</MenuItem>
-								))}
-							</TextField>
-						</Col>
-						<Col span={8}>
-							<TextField
-								id="discursiva"
-								select
-								label="Discursiva"
-								fullWidth={true}
-								className={classes.textField}
-								value={this.state.inDiscursiva}
-								onChange={this.handleChange("inDiscursiva")}
-								InputLabelProps={{ shrink: true }}
-								SelectProps={{
-									MenuProps: {
-										className: classes.menu
-									}
-								}}
-								margin="normal"
-								required
-							>
-								{discursivaOptions.map(option => (
-									<MenuItem key={option.value} value={option.value}>
-										{option.label}
-									</MenuItem>
-								))}
-							</TextField>
-						</Col>
-					</Row>
-					<br/><br/>
-					<Row gutter={48}>
-						<Col span={12}>
-							<Upload>
-								<Button>
-									<Icon type="upload" /> Imagem
-								</Button>
-							</Upload>
-						</Col>
-						<Col span={12}>
-							<Button
-								disabled={this.state.alternativaCorretaDisabled}
-								key="submit"
-								type="primary"
-								onClick={this.showModalAlternativa}
-								style={{float: "right"}}
-								>
-								<Icon type="ordered-list" />Alternativas
-							</Button>
-						</Col>
-					</Row>
-				</Modal>
-
-				<Modal
-					title="Alternativas"
-					visible={visibleAlternativa}
-					onCancel={this.handleCancelAlternativa}
-					footer={[
-						<Button
-							key="back"
-							onClick={this.handleCancelAlternativa}
-						>
-							<Icon type="close" />Cancelar
-						</Button>,
-						<Button
-							key="submit"
-							type="primary"
-							onClick={this.handleButtonConfirmAlternativa}
-						>
-							<Icon type="check" />Confirmar
-						</Button>
-					]}
-				>
-					<TextField
-						id="alternativaCorreta"
-						select
-						label="Alternativa correta"
-						fullWidth={true}
-						className={classes.textField}
-						value={this.state.inAlternativa}
-						onChange={this.handleChange("inAlternativa")}
-						InputLabelProps={{ shrink: true }}
-						SelectProps={{
-						MenuProps: {
-							className: classes.menu
-						}
-						}}
-						margin="normal"
-						style={{marginTop: 17}}
-						required
-						error = {this.state.inAlternativaError}
-					>
-						{alternativaOptions.map(option => (
-						<MenuItem key={option.value} value={option.value}>
-							{option.label}
-						</MenuItem>
-						))}
-					</TextField>
-					<TextField
-						name="inAlternativaA"
-						value={this.state.inAlternativaA}
-						label="Alternativa A"
-						placeholder="Alternativa A"
-						fullWidth={true}
-						onChange={this.handleFormInput}
-						required
-						style={{marginTop: 12}}
-						error = {this.state.inAlternativaAError}
-					/>
-					<TextField
-						name="inAlternativaB"
-						value={this.state.inAlternativaB}
-						label="Alternativa B"
-						placeholder="Alternativa B"
-						fullWidth={true}
-						onChange={this.handleFormInput}
-						required
-						style={{marginTop: 12}}
-						error = {this.state.inAlternativaBError}
-					/>
-					<TextField
-						name="inAlternativaC"
-						value={this.state.inAlternativaC}
-						label="Alternativa C"
-						placeholder="Alternativa C"
-						fullWidth={true}
-						onChange={this.handleFormInput}
-						required
-						style={{marginTop: 12}}
-						error = {this.state.inAlternativaCError}
-					/>
-					<TextField
-						name="inAlternativaD"
-						value={this.state.inAlternativaD}
-						label="Alternativa D"
-						placeholder="Alternativa D"
-						fullWidth={true}
-						onChange={this.handleFormInput}
-						required
-						style={{marginTop: 12}}
-						error = {this.state.inAlternativaDError}
-					/>
-					<TextField
-						name="inAlternativaE"
-						value={this.state.inAlternativaE}
-						label="Alternativa E"
-						placeholder="Alternativa E"
-						fullWidth={true}
-						onChange={this.handleFormInput}
-						required
-						style={{marginTop: 12}}
-						error = {this.state.inAlternativaEError}
-					/>
-				</Modal>
+				<ModalCadastro
+					showModalCadastro={this.state.showModalCadastro}
+					hideModalCadastro={this.hideModalCadastro}
+					handleGetQuestoes={this.handleGetQuestoes}
+					questao={this.state.questao}
+					mode={this.state.mode}
+				/>
 			</Content>
-		);
+		)
 	}
 }
-
-Questoes.propTypes = {
-	classes: PropTypes.object.isRequired
-};
 
 const MapStateToProps = (state) => {
 	return {
@@ -1401,4 +662,4 @@ const mapDispatchToProps = (dispatch) => {
     }
 }
 
-export default connect(MapStateToProps, mapDispatchToProps)(BackEndRequests(withStyles(styles)(Questoes)));
+export default connect(MapStateToProps, mapDispatchToProps)(BackEndRequests(withStyles(styles)(Form.create()(Questoes))))

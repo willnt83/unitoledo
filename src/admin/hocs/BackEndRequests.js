@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import axios from "axios";
+import axios from "axios"
 import { connect } from 'react-redux'
 
 function BackEndRequestsWrapper(WrappedComponent) {
@@ -20,41 +20,41 @@ function BackEndRequestsWrapper(WrappedComponent) {
 
 		getHabilidades = () => {
 			axios
-			.get(`http://localhost:5000/api/getHabilidades`)
+			.get('http://localhost:5000/api/getHabilidades')
 			.then(res => {
-				let tempArray = [];
-				let key = 0;
-				let labelStatus = null;
-				let valueStatus = null;
+				let tempArray = []
+				let key = 0
+				let labelStatus = null
+				let valueStatus = null
 				res.data.forEach((record, index) => {
-					labelStatus = record.status === true ? "Ativo" : "Inativo";
-					valueStatus = record.status === false ? false : true;
+					labelStatus = record.status === true ? "Ativo" : "Inativo"
+					valueStatus = record.status === false ? false : true
 					tempArray.push({
 						key: key,
 						id: record.id,
 						description: record.description,
 						labelStatus: labelStatus,
 						valueStatus: valueStatus
-					});
-					key++;
-				});
+					})
+					key++
+				})
 
-				this.props.setHabilidades(tempArray);
+				this.props.setHabilidades(tempArray)
 			})
 			.catch(error => {
-				console.log(error);
+				console.log(error)
 			})
 		}
 
 		createUpdateHabilidade = (request) => {
-			axios.post(`http://localhost:5000/api/createUpdateHabilidade`, request)
+			axios.post('http://localhost:5000/api/createUpdateHabilidade', request)
 			.then(res => {
 				this.setState({
 					createUpdateHabilidadeResponse: {
 						success: true,
 						message: 'Habilidade cadastrada / atualizada com sucesso.'
 					}
-				});
+				})
 			})
 			.catch(error =>{
 				console.log(error)
@@ -63,19 +63,19 @@ function BackEndRequestsWrapper(WrappedComponent) {
 						success: false,
 						message: 'Erro ao cadastrar / atualizar habilidade.'
 					}
-				});
+				})
 			})
 		}
 
 		deleteHabilidade = (id) => {
-			axios.post(`http://localhost:5000/api/deleteHabilidade`, { id: id })
+			axios.post('http://localhost:5000/api/deleteHabilidade', { id: id })
 			.then(res => {
 				this.setState({
 					deleteHabilidadeResponse: {
 						success: true,
 						message: 'Habilidade removida com sucesso.'
 					}
-				});
+				})
 			})
 			.catch(error =>{
 				console.log(error)
@@ -84,31 +84,31 @@ function BackEndRequestsWrapper(WrappedComponent) {
 						success: false,
 						message: 'Erro ao remover habilidade.'
 					}
-				});
+				})
 			})
 		}
 
 
 		getConteudos = () => {
-			axios.get(`http://localhost:5000/api/getConteudos`)
+			axios.get('http://localhost:5000/api/getConteudos')
 			.then(res => {
-				let tempArray = [];
-				let key = 0;
-				let labelStatus = null;
-				let valueStatus = null;
+				let tempArray = []
+				let key = 0
+				let labelStatus = null
+				let valueStatus = null
 				res.data.forEach((record, index) => {
-					labelStatus = record.status === true ? 'Ativo' : 'Inativo';
-					valueStatus = record.status === false ? false : true;
+					labelStatus = record.status === true ? 'Ativo' : 'Inativo'
+					valueStatus = record.status === false ? false : true
 					tempArray.push({
 						key: key,
 						id: record.id,
 						description: record.description,
 						labelStatus: labelStatus,
 						valueStatus: valueStatus
-					});
-					key++;
-				});
-				this.props.setConteudos(tempArray);
+					})
+					key++
+				})
+				this.props.setConteudos(tempArray)
 			})
 			.catch(error =>{
 				console.log(error)
@@ -116,14 +116,14 @@ function BackEndRequestsWrapper(WrappedComponent) {
 		}
 
 		createUpdateConteudo = (request) => {
-			axios.post(`http://localhost:5000/api/createUpdateConteudo`, request)
+			axios.post('http://localhost:5000/api/createUpdateConteudo', request)
 			.then(res => {
 				this.setState({
 					createUpdateConteudoResponse: {
 						success: true,
 						message: 'Habilidade cadastrada / atualizada com sucesso.'
 					}
-				});
+				})
 			})
 			.catch(error =>{
 				console.log(error)
@@ -132,19 +132,19 @@ function BackEndRequestsWrapper(WrappedComponent) {
 						success: false,
 						message: 'Erro ao cadastrar / atualizar habilidade.'
 					}
-				});
+				})
 			})
 		}
 
 		deleteConteudo = (id) => {
-			axios.post(`http://localhost:5000/api/deleteConteudo`, {id: id})
+			axios.post('http://localhost:5000/api/deleteConteudo', {id: id})
 			.then(res => {
 				this.setState({
 					deleteConteudoResponse: {
 						success: true,
 						message: 'Conteúdo removido com sucesso.'
 					}
-				});
+				})
 			})
 			.catch(error =>{
 				console.log(error)
@@ -153,32 +153,32 @@ function BackEndRequestsWrapper(WrappedComponent) {
 						success: false,
 						message: 'Erro ao remover conteúdo.'
 					}
-				});
+				})
 			})
 		}
 
 
 		getAreasDeConhecimento = () => {
-			axios.get(`http://localhost:5000/api/getAreaConhecimento`)
+			axios.get('http://localhost:5000/api/getAreaConhecimento')
 			.then(res => {
-				let tempArray = [];
-				let key = 0;
-				let labelStatus = null;
-				let valueStatus = null;
+				let tempArray = []
+				let key = 0
+				let labelStatus = null
+				let valueStatus = null
 				res.data.forEach((record, index) => {
-				labelStatus = record.status === true ? 'Ativo' : 'Inativo';
-				valueStatus = record.status === false ? false : true;
+				labelStatus = record.status === true ? 'Ativo' : 'Inativo'
+				valueStatus = record.status === false ? false : true
 				tempArray.push({
 					key: key,
 					id: record.id,
 					description: record.description,
 					labelStatus: labelStatus,
 					valueStatus: valueStatus
-				});
-				key++;
-				});
+				})
+				key++
+				})
 		
-				this.props.setAreasDeConhecimento(tempArray);
+				this.props.setAreasDeConhecimento(tempArray)
 			})
 			.catch(error =>{
 				console.log(error)
@@ -186,14 +186,14 @@ function BackEndRequestsWrapper(WrappedComponent) {
 		}
 
 		createUpdateAreaDeConhecimento = (request) => {
-			axios.post(`http://localhost:5000/api/createUpdateAreaConhecimento`, request)
+			axios.post('http://localhost:5000/api/createUpdateAreaConhecimento', request)
 			.then(res => {
 				this.setState({
 					createUpdateAreaDeConhecimentoResponse: {
 						success: true,
 						message: 'Área de conhecimento cadastrada / atualizada com sucesso.'
 					}
-				});
+				})
 			})
 			.catch(error =>{
 				console.log(error)
@@ -202,19 +202,19 @@ function BackEndRequestsWrapper(WrappedComponent) {
 						success: false,
 						message: 'Erro ao cadastrar / atualizar área de conhecimento.'
 					}
-				});
+				})
 			})
 		}
 
 		deleteAreaDeConhecimento = (id) => {
-			axios.post(`http://localhost:5000/api/deleteAreaConhecimento`, { id: id })
+			axios.post('http://localhost:5000/api/deleteAreaConhecimento', { id: id })
 			.then(res => {
 				this.setState({
 					deleteAreaDeConhecimentoResponse: {
 						success: true,
 						message: 'Área de conhecimento removida com sucesso.'
 					}
-				});
+				})
 			})
 			.catch(error =>{
 				console.log(error)
@@ -223,31 +223,32 @@ function BackEndRequestsWrapper(WrappedComponent) {
 						success: false,
 						message: 'Erro ao remover área de conhecimento.'
 					}
-				});
+				})
 			})
 		}
 
 
 		getQuestoes = () => {
-			axios.get(`http://localhost:5000/api/getQuestoes`)
+			axios.get('http://localhost:5000/api/getQuestoes')
 			.then(res => {
-				let tempArray = [];
-				let key = 0;
-				let labelStatus = null;
-				let arrayAlternativas = [];
-				let i = 0;
+				console.log('response getQuestoes', res.data)
+				let tempArray = []
+				let key = 0
+				let labelStatus = null
+				let arrayAlternativas = []
+				let i = 0
 				res.data.forEach((record, index) => {
-					arrayAlternativas = [];
+					arrayAlternativas = []
 					if(record.alternativas.length > 0){
-						i = 0;
+						i = 0
 						record.alternativas.forEach((alternativa) => {
 							arrayAlternativas[i] = {
 								id: record.alternativas[i].id,
 								descricao: record.alternativas[i].descricao,
 								correta: record.alternativas[i].correta
-							};
-							i++;
-						});
+							}
+							i++
+						})
 					}
 					else {
 						for(i = 0; i < 5; i++){
@@ -259,7 +260,7 @@ function BackEndRequestsWrapper(WrappedComponent) {
 						}
 					}
 
-					labelStatus = record.status === true ? 'Ativo' : 'Inativo';
+					labelStatus = record.status === true ? 'Ativo' : 'Inativo'
 
 					tempArray.push({
 						key: key,
@@ -280,10 +281,10 @@ function BackEndRequestsWrapper(WrappedComponent) {
 						areaConhecimento: record.areaConhecimento.description,
 						valueAlternativaCorreta:  record.alterCorreta,
 						alternativas : arrayAlternativas
-					});
-					key++;
-				});
-				this.props.setQuestoes(tempArray);
+					})
+					key++
+				})
+				this.props.setQuestoes(tempArray)
 			})
 			.catch(error =>{
 				console.log(error)
@@ -291,46 +292,48 @@ function BackEndRequestsWrapper(WrappedComponent) {
 		}
 
 		createUpdateQuestao = (request) => {
-			axios.post(`http://localhost:5000/api/createUpdateQuestao`, request)
+			console.log('createUpdateQuestao request', request)
+			axios.post('http://localhost:5000/api/createUpdateQuestao', request)
 			.then(res => {
+				console.log('createUpdateQuestao response', res.data)
 				this.setState({
 					createUpdateQuestaoResponse: {
 						success: true,
 						message: 'Questão cadastrada / atualizada com sucesso.'
 					}
-				});
+				})
 			})
 			.catch(error =>{
-				console.log(error);
+				console.log(error)
 				this.setState({
 					createUpdateQuestaoResponse: {
 						success: false,
 						message: 'Erro ao cadastrar / atualizar questão.'
 					}
-				});
+				})
 			})
 		}
 
 		deleteQuestao = (id) => {
 			axios
-			.post(`http://localhost:5000/api/deleteQuestao`, { id: id })
+			.post('http://localhost:5000/api/deleteQuestao', { id: id })
 			.then(res => {
 				this.setState({
 					deleteQuestaoResponse: {
 						success: true,
 						message: 'Questão removida com sucesso.'
 					}
-				});
+				})
 			})
 			.catch(error => {
-				console.log(error);
+				console.log(error)
 				this.setState({
 					deleteQuestaoResponse: {
 						success: false,
 						message: 'Erro ao remover questão.'
 					}
-				});
-			});
+				})
+			})
 		}
 
 		render() {
@@ -361,7 +364,7 @@ function BackEndRequestsWrapper(WrappedComponent) {
 					deleteQuestao={ this.deleteQuestao }
 					deleteQuestaoResponse={ this.state.deleteQuestaoResponse }
 				/>
-			);
+			)
 		}
 	}
 
@@ -383,4 +386,4 @@ function BackEndRequestsWrapper(WrappedComponent) {
 	return connect(MapStateToProps, mapDispatchToProps)(BackEndRequests)
 }
 
-export default BackEndRequestsWrapper;
+export default BackEndRequestsWrapper

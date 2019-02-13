@@ -145,7 +145,7 @@ class NovoSimulado2 extends Component {
     componentWillUpdate(nextProps, nextState){
         if(this.state.firstTime){
             
-            if(nextState.selectedRowKeys.length != this.state.newSelectedRowKeys && !nextState.selectAction){
+            if(nextState.selectedRowKeys.length !== this.state.newSelectedRowKeys && !nextState.selectAction){
                 var selectedRowKeys = this.state.selectedRowKeys
                 var alvos = this.props.simulado.alvos
                 var rowsToBeRemoved = []
@@ -164,14 +164,14 @@ class NovoSimulado2 extends Component {
 
     // Função que recebe a key da row seleciona, procura a row na tableData e a retorna
     rowHasChildren = (key) => {
-        var hit = false
+        //var hit = false
         var hasChild = false
 
         // Buscando a key, percorre cursos
         this.state.tableData.forEach(curso =>{
             if(curso.children){
                 if(curso.key === key){
-                    hit = true
+                    //hit = true
                     // O curso é a key buscada
                     hasChild = true
                 }
@@ -180,7 +180,7 @@ class NovoSimulado2 extends Component {
                     // Percorre suas turmas (nível Turmas)
                     curso.children.forEach(turma => {
                         if(turma.key === key){
-                            hit = true
+                            //hit = true
                             if(turma.children){
                                 hasChild = true
                             }
@@ -294,7 +294,7 @@ class NovoSimulado2 extends Component {
         var tempTableData = this.state.tableData
         var tempDisciplinas = []
         var tempTurmas = []
-        var hit = false
+        //var hit = false
         // Percorre os cursos
         this.state.tableData.forEach(curso => {
             if(curso.children){
@@ -302,7 +302,7 @@ class NovoSimulado2 extends Component {
                 // Percorre turmas
                 curso.children.forEach(turma => {
                     if(turma.key === key){
-                        hit = true
+                        //hit = true
                         // Se encontrar a key buscada em turma
                         // Verifica se existem disciplinas em mainData
                         if(this.props.mainData.disciplinas){
