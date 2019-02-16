@@ -40,7 +40,7 @@ class AlunosIndex extends Component {
 			<Layout className="layout">
 				<Header>
 					<div className="mainLogo">UNITOLEDO</div>
-					<div style={{float: 'right', color: '#fff'}}><Icon type="user" /> Nome do Aluno</div>
+					<div style={{float: 'right', color: '#fff'}}><Icon type="user" /> {this.props.usuarioNome}</div>
 				</Header>
 				<Content style={{
 					padding: 12,
@@ -69,9 +69,10 @@ class AlunosIndex extends Component {
 }
 
 const MapStateToProps = (state) => {
-  return {
-    pageTitle: state.pageTitle
-  }
+	return {
+		pageTitle: state.pageTitle,
+		usuarioNome: state.usuarioNome
+	}
 }
 
 export default connect(MapStateToProps)(AlunosIndex);

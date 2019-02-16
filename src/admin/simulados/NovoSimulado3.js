@@ -11,6 +11,17 @@ const { Content } = Layout
 const FormItem = Form.Item
 const Option = Select.Option
 
+const tipoOptions = [
+	{
+		key: 1,
+		description: 'Formação geral'
+	},
+	{
+		key: 2,
+		description: 'Conhecimento específico'
+	}
+]
+
 const simNaoOptions = [
 	{
 		key: "S",
@@ -93,6 +104,7 @@ class NovoSimulado3 extends Component {
         event.preventDefault()
         var request = null
         this.props.form.validateFieldsAndScroll((err, values) => {
+            console.log('values', values)
             if(!err){
                 var codigo = null
                 var habilidades = []
@@ -102,6 +114,7 @@ class NovoSimulado3 extends Component {
                 var anos = []
                 var fonte = null
                 var discursiva = null
+                var tipo = null
 
                 codigo = values.codigo ? values.codigo : ''
                 if(values.habilidades){
@@ -137,8 +150,11 @@ class NovoSimulado3 extends Component {
                 else
                     discursiva = ''
                 
-
-
+                if(values.tipo)
+                    tipo = parseInt(values.tipo)
+                else
+                    tipo = 0
+                
                 request = {
                     codigo: codigo,
                     enade: padraoEnade,
@@ -147,20 +163,17 @@ class NovoSimulado3 extends Component {
                     habilidades: habilidades,
                     conteudos: conteudos,
                     areaConhecimentos: areasDeConhecimento,
-                    anos: anos
-                }
-
-                /*
-                var config = {
-                    headers: {
-                        'Authorization': this.props.authHeaders.authorization,
-                        'CookieZ': this.props.authHeaders.cookie
+                    anos: anos,
+                    tipo: {
+                        id: tipo
                     }
                 }
-                */
+
+                console.log('request', request)
         
                 axios.post('http://localhost:5000/api/getQuestoesSimulado', request)
                 .then(res => {
+                    console.log('response', res.data)
                     this.setState({questoes: res.data, buttonLoadingBuscar: false})
                 })
                 .catch(error =>{
@@ -286,6 +299,21 @@ class NovoSimulado3 extends Component {
                                         >
                                             {
                                                 simNaoOptions.map((item) => {
+                                                    return (<Option key={item.key}>{item.description}</Option>)
+                                                })
+                                            }
+                                        </Select>
+                                    )}
+                                </FormItem>
+                                <FormItem label="Tipo">
+                                    {getFieldDecorator('tipo')(
+                                        <Select
+                                            style={{ width: '100%' }}
+                                            placeholder="tipo"
+                                            allowClear={true}
+                                        >
+                                            {
+                                                tipoOptions.map((item) => {
                                                     return (<Option key={item.key}>{item.description}</Option>)
                                                 })
                                             }

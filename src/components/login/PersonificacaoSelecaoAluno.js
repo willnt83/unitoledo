@@ -61,8 +61,8 @@ class PersonificacaoSelecaoAluno extends Component {
 		})
 	}
 	
-	getContexto = (usuarioId) => {
-		this.props.setUsuario(usuarioId)
+	getContexto = (usuarioId, usuarioNome) => {
+		this.props.setUsuario(usuarioId, usuarioNome)
 		var data = {
 			id: usuarioId
 		}
@@ -107,7 +107,7 @@ class PersonificacaoSelecaoAluno extends Component {
 				render: (text, record) => {
 					return(
 						<React.Fragment>
-							<Button type="primary" className="actionButton" title="Selecionar Usuário" onClick={() => this.getContexto(record.id)}><Icon type="login" /></Button>
+							<Button type="primary" className="actionButton" title="Selecionar Usuário" onClick={() => this.getContexto(record.id, record.nome)}><Icon type="login" /></Button>
 						</React.Fragment>
 					);
 				}
@@ -167,7 +167,7 @@ const MapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
 	return {
-			setUsuario: (usuario) => { dispatch({ type: 'SET_USUARIO', usuario }) },
+			setUsuario: (usuarioId, usuarioNome) => { dispatch({ type: 'SET_USUARIO', usuarioId, usuarioNome }) },
 	}
 }
 
