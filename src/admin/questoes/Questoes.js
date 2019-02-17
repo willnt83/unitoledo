@@ -42,24 +42,31 @@ const styles = () => ({
 class Questoes extends Component {
 	constructor(props) {
         super()
-        props.setPageTitle('Banco de Questões')
+		props.setPageTitle('Banco de Questões')
+		props.getHabilidades()
+        props.getConteudos()
+        props.getAreasDeConhecimento()
 	}
 
 	state = {
 		selectedRowKeys: [], // Check here to configure the default column
-		loading: false,
+		//loading: false,
 		tableLoading: false,
 		showModalCadastro: false,
 		questao: null,
-		searchText: "",
+		//searchText: "",
 		questoes: null,
+		buttonLoadingBuscar: false,
+		/*
 		filterHabilidadeOptions: null,
 		filterConteudoOptions: null,
 		filterAreaDeConhecimentoOptions: null,
 		filterHabilidades: [],
 		filterConteudos: [],
 		filterAreasDeConhecimento: [],
-		mode: null
+		*/
+		mode: null,
+		tableDisplay: 'none'
 	}
 
 	/*
@@ -116,11 +123,13 @@ class Questoes extends Component {
 		this.props.deleteQuestao(id)
 	}
 
+	/*
 	handleCancelAlternativa = () => {
 		this.setState({
 			visibleAlternativa: false
 		})
 	}
+	
 
 	handleButtonConfirmAlternativa = () => {
 		let validationError = false
@@ -201,6 +210,7 @@ class Questoes extends Component {
 			this.handleCancelAlternativa()
 		}
 	}
+	*/
 
 	handleFormInput = event => {
 	const target = event.target
@@ -233,195 +243,75 @@ class Questoes extends Component {
 		})
 	}
 
-	// Filtros
-	handleChangeHabilidadesFilter = (values) => {
-		if(values.length > 0){
-			this.setState({
-				filterHabilidades: values
-			})
-		}
-		else{
-			this.setState({
-				filterHabilidades: []
-			})
-		}
-	}
+	handleSearchSubmit = (event) => {
+		event.preventDefault()
+		this.setState({buttonLoadingBuscar: true, tableLoading: true})
+		var request = null
+		var habilidades = []
+		var conteudos = []
+		var areasDeConhecimento = []
 
-	handleChangeConteudosFilter = (values) => {
-		if(values.length > 0){
-			this.setState({
-				filterConteudos: values
-			})
-		}
-		else{
-			this.setState({
-				filterConteudos: []
-			})
-		}
-	}
+		this.props.form.validateFieldsAndScroll((err, values) => {
+			console.log('values', values)
+			if(values.habilidades){
+				habilidades = values.habilidades.map(habilidade =>{
+					return({id: parseInt(habilidade)})
+				})
+			}
+			if(values.conteudos){
+				conteudos = values.conteudos.map(conteudo =>{
+					return({id: parseInt(conteudo)})
+				})
+			}
+			if(values.areasDeConhecimento){
+				areasDeConhecimento = values.areasDeConhecimento.map(areaDeConhecimento =>{
+					return({id: parseInt(areaDeConhecimento)})
+				})
+			}
+			
+			request = {
+				codigo: '',
+				enade: '',
+				discursiva: '',
+				fonte: '',
+				habilidades: habilidades,
+				conteudos: conteudos,
+				areaConhecimentos: areasDeConhecimento,
+				anos: [],
+				tipo: {
+					id: 0
+				}
+			}
 
-	handleChangeAreasDeConhecimentoFilter = (values) => {
-		if(values.length > 0){
-			this.setState({
-				filterAreasDeConhecimento: values
-			})
-		}
-		else{
-			this.setState({
-				filterAreasDeConhecimento: []
-			})
-		}
-	}
-
-	componentDidMount() {
-        this.handleGetQuestoes()
-	}
-	// /Filtros
-
-	componentWillReceiveProps(nextProps){
-		// Atualização da table
-		if(nextProps.questoes){
-			this.setState({
-				questoes: nextProps.questoes
-			})
-		}
+			this.props.getQuestoes(request)
+		})
 	}
 
 	componentWillUpdate(nextProps, nextState) {
-        if(nextProps.questoes.length && nextProps.questoes !== this.props.questoes){
-			this.setState({tableLoading: false})
-			let habilidadeOptions = []
-			let conteudoOptions = []
-			let areaDeConhecimentoOptions = []
-			let tempKeys = []
-
-			// Construindo opções de filtro de habilidades
-			habilidadeOptions = nextProps.questoes.map((item) => {
-				if(tempKeys.indexOf(item.habilidadeId) === -1){
-					tempKeys.push(item.habilidadeId)
-					return (<Option key={item.habilidadeId} filtro="habilidades">{item.habilidade}</Option>)
-				}
-				else
-					return null
-			})
-
-			// Reset do array temporario
-			tempKeys.length = 0
-
-			// Construindo opções de filtro de conteudos
-			conteudoOptions = nextProps.questoes.map((item) => {
-				if(tempKeys.indexOf(item.conteudoId) === -1){
-					tempKeys.push(item.conteudoId)
-					return (<Option key={item.conteudoId} filtro="conteudos">{item.conteudo}</Option>)
-				}
-				else
-					return null
-			})
-
-			// Reset do array temporario
-			tempKeys.length = 0
-
-			// Construindo opções de filtro de áreas de conhecimento
-			areaDeConhecimentoOptions = nextProps.questoes.map((item) => {
-				if(tempKeys.indexOf(item.areaConhecimentoId) === -1){
-					tempKeys.push(item.areaConhecimentoId)
-					return (<Option key={item.areaConhecimentoId} filtro="areasDeConhecimento">{item.areaConhecimento}</Option>)
-				}
-				else
-					return null
-			})
-
-
-			this.setState({
-				filterHabilidadeOptions: habilidadeOptions,
-				filterConteudoOptions: conteudoOptions,
-				filterAreaDeConhecimentoOptions: areaDeConhecimentoOptions
-			})
-		}
-
-		// Tratando alterações dos valores de filtro
-		if(
-			this.state.filterHabilidades.length !== nextState.filterHabilidades.length
-			|| this.state.filterConteudos.length !== nextState.filterConteudos.length
-			|| this.state.filterAreasDeConhecimento.length !== nextState.filterAreasDeConhecimento.length
-		){
-			// Existe filtro
-			if(
-				nextState.filterHabilidades.length > 0
-				|| nextState.filterConteudos.length > 0
-				|| nextState.filterAreasDeConhecimento.length > 0
-			){
-				// Filtra questões
-				let filteredQuestoes = []
-				let allQuestoes = this.props.questoes
-				let hit = false
-				if(nextState.filterHabilidades.length > 0){
-					filteredQuestoes = allQuestoes.filter((questao) => {
-						hit = false
-						nextState.filterHabilidades.forEach((value) => {
-							if(questao.habilidadeId === parseInt(value)){
-								hit = true
-							}
-						})
-						return hit
-					})
-					allQuestoes = filteredQuestoes
-				}
-
-				if(nextState.filterConteudos.length > 0){
-					filteredQuestoes = allQuestoes.filter((questao) => {
-						hit = false
-						nextState.filterConteudos.forEach((value) => {
-							if(questao.conteudoId === parseInt(value)){
-								hit = true
-							}
-						})
-						return hit
-					})
-					allQuestoes = filteredQuestoes
-				}
-
-				if(nextState.filterAreasDeConhecimento.length > 0){
-					filteredQuestoes = allQuestoes.filter((questao) => {
-						hit = false
-						nextState.filterAreasDeConhecimento.forEach((value) => {
-							if(questao.areaConhecimentoId === parseInt(value)){
-								hit = true
-							}
-						})
-						return hit
-					})
-					allQuestoes = filteredQuestoes
-				}
-
-				this.setState({
-					questoes: filteredQuestoes
-				})
-
-			}
-			// Não existe filtro
-			else{
-				// Retorna todas as questões
-				this.setState({
-					questoes: this.props.questoes
-				})
-			}
-		}
-
 		// Tratando response da requisição deleteQuestao
 		if(nextProps.deleteQuestaoResponse && nextProps.deleteQuestaoResponse !== this.props.deleteQuestaoResponse){
 			if(nextProps.deleteQuestaoResponse.success){
 				this.handleGetQuestoes()
             }
 		}
+
+		// Tratando response da getQuestoes
+		if(nextProps.questoes && nextProps.questoes.length !== this.props.questoes.length){
+			console.log('checking table')
+			var tableDisplay = nextProps.questoes.length > 0 ? 'inline' : 'none'
+			this.setState({tableDisplay, buttonLoadingBuscar: false, tableLoading: false})
+		}
 	}
 
 	render() {
+		//console.log('this.props', this.props)
 		const { classes } = this.props
+		const { getFieldDecorator } = this.props.form
+
 		const columns = [
 			{
 				title: "ID",
-				dataIndex: "id",
+				dataIndex: "key",
 				sorter: (a, b) => a.id - b.id
 			},
 			{
@@ -575,41 +465,60 @@ class Questoes extends Component {
 
 				<Row>
 					<Col span={24}>
-						<Form layout="vertical">
-							<Form.Item label="Habilidades" style={{marginBottom: '5px'}}>
-								<Select
-									id="filterHabilidades"
-									mode="multiple"
-									style={{ width: '100%' }}
-									placeholder="Selecione as habilidades"
-									defaultValue={[]}
-									notFoundContent="Sem registros"
-									onChange={this.handleChangeHabilidadesFilter}
-								>
-									{this.state.filterHabilidadeOptions}
-								</Select>
+						<Form layout="vertical" onSubmit={this.handleSearchSubmit}>
+							<Form.Item label="Habilidades">
+								{getFieldDecorator('habilidades')(
+									<Select
+										mode="multiple"
+										style={{ width: '100%' }}
+										placeholder="Selecione as Habilidades"
+									>
+										{
+											this.props.habilidades.map((item) => {
+												return (<Option key={item.id}>{item.description}</Option>)
+											})
+										}
+									</Select>
+								)}
 							</Form.Item>
-							<Form.Item label="Conteúdos" style={{marginBottom: '5px'}}>
-								<Select
-									mode="multiple"
-									style={{ width: '100%' }}
-									placeholder="Selecione os conteúdos"
-									defaultValue={[]}
-									onChange={this.handleChangeConteudosFilter}
-								>
-									{this.state.filterConteudoOptions}
-								</Select>
+							<Form.Item label="Conteúdos">
+								{getFieldDecorator('conteudos')(
+									<Select
+										mode="multiple"
+										style={{ width: '100%' }}
+										placeholder="Selecione os Conteúdos"
+									>
+										{
+											this.props.conteudos.map((item) => {
+												return (<Option key={item.id}>{item.description}</Option>)
+											})
+										}
+									</Select>
+								)}
 							</Form.Item>
-							<Form.Item label="Áreas de Conhecimento" style={{marginBottom: '5px'}}>
-								<Select
-									mode="multiple"
-									style={{ width: '100%' }}
-									placeholder="Selecione as áreas de conhecimento"
-									defaultValue={[]}
-									onChange={this.handleChangeAreasDeConhecimentoFilter}
+							<Form.Item label="Áreas de Conhecimento">
+								{getFieldDecorator('areasDeConhecimento')(
+									<Select
+										mode="multiple"
+										style={{ width: '100%' }}
+										placeholder="Selecione as Áreas de Conhecimento"
+									>
+										{
+											this.props.areasDeConhecimento.map((item) => {
+												return (<Option key={item.id}>{item.description}</Option>)
+											})
+										}
+									</Select>
+								)}
+							</Form.Item>
+							<Form.Item>
+								<Button
+									type="primary"
+									htmlType="submit"
+									loading={this.state.buttonLoadingBuscar}
 								>
-									{this.state.filterAreaDeConhecimentoOptions}
-								</Select>
+									<Icon type="search" />Buscar
+								</Button>
 							</Form.Item>
 						</Form>
 					</Col>
@@ -620,9 +529,10 @@ class Questoes extends Component {
 					</Col>
 				</Row>
 
-				<Table 
+				<Table
+					style={{display: this.state.tableDisplay}}
 					columns={ columns } 
-					dataSource={ this.state.questoes }
+					dataSource={ this.props.questoes }
 					loading={ this.state.tableLoading }
 				/>
 

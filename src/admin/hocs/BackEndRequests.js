@@ -18,7 +18,7 @@ function BackEndRequestsWrapper(WrappedComponent) {
 			deleteAreaDeConhecimentoResponse: null
 		}
 
-		getHabilidades = () => {
+		getHabilidades = (request) => {
 			axios
 			.get('http://localhost:5000/api/getHabilidades')
 			.then(res => {
@@ -166,16 +166,16 @@ function BackEndRequestsWrapper(WrappedComponent) {
 				let labelStatus = null
 				let valueStatus = null
 				res.data.forEach((record, index) => {
-				labelStatus = record.status === true ? 'Ativo' : 'Inativo'
-				valueStatus = record.status === false ? false : true
-				tempArray.push({
-					key: key,
-					id: record.id,
-					description: record.description,
-					labelStatus: labelStatus,
-					valueStatus: valueStatus
-				})
-				key++
+					labelStatus = record.status === true ? 'Ativo' : 'Inativo'
+					valueStatus = record.status === false ? false : true
+					tempArray.push({
+						key: key,
+						id: record.id,
+						description: record.description,
+						labelStatus: labelStatus,
+						valueStatus: valueStatus
+					})
+					key++
 				})
 		
 				this.props.setAreasDeConhecimento(tempArray)
@@ -228,7 +228,69 @@ function BackEndRequestsWrapper(WrappedComponent) {
 		}
 
 
-		getQuestoes = () => {
+		getQuestoes = (request) => {
+			axios.post('http://localhost:5000/api/getQuestoesSimulado', request)
+			.then(res => {
+				console.log('response...', res.data)
+				let tempArray = []
+				let key = 0
+				let labelStatus = null
+				let arrayAlternativas = []
+				let i = 0
+				res.data.forEach((record, index) => {
+					arrayAlternativas = []
+					if(record.alternativas.length > 0){
+						i = 0
+						record.alternativas.forEach((alternativa) => {
+							arrayAlternativas[i] = {
+								id: record.alternativas[i].id,
+								descricao: record.alternativas[i].descricao,
+								correta: record.alternativas[i].correta
+							}
+							i++
+						})
+					}
+					else {
+						for(i = 0; i < 5; i++){
+							arrayAlternativas[i] = {
+								id: '',
+								descricao: '',
+								correta: 0
+							}
+						}
+					}
+
+					labelStatus = record.status === true ? 'Ativo' : 'Inativo'
+
+					tempArray.push({
+						key: key,
+						id: record.id,
+						description: record.descricao,
+						labelStatus: labelStatus,
+						valueStatus: record.status,
+						valueEnade: record.enade,
+						valueDiscursiva: record.discursiva,
+						fonte: record.fonte,
+						labelAno: record.ano,
+						valueAno: record.ano,
+						habilidadeId: record.habilidade.id,
+						habilidade: record.habilidade.description,
+						conteudoId: record.conteudo.id,
+						conteudo: record.conteudo.description,
+						areaConhecimentoId: record.areaConhecimento.id,
+						areaConhecimento: record.areaConhecimento.description,
+						//tipoId: record.tipo.id,
+						valueAlternativaCorreta:  record.alterCorreta,
+						alternativas : arrayAlternativas
+					})
+					key++
+				})
+				this.props.setQuestoes(tempArray)
+			})
+			.catch(error =>{
+				console.log(error)
+			})
+			/*
 			axios.get('http://localhost:5000/api/getQuestoes')
 			.then(res => {
 				let tempArray = []
@@ -289,6 +351,7 @@ function BackEndRequestsWrapper(WrappedComponent) {
 			.catch(error =>{
 				console.log(error)
 			})
+			*/
 		}
 
 		createUpdateQuestao = (request) => {
