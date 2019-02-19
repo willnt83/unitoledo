@@ -117,7 +117,7 @@ class ModalCadastro extends Component {
     handleModalClosure = () => {
         // Resetando form
         this.props.form.resetFields()
-
+        this.props.resetQuestao()
         // Limpando state
         this.setState({
             questaoId: '',
@@ -150,45 +150,6 @@ class ModalCadastro extends Component {
         this.setState({anoOptions})
     }
 
-    componentWillReceiveProps(nextProps){
-        if(nextProps.mode === 'create' && nextProps.mode !== this.props.mode){
-            /*
-            // Resetando form
-            this.props.form.resetFields()
-
-            // Limpando state
-            this.setState({
-                questaoId: '',
-                alternativaCorreta: null,
-                alternativas: []
-            })
-            */
-        }
-        else{
-            if(nextProps.questao !== null && nextProps.questao !== this.props.questao){
-                var padraoEnade = nextProps.valueEnade === true ? 'Sim' : 'Não'
-                var discursiva = nextProps.valueDiscursiva === true ? 'Sim' : 'Não'
-                this.props.form.setFieldsValue({
-                    habilidade: nextProps.questao.habilidadeId,
-                    conteudo: nextProps.questao.conteudoId,
-                    areaDeConhecimento: nextProps.questao.areaConhecimentoId,
-                    status: nextProps.questao.labelStatus,
-                    padraoEnade: padraoEnade,
-                    ano: nextProps.questao.valueAno,
-                    descricao: nextProps.questao.description,
-                    fonte: nextProps.questao.fonte,
-                    discursiva: discursiva,
-                    tipo: nextProps.questao.tipoId
-                })
-                this.setState({
-                    questaoId: nextProps.questao.key,
-                    alternativas: nextProps.questao.alternativas,
-                    alternativaCorreta: nextProps.questao.valueAlternativaCorreta
-                })
-            }
-        }
-    }
-
     componentWillUpdate(nextProps, nextState) {
         // Tratando response da requisição createUpdateQuestao
 		if(nextProps.createUpdateQuestaoResponse && nextProps.createUpdateQuestaoResponse !== this.props.createUpdateQuestaoResponse){
@@ -203,7 +164,30 @@ class ModalCadastro extends Component {
 				this.props.hideModalCadastro()
             }
             this.setState({buttonConfirmarLoading: false})
-        }       
+        }
+
+        // Populando campos do formulário
+        if(nextProps.questao !== null && nextProps.questao !== this.props.questao){
+            var padraoEnade = nextProps.valueEnade === true ? 'Sim' : 'Não'
+            var discursiva = nextProps.valueDiscursiva === true ? 'Sim' : 'Não'
+            this.props.form.setFieldsValue({
+                habilidade: nextProps.questao.habilidadeId,
+                conteudo: nextProps.questao.conteudoId,
+                areaDeConhecimento: nextProps.questao.areaConhecimentoId,
+                status: nextProps.questao.labelStatus,
+                padraoEnade: padraoEnade,
+                ano: nextProps.questao.valueAno,
+                descricao: nextProps.questao.description,
+                fonte: nextProps.questao.fonte,
+                discursiva: discursiva,
+                tipo: nextProps.questao.tipoId
+            })
+            this.setState({
+                questaoId: nextProps.questao.key,
+                alternativas: nextProps.questao.alternativas,
+                alternativaCorreta: nextProps.questao.valueAlternativaCorreta
+            })
+        }
     }
 
     render(){

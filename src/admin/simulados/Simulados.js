@@ -79,16 +79,16 @@ class Simulados extends Component {
         console.log('getAllSimulado request', request)
         axios.post('http://localhost:5000/api/getAllSimulado', request)
         .then(res => {
-            console.log('response', res.data)
+            console.log('getAllSimulado response', res.data)
             var inicio = null
             var termino = null
-            var status = null
+            var situacao = null
             var alvos = []
             var tableData = []
             tableData = res.data.map(simulado => {
                 inicio = moment(simulado.dataHoraInicial)
                 termino = moment(simulado.dataHoraFinal)
-                status = (simulado.rascunho) ? 'Rascunho' : 'Público'
+                situacao = (simulado.rascunho) ? 'Rascunho' : 'Público'
 
                 alvos = []
                 if(simulado.cursos && simulado.cursos.length > 0){
@@ -126,7 +126,7 @@ class Simulados extends Component {
                     nome: simulado.nome,
                     alvos: alvos,
                     questoes: simulado.questoes,
-                    status: status,
+                    situacao: situacao,
                     rascunho: simulado.rascunho,
                     inicio: inicio.format('DD/MM/YYYY HH:mm'),
                     termino: termino.format('DD/MM/YYYY HH:mm'),
@@ -149,14 +149,9 @@ class Simulados extends Component {
         this.props.history.push('/admin/simulados/novo/step-1')
     }
 
-    changeSimuladoStatus = (id, rascunho) => {
+    changeSimuladoSituacao = (id, rascunho) => {
         this.setState({tableLoading: true})
-        console.log('--==changeSimuladoStatus==--')
-        console.log('id', id)
-
         var turnTo = rascunho ? false : true
-        console.log('turnTo', turnTo)
-
         var request =  {
             "id": id,
             "rascunho": turnTo
@@ -164,7 +159,6 @@ class Simulados extends Component {
 
         axios.post('http://localhost:5000/api/updateStatus', request)
         .then(res => {
-            console.log('response', res.data)
             this.getSimulados()
         })
         .catch(error =>{
@@ -178,7 +172,6 @@ class Simulados extends Component {
         axios.get('http://localhost:5000/api/getSimuladoId/'+record.key)
         .then(res => {
             var response = res.data[0]
-            console.log('response edit', response)
                 // Transformando record para o formato de redux simulado
                 var alvos = []
                 var cursos = []
@@ -229,8 +222,6 @@ class Simulados extends Component {
                     })
                 }
 
-                console.log('alvos...', alvos)
-
                 this.setState({selectedRows: alvos})
 
                 // Questões
@@ -274,7 +265,7 @@ class Simulados extends Component {
     }
 
     render(){
-        console.log('props', this.props)
+        //console.log('props', this.props)
         const columns = [
             {
 				title: "ID",
@@ -287,8 +278,8 @@ class Simulados extends Component {
 				sorter: (a, b) => a.id - b.id
             },
             {
-				title: "Status",
-				dataIndex: "status",
+				title: "Situação",
+				dataIndex: "situacao",
 				sorter: (a, b) => a.id - b.id
 			},
 			{
@@ -322,8 +313,8 @@ class Simulados extends Component {
                     
 					return (
                         <React.Fragment>
-                            <Button className="actionButton buttonGreen" title="Publicar" onClick={() => this.changeSimuladoStatus(record.key, record.rascunho)} disabled={publicarButtonDisabled}><Icon type="global" /></Button>
-                            <Button className="actionButton buttonOrange" title="Mover para Rascunho" onClick={() => this.changeSimuladoStatus(record.key, record.rascunho)} disabled={moverRascunhoButtonDisabled}><Icon type="file-text" /></Button>
+                            <Button className="actionButton buttonGreen" title="Publicar" onClick={() => this.changeSimuladoSituacao(record.key, record.rascunho)} disabled={publicarButtonDisabled}><Icon type="global" /></Button>
+                            <Button className="actionButton buttonOrange" title="Mover para Rascunho" onClick={() => this.changeSimuladoSituacao(record.key, record.rascunho)} disabled={moverRascunhoButtonDisabled}><Icon type="file-text" /></Button>
                             <Button className="actionButton" title="Editar" type="primary" onClick={() => this.editSimulados(record)}><Icon type="edit" /></Button>
                             <Button className="actionButton buttonRed" title="Excluir"><Icon type="delete" /></Button>
                         </React.Fragment>

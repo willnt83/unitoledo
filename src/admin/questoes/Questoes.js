@@ -82,6 +82,10 @@ class Questoes extends Component {
 		}
 	}
 
+	resetQuestao = () => {
+		this.setState({questao: null})
+	}
+
 	showModalCadastro = (row) => {
 		this.props.getHabilidades()
 		this.props.getConteudos()
@@ -91,9 +95,9 @@ class Questoes extends Component {
 			// Create
 			this.setState({mode: 'create', showModalCadastro: true})
 		} else {
+			// Edit
 			axios.get('http://localhost:5000/api/getAlternativas/'+row.key)
 			.then(res => {
-				// Edit
 				this.setState({mode: 'edit'})
 				var alternativaLetras = ['A', 'B', 'C', 'D', 'E']
 				var alternativaCorreta = null
@@ -128,7 +132,6 @@ class Questoes extends Component {
 		this.props.getQuestoes(this.state.getQuestoesRequest)
 	}
 
-	// Handlers
 	handleDeleteQuestao = (id) => {
 		this.setState({tableLoading: true})
 		this.props.deleteQuestao(id)
@@ -211,7 +214,6 @@ class Questoes extends Component {
 		}
 
 		// Tratando response da getQuestoes
-		//if(nextProps.questoes && nextProps.questoes.length !== this.props.questoes.length){
 		if(nextProps.getQuestoesResponse && nextProps.getQuestoesResponse !== this.props.getQuestoesResponse){
 			var tableDisplay = nextProps.questoes.length > 0 ? 'inline' : 'none'
 			this.setState({tableDisplay, buttonLoadingBuscar: false, tableLoading: false})
@@ -456,6 +458,7 @@ class Questoes extends Component {
 					handleGetQuestoes={this.handleGetQuestoes}
 					questao={this.state.questao}
 					mode={this.state.mode}
+					resetQuestao={this.resetQuestao}
 				/>
 			</Content>
 		)

@@ -274,7 +274,7 @@ function BackEndRequestsWrapper(WrappedComponent) {
 						areaConhecimento: questao.areaConhecimento.description,
 						areaConhecimentoId: questao.areaConhecimento.id,
 						//imagem: questao.imagem,
-						//tipoId: questao.tipo.id
+						tipoId: questao.tipo.id
 					})
 				})
 				this.props.setQuestoes(tempArray)
@@ -291,6 +291,7 @@ function BackEndRequestsWrapper(WrappedComponent) {
 		}
 
 		createUpdateQuestao = (request) => {
+			console.log('createUpdateQuestao request', request)
 			axios.post('http://localhost:5000/api/createUpdateQuestao', request)
 			.then(res => {
 				this.setState({
