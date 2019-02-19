@@ -59,7 +59,6 @@ class ContextoSelection extends Component {
 			var periodos = []
 			this.props.userInfos.forEach(userInfo => {
 				if(userInfo.tipo === value){
-					console.log('entrou aluno')
 					userInfo.contextos.forEach(contexto => {
 						periodos.push({
 							key: contexto.idPeriodoLetivo,
@@ -69,7 +68,6 @@ class ContextoSelection extends Component {
 				}
 			})
 
-			console.log('periodos', periodos)
 			this.setState({
 				periodos: periodos,
 				showPeriodosSelect: 'block'
@@ -84,6 +82,8 @@ class ContextoSelection extends Component {
 				if(userInfo.tipo === this.state.contexto){
 					userInfo.contextos.forEach(contexto => {
 						if(contexto.idPeriodoLetivo === parseInt(value)){
+							console.log('contexto...', contexto)
+							this.props.setContextoAluno(contexto)
 							this.setState({contextoData: contexto})
 						}
 					})
@@ -237,7 +237,8 @@ const mapDispatchToProps = (dispatch) => {
     return {
 			setContexto: (contexto) => { dispatch({ type: 'SET_CONTEXTO', contexto }) },
 			setMainData: (mainData) => { dispatch({ type: 'SET_MAINDATA', mainData }) },
-			setPeriodoLetivo: (periodo) => { dispatch({ type: 'SET_PERIODOLETIVO', periodo }) }
+			setPeriodoLetivo: (periodo) => { dispatch({ type: 'SET_PERIODOLETIVO', periodo }) },
+			setContextoAluno: (contexto) => { dispatch({ type: 'SET_CONTEXTOALUNO', contexto }) }
     }
 }
 

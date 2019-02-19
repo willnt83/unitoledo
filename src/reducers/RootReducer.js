@@ -5,7 +5,7 @@ const initState = {
     usuarioId: 42312,
     usuarioNome: 'IZABELLA DO NASCIMENTO CARDOSO',
     authHeaders: null,
-    mainData: {"simulados":[{"id":44,"nome":"das","dataHoraInicial":"2019-01-31T03:00:00.000+0000","dataHoraFinal":"2019-01-31T11:00:00.000+0000","rascunho":false,"questoes":null,"cursos":[],"turmas":[{"idColigada":0,"idFilial":0,"idPeriodoLetivo":0,"id":"049.01SA","nome":"ANÁLISE E DESENVOLVIMENTO DE SISTEMAS - 01SA","idNivelEnsino":0,"idCurso":null,"idProximaTurma":null}],"disciplinas":[{"idColigada":0,"idFilial":0,"idPeriodoLetivo":0,"idTurma":null,"id":"12846","nome":"ANÁLISE E PROJETOS DE SIST.DISTRIBUIDOS","idTurno":0,"idNivelEnsino":0},{"idColigada":0,"idFilial":0,"idPeriodoLetivo":0,"idTurma":null,"id":"12845","nome":"ESTRUTURAS DE DADOS","idTurno":0,"idNivelEnsino":0}]},{"id":45,"nome":"Teste","dataHoraInicial":"2019-01-31T02:00:00.000+0000","dataHoraFinal":"2019-01-31T07:00:00.000+0000","rascunho":false,"questoes":null,"cursos":[],"turmas":[],"disciplinas":[{"idColigada":0,"idFilial":0,"idPeriodoLetivo":0,"idTurma":null,"id":"12845","nome":"ESTRUTURAS DE DADOS","idTurno":0,"idNivelEnsino":0},{"idColigada":0,"idFilial":0,"idPeriodoLetivo":0,"idTurma":null,"id":"12844","nome":"INOVAÇÕES TECNOLÓGICAS","idTurno":0,"idNivelEnsino":0}]},{"id":51,"nome":"Simulado 4","dataHoraInicial":"2019-02-01T10:00:00.000+0000","dataHoraFinal":"2019-02-28T12:00:00.000+0000","rascunho":false,"questoes":null,"cursos":[],"turmas":[],"disciplinas":[{"idColigada":0,"idFilial":0,"idPeriodoLetivo":0,"idTurma":null,"id":"12848","nome":"12848 - PROJETO: SISTEMAS DISTRIBUIDOS","idTurno":0,"idNivelEnsino":0},{"idColigada":0,"idFilial":0,"idPeriodoLetivo":0,"idTurma":null,"id":"12843","nome":"12843 - SISTEMAS OPERACIONAIS","idTurno":0,"idNivelEnsino":0}]},{"id":42,"nome":"Simulado 2","dataHoraInicial":"2019-01-01T04:00:00.000+0000","dataHoraFinal":"2019-01-30T02:04:00.000+0000","rascunho":false,"questoes":null,"cursos":[],"turmas":[{"idColigada":0,"idFilial":0,"idPeriodoLetivo":0,"id":"049.01SA","nome":"049.01SA - ANÁLISE E DESENVOLVIMENTO DE SISTEMAS - 01SA","idNivelEnsino":0,"idCurso":null,"idProximaTurma":null}],"disciplinas":[]},{"id":49,"nome":"Simulado 1","dataHoraInicial":"2019-02-01T03:00:00.000+0000","dataHoraFinal":"2019-02-28T14:00:00.000+0000","rascunho":false,"questoes":null,"cursos":[{"idColigada":0,"id":"49","nome":"49 - ANÁLISE E DESENVOLVIMENTO DE SISTEMAS","idNivelEnsino":0,"idPeriodoLetivo":0}],"turmas":[],"disciplinas":[]}]},
+    mainData: {"simulados":[{"id":44,"nome":"das","dataHoraInicial":"2019-01-31T03:00:00.000+0000","dataHoraFinal":"2019-01-31T11:00:00.000+0000","rascunho":false,"status":"Pendente","questoes":null,"cursos":[],"turmas":[{"idColigada":0,"idFilial":0,"idPeriodoLetivo":0,"id":"049.01SA","nome":"ANÁLISE E DESENVOLVIMENTO DE SISTEMAS - 01SA","idNivelEnsino":0,"idCurso":null,"idProximaTurma":null}],"disciplinas":[{"idColigada":0,"idFilial":0,"idPeriodoLetivo":0,"idTurma":null,"id":"12846","nome":"ANÁLISE E PROJETOS DE SIST.DISTRIBUIDOS","idTurno":0,"idNivelEnsino":0},{"idColigada":0,"idFilial":0,"idPeriodoLetivo":0,"idTurma":null,"id":"12845","nome":"ESTRUTURAS DE DADOS","idTurno":0,"idNivelEnsino":0}]},{"id":45,"nome":"Teste","dataHoraInicial":"2019-01-31T02:00:00.000+0000","dataHoraFinal":"2019-01-31T07:00:00.000+0000","rascunho":false,"status":"Pendente","questoes":null,"cursos":[],"turmas":[],"disciplinas":[{"idColigada":0,"idFilial":0,"idPeriodoLetivo":0,"idTurma":null,"id":"12845","nome":"ESTRUTURAS DE DADOS","idTurno":0,"idNivelEnsino":0},{"idColigada":0,"idFilial":0,"idPeriodoLetivo":0,"idTurma":null,"id":"12844","nome":"INOVAÇÕES TECNOLÓGICAS","idTurno":0,"idNivelEnsino":0}]},{"id":51,"nome":"Simulado 4","dataHoraInicial":"2019-02-01T10:00:00.000+0000","dataHoraFinal":"2019-02-28T12:00:00.000+0000","rascunho":false,"status":"Pendente","questoes":null,"cursos":[],"turmas":[],"disciplinas":[{"idColigada":0,"idFilial":0,"idPeriodoLetivo":0,"idTurma":null,"id":"12848","nome":"12848 - PROJETO: SISTEMAS DISTRIBUIDOS","idTurno":0,"idNivelEnsino":0},{"idColigada":0,"idFilial":0,"idPeriodoLetivo":0,"idTurma":null,"id":"12843","nome":"12843 - SISTEMAS OPERACIONAIS","idTurno":0,"idNivelEnsino":0}]},{"id":42,"nome":"Simulado 2","dataHoraInicial":"2019-01-01T04:00:00.000+0000","dataHoraFinal":"2019-01-30T02:04:00.000+0000","rascunho":false,"status":"Pendente","questoes":null,"cursos":[],"turmas":[{"idColigada":0,"idFilial":0,"idPeriodoLetivo":0,"id":"049.01SA","nome":"049.01SA - ANÁLISE E DESENVOLVIMENTO DE SISTEMAS - 01SA","idNivelEnsino":0,"idCurso":null,"idProximaTurma":null}],"disciplinas":[]},{"id":49,"nome":"Simulado 1","dataHoraInicial":"2019-02-01T03:00:00.000+0000","dataHoraFinal":"2019-02-28T14:00:00.000+0000","rascunho":false,"status":"Pendente","questoes":null,"cursos":[{"idColigada":0,"id":"49","nome":"49 - ANÁLISE E DESENVOLVIMENTO DE SISTEMAS","idNivelEnsino":0,"idPeriodoLetivo":0}],"turmas":[],"disciplinas":[]}]},
     periodoLetivo: 202,
     pageTitle: [],
     habilidades: [],
@@ -26,7 +26,9 @@ const initState = {
             hora: null
         }
     },
-    selectedQuestoes: []
+    selectedQuestoes: [],
+    flagSimuladoFinalizado: null,
+    contextoAluno: null
     */
 
     // Coordenador
@@ -55,7 +57,9 @@ const initState = {
             hora: null
         }
     },
-    selectedQuestoes: []
+    selectedQuestoes: [],
+    flagSimuladoFinalizado: null,
+    contextoAluno: null
 
     /*
     // Original
@@ -84,7 +88,9 @@ const initState = {
             hora: null
         }
     },
-    selectedQuestoes: []
+    selectedQuestoes: [],
+    flagSimuladoFinalizado: null, //flag necessária para contornar a inconsistencia da chamada getData :(
+    contextoAluno: null // variável necessário para contornar a inconsitencia da chamada getData :(((((
     */
 }
 
@@ -296,6 +302,18 @@ const RootReducer = (state = initState, action) => {
                 inicio: state.dateTimeInicial,
                 fim: state.dateTimeFinal
             }
+        }
+    }
+    else if(action.type === 'SET_SIMULADOFINALIZADO'){
+        return{
+            ...state,
+            flagSimuladoFinalizado: action.simuladoFinalizado
+        }
+    }
+    else if(action.type === 'SET_CONTEXTOALUNO'){
+        return{
+            ...state,
+            contextoAluno: action.contexto
         }
     }
 

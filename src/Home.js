@@ -16,42 +16,89 @@ class Home extends Component {
 
     getSimulado = (record) => {
         this.setState({tableLoading: true})
-        axios.get('http://localhost:5000/api/getSimuladoIdAlunoQuestao/'+record.key+'/'+this.props.usuarioId)
+        var request = {
+            "id": record.key,
+            "status": "Em andamento"
+        }
+
+        axios.post('http://localhost:5000/api/statusSimulado', request)
         .then(res => {
-            this.setState({tableLoading: false})
-            var simulado = {
-                id: record.key,
-                nome: record.nome,
-                dataHoraInicial: record.inicio,
-                dataHoraFinal: record.fim,
-                questoes: res.data
-            }
-            this.props.setSimulado(simulado)
-            this.props.history.push('/alunos/execucao-simulado')
+
+            axios.get('http://localhost:5000/api/getSimuladoIdAlunoQuestao/'+record.key+'/'+this.props.usuarioId)
+            .then(res => {
+                this.setState({tableLoading: false})
+                var simulado = {
+                    id: record.key,
+                    nome: record.nome,
+                    dataHoraInicial: record.inicio,
+                    dataHoraFinal: record.fim,
+                    questoes: res.data
+                }
+                this.props.setSimulado(simulado)
+                this.props.history.push('/alunos/execucao-simulado')
+            })
+            .catch(error =>{
+                this.setState({tableLoading: false})
+                console.log(error)
+            })
         })
         .catch(error =>{
-            this.setState({tableLoading: false})
             console.log(error)
         })
     }
 
-    componentWillMount(){
+    buildTableData = () => {
         var tableData = this.props.mainData.simulados.map(simulado => {
             var inicioObj = moment(simulado.dataHoraInicial)
             var inicio = inicioObj.format('DD/MM/YYYY HH:mm')
-
             var terminoObj = moment(simulado.dataHoraFinal)
             var termino = terminoObj.format('DD/MM/YYYY HH:mm')
+
+
+            var status = simulado.status
+            var btnExecutarDisabled = false
+            var currDate = moment()
+            
+            if(terminoObj <= currDate)
+                status = 'Expirado'
+
+            if(status === 'Expirado' || status === 'Finalizado')
+                btnExecutarDisabled = true
+
 
             return({
                 key: simulado.id,
                 nome: simulado.nome,
                 inicio: inicio,
-                fim: termino
+                fim: termino,
+                status: status,
+                btnExecutarDisabled
             })
         })
 
         this.setState({tableData})
+    }
+
+    componentWillMount(){
+        console.log('home componentWillMount', this.props)
+
+        var requestData = this.props.contextoAluno
+        if(this.props.flagSimuladoFinalizado){
+            this.setState({tableLoading: true})
+            axios.post('http://localhost:5000/api/getData', requestData)
+            .then(res => {
+                this.props.setMainData(res.data)
+                this.buildTableData()
+                this.setState({tableLoading: false})
+            })
+            .catch(error =>{
+                console.log(error)
+            })
+        }
+        else{
+            this.buildTableData()
+        }
+        
     }
 
     render() {
@@ -72,6 +119,11 @@ class Home extends Component {
 				sorter: (a, b) => a.id - b.id
             },
             {
+                title: 'Status',
+                dataIndex: 'status',
+                sorter: (a, b) => a.id - b.id
+            },
+            {
 				title: "Executar",
 				colSpan: 2,
 				dataIndex: "acao",
@@ -81,7 +133,7 @@ class Home extends Component {
 				render: (text, record) => {
 					return (
                         <React.Fragment>
-                            <Button className="actionButton buttonGreen" title="Executar" onClick={() => this.getSimulado(record)}><Icon type="caret-right" /></Button>
+                            <Button className="actionButton buttonGreen" title="Executar" onClick={() => this.getSimulado(record)} disabled={record.btnExecutarDisabled}><Icon type="caret-right" /></Button>
                         </React.Fragment>
 					);
 				}
@@ -109,13 +161,16 @@ class Home extends Component {
 const MapStateToProps = (state) => {
 	return {
         mainData: state.mainData,
-        usuarioId: state.usuarioId
+        usuarioId: state.usuarioId,
+        flagSimuladoFinalizado: state.flagSimuladoFinalizado,
+        contextoAluno: state.contextoAluno
 	}
 }
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        setSimulado: (simulado) => { dispatch({ type: 'SET_SIMULADORESOLUCAO', simulado }) }
+        setSimulado: (simulado) => { dispatch({ type: 'SET_SIMULADORESOLUCAO', simulado }) },
+        setMainData: (mainData) => { dispatch({ type: 'SET_MAINDATA', mainData }) }
     }
 }
 

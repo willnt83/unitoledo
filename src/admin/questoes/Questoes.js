@@ -3,7 +3,7 @@ import { Layout, Table, Icon, Popconfirm, Form, Input, Button, Row, Col, Select 
 import { withStyles } from "@material-ui/core/styles"
 import BackEndRequests from '../hocs/BackEndRequests'
 import { connect } from 'react-redux'
-
+import axios from "axios"
 import ModalCadastro from './ModalCadastro'
 
 const { Content } = Layout
@@ -66,27 +66,21 @@ class Questoes extends Component {
 		filterAreasDeConhecimento: [],
 		*/
 		mode: null,
-		tableDisplay: 'none'
+		tableDisplay: 'none',
+		getQuestoesRequest: {
+			codigo: '',
+			enade: '',
+			discursiva: '',
+			fonte: '',
+			habilidades: [],
+			conteudos: [],
+			areaConhecimentos: [],
+			anos: [],
+			tipo: {
+				id: 0
+			}
+		}
 	}
-
-	/*
-	resetInputStates = () => {
-		this.setState({
-			inId: "",
-			inDescricao: "",
-			inStatus: true,
-			inPadraoEnade: "sim",
-			inFonte: "",
-			inAno: "",
-			inAlternativa: "",
-			inHabilidade: "",
-			inConteudo: "",
-			inAreaConhecimento: "",
-			inDiscursiva: "",
-			alternativaCorretaDisabled: false,
-		})
-	}
-	*/
 
 	showModalCadastro = (row) => {
 		this.props.getHabilidades()
@@ -95,15 +89,32 @@ class Questoes extends Component {
 
 		if (typeof row == "undefined") {
 			// Create
-			this.setState({mode: 'create'})
+			this.setState({mode: 'create', showModalCadastro: true})
 		} else {
-			// Edit
-			this.setState({mode: 'edit'})
-			this.setState({questao: row})
+			axios.get('http://localhost:5000/api/getAlternativas/'+row.key)
+			.then(res => {
+				// Edit
+				this.setState({mode: 'edit'})
+				var alternativaLetras = ['A', 'B', 'C', 'D', 'E']
+				var alternativaCorreta = null
+				var alternativas = res.data.map((alternativa, index) => {
+					if(alternativa.correta)
+						alternativaCorreta = alternativaLetras[index]
+					return({
+						id: alternativa.id,
+						correta: alternativa.correta,
+						descricao: alternativa.descricao
+					})
+				})
+
+				row.valueAlternativaCorreta = alternativaCorreta
+				row.alternativas = alternativas
+				this.setState({questao: row, showModalCadastro: true})
+			})
+			.catch(error =>{
+				console.log(error)
+			})
 		}
-		this.setState({
-			showModalCadastro: true
-		})
 	}
 
 	hideModalCadastro = () => {
@@ -114,110 +125,13 @@ class Questoes extends Component {
 
 	handleGetQuestoes = () => {
 		this.setState({ tableLoading: true })
-		this.props.getQuestoes()
+		this.props.getQuestoes(this.state.getQuestoesRequest)
 	}
 
 	// Handlers
 	handleDeleteQuestao = (id) => {
 		this.setState({tableLoading: true})
 		this.props.deleteQuestao(id)
-	}
-
-	/*
-	handleCancelAlternativa = () => {
-		this.setState({
-			visibleAlternativa: false
-		})
-	}
-	
-
-	handleButtonConfirmAlternativa = () => {
-		let validationError = false
-
-		if(this.state.inAlternativa === '') {
-			this.setState({
-			inAlternativaError: true
-			})
-			validationError = true
-		}
-		else {
-			this.setState({
-			inAlternativaError: false
-			})
-		}
-
-		if(this.state.inAlternativaA === '') {
-			this.setState({
-			inAlternativaAError: true
-			})
-			validationError = true
-		}
-		else {
-			this.setState({
-			inAlternativaAError: false
-			})
-		}
-
-		if(this.state.inAlternativaB === '') {
-			this.setState({
-			inAlternativaBError: true
-			})
-			validationError = true
-		}
-		else {
-			this.setState({
-			inAlternativaBError: false
-			})
-		}
-
-		if(this.state.inAlternativaC === '') {
-			this.setState({
-			inAlternativaCError: true
-			})
-			validationError = true
-		}
-		else {
-			this.setState({
-			inAlternativaCError: false
-			})
-		}
-
-		if(this.state.inAlternativaD === '') {
-			this.setState({
-			inAlternativaDError: true
-			})
-			validationError = true
-		}
-		else {
-			this.setState({
-			inAlternativaDError: false
-			})
-		}
-
-		if(this.state.inAlternativaE === '') {
-			this.setState({
-			inAlternativaEError: true
-			})
-			validationError = true
-		}
-		else {
-			this.setState({
-			inAlternativaEError: false
-			})
-		}
-
-		if(!validationError){
-			this.handleCancelAlternativa()
-		}
-	}
-	*/
-
-	handleFormInput = event => {
-	const target = event.target
-
-	this.setState({
-		[target.name]: target.value
-	})
 	}
 
 	// Filtros e Ordenação
@@ -252,7 +166,6 @@ class Questoes extends Component {
 		var areasDeConhecimento = []
 
 		this.props.form.validateFieldsAndScroll((err, values) => {
-			console.log('values', values)
 			if(values.habilidades){
 				habilidades = values.habilidades.map(habilidade =>{
 					return({id: parseInt(habilidade)})
@@ -283,6 +196,8 @@ class Questoes extends Component {
 				}
 			}
 
+			this.setState({getQuestoesRequest: request})
+
 			this.props.getQuestoes(request)
 		})
 	}
@@ -296,15 +211,14 @@ class Questoes extends Component {
 		}
 
 		// Tratando response da getQuestoes
-		if(nextProps.questoes && nextProps.questoes.length !== this.props.questoes.length){
-			console.log('checking table')
+		//if(nextProps.questoes && nextProps.questoes.length !== this.props.questoes.length){
+		if(nextProps.getQuestoesResponse && nextProps.getQuestoesResponse !== this.props.getQuestoesResponse){
 			var tableDisplay = nextProps.questoes.length > 0 ? 'inline' : 'none'
 			this.setState({tableDisplay, buttonLoadingBuscar: false, tableLoading: false})
 		}
 	}
 
 	render() {
-		//console.log('this.props', this.props)
 		const { classes } = this.props
 		const { getFieldDecorator } = this.props.form
 

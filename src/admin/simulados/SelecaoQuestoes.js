@@ -32,6 +32,8 @@ class SelecaoQuestoes extends Component {
                             selectButton = (hit) ?
                                 <Button  className="buttonOrange" onClick={() => this.props.removeSimuladoQuestao(questao)}><Icon type="check" />Remover Seleção</Button>
                                 :<Button className="buttonGreen" onClick={() => this.props.setSimuladoQuestao(questao)}><Icon type="check" />Selecionar</Button>
+                            
+                            /*
                             alternativas = (
                                 questao.alternativas.map(alternativa => {
                                     var correta = alternativa.correta ? 'correta' : 'errada'
@@ -40,6 +42,7 @@ class SelecaoQuestoes extends Component {
                                     )
                                 })
                             )
+                            */
                         }
                         return(
                             <Row key={questao.id} style={{marginBottom: 20}}>

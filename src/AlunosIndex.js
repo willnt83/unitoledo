@@ -4,7 +4,7 @@ import { BrowserRouter as Router, Route } from "react-router-dom"
 import { connect } from 'react-redux'
 import PageTitle from "./layout/PageTitle"
 import Home from './Home'
-import ExecucaoSimulado from './ExecucaoSimulado'
+import ExecucaoSimulado from './components/execucaoSimulado/ExecucaoSimulado'
 
 import "antd/dist/antd.css"
 import "./static/style.css"

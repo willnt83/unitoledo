@@ -106,7 +106,8 @@ class NovoSimulado4 extends Component {
                         questoes: questoes,
                         cursos: cursos,
                         turmas: turmas,
-                        disciplinas: disciplinas
+                        disciplinas: disciplinas,
+                        status: 'Pendente'
                 }
                 console.log('request', request)
 
@@ -132,7 +133,6 @@ class NovoSimulado4 extends Component {
             })
         }
 
-        console.log('this.props.simulado.inicio.data', this.props.simulado.inicio.data)
         if(this.props.simulado.inicio.data !== null && this.props.simulado.inicio.data !== ''){
             this.props.form.setFieldsValue({
                 dataInicial: moment(this.props.simulado.inicio.data, 'DD/MM/YYYY')
@@ -170,7 +170,6 @@ class NovoSimulado4 extends Component {
     }
 
     render(){
-        console.log('props simulado', this.props.simulado)
         const { getFieldDecorator } = this.props.form
         return(
             <React.Fragment>

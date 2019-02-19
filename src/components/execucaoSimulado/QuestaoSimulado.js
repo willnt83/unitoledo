@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { Layout, Row, Col, Radio, Button, Icon } from 'antd'
 import { connect } from 'react-redux'
-import "./static/style.css"
+import "../../static/style.css"
 
 const { Content } = Layout
 const RadioGroup = Radio.Group
@@ -16,7 +16,8 @@ class QuestaoSimulado extends Component {
         btnDisplayAnterior: null,
         btnDisplayProximo: null,
         btnDisplayFinalizarSimulado: null,
-        btnSalvarRespostaLoading: false
+        btnSalvarRespostaLoading: false,
+        btnFinalizarSimuladoLoading: false
     }
 
     checkResponse = (questaoNo) => {
@@ -81,9 +82,14 @@ class QuestaoSimulado extends Component {
         if(nextProps.btnSalvarRespostaLoading !== this.props.btnSalvarRespostaLoading){
             this.setState({btnSalvarRespostaLoading: nextProps.btnSalvarRespostaLoading})
         }
+
+        if(nextProps.btnFinalizarSimuladoLoading !== this.props.btnFinalizarSimuladoLoading){
+            this.setState({btnFinalizarSimuladoLoading: nextProps.btnFinalizarSimuladoLoading})
+        }
     }
 
     render() {
+        console.log('this.props', this.props)
         var simuladoFonteText = this.props.simulado.fonte ? '<h4>'+this.props.simulado.fonte+'</h4>' : null
 
         const radioStyle = {
@@ -143,7 +149,7 @@ class QuestaoSimulado extends Component {
                         <Col span={8} align="center"><Button type="primary" onClick={() => this.props.handleResponder(this.state.resposta)} loading={this.state.btnSalvarRespostaLoading}><Icon type="save" />Salvar Resposta</Button></Col>
                         <Col span={8} align="end">
                             <Button className="buttonGreen" type="success" style={{display: this.state.btnDisplayProximo}} onClick={() => this.props.handleProximo()}>Próximo<Icon type="right" /></Button>
-                            <Button className="buttonOrange" type="success" style={{display: this.state.btnDisplayFinalizarSimulado}} onClick={() => this.props.handleFinalizarSimulado()}><Icon type="check-circle" />Finalizar Simulado</Button>
+                            <Button className="buttonOrange" type="success" style={{display: this.state.btnDisplayFinalizarSimulado}} onClick={() => this.props.handleFinalizarSimulado()} loading={this.state.btnFinalizarSimuladoLoading} ><Icon type="check-circle" />Finalizar Simulado</Button>
                         </Col>
                     </Row>
                 </Content>

@@ -12,6 +12,7 @@ function BackEndRequestsWrapper(WrappedComponent) {
 			deleteConteudoResponse: null,
 
 			createUpdateQuestaoResponse: null,
+			getQuestoesResponse: null,
 			deleteQuestaoResponse: null,
 
 			createUpdateAreaDeConhecimentoResponse: null,
@@ -231,127 +232,62 @@ function BackEndRequestsWrapper(WrappedComponent) {
 		getQuestoes = (request) => {
 			axios.post('http://localhost:5000/api/getQuestoesSimulado', request)
 			.then(res => {
-				console.log('response...', res.data)
-				let tempArray = []
-				let key = 0
-				let labelStatus = null
-				let arrayAlternativas = []
-				let i = 0
-				res.data.forEach((record, index) => {
-					arrayAlternativas = []
-					if(record.alternativas.length > 0){
-						i = 0
-						record.alternativas.forEach((alternativa) => {
-							arrayAlternativas[i] = {
-								id: record.alternativas[i].id,
-								descricao: record.alternativas[i].descricao,
-								correta: record.alternativas[i].correta
-							}
-							i++
-						})
-					}
-					else {
-						for(i = 0; i < 5; i++){
-							arrayAlternativas[i] = {
-								id: '',
-								descricao: '',
-								correta: 0
-							}
-						}
-					}
+				var labelStatus = null
 
-					labelStatus = record.status === true ? 'Ativo' : 'Inativo'
-
-					tempArray.push({
-						key: key,
-						id: record.id,
-						description: record.descricao,
+				var tempArray = res.data.map(questao => {
+					labelStatus = questao.status === true ? 'Ativo' : 'Inativo'
+					/*
+					key: key,
+					id: record.id,
+					description: record.descricao,
+					labelStatus: labelStatus,
+					valueStatus: record.status,
+					valueEnade: record.enade,
+					valueDiscursiva: record.discursiva,
+					fonte: record.fonte,
+					labelAno: record.ano,
+					valueAno: record.ano,
+					habilidadeId: record.habilidade.id,
+					habilidade: record.habilidade.description,
+					conteudoId: record.conteudo.id,
+					conteudo: record.conteudo.description,
+					areaConhecimentoId: record.areaConhecimento.id,
+					areaConhecimento: record.areaConhecimento.description,
+					//tipoId: record.tipo.id,
+					valueAlternativaCorreta:  record.alterCorreta,
+					alternativas : arrayAlternativas
+					*/
+					return ({
+						key: questao.id,
+						description: questao.descricao,
 						labelStatus: labelStatus,
-						valueStatus: record.status,
-						valueEnade: record.enade,
-						valueDiscursiva: record.discursiva,
-						fonte: record.fonte,
-						labelAno: record.ano,
-						valueAno: record.ano,
-						habilidadeId: record.habilidade.id,
-						habilidade: record.habilidade.description,
-						conteudoId: record.conteudo.id,
-						conteudo: record.conteudo.description,
-						areaConhecimentoId: record.areaConhecimento.id,
-						areaConhecimento: record.areaConhecimento.description,
-						//tipoId: record.tipo.id,
-						valueAlternativaCorreta:  record.alterCorreta,
-						alternativas : arrayAlternativas
+						valueStatus: questao.status,
+						valueEnade: questao.enade,
+						valueDiscursiva: questao.discursiva,
+						fonte: questao.fonte,
+						valueAno: questao.ano,
+						ano: questao.ano,
+						habilidade: questao.habilidade.description,
+						habilidadeId: questao.habilidade.id,
+						conteudo: questao.conteudo.description,
+						conteudoId: questao.conteudo.id,
+						areaConhecimento: questao.areaConhecimento.description,
+						areaConhecimentoId: questao.areaConhecimento.id,
+						//imagem: questao.imagem,
+						//tipoId: questao.tipo.id
 					})
-					key++
 				})
 				this.props.setQuestoes(tempArray)
+				this.setState({
+					getQuestoesResponse: {
+						success: true,
+						message: 'Questões recuperadas com sucesso'
+					}
+				})
 			})
 			.catch(error =>{
 				console.log(error)
 			})
-			/*
-			axios.get('http://localhost:5000/api/getQuestoes')
-			.then(res => {
-				let tempArray = []
-				let key = 0
-				let labelStatus = null
-				let arrayAlternativas = []
-				let i = 0
-				res.data.forEach((record, index) => {
-					arrayAlternativas = []
-					if(record.alternativas.length > 0){
-						i = 0
-						record.alternativas.forEach((alternativa) => {
-							arrayAlternativas[i] = {
-								id: record.alternativas[i].id,
-								descricao: record.alternativas[i].descricao,
-								correta: record.alternativas[i].correta
-							}
-							i++
-						})
-					}
-					else {
-						for(i = 0; i < 5; i++){
-							arrayAlternativas[i] = {
-								id: '',
-								descricao: '',
-								correta: 0
-							}
-						}
-					}
-
-					labelStatus = record.status === true ? 'Ativo' : 'Inativo'
-
-					tempArray.push({
-						key: key,
-						id: record.id,
-						description: record.descricao,
-						labelStatus: labelStatus,
-						valueStatus: record.status,
-						valueEnade: record.enade,
-						valueDiscursiva: record.discursiva,
-						fonte: record.fonte,
-						labelAno: record.ano,
-						valueAno: record.ano,
-						habilidadeId: record.habilidade.id,
-						habilidade: record.habilidade.description,
-						conteudoId: record.conteudo.id,
-						conteudo: record.conteudo.description,
-						areaConhecimentoId: record.areaConhecimento.id,
-						areaConhecimento: record.areaConhecimento.description,
-						tipoId: record.tipo.id,
-						valueAlternativaCorreta:  record.alterCorreta,
-						alternativas : arrayAlternativas
-					})
-					key++
-				})
-				this.props.setQuestoes(tempArray)
-			})
-			.catch(error =>{
-				console.log(error)
-			})
-			*/
 		}
 
 		createUpdateQuestao = (request) => {
@@ -422,6 +358,7 @@ function BackEndRequestsWrapper(WrappedComponent) {
 					getQuestoes={ this.getQuestoes }
 					createUpdateQuestao={ this.createUpdateQuestao }
 					createUpdateQuestaoResponse={ this.state.createUpdateQuestaoResponse }
+					getQuestoesResponse={ this.state.getQuestoesResponse }
 					deleteQuestao={ this.deleteQuestao }
 					deleteQuestaoResponse={ this.state.deleteQuestaoResponse }
 				/>

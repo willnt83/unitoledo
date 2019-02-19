@@ -181,7 +181,7 @@ class ModalCadastro extends Component {
                     tipo: nextProps.questao.tipoId
                 })
                 this.setState({
-                    questaoId: nextProps.questao.id,
+                    questaoId: nextProps.questao.key,
                     alternativas: nextProps.questao.alternativas,
                     alternativaCorreta: nextProps.questao.valueAlternativaCorreta
                 })

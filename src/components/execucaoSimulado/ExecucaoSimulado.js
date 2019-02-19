@@ -1,10 +1,11 @@
 import React, { Component } from 'react'
-import { Layout, Row, Col, Icon, Modal, Button } from 'antd'
+import { Layout, Row, Col, Icon, Modal, Button, notification } from 'antd'
 import Countdown from 'react-countdown-now'
 import moment from 'moment'
 import { connect } from 'react-redux'
 import axios from 'axios'
-import "./static/style.css"
+import { withRouter } from "react-router-dom"
+import "../../static/style.css"
 import QuestaoSimulado from './QuestaoSimulado'
 
 const { Content } = Layout
@@ -16,7 +17,8 @@ class ExecucaoSimulado extends Component {
         questoesRespondidas: 0,
         periodoExecucao: null,
         showModal: false,
-        btnSalvarRespostaLoading: false
+        btnSalvarRespostaLoading: false,
+        btnFinalizarSimuladoLoading: false
     }
     onChange = (e) => {
         this.setState({
@@ -55,6 +57,7 @@ class ExecucaoSimulado extends Component {
             this.props.setQuestaoRespondida(questoes)
             this.countRespondidas()
             this.setState({btnSalvarRespostaLoading: false})
+            this.openNotificationRespondido()
         })
         .catch(error =>{
             console.log('error: ', error)
@@ -71,12 +74,47 @@ class ExecucaoSimulado extends Component {
     }
 
     handleModalOk = () => {
-        this.showModal(false);
-        this.props.history.push('/alunos/execucao-simulado')
+        this.setState({btnFinalizarSimuladoLoading: true})
+        this.displayModal(false)
+
+        var request = {
+            "id": this.props.simulado.id,
+            "status": "Finalizado"
+        }
+
+        axios.post('http://localhost:5000/api/statusSimulado', request)
+        .then(res => {
+            this.setState({btnFinalizarSimuladoLoading: false})
+            this.openNotificationFinalizado()
+            this.props.setSimuladoFinalizado(true)
+            this.props.history.push('/alunos')
+        })
+        .catch(error =>{
+            console.log(error)
+        })
     }
 
     handleModalCancel = () => {
-        this.showModal(false);
+        this.displayModal(false)
+    }
+
+    openNotificationFinalizado = () => {
+        const args = {
+            message: 'Simulado Finalizado',
+            icon: <Icon type="check-circle" style={{color: '#13a54b', fontWeight: '800'}} />,
+            //description: 'Simulado finalizado com sucesso.',
+            duration: 0
+        }
+        notification.open(args)
+    }
+
+    openNotificationRespondido = () => {
+        const args = {
+            message: 'Resposta registrada',
+            icon: <Icon type="check-circle" style={{color: '#13a54b', fontWeight: '800'}} />,
+            duration: 0
+        }
+        notification.open(args)
     }
 
     countRespondidas = () => {
@@ -122,6 +160,7 @@ class ExecucaoSimulado extends Component {
                     handleFinalizarSimulado={this.handleFinalizarSimulado}
                     questoesRespondidas={this.state.questoesRespondidas}
                     btnSalvarRespostaLoading={this.state.btnSalvarRespostaLoading}
+                    btnFinalizarSimuladoLoading={this.state.btnFinalizarSimuladoLoading}
                 />
                 <Modal
                     title="Atenção!"
@@ -152,8 +191,9 @@ const MapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        setQuestaoRespondida: (questoes) => { dispatch({ type: 'SET_QUESTAORESPONDIDA', questoes }) }
+        setQuestaoRespondida: (questoes) => { dispatch({ type: 'SET_QUESTAORESPONDIDA', questoes }) },
+        setSimuladoFinalizado: (simuladoFinalizado) => { dispatch({ type: 'SET_SIMULADOFINALIZADO', simuladoFinalizado }) }
     }
 }
  
-export default connect(MapStateToProps, mapDispatchToProps)(ExecucaoSimulado)
+export default connect(MapStateToProps, mapDispatchToProps)(withRouter(ExecucaoSimulado))
