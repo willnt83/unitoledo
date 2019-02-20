@@ -110,3 +110,10 @@ code {
 .mb10{
     margin-bottom: 10px
 }
+
+.ant-tooltip-inner{
+    background-color: #f5222d !important
+}
+.ant-tooltip-arrow{
+    border-top-color: #f5222d !important
+}

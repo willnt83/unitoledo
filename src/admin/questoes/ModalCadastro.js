@@ -1,8 +1,10 @@
 import React, { Component } from "react"
-import { Icon, Modal, Form, Input, Button, Upload, Row, Col, Select } from "antd"
+import { Icon, Modal, Form, Input, Button,  Row, Col, Select, Tooltip } from "antd"
 import { connect } from 'react-redux'
 import ModalAlternativas from './ModalAlternativas'
 import BackEndRequests from '../hocs/BackEndRequests'
+import classNames from 'classnames'
+import Dropzone from 'react-dropzone'
 import moment from 'moment'
 
 const statusOptions = [
@@ -51,29 +53,29 @@ const tipoOptions = [
 
 class ModalCadastro extends Component {
     state = {
-        alternativaCorretaDisabled: false,
+        alternativaCorretaDisabled: true,
         showModalAlternativas: false,
         alternativaCorreta: null,
         alternativas: [],
         buttonConfirmarLoading: false,
         anoOptions: [],
-        questaoId: ''
+        questaoId: '',
+        alternativasTooltipVisible: false
     }
 
     stringToBool = (str) => {
-        return (str === 'true')
+        return (str === 1 || str === 'true')
     }
 
     handleDiscursivaChange = (value) => {
-		value = value === 'true' ? true : false
-		this.setState({alternativaCorretaDisabled: value})
+        value = value === 1 ? true : false
+		this.setState({alternativaCorretaDisabled: value, alternativasTooltipVisible: false})
     }
 
     handleSubmitCadastro = (event) => {
         event.preventDefault()
         this.props.form.validateFieldsAndScroll((err, values) => {
             if(!err){
-                this.setState({buttonConfirmarLoading: true})
                 let request = {
                     "id": this.state.questaoId,
                     "descricao": values.descricao,
@@ -98,7 +100,15 @@ class ModalCadastro extends Component {
                         "id": values.tipo
                     }
                 }
-                this.props.createUpdateQuestao(request)
+
+                if(!this.stringToBool(values.discursiva) && this.state.alternativas.length < 1){
+                    this.setState({alternativasTooltipVisible: true})
+                }
+                else{
+                    this.setState({buttonConfirmarLoading: true, alternativasTooltipVisible: false})
+                    this.props.createUpdateQuestao(request)
+                }
+                   
             }
             else{
                 console.log('erro', err)
@@ -130,6 +140,14 @@ class ModalCadastro extends Component {
 
     showHideModalAlternativas = (bool) => {
 		this.setState({showModalAlternativas: bool})
+    }
+
+    onDrop = (acceptedFiles, rejectedFiles) => {
+        // Do something with files
+        console.log('onDrop')
+        console.log('acceptedFiles', acceptedFiles)
+
+        //this.getBase64(acceptedFiles)
     }
 
     componentWillMount(){
@@ -438,22 +456,41 @@ class ModalCadastro extends Component {
                         </Row>
                         <Row gutter={48}>
                         <Col span={12}>
-                            <Upload>
-                                <Button>
-                                    <Icon type="upload" /> Imagem
-                                </Button>
-                            </Upload>
+                            <Dropzone onDrop={this.onDrop}>
+                                {({getRootProps, getInputProps, isDragActive}) => {
+                                    return (
+                                        <div
+                                            {...getRootProps()}
+                                            className={classNames('dropzone', {'dropzone--isActive': isDragActive})}
+                                            >
+                                            <input {...getInputProps()} />
+                                            {
+                                                isDragActive ?
+                                                <p>Drop files here...</p> :
+                                                <p>Try dropping some files here, or click to select files to upload.</p>
+                                            }
+                                        </div>
+                                    )
+                                }}
+                            </Dropzone>
                         </Col>
                         <Col span={12}>
-                            <Button
-                                disabled={this.state.alternativaCorretaDisabled}
-                                key="submit"
-                                type="primary"
-                                onClick={() => this.showHideModalAlternativas(true)}
-                                style={{float: "right"}}
+                            <Tooltip
+                                placement="topLeft"
+                                title="Informar alternativas"
+                                visible={this.state.alternativasTooltipVisible}
+                                trigger="contextMenu"
                             >
-                                <Icon type="ordered-list" />Alternativas
-                            </Button>
+                                <Button
+                                    disabled={this.state.alternativaCorretaDisabled}
+                                    key="submit"
+                                    type="primary"
+                                    onClick={() => this.showHideModalAlternativas(true)}
+                                    style={{float: "right"}}
+                                >
+                                    <Icon type="ordered-list" />Alternativas
+                                </Button>
+                            </Tooltip>
                         </Col>
                     </Row>
                     </Form>
