@@ -51,6 +51,63 @@ const tipoOptions = [
 	}
 ]
 
+const thumbsContainer = {
+    display: 'flex',
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    marginTop: 16
+}
+const thumb = {
+    display: 'inline-flex',
+    borderRadius: 2,
+    border: '1px solid #eaeaea',
+    marginBottom: 8,
+    marginRight: 8,
+    maxWidth: '100%',
+    height: 100,
+    padding: 4,
+    boxSizing: 'border-box'
+}
+
+const thumbInner = {
+    display: 'flex',
+    minWidth: 0,
+    overflow: 'hidden'
+}
+
+const img = {
+    objectFit: 'cover',
+    display: 'block',
+    width: '100%',
+    height: 'auto'
+}
+
+/*
+const thumb = {
+    display: 'inline-flex',
+    borderRadius: 2,
+    border: '1px solid #eaeaea',
+    marginBottom: 8,
+    marginRight: 8,
+    width: 'auto',
+    height: 150,
+    padding: 4,
+    boxSizing: 'border-box'
+}
+
+const thumbInner = {
+    display: 'flex',
+    minWidth: 0,
+    overflow: 'hidden'
+}
+
+const img = {
+    display: 'block',
+    width: 'auto',
+    height: '100%'
+}
+*/
+
 class ModalCadastro extends Component {
     state = {
         alternativaCorretaDisabled: true,
@@ -60,7 +117,10 @@ class ModalCadastro extends Component {
         buttonConfirmarLoading: false,
         anoOptions: [],
         questaoId: '',
-        alternativasTooltipVisible: false
+        alternativasTooltipVisible: false,
+        file: null,
+        fileBase64: null,
+        receivedFile: null
     }
 
     stringToBool = (str) => {
@@ -85,7 +145,7 @@ class ModalCadastro extends Component {
                     "fonte": values.fonte,
                     "ano": values.ano,
                     "alterCorreta": this.state.alternativaCorreta,
-                    "imagem": "caminho da imagem",
+                    "imagem": this.state.fileBase64,
                     "conteudo": {
                         "id": values.conteudo
                     },
@@ -142,12 +202,39 @@ class ModalCadastro extends Component {
 		this.setState({showModalAlternativas: bool})
     }
 
-    onDrop = (acceptedFiles, rejectedFiles) => {
-        // Do something with files
-        console.log('onDrop')
-        console.log('acceptedFiles', acceptedFiles)
 
-        //this.getBase64(acceptedFiles)
+    fileToBase64 = (file, that) => {
+        var reader = new FileReader()
+        
+        reader.readAsDataURL(file)
+        reader.onload = (event) => {
+            that.setState({fileBase64: event.target.result})
+        }
+        reader.onerror = function (error) {
+            console.log('Error: ', error)
+        }
+    }
+
+    Base64ToFile = (file, filename) => {
+        var arr = file.split(','), mime = arr[0].match(/:(.*?);/)[1],
+        bstr = atob(arr[1]), n = bstr.length, u8arr = new Uint8Array(n);
+        while(n--){
+            u8arr[n] = bstr.charCodeAt(n);
+        }
+        return new File([u8arr], filename, {type:mime});
+    }
+
+    onDrop = (acceptedFiles, rejectedFiles) => {
+        this.setState({
+            file: Object.assign(acceptedFiles[0], {
+              preview: URL.createObjectURL(acceptedFiles[0])
+            })
+          });
+        this.fileToBase64(acceptedFiles[0], this)
+    }
+
+    openImage = (image) => {
+        window.open(image, '_blank');
     }
 
     componentWillMount(){
@@ -186,8 +273,10 @@ class ModalCadastro extends Component {
 
         // Populando campos do formulário
         if(nextProps.questao !== null && nextProps.questao !== this.props.questao){
-            var padraoEnade = nextProps.valueEnade === true ? 'Sim' : 'Não'
-            var discursiva = nextProps.valueDiscursiva === true ? 'Sim' : 'Não'
+            console.log('nextProps.questao', nextProps.questao)
+            var padraoEnade = nextProps.questao.valueEnade === true ? 'Sim' : 'Não'
+            var discursiva = nextProps.questao.valueDiscursiva === true ? 1 : 0
+            var file = null
             this.props.form.setFieldsValue({
                 habilidade: nextProps.questao.habilidadeId,
                 conteudo: nextProps.questao.conteudoId,
@@ -200,16 +289,45 @@ class ModalCadastro extends Component {
                 discursiva: discursiva,
                 tipo: nextProps.questao.tipoId
             })
+            if(nextProps.questao.imagem) {
+                file = this.Base64ToFile(nextProps.questao.imagem, 'imagem.png')
+                Object.assign(file, {
+                    preview: URL.createObjectURL(file)
+                })
+            }
+
             this.setState({
                 questaoId: nextProps.questao.key,
                 alternativas: nextProps.questao.alternativas,
-                alternativaCorreta: nextProps.questao.valueAlternativaCorreta
+                alternativaCorreta: nextProps.questao.valueAlternativaCorreta,
+                fileBase64: nextProps.questao.imagem,
+                file
             })
         }
+
     }
 
     render(){
         const { getFieldDecorator } = this.props.form
+        var imagePreview = null
+        if(this.state.file !== null){
+            imagePreview = 
+                <aside style={thumbsContainer}>
+                    <div style={thumb}>
+                        <div style={thumbInner}>
+                            <img
+                                src={this.state.file.preview}
+                                style={img}
+                                alt=""
+                                onClick={() => this.openImage(this.state.fileBase64)}
+                            />
+                        </div>
+                    </div>
+                </aside>
+        }
+        else
+            imagePreview = null
+
         return(
             <React.Fragment>
                 <Modal
@@ -456,23 +574,25 @@ class ModalCadastro extends Component {
                         </Row>
                         <Row gutter={48}>
                         <Col span={12}>
-                            <Dropzone onDrop={this.onDrop}>
+                            <Dropzone 
+                                accept="image/jpeg, image/png, image/gif"
+                                onDrop={this.onDrop}
+                            >
                                 {({getRootProps, getInputProps, isDragActive}) => {
                                     return (
                                         <div
                                             {...getRootProps()}
                                             className={classNames('dropzone', {'dropzone--isActive': isDragActive})}
-                                            >
+                                        >
                                             <input {...getInputProps()} />
                                             {
-                                                isDragActive ?
-                                                <p>Drop files here...</p> :
-                                                <p>Try dropping some files here, or click to select files to upload.</p>
+                                                <Button><Icon type="upload" />Imagens</Button>
                                             }
                                         </div>
                                     )
                                 }}
                             </Dropzone>
+                            {imagePreview}
                         </Col>
                         <Col span={12}>
                             <Tooltip

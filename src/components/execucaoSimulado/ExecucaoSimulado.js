@@ -128,7 +128,7 @@ class ExecucaoSimulado extends Component {
 
     componentWillMount(){
         // Settando periodoExecucao (em minutos) com a diferença entre as dataHoras Inicial e Final
-        var inicioObj = moment(this.props.simulado.dataHoraInicial, 'DD/MM/YYYY HH:mm')
+        var inicioObj = moment()
         var terminoObj = moment(this.props.simulado.dataHoraFinal, 'DD/MM/YYYY HH:mm')
         var periodoExecucaoObj = terminoObj.diff(inicioObj, 'minutes')
         this.setState({periodoExecucao: periodoExecucaoObj})
@@ -138,17 +138,19 @@ class ExecucaoSimulado extends Component {
     render() {
         return (
             <Layout className="layout">
-                <Content style={{
-                    margin: "0",
-                    padding: "0 30px 0 24px",
-                    background: "#13a54b",
-                    color: '#fff'
-                }}>
+                <Content
+                    style={{
+                        margin: "0",
+                        padding: "0 30px 0 24px",
+                        background: "#13a54b",
+                        color: '#fff',
+                    }}
+                >
                     <Row>
                         <Col span={24} align="end" style={{fontWeight: 500}}>
                             <Icon type="clock-circle"  style={{ marginRight: 10 }}/>
                             <span style={{ marginRight: 10 }}>Tempo restante:</span>
-                            <Countdown date={Date.now() + this.state.periodoExecucao * 60000} />
+                            <Countdown date={Date.now() + this.state.periodoExecucao * 60000} daysInHours={true} />
                         </Col>
                     </Row>
                 </Content>

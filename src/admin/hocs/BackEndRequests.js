@@ -232,31 +232,11 @@ function BackEndRequestsWrapper(WrappedComponent) {
 		getQuestoes = (request) => {
 			axios.post('http://localhost:5000/api/getQuestoesSimulado', request)
 			.then(res => {
+				console.log('getQuestoes response', res.data)
 				var labelStatus = null
-
 				var tempArray = res.data.map(questao => {
 					labelStatus = questao.status === true ? 'Ativo' : 'Inativo'
-					/*
-					key: key,
-					id: record.id,
-					description: record.descricao,
-					labelStatus: labelStatus,
-					valueStatus: record.status,
-					valueEnade: record.enade,
-					valueDiscursiva: record.discursiva,
-					fonte: record.fonte,
-					labelAno: record.ano,
-					valueAno: record.ano,
-					habilidadeId: record.habilidade.id,
-					habilidade: record.habilidade.description,
-					conteudoId: record.conteudo.id,
-					conteudo: record.conteudo.description,
-					areaConhecimentoId: record.areaConhecimento.id,
-					areaConhecimento: record.areaConhecimento.description,
-					//tipoId: record.tipo.id,
-					valueAlternativaCorreta:  record.alterCorreta,
-					alternativas : arrayAlternativas
-					*/
+
 					return ({
 						key: questao.id,
 						description: questao.descricao,
@@ -273,7 +253,7 @@ function BackEndRequestsWrapper(WrappedComponent) {
 						conteudoId: questao.conteudo.id,
 						areaConhecimento: questao.areaConhecimento.description,
 						areaConhecimentoId: questao.areaConhecimento.id,
-						//imagem: questao.imagem,
+						imagem: questao.imagem,
 						tipoId: questao.tipo.id
 					})
 				})
@@ -291,7 +271,7 @@ function BackEndRequestsWrapper(WrappedComponent) {
 		}
 
 		createUpdateQuestao = (request) => {
-			console.log('createUpdateQuestao request', request)
+			console.log('createUpdateQuestao', request)
 			axios.post('http://localhost:5000/api/createUpdateQuestao', request)
 			.then(res => {
 				this.setState({

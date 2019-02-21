@@ -109,11 +109,9 @@ class NovoSimulado4 extends Component {
                         disciplinas: disciplinas,
                         status: 'Pendente'
                 }
-                console.log('request', request)
 
                 axios.post('http://localhost:5000/api/createUpdateSimulado', request)
                 .then(res => {
-                    console.log('response: ', res.data)
                     this.successModal(this.props)
                 })
                 .catch(error =>{

@@ -324,29 +324,6 @@ class Simulados extends Component {
         ]
         return(
             <React.Fragment>
-                {/*
-                <Content
-                    style={{
-                        margin: "12px 16px 0 16px",
-                        padding: 24,
-                        background: "#fff",
-                        maxHeight: 200
-                    }}
-                >
-                    <h3>Buscar Simulados</h3>
-                    <Form layout="vertical">
-                        <FormItem
-                            label="Nome"
-                        >
-                            <Input placeholder="Digite o nome do simulado" />
-                        </FormItem>
-                        <FormItem>
-                            <Button type="primary"><Icon type="search" />Buscar</Button>
-                        </FormItem>
-                    </Form>
-                </Content>
-                */}
-
                 <Content
                     style={{
                         margin: "12px 16px 0 16px",
