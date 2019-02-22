@@ -135,13 +135,24 @@ class ModalCadastro extends Component {
     handleSubmitCadastro = (event) => {
         event.preventDefault()
         this.props.form.validateFieldsAndScroll((err, values) => {
+            var discursiva = this.stringToBool(values.discursiva)
+            var alternativas = []
+            if(!discursiva){
+                // Se não for discursiva
+                alternativas = this.state.alternativas
+            }
+            else{
+                // Limpa state.alternativas
+                this.setState({alternativas: []})
+            }
+
             if(!err){
                 let request = {
                     "id": this.state.questaoId,
                     "descricao": values.descricao,
                     "status": this.stringToBool(values.status),
                     "enade": this.stringToBool(values.padraoEnade),
-                    "discursiva": this.stringToBool(values.discursiva),
+                    "discursiva": discursiva,
                     "fonte": values.fonte,
                     "ano": values.ano,
                     "alterCorreta": this.state.alternativaCorreta,
@@ -155,7 +166,7 @@ class ModalCadastro extends Component {
                     "areaConhecimento": {
                         "id": values.areaDeConhecimento
                     },
-                    "alternativas" : this.state.alternativas,
+                    "alternativas" : alternativas,
                     "tipo": {
                         "id": values.tipo
                     }
@@ -275,7 +286,16 @@ class ModalCadastro extends Component {
         if(nextProps.questao !== null && nextProps.questao !== this.props.questao){
             console.log('nextProps.questao', nextProps.questao)
             var padraoEnade = nextProps.questao.valueEnade === true ? 'Sim' : 'Não'
-            var discursiva = nextProps.questao.valueDiscursiva === true ? 1 : 0
+            var discursiva = null
+            if(nextProps.questao.valueDiscursiva === true){
+                discursiva = 1
+                this.setState({alternativaCorretaDisabled: true})
+            }
+            else{
+                discursiva = 0
+                this.setState({alternativaCorretaDisabled: false})
+            }
+
             var file = null
             this.props.form.setFieldsValue({
                 habilidade: nextProps.questao.habilidadeId,

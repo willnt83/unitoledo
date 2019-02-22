@@ -224,16 +224,18 @@ class Questoes extends Component {
 		const { classes } = this.props
 		const { getFieldDecorator } = this.props.form
 
+		console.log('this.props.questoes', this.props.questoes)
+
 		const columns = [
 			{
 				title: "ID",
 				dataIndex: "key",
-				sorter: (a, b) => a.id - b.id
+				sorter: (a, b) => a.key - b.key
 			},
 			{
 				title: "Descrição",
 				dataIndex: "description",
-				sorter: (a, b) => this.compareByAlph(a.description, b.description),
+				sorter: (a, b) => this.compareByAlph(a.description, b.description)/*,
 				filterDropdown: ({
 					setSelectedKeys,
 					selectedKeys,
@@ -301,22 +303,24 @@ class Questoes extends Component {
 					) : (
 					text
 					)
-				}
+				}*/
 			},
 			{
 				title: "Habilidade",
 				dataIndex: "habilidade",
-				sorter: (a, b) => a.id - b.id
+				sorter: (a, b) => this.compareByAlph(a.habilidade, b.habilidade),
+				width: 139
 			},
 			{
 				title: "Conteúdo",
 				dataIndex: "conteudo",
-				sorter: (a, b) => a.id - b.id
+				sorter: (a, b) => this.compareByAlph(a.conteudo, b.conteudo)
 			},
 			{
 				title: "Área de Conhecimento",
 				dataIndex: "areaConhecimento",
-				sorter: (a, b) => a.id - b.id
+				sorter: (a, b) => this.compareByAlph(a.areaConhecimento, b.areaConhecimento),
+				width: 93
 			},
 			{
 				title: "Status",

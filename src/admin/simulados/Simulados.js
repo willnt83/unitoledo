@@ -19,11 +19,11 @@ class Simulados extends Component {
         tableLoading: false
     }
 
-    /*
-    handleSubmit = () => {
-        console.log('submit')
-    }
-    */
+    compareByAlph = (a, b) => {
+		if (a > b) return -1
+		if (a < b) return 1
+		return 0
+	}
 
     getSimulados = () => {
         var cursos = this.props.mainData.cursos.map(curso => {
@@ -270,27 +270,27 @@ class Simulados extends Component {
             {
 				title: "ID",
 				dataIndex: "key",
-				sorter: (a, b) => a.id - b.id
+				sorter: (a, b) => a.key - b.key
             },
 			{
 				title: "Nome",
 				dataIndex: "nome",
-				sorter: (a, b) => a.id - b.id
+				sorter: (a, b) => this.compareByAlph(a.nome, b.nome)
             },
             {
 				title: "Situação",
 				dataIndex: "situacao",
-				sorter: (a, b) => a.id - b.id
+				sorter: (a, b) => this.compareByAlph(a.situacao, b.situacao)
 			},
 			{
 				title: "Início em",
 				dataIndex: "inicio",
-				sorter: (a, b) => a.id - b.id
+				sorter: (a, b) => this.compareByAlph(a.inicio, b.inicio)
 			},
 			{
 				title: "Término em",
 				dataIndex: "termino",
-				sorter: (a, b) => a.id - b.id
+				sorter: (a, b) => this.compareByAlph(a.termino, b.termino)
             },
             {
 				title: "Ações",
