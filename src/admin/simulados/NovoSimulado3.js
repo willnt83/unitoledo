@@ -134,9 +134,10 @@ class NovoSimulado3 extends Component {
     componentWillMount(){
         // Se for edição e existir questões selecionadas
         if(this.props.simulado.questoes.length > 0){
-            this.setState({mode: 'edit'})
+            //this.setState({mode: 'edit'})
+
             var request = {
-                codigo: '',
+                codigos: this.props.simulado.questoes,
                 enade: '',
                 discursiva: '',
                 fonte: '',
@@ -167,7 +168,7 @@ class NovoSimulado3 extends Component {
                 var discursiva = null
                 var tipo = null
 
-                codigo = values.codigo ? values.codigo : ''
+                codigo = values.codigo ? [values.codigo] : []
                 if(values.habilidades){
                     habilidades = values.habilidades.map(habilidade =>{
                         return({id: parseInt(habilidade)})
@@ -207,7 +208,7 @@ class NovoSimulado3 extends Component {
                     tipo = 0
                 
                 request = {
-                    codigo: codigo,
+                    codigos: codigo,
                     enade: padraoEnade,
                     discursiva: discursiva,
                     fonte: fonte,
