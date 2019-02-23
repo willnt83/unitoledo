@@ -49,22 +49,12 @@ class Questoes extends Component {
 	}
 
 	state = {
-		selectedRowKeys: [], // Check here to configure the default column
-		//loading: false,
+		selectedRowKeys: [],
 		tableLoading: false,
 		showModalCadastro: false,
 		questao: null,
-		//searchText: "",
 		questoes: null,
 		buttonLoadingBuscar: false,
-		/*
-		filterHabilidadeOptions: null,
-		filterConteudoOptions: null,
-		filterAreaDeConhecimentoOptions: null,
-		filterHabilidades: [],
-		filterConteudos: [],
-		filterAreasDeConhecimento: [],
-		*/
 		mode: null,
 		tableDisplay: 'none',
 		getQuestoesRequest: {
@@ -186,7 +176,7 @@ class Questoes extends Component {
 			}
 			
 			request = {
-				codigo: '',
+				codigos: [],
 				enade: '',
 				discursiva: '',
 				fonte: '',
