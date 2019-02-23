@@ -144,7 +144,6 @@ class NovoSimulado2 extends Component {
 
     componentWillUpdate(nextProps, nextState){
         if(this.state.firstTime){
-            
             if(nextState.selectedRowKeys.length !== this.state.newSelectedRowKeys && !nextState.selectAction){
                 var selectedRowKeys = this.state.selectedRowKeys
                 var alvos = this.props.simulado.alvos
@@ -415,7 +414,7 @@ class NovoSimulado2 extends Component {
                     this.props.setSimuladoAlvo(selectedRows)
 
                     selectedRowKeys.push(record.key)
-                    this.setState({ selectedRowKeys });
+                    this.setState({ selectedRowKeys, showWarning: false });
                 }
                 // Dermarcação
                 else{
@@ -466,7 +465,7 @@ class NovoSimulado2 extends Component {
                                     minHeight: 'calc(100% - 8px)'
                                 }}
                             >
-                                <WarningMessage message="Nenhuma Público Alvo selecionado" type="error" visible={this.state.showWarning} />
+                                <WarningMessage message="Nenhum Público Alvo selecionado" type="error" visible={this.state.showWarning} />
                                 {
                                     this.props.simulado.alvos.map(alvo => {
                                         return (

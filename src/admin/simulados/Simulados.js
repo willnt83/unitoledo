@@ -76,10 +76,8 @@ class Simulados extends Component {
             disciplinas: disciplinas
         }
 
-        console.log('getAllSimulado request', request)
         axios.post('http://localhost:5000/api/getAllSimulado', request)
         .then(res => {
-            console.log('getAllSimulado response', res.data)
             var inicio = null
             var termino = null
             var situacao = null

@@ -34,6 +34,10 @@ const simNaoOptions = [
 ]
 
 const anoOptions = [
+    {
+        key: "2019",
+        description: "2019"
+    },
 	{
 		key: "2018",
 		description: "2018"
@@ -88,7 +92,35 @@ class NovoSimulado3 extends Component {
     state = {
         buttonLoadingBuscar: false,
         questoes: null,
-        quantidadeQuestoesSelecionadas: 'Questões'
+        quantidadeQuestoesSelecionadas: 'Questões',
+        mode: null
+    }
+
+    getQuestoes = (request) => {
+        this.setState({buttonLoadingBuscar: true})
+        axios.post('http://localhost:5000/api/getQuestoesSimulado', request)
+        .then(res => {
+            console.log('getQuestoes response', res.data)
+            var questoes = []
+            // Edição
+            if(this.state.mode === 'edit'){
+                questoes = res.data.filter(questao => {
+                    var hit = false
+                    this.props.simulado.questoes.forEach(questaoSelecionada => {
+                        if(questao.id === questaoSelecionada)
+                            hit = true
+                    })
+                    return hit
+                })
+            }
+            // Criação
+            else
+                questoes = res.data
+            this.setState({questoes, buttonLoadingBuscar: false})
+        })
+        .catch(error =>{
+            console.log(error)
+        })
     }
 
     componentWillReceiveProps(props) {
@@ -99,12 +131,31 @@ class NovoSimulado3 extends Component {
         }
     }
 
+    componentWillMount(){
+        // Se for edição e existir questões selecionadas
+        if(this.props.simulado.questoes.length > 0){
+            this.setState({mode: 'edit'})
+            var request = {
+                codigo: '',
+                enade: '',
+                discursiva: '',
+                fonte: '',
+                habilidades: [],
+                conteudos: [],
+                areaConhecimentos: [],
+                anos: [],
+                tipo: {
+                    id: 0
+                }
+            }
+            this.getQuestoes(request)
+        }
+    }
+
     handleSearchSubmit = (event) => {
-        this.setState({buttonLoadingBuscar: true})
         event.preventDefault()
         var request = null
         this.props.form.validateFieldsAndScroll((err, values) => {
-            console.log('values', values)
             if(!err){
                 var codigo = null
                 var habilidades = []
@@ -168,17 +219,7 @@ class NovoSimulado3 extends Component {
                         id: tipo
                     }
                 }
-
-                console.log('request', request)
-        
-                axios.post('http://localhost:5000/api/getQuestoesSimulado', request)
-                .then(res => {
-                    console.log('response', res.data)
-                    this.setState({questoes: res.data, buttonLoadingBuscar: false})
-                })
-                .catch(error =>{
-                    console.log(error)
-                })
+                this.getQuestoes(request)
             }
             else{
                 console.log('erro', err)

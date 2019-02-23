@@ -1,5 +1,5 @@
 import React, { Component } from "react"
-import { Layout, Table, Icon, Popconfirm, Form, Input, Button, Row, Col, Select } from "antd"
+import { Layout, Table, Icon, Popconfirm, Form, Button, Row, Col, Select } from "antd"
 import { withStyles } from "@material-ui/core/styles"
 import BackEndRequests from '../hocs/BackEndRequests'
 import { connect } from 'react-redux'
@@ -221,11 +221,7 @@ class Questoes extends Component {
 	}
 
 	render() {
-		const { classes } = this.props
 		const { getFieldDecorator } = this.props.form
-
-		console.log('this.props.questoes', this.props.questoes)
-
 		const columns = [
 			{
 				title: "ID",
@@ -235,75 +231,7 @@ class Questoes extends Component {
 			{
 				title: "Descrição",
 				dataIndex: "description",
-				sorter: (a, b) => this.compareByAlph(a.description, b.description)/*,
-				filterDropdown: ({
-					setSelectedKeys,
-					selectedKeys,
-					confirm,
-					clearFilters
-				}) => (
-					<div className={classes.customFilterDropdown}>
-					<Input
-						className={classes.customFilterDropdownInput}
-						ref={ele => (this.searchInput = ele)}
-						placeholder="Buscar"
-						value={selectedKeys[0]}
-						onChange={e =>
-							setSelectedKeys(e.target.value ? [e.target.value] : [])
-						}
-						onPressEnter={this.handleSearch(selectedKeys, confirm)}
-					/>
-					<Button
-						className={classes.customFilterDropdownButton}
-						type="primary"
-						onClick={this.handleSearch(selectedKeys, confirm)}
-					>
-						Buscar
-					</Button>
-					<Button
-						className={classes.customFilterDropdownButton}
-						onClick={this.handleReset(clearFilters)}
-					>
-						Limpar
-					</Button>
-					</div>
-				),
-				filterIcon: filtered => (
-					<Icon
-						type="search"
-						style={{ color: filtered ? "#108ee9" : "#aaa" }}
-					/>
-				),
-				onFilter: (value, record) =>
-					record.description.toLowerCase().includes(value.toLowerCase()),
-				onFilterDropdownVisibleChange: visible => {
-					if (visible) {
-						setTimeout(() => {
-							this.searchInput.focus()
-						})
-					}
-				},
-				render: text => {
-					const { searchText } = this.state
-					return searchText ? (
-					<span>
-						{text
-						.split(new RegExp(`(?<=${searchText})|(?=${searchText})`, "i"))
-						.map(
-							(fragment, i) =>
-							fragment.toLowerCase() === searchText.toLowerCase() ? (
-								<span key={i} className="highlight">
-								{fragment}
-								</span>
-							) : (
-								fragment
-							) // eslint-disable-line
-						)}
-					</span>
-					) : (
-					text
-					)
-				}*/
+				sorter: (a, b) => this.compareByAlph(a.description, b.description),
 			},
 			{
 				title: "Habilidade",
