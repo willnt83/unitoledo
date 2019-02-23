@@ -3,6 +3,7 @@ import { Layout, Row, Col, Button, Form, Input, Card, Select, Icon } from "antd"
 import { Link } from "react-router-dom"
 import axios from "axios"
 import { connect } from 'react-redux'
+import moment from 'moment'
 import SimuladoSteps from './SimuladoSteps'
 import SelecaoQuestoes from './SelecaoQuestoes'
 import BackEndRequests from '../hocs/BackEndRequests'
@@ -33,53 +34,6 @@ const simNaoOptions = [
 	}
 ]
 
-const anoOptions = [
-    {
-        key: "2019",
-        description: "2019"
-    },
-	{
-		key: "2018",
-		description: "2018"
-	},
-	{
-		key: "2017",
-		description: "2017"
-	},
-	{
-		key: "2016",
-		description: "2016"
-	},
-	{
-		key: "2015",
-		description: "2015"
-	},
-	{
-		key: "2014",
-		description: "2014"
-	},
-	{
-		key: "2013",
-		description: "2013"
-	},
-	{
-		key: "2012",
-		description: "2012"
-	},
-	{
-		key: "2011",
-		description: "2011"
-	},
-	{
-		key: "2010",
-		description: "2010"
-	},
-	{
-		key: "2009",
-		description: "2009"
-	}
-]
-
 class NovoSimulado3 extends Component {
     constructor(props) {
         super()
@@ -93,14 +47,14 @@ class NovoSimulado3 extends Component {
         buttonLoadingBuscar: false,
         questoes: null,
         quantidadeQuestoesSelecionadas: 'Questões',
-        mode: null
+        mode: null,
+        anoOptions: []
     }
 
     getQuestoes = (request) => {
         this.setState({buttonLoadingBuscar: true})
         axios.post('http://localhost:5000/api/getQuestoesSimulado', request)
         .then(res => {
-            console.log('getQuestoes response', res.data)
             var questoes = []
             // Edição
             if(this.state.mode === 'edit'){
@@ -132,6 +86,23 @@ class NovoSimulado3 extends Component {
     }
 
     componentWillMount(){
+        // Construindo opções de seleção do campo Ano
+        var currDate = moment()
+        var anoOptions = []
+        var i = 0
+        while(i < 10){
+            anoOptions.push({
+                key: i,
+                value: currDate.format('YYYY'),
+                description: currDate.format('YYYY')
+                
+            })
+            currDate = currDate.subtract(1, 'years')
+            i++
+        }
+        this.setState({anoOptions})
+
+
         // Se for edição e existir questões selecionadas
         if(this.props.simulado.questoes.length > 0){
             //this.setState({mode: 'edit'})
@@ -234,7 +205,7 @@ class NovoSimulado3 extends Component {
         return(
             <React.Fragment>
                 <SimuladoSteps step={2} />
-                <Row type="flex">
+                <Row type="flex" style={{display: 'flex'}}>
                     <Col span={8}>
                         <Card
                             title="Filtros"
@@ -243,7 +214,7 @@ class NovoSimulado3 extends Component {
                                 margin: "4px 4px 4px 16px",
                                 padding: 24,
                                 background: "#fff",
-                                maxHeight: '100%'
+                                maxHeight: '1053px'
                             }}
                         >
                             <Form layout="vertical" onSubmit={this.handleSearchSubmit}>
@@ -320,8 +291,8 @@ class NovoSimulado3 extends Component {
                                             placeholder="Anos"
                                         >
                                             {
-                                                anoOptions.map((item) => {
-                                                    return (<Option key={item.key}>{item.description}</Option>)
+                                                this.state.anoOptions.map((item) => {
+                                                    return (<Option key={item.key} value={item.value}>{item.description}</Option>)
                                                 })
                                             }
                                         </Select>
@@ -382,7 +353,8 @@ class NovoSimulado3 extends Component {
                                 margin: "4px 16px 4px 4px",
                                 padding: 24,
                                 background: "#fff",
-                                height: 'calc(100% - 8px)'
+                                height: '1053px',
+                                overflowY: 'scroll'
                             }}
                         >
                             <SelecaoQuestoes questoes={this.state.questoes} mode='edit' />

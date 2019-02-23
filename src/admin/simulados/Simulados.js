@@ -42,6 +42,7 @@ class Simulados extends Component {
                 idCurso: turma.idCurso
             })
         })
+        /*
         .filter(turma => {
             var hit = true
             this.props.mainData.cursos.forEach(curso => {
@@ -50,6 +51,7 @@ class Simulados extends Component {
             })
             return hit
         })
+        */
 
 
         var disciplinas = this.props.mainData.disciplinas
@@ -61,6 +63,7 @@ class Simulados extends Component {
                 idTurma: disciplina.idTurma
             })
         })
+        /*
         .filter(disciplina => {
             var hit = true
             this.props.mainData.turmas.forEach(turma => {
@@ -69,6 +72,7 @@ class Simulados extends Component {
             })
             return hit
         })
+        */
 
         var request = {
             cursos: cursos,

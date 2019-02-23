@@ -232,7 +232,6 @@ function BackEndRequestsWrapper(WrappedComponent) {
 		getQuestoes = (request) => {
 			axios.post('http://localhost:5000/api/getQuestoesSimulado', request)
 			.then(res => {
-				console.log('getQuestoes response', res.data)
 				var labelStatus = null
 				var tempArray = res.data.map(questao => {
 					labelStatus = questao.status === true ? 'Ativo' : 'Inativo'
