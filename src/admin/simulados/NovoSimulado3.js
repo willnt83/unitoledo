@@ -1,11 +1,12 @@
 import React, { Component } from "react"
 import { Layout, Row, Col, Button, Form, Input, Card, Select, Icon } from "antd"
-import { Link } from "react-router-dom"
+import { Link, withRouter } from "react-router-dom"
 import axios from "axios"
 import { connect } from 'react-redux'
 import moment from 'moment'
 import SimuladoSteps from './SimuladoSteps'
 import SelecaoQuestoes from './SelecaoQuestoes'
+import WarningMessage from './WarningMessage'
 import BackEndRequests from '../hocs/BackEndRequests'
 
 const { Content } = Layout
@@ -48,7 +49,8 @@ class NovoSimulado3 extends Component {
         questoes: null,
         quantidadeQuestoesSelecionadas: 'Questões',
         mode: null,
-        anoOptions: []
+        anoOptions: [],
+        showWarning: false
     }
 
     getQuestoes = (request) => {
@@ -198,6 +200,14 @@ class NovoSimulado3 extends Component {
                 this.setState({buttonLoadingBuscar: false})
             }
         })
+    }
+
+    handleProximoButton = () => {
+        if(this.props.simulado.questoes.length === 0){
+            this.setState({showWarning: true})
+        }
+        else
+            this.props.history.push('/admin/simulados/novo/step-4')
     }
 
     render(){
@@ -357,6 +367,7 @@ class NovoSimulado3 extends Component {
                                 overflowY: 'scroll'
                             }}
                         >
+                            <WarningMessage message="Nenhuma questão selecionada" type="error" visible={this.state.showWarning} style={{marginBottom: 10}}/>
                             <SelecaoQuestoes questoes={this.state.questoes} mode='edit' />
                         </Card>
                     </Col>
@@ -377,7 +388,7 @@ class NovoSimulado3 extends Component {
                                     <Link to="/admin/simulados/novo/step-2"><Button type="default"><Icon type="left" />Anterior</Button></Link>
                                 </Col>
                                 <Col span={12} align="end">
-                                    <Link to="/admin/simulados/novo/step-4"><Button type="primary">Próximo<Icon type="right" /></Button></Link>
+                                    <Button type="primary" onClick={this.handleProximoButton}>Próximo<Icon type="right" /></Button>
                                 </Col>
                             </Row>
                         </Content>
@@ -405,4 +416,4 @@ const mapDispatchToProps = (dispatch) => {
     }
 }
 
-export default connect(MapStateToProps, mapDispatchToProps)(BackEndRequests(Form.create()(NovoSimulado3)))
+export default connect(MapStateToProps, mapDispatchToProps)(BackEndRequests(Form.create()(withRouter(NovoSimulado3))))

@@ -63,6 +63,7 @@ class NovoSimulado1 extends Component {
                                         id="nome"
                                         placeholder="Digite o nome do simulado"
                                         onChange={this.handleInput}
+                                        autoFocus={true}
                                     />
                                 )}
                             </FormItem>

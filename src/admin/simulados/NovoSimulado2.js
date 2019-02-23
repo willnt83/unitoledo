@@ -465,7 +465,7 @@ class NovoSimulado2 extends Component {
                                     minHeight: 'calc(100% - 8px)'
                                 }}
                             >
-                                <WarningMessage message="Nenhum Público Alvo selecionado" type="error" visible={this.state.showWarning} />
+                                <WarningMessage message="Nenhum público alvo selecionado" type="error" visible={this.state.showWarning} />
                                 {
                                     this.props.simulado.alvos.map(alvo => {
                                         return (
