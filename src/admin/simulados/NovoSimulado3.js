@@ -55,7 +55,7 @@ class NovoSimulado3 extends Component {
 
     getQuestoes = (request) => {
         this.setState({buttonLoadingBuscar: true})
-        axios.post('http://localhost:5000/api/getQuestoesSimulado', request)
+        axios.post('http://localhost:5000/api/getQuestoesSimulado/simulado', request)
         .then(res => {
             var questoes = []
             // Edição

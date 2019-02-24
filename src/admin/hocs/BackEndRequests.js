@@ -230,7 +230,7 @@ function BackEndRequestsWrapper(WrappedComponent) {
 
 
 		getQuestoes = (request) => {
-			axios.post('http://localhost:5000/api/getQuestoesSimulado', request)
+			axios.post('http://localhost:5000/api/getQuestoesSimulado/questao', request)
 			.then(res => {
 				var labelStatus = null
 				var tempArray = res.data.map(questao => {
@@ -292,15 +292,26 @@ function BackEndRequestsWrapper(WrappedComponent) {
 		}
 
 		deleteQuestao = (id) => {
+			console.log('delete questao id: ', id)
 			axios
 			.post('http://localhost:5000/api/deleteQuestao', { id: id })
 			.then(res => {
-				this.setState({
-					deleteQuestaoResponse: {
-						success: true,
-						message: 'Questão removida com sucesso.'
-					}
-				})
+				if(res.data.success){
+					this.setState({
+						deleteQuestaoResponse: {
+							success: true,
+							message: 'Questão removida com sucesso.'
+						}
+					})
+				}
+				else{
+					this.setState({
+						deleteQuestaoResponse: {
+							success: false,
+							message: 'Não é possível remover questão que está vinculada a algum simulado.'
+						}
+					})
+				}
 			})
 			.catch(error => {
 				console.log(error)

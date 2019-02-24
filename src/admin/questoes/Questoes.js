@@ -1,5 +1,5 @@
 import React, { Component } from "react"
-import { Layout, Table, Icon, Popconfirm, Form, Button, Row, Col, Select } from "antd"
+import { Layout, Table, Icon, Popconfirm, Form, Button, Row, Col, Select, notification } from "antd"
 import { withStyles } from "@material-ui/core/styles"
 import BackEndRequests from '../hocs/BackEndRequests'
 import { connect } from 'react-redux'
@@ -150,6 +150,15 @@ class Questoes extends Component {
 		})
 	}
 
+	openNotificationError = (message) => {
+        const args = {
+            message: message,
+            icon: <Icon type="stop" style={{color: '#f5222d', fontWeight: '800'}} />,
+            duration: 0
+        }
+        notification.open(args)
+    }
+
 	handleSearchSubmit = (event) => {
 		event.preventDefault()
 		this.setState({buttonLoadingBuscar: true, tableLoading: true})
@@ -200,7 +209,12 @@ class Questoes extends Component {
 		if(nextProps.deleteQuestaoResponse && nextProps.deleteQuestaoResponse !== this.props.deleteQuestaoResponse){
 			if(nextProps.deleteQuestaoResponse.success){
 				this.handleGetQuestoes()
-            }
+			}
+			else{
+				// Exibir mensagem de erro de remoção
+				this.openNotificationError(nextProps.deleteQuestaoResponse.message)
+				this.setState({tableLoading: false})
+			}
 		}
 
 		// Tratando response da getQuestoes
@@ -211,6 +225,7 @@ class Questoes extends Component {
 	}
 
 	render() {
+		console.log('this.props.questoes', this.props.questoes)
 		const { getFieldDecorator } = this.props.form
 		const columns = [
 			{
@@ -274,7 +289,7 @@ class Questoes extends Component {
 						/>
 						<Popconfirm
 							title="Confirmar remoção?"
-							onConfirm={() => this.handleDeleteQuestao(record.id)}
+							onConfirm={() => this.handleDeleteQuestao(record.key)}
 						>
 							<a href="/admin/cadastros/questoes" style={{ marginLeft: 20 }}>
 								<Icon type="delete" style={{ color: "red" }} />
