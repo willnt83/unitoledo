@@ -81,12 +81,22 @@ function BackEndRequestsWrapper(WrappedComponent) {
 		deleteHabilidade = (id) => {
 			axios.post('http://localhost:5000/api/deleteHabilidade', { id: id })
 			.then(res => {
-				this.setState({
-					deleteHabilidadeResponse: {
-						success: true,
-						message: 'Habilidade removida com sucesso.'
-					}
-				})
+				if(res.data.success){
+					this.setState({
+						deleteHabilidadeResponse: {
+							success: true,
+							message: 'Habilidade removida com sucesso.'
+						}
+					})
+				}
+				else{
+					this.setState({
+						deleteHabilidadeResponse: {
+							success: false,
+							message: res.data.message
+						}
+					})
+				}
 			})
 			.catch(error =>{
 				console.log(error)
@@ -161,12 +171,22 @@ function BackEndRequestsWrapper(WrappedComponent) {
 		deleteConteudo = (id) => {
 			axios.post('http://localhost:5000/api/deleteConteudo', {id: id})
 			.then(res => {
-				this.setState({
-					deleteConteudoResponse: {
-						success: true,
-						message: 'Conteúdo removido com sucesso.'
-					}
-				})
+				if(res.data.success){
+					this.setState({
+						deleteConteudoResponse: {
+							success: true,
+							message: 'Conteúdo removido com sucesso.'
+						}
+					})
+				}
+				else{
+					this.setState({
+						deleteConteudoResponse: {
+							success: false,
+							message: res.data.message
+						}
+					})
+				}
 			})
 			.catch(error =>{
 				console.log(error)
@@ -242,12 +262,22 @@ function BackEndRequestsWrapper(WrappedComponent) {
 		deleteAreaDeConhecimento = (id) => {
 			axios.post('http://localhost:5000/api/deleteAreaConhecimento', { id: id })
 			.then(res => {
-				this.setState({
-					deleteAreaDeConhecimentoResponse: {
-						success: true,
-						message: 'Área de conhecimento removida com sucesso.'
-					}
-				})
+				if(res.data.success){
+					this.setState({
+						deleteAreaDeConhecimentoResponse: {
+							success: true,
+							message: 'Área de conhecimento removida com sucesso.'
+						}
+					})
+				}
+				else{
+					this.setState({
+						deleteAreaDeConhecimentoResponse: {
+							success: false,
+							message: res.data.message
+						}
+					})
+				}
 			})
 			.catch(error =>{
 				console.log(error)

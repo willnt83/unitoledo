@@ -180,7 +180,10 @@ class Habilidades extends Component {
         if(nextProps.deleteHabilidadeResponse && nextProps.deleteHabilidadeResponse !== this.props.deleteHabilidadeResponse){
 			if(nextProps.deleteHabilidadeResponse.success){
 				this.handleGetHabilidades()
-			}
+            }
+            else{
+                this.openNotificationError(nextProps.deleteHabilidadeResponse.message)
+            }
         }
     }
 

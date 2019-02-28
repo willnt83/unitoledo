@@ -169,7 +169,10 @@ class AreasDeConhecimento extends Component {
         if(nextProps.deleteAreaDeConhecimentoResponse && nextProps.deleteAreaDeConhecimentoResponse !== this.props.deleteAreaDeConhecimentoResponse){
 			if(nextProps.deleteAreaDeConhecimentoResponse.success){
 				this.handleGetAreasDeConhecimento()
-			}
+            }
+            else{
+                this.openNotificationError(nextProps.deleteAreaDeConhecimentoResponse.message)
+            }
 		}
     }
 

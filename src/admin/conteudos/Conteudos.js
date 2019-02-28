@@ -175,7 +175,10 @@ class Conteudos extends Component {
         if(nextProps.deleteConteudoResponse && nextProps.deleteConteudoResponse !== this.props.deleteConteudoResponse){
 			if(nextProps.deleteConteudoResponse.success){
 				this.handleGetConteudos()
-			}
+            }
+            else{
+                this.openNotificationError(nextProps.deleteConteudoResponse.message)
+            }
 		}
     }
 
