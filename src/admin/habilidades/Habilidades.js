@@ -176,6 +176,7 @@ class Habilidades extends Component {
 			}
         }
         
+        
         // Tratando response da requisição deleteHabilidade
         if(nextProps.deleteHabilidadeResponse && nextProps.deleteHabilidadeResponse !== this.props.deleteHabilidadeResponse){
 			if(nextProps.deleteHabilidadeResponse.success){

@@ -290,7 +290,6 @@ function BackEndRequestsWrapper(WrappedComponent) {
 			})
 		}
 
-
 		getQuestoes = (request) => {
 			axios.post('http://localhost:5000/api/getQuestoesSimulado/questao', request)
 			.then(res => {

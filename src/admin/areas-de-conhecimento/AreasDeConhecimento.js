@@ -165,6 +165,7 @@ class AreasDeConhecimento extends Component {
 			}
         }
         
+        
         // Tratando response da requisição deleteAreaDeConhecimento
         if(nextProps.deleteAreaDeConhecimentoResponse && nextProps.deleteAreaDeConhecimentoResponse !== this.props.deleteAreaDeConhecimentoResponse){
 			if(nextProps.deleteAreaDeConhecimentoResponse.success){

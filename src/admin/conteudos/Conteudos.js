@@ -171,6 +171,7 @@ class Conteudos extends Component {
 			}
         }
         
+        
         // Tratando response da requisição deleteConteudo
         if(nextProps.deleteConteudoResponse && nextProps.deleteConteudoResponse !== this.props.deleteConteudoResponse){
 			if(nextProps.deleteConteudoResponse.success){
