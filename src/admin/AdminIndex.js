@@ -84,11 +84,6 @@ const routes = [
     path: "/admin/meus-alunos",
     sidebar: () => <div>Cadastro/Conteudo</div>,
     main: () => <h1>Meus Alunos</h1>
-  },
-  {
-    path: "/admin/editar-perfil",
-    sidebar: () => <div>Cadastro/Conteudo</div>,
-    main: () => <h1>Editar Perfil</h1>
   }
 ];
 

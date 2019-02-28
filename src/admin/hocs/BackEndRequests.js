@@ -50,12 +50,22 @@ function BackEndRequestsWrapper(WrappedComponent) {
 		createUpdateHabilidade = (request) => {
 			axios.post('http://localhost:5000/api/createUpdateHabilidade', request)
 			.then(res => {
-				this.setState({
-					createUpdateHabilidadeResponse: {
-						success: true,
-						message: 'Habilidade cadastrada / atualizada com sucesso.'
-					}
-				})
+				if(res.data.success){
+					this.setState({
+						createUpdateHabilidadeResponse: {
+							success: true,
+							message: 'Habilidade cadastrada / atualizada com sucesso.'
+						}
+					})
+				}
+				else{
+					this.setState({
+						createUpdateHabilidadeResponse: {
+							success: false,
+							message: res.data.message
+						}
+					})
+				}
 			})
 			.catch(error =>{
 				console.log(error)
@@ -119,12 +129,23 @@ function BackEndRequestsWrapper(WrappedComponent) {
 		createUpdateConteudo = (request) => {
 			axios.post('http://localhost:5000/api/createUpdateConteudo', request)
 			.then(res => {
-				this.setState({
-					createUpdateConteudoResponse: {
-						success: true,
-						message: 'Habilidade cadastrada / atualizada com sucesso.'
-					}
-				})
+				console.log('response conteudo', res.data)
+				if(res.data.success){
+					this.setState({
+						createUpdateConteudoResponse: {
+							success: true,
+							message: 'Conteúdo cadastrado / atualizado com sucesso.'
+						}
+					})
+				}
+				else{
+					this.setState({
+						createUpdateConteudoResponse: {
+							success: false,
+							message: res.data.message
+						}
+					})
+				}
 			})
 			.catch(error =>{
 				console.log(error)
@@ -189,12 +210,23 @@ function BackEndRequestsWrapper(WrappedComponent) {
 		createUpdateAreaDeConhecimento = (request) => {
 			axios.post('http://localhost:5000/api/createUpdateAreaConhecimento', request)
 			.then(res => {
-				this.setState({
-					createUpdateAreaDeConhecimentoResponse: {
-						success: true,
-						message: 'Área de conhecimento cadastrada / atualizada com sucesso.'
-					}
-				})
+				if(res.data.success){
+					this.setState({
+						createUpdateAreaDeConhecimentoResponse: {
+							success: true,
+							message: 'Área de conhecimento cadastrada / atualizada com sucesso.'
+						}
+					})
+				}
+				else{
+					this.setState({
+						createUpdateAreaDeConhecimentoResponse: {
+							success: false,
+							message: res.data.message
+						}
+					})
+				}
+
 			})
 			.catch(error =>{
 				console.log(error)

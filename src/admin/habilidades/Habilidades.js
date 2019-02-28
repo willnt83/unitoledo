@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import { Layout, Table, Icon, Popconfirm, Modal, Input, Button, Row, Col } from 'antd'
+import { Layout, Table, Icon, Popconfirm, Modal, Input, Button, Row, Col, notification } from 'antd'
 import { TextField, MenuItem } from '@material-ui/core/'
 import { withStyles } from '@material-ui/core/styles'
 import BackEndRequests from '../hocs/BackEndRequests'
@@ -170,6 +170,7 @@ class Habilidades extends Component {
 				this.handleGetHabilidades()
 			}
 			else{
+                this.openNotificationError(nextProps.createUpdateHabilidadeResponse.message)
 				this.resetInputStates();
 				this.hideHabilidadesModal()
 			}
@@ -181,6 +182,15 @@ class Habilidades extends Component {
 				this.handleGetHabilidades()
 			}
         }
+    }
+
+    openNotificationError = (message) => {
+        const args = {
+            message: message,
+            icon: <Icon type="stop" style={{color: '#f5222d', fontWeight: '800'}} />,
+            duration: 0
+        }
+        notification.open(args)
     }
 
     render(){

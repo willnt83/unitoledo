@@ -87,13 +87,7 @@ class ListMenu extends Component {
                             <span>Meus Alunos</span>
                         </Link>
                     </Menu.Item>
-                    <Menu.Item key="10">
-                        <Link to="/admin/editar-perfil">
-                            <Icon type="edit" />
-                            <span>Editar Perfil</span>
-                        </Link>
-                    </Menu.Item>
-                    <Menu.Item key="11" onClick={() => this.logout()}>
+                    <Menu.Item key="10" onClick={() => this.logout()}>
                         <Icon type="export" />
                         <span>Sair</span>
                     </Menu.Item>
