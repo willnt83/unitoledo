@@ -320,7 +320,7 @@ class Simulados extends Component {
                             <Button className="actionButton" title="Editar" type="primary" onClick={() => this.editSimulados(record)}><Icon type="edit" /></Button>
                             <Button className="actionButton buttonRed" title="Excluir"><Icon type="delete" /></Button>
                         </React.Fragment>
-					);
+					)
 				}
 			}
         ]

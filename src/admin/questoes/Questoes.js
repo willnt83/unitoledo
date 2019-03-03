@@ -58,7 +58,7 @@ class Questoes extends Component {
 		mode: null,
 		tableDisplay: 'none',
 		getQuestoesRequest: {
-			codigo: '',
+			codigos: [],
 			enade: '',
 			discursiva: '',
 			fonte: '',
@@ -225,7 +225,6 @@ class Questoes extends Component {
 	}
 
 	render() {
-		console.log('this.props.questoes', this.props.questoes)
 		const { getFieldDecorator } = this.props.form
 		const columns = [
 			{

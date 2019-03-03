@@ -331,7 +331,6 @@ function BackEndRequestsWrapper(WrappedComponent) {
 		}
 
 		createUpdateQuestao = (request) => {
-			console.log('createUpdateQuestao', request)
 			axios.post('http://localhost:5000/api/createUpdateQuestao', request)
 			.then(res => {
 				this.setState({
@@ -353,7 +352,6 @@ function BackEndRequestsWrapper(WrappedComponent) {
 		}
 
 		deleteQuestao = (id) => {
-			console.log('delete questao id: ', id)
 			axios
 			.post('http://localhost:5000/api/deleteQuestao', { id: id })
 			.then(res => {

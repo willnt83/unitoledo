@@ -120,7 +120,8 @@ class ModalCadastro extends Component {
         alternativasTooltipVisible: false,
         file: null,
         fileBase64: null,
-        receivedFile: null
+        receivedFile: null,
+        resetAlternativasForm : false
     }
 
     stringToBool = (str) => {
@@ -129,13 +130,25 @@ class ModalCadastro extends Component {
 
     handleDiscursivaChange = (value) => {
         value = value === 1 ? true : false
-		this.setState({alternativaCorretaDisabled: value, alternativasTooltipVisible: false})
+		this.setState({
+            alternativaCorretaDisabled: value,
+            alternativasTooltipVisible: false
+        })
+
+        // Se alterar para Discursiva = Sim
+        if(value){
+            this.setState({
+                alternativas: [],
+                alternativaCorreta: null
+            })
+        }
     }
 
     handleSubmitCadastro = (event) => {
         event.preventDefault()
         this.props.form.validateFieldsAndScroll((err, values) => {
             var discursiva = this.stringToBool(values.discursiva)
+            /*
             var alternativas = []
             if(!discursiva){
                 // Se não for discursiva
@@ -145,6 +158,7 @@ class ModalCadastro extends Component {
                 // Limpa state.alternativas
                 this.setState({alternativas: []})
             }
+            */
 
             if(!err){
                 let request = {
@@ -166,7 +180,7 @@ class ModalCadastro extends Component {
                     "areaConhecimento": {
                         "id": values.areaDeConhecimento
                     },
-                    "alternativas" : alternativas,
+                    "alternativas" : this.state.alternativas,
                     "tipo": {
                         "id": values.tipo
                     }
@@ -203,10 +217,16 @@ class ModalCadastro extends Component {
         this.setState({
             questaoId: '',
             alternativaCorreta: null,
-            alternativas: []
+            alternativas: [],
+            file: null,
+            resetAlternativasForm: true
         })
 
         this.props.hideModalCadastro()
+    }
+
+    updateResetAlternativasFormState = (val) => {
+        this.setState({resetAlternativasForm: val})
     }
 
     showHideModalAlternativas = (bool) => {
@@ -246,6 +266,15 @@ class ModalCadastro extends Component {
 
     openImage = (image) => {
         window.open(image, '_blank');
+    }
+
+    removeImage = () => {
+        console.log('removeImage...')
+        this.setState({
+            file: null,
+            fileBase64: null,
+            receivedFile: null
+        })
     }
 
     componentWillMount(){
@@ -342,6 +371,9 @@ class ModalCadastro extends Component {
                                 onClick={() => this.openImage(this.state.fileBase64)}
                             />
                         </div>
+                    </div>
+                    <div>
+                        <Button className="buttonRed" onClick={this.removeImage}><Icon type="delete" />Remover Imagem</Button>
                     </div>
                 </aside>
         }
@@ -642,6 +674,9 @@ class ModalCadastro extends Component {
                     alternativas={this.state.alternativas}
                     alternativaCorreta={this.state.alternativaCorreta}
                     mode={this.props.mode}
+                    resetAlternativasForm={this.state.resetAlternativasForm}
+                    updateResetAlternativasFormState={this.updateResetAlternativasFormState}
+
                 />
             </React.Fragment>
         )

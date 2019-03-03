@@ -28,8 +28,14 @@ const alternativaOptions = [
 class ModalAlternativas extends Component {
     componentWillUpdate(nextProps, nextState){
         // Reset nos fields na criação da questão
+        /*
         if(this.props.mode !== nextProps.mode && nextProps.mode === 'create'){
             this.props.form.resetFields()
+        }
+        */
+        if(nextProps.resetAlternativasForm){
+            this.props.form.resetFields()
+            this.props.updateResetAlternativasFormState(false)
         }
 
         if(this.props.alternativaCorreta !== nextProps.alternativaCorreta && nextProps.alternativas.length > 0){

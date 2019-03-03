@@ -30,7 +30,7 @@ const initState = {
     flagSimuladoFinalizado: null,
     contextoAluno: null
     */
-
+    /*
     // Coordenador
     contexto: null,
     usuarioId: null,
@@ -60,8 +60,8 @@ const initState = {
     selectedQuestoes: [],
     flagSimuladoFinalizado: null,
     contextoAluno: null
+    */
 
-    /*
     // Original
     contexto: null,
     usuarioId: null,
@@ -91,7 +91,6 @@ const initState = {
     selectedQuestoes: [],
     flagSimuladoFinalizado: null, //flag necessária para contornar a inconsistencia da chamada getData :(
     contextoAluno: null // variável necessário para contornar a inconsitencia da chamada getData :(((((
-    */
 }
 
 const RootReducer = (state = initState, action) => {
@@ -175,7 +174,8 @@ const RootReducer = (state = initState, action) => {
                     data: null,
                     hora: null
                 }
-            }
+            },
+            selectedQuestoes: []
         }
     }
     else if(action.type === 'SET_SIMULADO_NOME'){

@@ -4,8 +4,8 @@ import { withRouter } from "react-router-dom"
 import { connect } from 'react-redux'
 import axios from 'axios'
 
-const { Content } = Layout;
-const Option = Select.Option;
+const { Content } = Layout
+const Option = Select.Option
 
 class ContextoSelection extends Component {
 	state =  {
@@ -19,7 +19,6 @@ class ContextoSelection extends Component {
 	}
 
 	handleSelectContextoChange = (value) => {
-		console.log('this.props.userInfos', this.props.userInfos)
 		this.setState({contexto: value})
 		if(value === 'COORDENADOR'){
 			var selectedContexto = null
@@ -82,7 +81,6 @@ class ContextoSelection extends Component {
 				if(userInfo.tipo === this.state.contexto){
 					userInfo.contextos.forEach(contexto => {
 						if(contexto.idPeriodoLetivo === parseInt(value)){
-							console.log('contexto...', contexto)
 							this.props.setContextoAluno(contexto)
 							this.setState({contextoData: contexto})
 						}
@@ -98,7 +96,7 @@ class ContextoSelection extends Component {
 	}
 
 	handleContextoSubmit = (event) => {
-		event.preventDefault();
+		event.preventDefault()
 		this.setState({ enviarButtonLoading : true})
 
 		var config = {
@@ -120,11 +118,8 @@ class ContextoSelection extends Component {
 			requestData = this.state.contextoData
 		}
 
-		console.log('getDataRequest', requestData)
-
 		axios.post('http://localhost:5000/api/getData', requestData, config)
 		.then(res => {
-			console.log('getData response', res.data)
 			this.props.setMainData(res.data)
 
 			if(this.state.periodo)
@@ -146,7 +141,7 @@ class ContextoSelection extends Component {
 	}
 
 	render () {
-		const { getFieldDecorator } = this.props.form;
+		const { getFieldDecorator } = this.props.form
 		return (
 			<Content
 				id="mainContent"

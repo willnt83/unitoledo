@@ -43,7 +43,7 @@ class NovoSimulado4 extends Component {
                 let dateTimeFinal = moment(dataFinal + ' ' + horarioFinal, 'YYYY/MM/DD HH:mm')
                 this.props.setStartFinish({dateTimeInicial: dateTimeInicial.format(), dateTimeFinal: dateTimeFinal.format()})
                 
-                rascunho = mode === rascunho ? true : false
+                rascunho = mode === 'rascunho' ? true : false
                 let questoes = this.props.simulado.questoes.map(questao => {
                     return(
                         {id: questao}
@@ -162,9 +162,10 @@ class NovoSimulado4 extends Component {
         Modal.success({
             title: 'Simulado criado com sucesso',
             onOk() {
+                props.resetSimulado()
                 props.history.push('/admin/simulados/')
             }
-        });
+        })
     }
 
     render(){
@@ -334,6 +335,7 @@ const MapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
     return {
         setPageTitle: (pageTitle) => { dispatch({ type: 'SET_PAGETITLE', pageTitle }) },
+        resetSimulado: () => { dispatch({ type: 'RESET_SIMULADO' }) },
         setStartFinish: (startFinish) => { dispatch({ type: 'SET_SIMULADOSTARTFINISH', startFinish }) },
 
     }
