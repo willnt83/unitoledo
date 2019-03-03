@@ -147,7 +147,6 @@ class Simulados extends Component {
     }
 
     newSimulado = () => {
-        this.props.resetSimulado()
         this.props.history.push('/admin/simulados/novo/step-1')
     }
 
@@ -262,12 +261,13 @@ class Simulados extends Component {
     }
 
     componentWillMount(){
+        this.props.resetSimulado()
         this.setState({tableLoading: true})
         this.getSimulados()
     }
 
     render(){
-        //console.log('props', this.props)
+        console.log('props', this.props)
         const columns = [
             {
 				title: "ID",

@@ -333,12 +333,23 @@ function BackEndRequestsWrapper(WrappedComponent) {
 		createUpdateQuestao = (request) => {
 			axios.post('http://localhost:5000/api/createUpdateQuestao', request)
 			.then(res => {
-				this.setState({
-					createUpdateQuestaoResponse: {
-						success: true,
-						message: 'Questão cadastrada / atualizada com sucesso.'
-					}
-				})
+				if(res.data.success){
+					this.setState({
+						createUpdateQuestaoResponse: {
+							success: true,
+							message: 'Questão cadastrada / atualizada com sucesso.'
+						}
+					})
+				}
+				else{
+					console.log('backendRequest erro no createUpdateQuestao')
+					this.setState({
+						createUpdateQuestaoResponse: {
+							success: false,
+							message: res.data.message
+						}
+					})
+				}
 			})
 			.catch(error =>{
 				console.log(error)
@@ -367,7 +378,7 @@ function BackEndRequestsWrapper(WrappedComponent) {
 					this.setState({
 						deleteQuestaoResponse: {
 							success: false,
-							message: 'Não é possível remover questão que está vinculada a algum simulado.'
+							message: res.data.message
 						}
 					})
 				}

@@ -58,8 +58,9 @@ class NovoSimulado3 extends Component {
         axios.post('http://localhost:5000/api/getQuestoesSimulado/simulado', request)
         .then(res => {
             var questoes = []
-            // Edição
+            /*
             if(this.state.mode === 'edit'){
+                console.log('edit...')
                 questoes = res.data.filter(questao => {
                     var hit = false
                     this.props.simulado.questoes.forEach(questaoSelecionada => {
@@ -70,8 +71,10 @@ class NovoSimulado3 extends Component {
                 })
             }
             // Criação
-            else
+            else{
+            */
                 questoes = res.data
+            //}
             this.setState({questoes, buttonLoadingBuscar: false})
         })
         .catch(error =>{
@@ -406,7 +409,8 @@ const MapStateToProps = (state) => {
 		areasDeConhecimento: state.areasDeConhecimento,
         questoes: state.questoes,
         simulado: state.simulado,
-        authHeaders: state.authHeaders
+        authHeaders: state.authHeaders,
+        selectedQuestoes: state.selectedQuestoes
 
 	}
 }

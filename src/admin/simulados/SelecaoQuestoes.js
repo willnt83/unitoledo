@@ -5,7 +5,8 @@ import BackEndRequests from '../hocs/BackEndRequests'
 
 class SelecaoQuestoes extends Component {
     state = {
-        questoes: []
+        questoes: [],
+        first: true
     }
 
     componentWillReceiveProps(props) {
@@ -13,6 +14,20 @@ class SelecaoQuestoes extends Component {
             this.setState({
                 questoes: props.questoes
             })
+        }
+    }
+
+    componentWillUpdate(nextProps, nextState){
+
+        if(nextState.first && nextProps.questoes !== null){
+            console.log('primeira vez...')
+            nextProps.questoes.forEach(questao => {
+                if(nextProps.simulado.questoes.indexOf(questao.id) > -1){
+                    console.log('inserindo questao na redux selectedQuestoes')
+                    //this.props.setSimuladoQuestao(questao)
+                }
+            })
+            this.setState({first: false})
         }
     }
 
@@ -27,23 +42,14 @@ class SelecaoQuestoes extends Component {
                             var alternativas = null
                             // Verificando se a questao já está selecionada
                             if(this.props.simulado.questoes){
-                                if(this.props.simulado.questoes.indexOf(questao.id) > -1) hit = true
+                                if(this.props.simulado.questoes.indexOf(questao.id) > -1){
+                                    hit = true
+                                }
                             }
                             if(this.props.mode === 'edit'){
                                 selectButton = (hit) ?
                                     <Button  className="buttonOrange" onClick={() => this.props.removeSimuladoQuestao(questao)}><Icon type="check" />Remover Seleção</Button>
                                     :<Button className="buttonGreen" onClick={() => this.props.setSimuladoQuestao(questao)}><Icon type="check" />Selecionar</Button>
-                                
-                                /*
-                                alternativas = (
-                                    questao.alternativas.map(alternativa => {
-                                        var correta = alternativa.correta ? 'correta' : 'errada'
-                                        return(
-                                            <p key={alternativa.id}><code className={correta}>{alternativa.descricao}</code></p>
-                                        )
-                                    })
-                                )
-                                */
                             }
                             return(
                                 <Row key={questao.id} style={{marginBottom: 20}}>

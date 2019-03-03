@@ -205,6 +205,7 @@ class Questoes extends Component {
 	}
 
 	componentWillUpdate(nextProps, nextState) {
+		//console.log('nextProps.createUpdateQuestaoResponse', nextProps.createUpdateQuestaoResponse)
 		// Tratando response da requisição deleteQuestao
 		if(nextProps.deleteQuestaoResponse && nextProps.deleteQuestaoResponse !== this.props.deleteQuestaoResponse){
 			if(nextProps.deleteQuestaoResponse.success){
@@ -225,6 +226,7 @@ class Questoes extends Component {
 	}
 
 	render() {
+		//console.log('this.props', this.props)
 		const { getFieldDecorator } = this.props.form
 		const columns = [
 			{

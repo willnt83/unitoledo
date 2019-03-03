@@ -1,5 +1,5 @@
 import React, { Component } from "react"
-import { Icon, Modal, Form, Input, Button,  Row, Col, Select, Tooltip } from "antd"
+import { Icon, Modal, Form, Input, Button,  Row, Col, Select, Tooltip, notification } from "antd"
 import { connect } from 'react-redux'
 import ModalAlternativas from './ModalAlternativas'
 import BackEndRequests from '../hocs/BackEndRequests'
@@ -269,12 +269,20 @@ class ModalCadastro extends Component {
     }
 
     removeImage = () => {
-        console.log('removeImage...')
         this.setState({
             file: null,
             fileBase64: null,
             receivedFile: null
         })
+    }
+
+    openNotificationError = (message) => {
+        const args = {
+            message: message,
+            icon: <Icon type="stop" style={{color: '#f5222d', fontWeight: '800'}} />,
+            duration: 0
+        }
+        notification.open(args)
     }
 
     componentWillMount(){
@@ -305,7 +313,7 @@ class ModalCadastro extends Component {
 				this.props.handleGetQuestoes()
 			}
 			else{
-				//this.resetInputStates()
+				this.openNotificationError(nextProps.createUpdateQuestaoResponse.message)
 				this.props.hideModalCadastro()
             }
             this.setState({buttonConfirmarLoading: false})
@@ -313,8 +321,9 @@ class ModalCadastro extends Component {
 
         // Populando campos do formulário
         if(nextProps.questao !== null && nextProps.questao !== this.props.questao){
-            console.log('nextProps.questao', nextProps.questao)
+            var status = nextProps.questao.valueStatus === true ? 'true' : 'false'
             var padraoEnade = nextProps.questao.valueEnade === true ? 'Sim' : 'Não'
+
             var discursiva = null
             if(nextProps.questao.valueDiscursiva === true){
                 discursiva = 1
@@ -330,7 +339,7 @@ class ModalCadastro extends Component {
                 habilidade: nextProps.questao.habilidadeId,
                 conteudo: nextProps.questao.conteudoId,
                 areaDeConhecimento: nextProps.questao.areaConhecimentoId,
-                status: nextProps.questao.labelStatus,
+                status: status,
                 padraoEnade: padraoEnade,
                 ano: nextProps.questao.valueAno,
                 descricao: nextProps.questao.description,
