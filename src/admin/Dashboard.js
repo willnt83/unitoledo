@@ -7,6 +7,7 @@ const { Content } = Layout
 
 class Dashboard extends Component {
     render(){
+        console.log('this.props.mainData', this.props.mainData)
         return(
             <Content
                 style={{
