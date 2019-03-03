@@ -266,6 +266,14 @@ const RootReducer = (state = initState, action) => {
             selectedQuestoes
         }
     }
+    else if(action.type === 'SET_SELECTEDQUESTAO'){
+        var selectedQuestoes = state.selectedQuestoes
+        selectedQuestoes.push(action.questao)
+        return{
+            ...state,
+            selectedQuestoes 
+        }
+    }
     else if(action.type === 'SET_SIMULADOSTARTFINISH'){
         return{
             ...state,

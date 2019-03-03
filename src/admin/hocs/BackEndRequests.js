@@ -342,7 +342,6 @@ function BackEndRequestsWrapper(WrappedComponent) {
 					})
 				}
 				else{
-					console.log('backendRequest erro no createUpdateQuestao')
 					this.setState({
 						createUpdateQuestaoResponse: {
 							success: false,

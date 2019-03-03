@@ -14,20 +14,23 @@ class SelecaoQuestoes extends Component {
             this.setState({
                 questoes: props.questoes
             })
-        }
-    }
 
-    componentWillUpdate(nextProps, nextState){
+            if(this.state.first){
+                props.questoes.forEach(questao => {
+                    // Verifica em redux.selectedQuestoes se a questão consta nele
+                    var hit = false
+                    this.props.selectedQuestoes.forEach(selectedQuestao => {
+                        if(selectedQuestao.id === questao.id){
+                            hit = true
+                        }
+                    })
 
-        if(nextState.first && nextProps.questoes !== null){
-            console.log('primeira vez...')
-            nextProps.questoes.forEach(questao => {
-                if(nextProps.simulado.questoes.indexOf(questao.id) > -1){
-                    console.log('inserindo questao na redux selectedQuestoes')
-                    //this.props.setSimuladoQuestao(questao)
-                }
-            })
-            this.setState({first: false})
+                    if(this.props.simulado.questoes.indexOf(questao.id) > -1 && !hit){
+                        this.props.setSelectedQuestao(questao)
+                    }
+                })
+                this.setState({first: false})
+            }
         }
     }
 
@@ -78,13 +81,15 @@ class SelecaoQuestoes extends Component {
 
 const MapStateToProps = (state) => {
 	return {
-        simulado: state.simulado
+        simulado: state.simulado,
+        selectedQuestoes: state.selectedQuestoes
 	}
 }
 
 const mapDispatchToProps = (dispatch) => {
     return {
         setSimuladoQuestao: (questao) => { dispatch({ type: 'SET_SIMULADOQUESTAO', questao }) },
+        setSelectedQuestao: (questao) => { dispatch({ type: 'SET_SELECTEDQUESTAO', questao }) },
         removeSimuladoQuestao: (questao) => { dispatch({ type: 'REMOVE_SIMULADOQUESTAO', questao }) }
     }
 }

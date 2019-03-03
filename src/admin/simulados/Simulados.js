@@ -228,7 +228,6 @@ class Simulados extends Component {
                 // Questões
                 var questoes = []
                 if(response.questoes.length > 0){
-
                     questoes = response.questoes.map(questao => {
                         return questao.id
                     })
