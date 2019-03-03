@@ -92,7 +92,7 @@ class AreasDeConhecimento extends Component {
 
     handleGetAreasDeConhecimento = () => {
         this.setState({ tableLoading: true })
-        this.props.getAreasDeConhecimento()
+        this.props.getAreasDeConhecimento('')
     }
 
     handleCreateUpdateAreaDeConhecimento = () => {

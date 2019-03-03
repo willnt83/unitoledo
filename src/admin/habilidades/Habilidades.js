@@ -92,7 +92,7 @@ class Habilidades extends Component {
     
     handleGetHabilidades = () => {
         this.setState({tableLoading: true})
-        this.props.getHabilidades()
+        this.props.getHabilidades('')
     }
     
     handleCreateUpdateHabilidade = () => {

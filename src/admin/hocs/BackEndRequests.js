@@ -19,9 +19,10 @@ function BackEndRequestsWrapper(WrappedComponent) {
 			deleteAreaDeConhecimentoResponse: null
 		}
 
-		getHabilidades = (request) => {
+		getHabilidades = (status) => {
+			var ativo = status !== '' ? '/ativo' : ''
 			axios
-			.get('http://localhost:5000/api/getHabilidades')
+			.get('http://localhost:5000/api/getHabilidades'+ativo)
 			.then(res => {
 				let tempArray = []
 				let key = 0
@@ -110,8 +111,9 @@ function BackEndRequestsWrapper(WrappedComponent) {
 		}
 
 
-		getConteudos = () => {
-			axios.get('http://localhost:5000/api/getConteudos')
+		getConteudos = (status) => {
+			var ativo = status !== '' ? '/ativo' : ''
+			axios.get('http://localhost:5000/api/getConteudos'+ativo)
 			.then(res => {
 				let tempArray = []
 				let key = 0
@@ -200,8 +202,9 @@ function BackEndRequestsWrapper(WrappedComponent) {
 		}
 
 
-		getAreasDeConhecimento = () => {
-			axios.get('http://localhost:5000/api/getAreaConhecimento')
+		getAreasDeConhecimento = (status) => {
+			var ativo = status !== '' ? '/ativo' : ''
+			axios.get('http://localhost:5000/api/getAreaConhecimento'+ativo)
 			.then(res => {
 				let tempArray = []
 				let key = 0

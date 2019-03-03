@@ -266,7 +266,7 @@ class Simulados extends Component {
     }
 
     render(){
-        console.log('props', this.props)
+        //console.log('props', this.props)
         const columns = [
             {
 				title: "ID",

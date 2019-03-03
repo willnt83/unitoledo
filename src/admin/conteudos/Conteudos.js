@@ -98,7 +98,7 @@ class Conteudos extends Component {
 
     handleGetConteudos = () => {
         this.setState({tableLoading: true})
-        this.props.getConteudos();
+        this.props.getConteudos('');
     }
 
     handleCreateUpdateConteudo = () => {

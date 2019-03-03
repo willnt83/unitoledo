@@ -267,7 +267,7 @@ const RootReducer = (state = initState, action) => {
         }
     }
     else if(action.type === 'SET_SELECTEDQUESTAO'){
-        var selectedQuestoes = state.selectedQuestoes
+        selectedQuestoes = state.selectedQuestoes
         selectedQuestoes.push(action.questao)
         return{
             ...state,

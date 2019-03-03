@@ -50,11 +50,12 @@ class NovoSimulado3 extends Component {
         quantidadeQuestoesSelecionadas: 'Questões',
         mode: null,
         anoOptions: [],
-        showWarning: false
+        showWarning: false,
+        btnProximoDisabled: true
     }
 
     getQuestoes = (request) => {
-        this.setState({buttonLoadingBuscar: true})
+        this.setState({buttonLoadingBuscar: true, btnProximoDisabled: true})
         axios.post('http://localhost:5000/api/getQuestoesSimulado/simulado', request)
         .then(res => {
             var questoes = []
@@ -75,7 +76,7 @@ class NovoSimulado3 extends Component {
             */
                 questoes = res.data
             //}
-            this.setState({questoes, buttonLoadingBuscar: false})
+            this.setState({questoes, buttonLoadingBuscar: false, btnProximoDisabled: false})
         })
         .catch(error =>{
             console.log(error)
@@ -391,7 +392,7 @@ class NovoSimulado3 extends Component {
                                     <Link to="/admin/simulados/novo/step-2"><Button type="default"><Icon type="left" />Anterior</Button></Link>
                                 </Col>
                                 <Col span={12} align="end">
-                                    <Button type="primary" onClick={this.handleProximoButton}>Próximo<Icon type="right" /></Button>
+                                    <Button type="primary" onClick={this.handleProximoButton} disabled={this.state.btnProximoDisabled}>Próximo<Icon type="right" /></Button>
                                 </Col>
                             </Row>
                         </Content>

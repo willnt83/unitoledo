@@ -43,9 +43,9 @@ class Questoes extends Component {
 	constructor(props) {
         super()
 		props.setPageTitle('Banco de Questões')
-		props.getHabilidades()
-        props.getConteudos()
-        props.getAreasDeConhecimento()
+		props.getHabilidades('ativo')
+        props.getConteudos('ativo')
+        props.getAreasDeConhecimento('ativo')
 	}
 
 	state = {
@@ -77,9 +77,11 @@ class Questoes extends Component {
 	}
 
 	showModalCadastro = (row) => {
+		/*
 		this.props.getHabilidades()
 		this.props.getConteudos()
 		this.props.getAreasDeConhecimento()
+		*/
 
 		if (typeof row == "undefined") {
 			// Create
