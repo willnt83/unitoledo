@@ -127,6 +127,11 @@ class ExecucaoSimulado extends Component {
     }
 
     componentWillMount(){
+        if(this.props.mainData === null || this.props.contexto !== 'ALUNO'){
+            this.props.resetAll()
+            window.location.replace("/")
+        }
+
         // Settando periodoExecucao (em minutos) com a diferença entre as dataHoras Inicial e Final
         var inicioObj = moment()
         var terminoObj = moment(this.props.simulado.dataHoraFinal, 'DD/MM/YYYY HH:mm')
@@ -187,14 +192,17 @@ class ExecucaoSimulado extends Component {
 const MapStateToProps = (state) => {
 	return {
         simulado: state.simulado,
-        usuarioId: state.usuarioId
+        usuarioId: state.usuarioId,
+        mainData: state.mainData,
+        contexto: state.contexto
 	}
 }
 
 const mapDispatchToProps = (dispatch) => {
     return {
         setQuestaoRespondida: (questoes) => { dispatch({ type: 'SET_QUESTAORESPONDIDA', questoes }) },
-        setSimuladoFinalizado: (simuladoFinalizado) => { dispatch({ type: 'SET_SIMULADOFINALIZADO', simuladoFinalizado }) }
+        setSimuladoFinalizado: (simuladoFinalizado) => { dispatch({ type: 'SET_SIMULADOFINALIZADO', simuladoFinalizado }) },
+        resetAll: () => { dispatch({ type: 'RESET_ALL' }) }
     }
 }
  

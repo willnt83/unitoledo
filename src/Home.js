@@ -80,10 +80,6 @@ class Home extends Component {
     }
 
     componentWillMount(){
-        console.log('this.props.mainData', this.props.mainData)
-        console.log('this.props.contextoAluno', this.props.contextoAluno)
-        console.log('this.props.contexto', this.props.contexto)
-
         if(this.props.mainData === null || this.props.contexto !== 'ALUNO'){
             this.props.resetAll()
             window.location.replace("/")

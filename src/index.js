@@ -35,7 +35,6 @@ const routes = [
 	},
 	{
 		path: "/alunos",
-        exact: true,
         main: () => <AlunosIndex />
 	},
     {

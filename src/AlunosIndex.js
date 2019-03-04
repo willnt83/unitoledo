@@ -1,6 +1,7 @@
 import React, { Component } from "react"
 import { Layout, Icon, Row, Col, Button, Modal } from "antd"
 import { BrowserRouter as Router, Route, withRouter } from "react-router-dom"
+
 import { connect } from 'react-redux'
 import axios from "axios"
 import PageTitle from "./layout/PageTitle"
@@ -86,7 +87,7 @@ class AlunosIndex extends Component {
 							background: "#fff"
 						}}>
 							<Row>
-								<Col span={12}><PageTitle pageTitle="Execução do Simulado" /></Col>
+								<Col span={12}><PageTitle pageTitle="Simulados" /></Col>
 							</Row>
 						</Content>
 
