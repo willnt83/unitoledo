@@ -355,7 +355,7 @@ class NovoSimulado2 extends Component {
                                         key: turma.id,
                                         name: turma.nome,
                                         parentKey: turma.idCurso,
-                                        tipo: 'Disciplina',
+                                        tipo: 'Turma',
                                         children: tempDisciplinas
                                     })
                                 }
