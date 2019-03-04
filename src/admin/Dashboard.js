@@ -1,13 +1,19 @@
 import React, { Component } from 'react'
 import { Layout } from 'antd'
 import { connect } from 'react-redux'
+import { withRouter } from "react-router-dom"
 
 
 const { Content } = Layout
 
 class Dashboard extends Component {
+    componentWillMount(){
+        if(this.props.mainData === null || (this.props.contexto !== 'COORDENADOR' && this.props.contexto !== 'PROFESSOR')){
+            this.props.resetAll()
+            window.location.replace("/")
+        }
+    }
     render(){
-        console.log('this.props.mainData', this.props.mainData)
         return(
             <Content
                 style={{
@@ -25,13 +31,14 @@ class Dashboard extends Component {
 
 const MapStateToProps = (state) => {
 	return {
-        mainData: state.mainData
+        mainData: state.mainData,
+        contexto: state.contexto
 	}
 }
 const mapDispatchToProps = (dispatch) => {
     return {
-        setPageTitle: (pageTitle) => { dispatch({ type: 'SET_PAGETITLE', pageTitle }) }
+        resetAll: () => { dispatch({ type: 'RESET_ALL' }) }
     }
 }
 
-export default connect(MapStateToProps, mapDispatchToProps)(Dashboard)
+export default connect(MapStateToProps, mapDispatchToProps)(withRouter(Dashboard))

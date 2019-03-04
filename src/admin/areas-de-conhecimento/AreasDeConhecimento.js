@@ -5,6 +5,7 @@ import { TextField, MenuItem } from '@material-ui/core/'
 import { withStyles } from '@material-ui/core/styles'
 import BackEndRequests from '../hocs/BackEndRequests'
 import { connect } from 'react-redux'
+import { withRouter } from "react-router-dom"
 
 const { Content } = Layout
 const statusOptions = [{
@@ -139,6 +140,13 @@ class AreasDeConhecimento extends Component {
         this.setState({
             [name]: event.target.value,
         })
+    }
+
+    componentWillMount(){
+        if(this.props.mainData === null || (this.props.contexto !== 'COORDENADOR' && this.props.contexto !== 'PROFESSOR')){
+            this.props.resetAll()
+            window.location.replace("/")
+        }
     }
 
     componentDidMount() {
@@ -341,13 +349,16 @@ AreasDeConhecimento.propTypes = {
 
 const MapStateToProps = (state) => {
 	return {
+        mainData: state.mainData,
+        contexto: state.contexto,
 		areasDeConhecimento: state.areasDeConhecimento
 	}
 }
 const mapDispatchToProps = (dispatch) => {
     return {
-        setPageTitle: (pageTitle) => { dispatch({ type: 'SET_PAGETITLE', pageTitle }) }
+        setPageTitle: (pageTitle) => { dispatch({ type: 'SET_PAGETITLE', pageTitle }) },
+        resetAll: () => { dispatch({ type: 'RESET_ALL' }) }
     }
 }
 
-export default connect(MapStateToProps, mapDispatchToProps)(BackEndRequests(withStyles(styles)(AreasDeConhecimento)))
+export default connect(MapStateToProps, mapDispatchToProps)(BackEndRequests(withStyles(styles)(withRouter(AreasDeConhecimento))))

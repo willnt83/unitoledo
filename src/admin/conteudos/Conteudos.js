@@ -5,6 +5,7 @@ import { TextField, MenuItem } from '@material-ui/core/'
 import { withStyles } from '@material-ui/core/styles'
 import BackEndRequests from '../hocs/BackEndRequests'
 import { connect } from 'react-redux'
+import { withRouter } from "react-router-dom"
 
 const { Content } = Layout;
 const statusOptions = [{
@@ -146,6 +147,13 @@ class Conteudos extends Component {
             [name]: event.target.value,
         });
     };
+
+    componentWillMount(){
+        if(this.props.mainData === null || (this.props.contexto !== 'COORDENADOR' && this.props.contexto !== 'PROFESSOR')){
+            this.props.resetAll()
+            window.location.replace("/")
+        }
+    }
 
     componentDidMount() {
         this.handleGetConteudos()
@@ -347,13 +355,16 @@ Conteudos.propTypes = {
 
 const MapStateToProps = (state) => {
 	return {
-		conteudos: state.conteudos
+        mainData: state.mainData,
+        contexto: state.contexto,
+        conteudos: state.conteudos
 	}
 }
 const mapDispatchToProps = (dispatch) => {
     return {
-        setPageTitle: (pageTitle) => { dispatch({ type: 'SET_PAGETITLE', pageTitle }) }
+        setPageTitle: (pageTitle) => { dispatch({ type: 'SET_PAGETITLE', pageTitle }) },
+        resetAll: () => { dispatch({ type: 'RESET_ALL' }) }
     }
 }
 
-export default connect(MapStateToProps, mapDispatchToProps)(BackEndRequests(withStyles(styles)(Conteudos)));
+export default connect(MapStateToProps, mapDispatchToProps)(BackEndRequests(withStyles(styles)(withRouter(Conteudos))));

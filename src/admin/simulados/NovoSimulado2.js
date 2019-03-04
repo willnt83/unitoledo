@@ -33,6 +33,11 @@ class NovoSimulado2 extends Component {
     }
 
     componentWillMount(){
+        if(this.props.mainData === null || (this.props.contexto !== 'COORDENADOR' && this.props.contexto !== 'PROFESSOR')){
+            this.props.resetAll()
+            window.location.replace("/")
+        }
+
         // Se tiver this.props.simulado.alvos, atualiza state.selectedRowKeys
         if(this.props.simulado.alvos.length > 0){
             var tempArray = []
@@ -501,6 +506,7 @@ class NovoSimulado2 extends Component {
 const MapStateToProps = (state) => {
 	return {
         mainData: state.mainData,
+        contexto: state.contexto,
         simulado: state.simulado
 	}
 }
@@ -508,7 +514,8 @@ const MapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
     return {
         setPageTitle: (pageTitle) => { dispatch({ type: 'SET_PAGETITLE', pageTitle }) },
-        setSimuladoAlvo: (simuladoAlvos) => { dispatch({ type: 'SET_SIMULADOALVO', simuladoAlvos }) }
+        setSimuladoAlvo: (simuladoAlvos) => { dispatch({ type: 'SET_SIMULADOALVO', simuladoAlvos }) },
+        resetAll: () => { dispatch({ type: 'RESET_ALL' }) }
     }
 }
 

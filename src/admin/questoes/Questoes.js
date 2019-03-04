@@ -4,6 +4,7 @@ import { withStyles } from "@material-ui/core/styles"
 import BackEndRequests from '../hocs/BackEndRequests'
 import { connect } from 'react-redux'
 import axios from "axios"
+import { withRouter } from "react-router-dom"
 import ModalCadastro from './ModalCadastro'
 
 const { Content } = Layout
@@ -206,6 +207,13 @@ class Questoes extends Component {
 		})
 	}
 
+	componentWillMount(){
+        if(this.props.mainData === null || (this.props.contexto !== 'COORDENADOR' && this.props.contexto !== 'PROFESSOR')){
+            this.props.resetAll()
+            window.location.replace("/")
+        }
+    }
+
 	componentWillUpdate(nextProps, nextState) {
 		//console.log('nextProps.createUpdateQuestaoResponse', nextProps.createUpdateQuestaoResponse)
 		// Tratando response da requisição deleteQuestao
@@ -407,6 +415,8 @@ class Questoes extends Component {
 
 const MapStateToProps = (state) => {
 	return {
+		mainData: state.mainData,
+		contexto: state.contexto,
 		habilidades: state.habilidades,
 		conteudos: state.conteudos,
 		areasDeConhecimento: state.areasDeConhecimento,
@@ -415,8 +425,9 @@ const MapStateToProps = (state) => {
 }
 const mapDispatchToProps = (dispatch) => {
     return {
-        setPageTitle: (pageTitle) => { dispatch({ type: 'SET_PAGETITLE', pageTitle }) }
+		setPageTitle: (pageTitle) => { dispatch({ type: 'SET_PAGETITLE', pageTitle }) },
+		resetAll: () => { dispatch({ type: 'RESET_ALL' }) }
     }
 }
 
-export default connect(MapStateToProps, mapDispatchToProps)(BackEndRequests(withStyles(styles)(Form.create()(Questoes))))
+export default connect(MapStateToProps, mapDispatchToProps)(BackEndRequests(withStyles(styles)(Form.create()(withRouter(Questoes)))))

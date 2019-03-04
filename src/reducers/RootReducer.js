@@ -94,7 +94,40 @@ const initState = {
 }
 
 const RootReducer = (state = initState, action) => {
-    if(action.type === 'SET_HEADERS'){
+    if(action.type === 'RESET_ALL'){
+        console.log('reducer RESET_ALL')
+        return {
+            contexto: null,
+            usuarioId: null,
+            usuarioNome: null,
+            authHeaders: null,
+            mainData: null,
+            periodoLetivo: null,
+            pageTitle: [],
+            habilidades: [],
+            conteudos: [],
+            areasDeConhecimento: [],
+            questoes: [],
+            simulado: {
+                id: '',
+                nome: null,
+                alvos: [],
+                questoes: [],
+                inicio: {
+                    data: null,
+                    hora: null
+                },
+                fim: {
+                    data: null,
+                    hora: null
+                }
+            },
+            selectedQuestoes: [],
+            flagSimuladoFinalizado: null,
+            contextoAluno: null
+        }
+    }
+    else if(action.type === 'SET_HEADERS'){
         return {
             ...state,
             authHeaders: {

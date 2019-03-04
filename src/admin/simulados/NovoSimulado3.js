@@ -92,6 +92,11 @@ class NovoSimulado3 extends Component {
     }
 
     componentWillMount(){
+        if(this.props.mainData === null || (this.props.contexto !== 'COORDENADOR' && this.props.contexto !== 'PROFESSOR')){
+            this.props.resetAll()
+            window.location.replace("/")
+        }
+
         // Construindo opções de seleção do campo Ano
         var currDate = moment()
         var anoOptions = []
@@ -405,19 +410,20 @@ class NovoSimulado3 extends Component {
 
 const MapStateToProps = (state) => {
 	return {
+        mainData: state.mainData,
+        contexto: state.contexto,
 		habilidades: state.habilidades,
 		conteudos: state.conteudos,
 		areasDeConhecimento: state.areasDeConhecimento,
         questoes: state.questoes,
         simulado: state.simulado,
-        authHeaders: state.authHeaders,
         selectedQuestoes: state.selectedQuestoes
-
 	}
 }
 const mapDispatchToProps = (dispatch) => {
     return {
-        setPageTitle: (pageTitle) => { dispatch({ type: 'SET_PAGETITLE', pageTitle }) }
+        setPageTitle: (pageTitle) => { dispatch({ type: 'SET_PAGETITLE', pageTitle }) },
+        resetAll: () => { dispatch({ type: 'RESET_ALL' }) }
     }
 }
 

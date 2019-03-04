@@ -260,6 +260,11 @@ class Simulados extends Component {
     }
 
     componentWillMount(){
+        if(this.props.mainData === null || (this.props.contexto !== 'COORDENADOR' && this.props.contexto !== 'PROFESSOR')){
+            this.props.resetAll()
+            window.location.replace("/")
+        }
+
         this.props.resetSimulado()
         this.setState({tableLoading: true})
         this.getSimulados()
@@ -362,7 +367,8 @@ const mapDispatchToProps = (dispatch) => {
     return {
         setPageTitle: (pageTitle) => { dispatch({ type: 'SET_PAGETITLE', pageTitle }) },
         resetSimulado: () => { dispatch({ type: 'RESET_SIMULADO' }) },
-        setFullSimulado: (simulado) => { dispatch({ type: 'SET_SIMULADOSFULL', simulado }) }
+        setFullSimulado: (simulado) => { dispatch({ type: 'SET_SIMULADOSFULL', simulado }) },
+        resetAll: () => { dispatch({ type: 'RESET_ALL' }) }
     }
 }
 

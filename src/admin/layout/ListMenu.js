@@ -1,6 +1,7 @@
 import React, { Component } from "react"
 import { Link, withRouter } from "react-router-dom"
 import { Menu, Icon, Modal, Button } from 'antd'
+import { connect } from 'react-redux'
 import axios from "axios"
 
 const { SubMenu } = Menu
@@ -19,18 +20,26 @@ class ListMenu extends Component {
         this.setState({showModalLogout: true})
     }
 
+
     handleConfirmLogout = () => {
         this.setState({btnConfirmarLoading: true})
+        axios.defaults.headers = {
+            'Authorization': this.props.authHeaders.authorization,
+            'CookieZ': this.props.authHeaders.cookie
+        }
+        
         var request = {}
         axios.post('http://localhost:5000/api/logout', request)
         .then(res => {
             this.setState({btnConfirmarLoading: false})
+            this.props.resetAll()
             this.showHideModalLogout(false)
-            window.location.replace("/");
+            window.location.replace("/")
         })
         .catch(error =>{
             console.log(error)
         })
+
     }
 
     render(){
@@ -111,4 +120,16 @@ class ListMenu extends Component {
     }
 }
 
-export default withRouter(ListMenu)
+const MapStateToProps = (state) => {
+	return {
+        authHeaders: state.authHeaders
+	}
+}
+
+const mapDispatchToProps = (dispatch) => {
+    return {
+        resetAll: () => { dispatch({ type: 'RESET_ALL' }) }
+    }
+}
+
+export default connect(MapStateToProps, mapDispatchToProps)(withRouter(ListMenu))

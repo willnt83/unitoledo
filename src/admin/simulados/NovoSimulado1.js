@@ -25,6 +25,13 @@ class NovoSimulado1 extends Component {
         })
     }
 
+    componentWillMount(){
+        if(this.props.mainData === null || (this.props.contexto !== 'COORDENADOR' && this.props.contexto !== 'PROFESSOR')){
+            this.props.resetAll()
+            window.location.replace("/")
+        }
+    }
+
     componentDidMount(){
         if(this.props.simulado.nome !== null || this.props.simulado.nome !== ''){
             this.props.form.setFieldsValue({
@@ -94,6 +101,8 @@ class NovoSimulado1 extends Component {
 
 const MapStateToProps = (state) => {
 	return {
+        mainData: state.mainData,
+        contexto: state.contexto,
         simulado: state.simulado,
         periodoLetivo: state.periodoLetivo
 	}
@@ -102,7 +111,8 @@ const MapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
     return {
         setPageTitle: (pageTitle) => { dispatch({ type: 'SET_PAGETITLE', pageTitle }) },
-        setSimuladoNome: (simuladoNome) => { dispatch({ type: 'SET_SIMULADO_NOME', simuladoNome }) }
+        setSimuladoNome: (simuladoNome) => { dispatch({ type: 'SET_SIMULADO_NOME', simuladoNome }) },
+        resetAll: () => { dispatch({ type: 'RESET_ALL' }) }
     }
 }
 

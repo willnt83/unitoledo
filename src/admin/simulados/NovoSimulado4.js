@@ -23,6 +23,13 @@ class NovoSimulado4 extends Component {
         quantidadeQuestoesSelecionadas: 'Questões Selecionadas'
     }
 
+    componentWillMount(){
+        if(this.props.mainData === null || (this.props.contexto !== 'COORDENADOR' && this.props.contexto !== 'PROFESSOR')){
+            this.props.resetAll()
+            window.location.replace("/")
+        }
+    }
+
     componentWillReceiveProps(props) {
         if(props.simulado.questoes.length > 0){
             this.setState({
@@ -327,6 +334,8 @@ class NovoSimulado4 extends Component {
 
 const MapStateToProps = (state) => {
 	return {
+        mainData: state.mainData,
+        contexto: state.contexto,
         simulado: state.simulado,
         selectedQuestoes: state.selectedQuestoes,
         periodoLetivo: state.periodoLetivo
@@ -338,7 +347,7 @@ const mapDispatchToProps = (dispatch) => {
         setPageTitle: (pageTitle) => { dispatch({ type: 'SET_PAGETITLE', pageTitle }) },
         resetSimulado: () => { dispatch({ type: 'RESET_SIMULADO' }) },
         setStartFinish: (startFinish) => { dispatch({ type: 'SET_SIMULADOSTARTFINISH', startFinish }) },
-
+        resetAll: () => { dispatch({ type: 'RESET_ALL' }) }
     }
 }
 
