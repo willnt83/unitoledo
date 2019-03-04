@@ -169,7 +169,6 @@ class Simulados extends Component {
     }
 
     editSimulados = (record) => {
-
         axios.get('http://localhost:5000/api/getSimuladoId/'+record.key)
         .then(res => {
             var response = res.data[0]

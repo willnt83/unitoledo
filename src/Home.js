@@ -80,7 +80,14 @@ class Home extends Component {
     }
 
     componentWillMount(){
-        console.log('home componentWillMount', this.props)
+        console.log('this.props.mainData', this.props.mainData)
+        console.log('this.props.contextoAluno', this.props.contextoAluno)
+        console.log('this.props.contexto', this.props.contexto)
+
+        if(this.props.mainData === null || this.props.contexto !== 'ALUNO'){
+            this.props.resetAll()
+            window.location.replace("/")
+        }
 
         var requestData = this.props.contextoAluno
         if(this.props.flagSimuladoFinalizado){
@@ -163,14 +170,16 @@ const MapStateToProps = (state) => {
         mainData: state.mainData,
         usuarioId: state.usuarioId,
         flagSimuladoFinalizado: state.flagSimuladoFinalizado,
-        contextoAluno: state.contextoAluno
+        contextoAluno: state.contextoAluno,
+        contexto: state.contexto
 	}
 }
 
 const mapDispatchToProps = (dispatch) => {
     return {
         setSimulado: (simulado) => { dispatch({ type: 'SET_SIMULADORESOLUCAO', simulado }) },
-        setMainData: (mainData) => { dispatch({ type: 'SET_MAINDATA', mainData }) }
+        setMainData: (mainData) => { dispatch({ type: 'SET_MAINDATA', mainData }) },
+        resetAll: () => { dispatch({ type: 'RESET_ALL' }) }
     }
 }
 
