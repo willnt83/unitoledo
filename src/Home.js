@@ -80,6 +80,14 @@ class Home extends Component {
         this.setState({tableData})
     }
 
+    compareByAlph = (a, b) => {
+        if (a > b)
+            return -1
+        if (a < b)
+            return 1
+        return 0
+    }
+
     componentWillMount(){
         if(this.props.mainData === null || this.props.contexto !== 'ALUNO'){
             this.props.resetAll()
@@ -107,25 +115,30 @@ class Home extends Component {
 
     render() {
         const columns = [
+            {
+                title: 'ID',
+                dataIndex: 'key',
+                sorter: (a, b) => a.key - b.key,
+            },
 			{
 				title: "Descrição",
 				dataIndex: "nome",
-				sorter: (a, b) => a.id - b.id
+				sorter: (a, b) => this.compareByAlph(a.nome, b.nome)
             },
             {
-				title: "Criado em",
+				title: "Inicia em",
 				dataIndex: "inicio",
-				sorter: (a, b) => a.id - b.id
+				sorter: (a, b) => this.compareByAlph(a.inicio, b.inicio)
 			},
             {
 				title: "Finaliza em",
 				dataIndex: "fim",
-				sorter: (a, b) => a.id - b.id
+				sorter: (a, b) => this.compareByAlph(a.fim, b.fim)
             },
             {
                 title: 'Status',
                 dataIndex: 'status',
-                sorter: (a, b) => a.id - b.id
+                sorter: (a, b) => this.compareByAlph(a.status, b.status)
             },
             {
 				title: "Executar",
