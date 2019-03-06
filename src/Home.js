@@ -77,7 +77,6 @@ class Home extends Component {
                 btnExecutarDisabled
             })
         })
-
         this.setState({tableData})
     }
 

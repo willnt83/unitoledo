@@ -46,8 +46,9 @@ class ExecucaoSimulado extends Component {
             idSimulado: this.props.simulado.id,
             idQuestao: questaoId,
             idAlternativa: idAlternativa,
-            idAluno: this.props.usuarioId
+            idUltilizador: this.props.contextoAluno.idUtilizador
         }
+
         axios.post('http://localhost:5000/api/simuladoResposta', request)
         .then(res => {
             // Atualizando redux simulado.questoes com a alternativa respondida na questão
@@ -168,6 +169,7 @@ class ExecucaoSimulado extends Component {
                     questoesRespondidas={this.state.questoesRespondidas}
                     btnSalvarRespostaLoading={this.state.btnSalvarRespostaLoading}
                     btnFinalizarSimuladoLoading={this.state.btnFinalizarSimuladoLoading}
+                    tempoTotal={this.state.tempoTotalSimulado}
                 />
                 <Modal
                     title="Atenção!"
@@ -194,7 +196,8 @@ const MapStateToProps = (state) => {
         simulado: state.simulado,
         usuarioId: state.usuarioId,
         mainData: state.mainData,
-        contexto: state.contexto
+        contexto: state.contexto,
+        contextoAluno: state.contextoAluno
 	}
 }
 

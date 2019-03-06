@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import { Layout, Row, Col, Radio, Button, Icon } from 'antd'
 import { connect } from 'react-redux'
+import moment from 'moment'
 import "../../static/style.css"
 
 const { Content } = Layout
@@ -17,7 +18,8 @@ class QuestaoSimulado extends Component {
         btnDisplayProximo: null,
         btnDisplayFinalizarSimulado: null,
         btnSalvarRespostaLoading: false,
-        btnFinalizarSimuladoLoading: false
+        btnFinalizarSimuladoLoading: false,
+        tempoTotalSimulado: null
     }
 
     checkResponse = (questaoNo) => {
@@ -37,6 +39,11 @@ class QuestaoSimulado extends Component {
         // Verificando se a questão já foi respondida. Se sim, retornará o id da alternativa, se não, retorna null
         var resposta = this.checkResponse(this.props.questaoNo)
 
+        // Tempo total do simulado
+        var dataHoraInicialObj = moment(this.props.simulado.dataHoraInicial, 'DD/MM/YY HH:mm')
+        var dataHoraFinalObj = moment(this.props.simulado.dataHoraFinal, 'DD/MM/YY HH:mm')
+
+
         this.setState({
             questaoNo: this.props.questaoNo,
             questaoNoText: parseInt(this.props.questaoNo) + 1,
@@ -44,7 +51,8 @@ class QuestaoSimulado extends Component {
             btnDisplayAnterior: 'none',
             btnDisplayProximo,
             btnDisplayFinalizarSimulado,
-            resposta
+            resposta,
+            tempoTotalSimulado: dataHoraFinalObj.diff(dataHoraInicialObj, 'minutes')
         })
     }
 
@@ -117,9 +125,8 @@ class QuestaoSimulado extends Component {
                     background: "#fff"
                 }}>
                     <h4>{this.state.simulado.nome} (Questões respondidas: {this.props.questoesRespondidas} de {this.props.simulado.questoes.length})</h4>
-                    <Row>
-                        <Col span={24}>Tempo total: 90 minutos</Col>
-                    </Row>
+                    <h4>Tempo total: {this.state.tempoTotalSimulado} minutos</h4>
+
                     <Row style={{ marginTop: 20 }}>
                         <Col span={24}>
                             {simuladoFonteText}

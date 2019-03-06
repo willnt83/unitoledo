@@ -20,7 +20,11 @@ class NovoSimulado4 extends Component {
     }
 
     state = {
-        quantidadeQuestoesSelecionadas: 'Questões Selecionadas'
+        quantidadeQuestoesSelecionadas: 'Questões Selecionadas',
+        dataHoraFinalValidation: {
+            validateStatus: 'success',
+            help: ''
+        }
     }
 
     componentWillMount(){
@@ -49,84 +53,106 @@ class NovoSimulado4 extends Component {
                 let horarioFinal = values.horarioFinal.format('HH:mm')
                 let dateTimeFinal = moment(dataFinal + ' ' + horarioFinal, 'YYYY/MM/DD HH:mm')
                 this.props.setStartFinish({dateTimeInicial: dateTimeInicial.format(), dateTimeFinal: dateTimeFinal.format()})
-                
-                rascunho = mode === 'rascunho' ? true : false
-                let questoes = this.props.simulado.questoes.map(questao => {
-                    return(
-                        {id: questao}
-                    )
-                })
 
-                let cursos = this.props.simulado.alvos
-                .map(alvo => {
-                    if(alvo.tipo === 'Curso'){
-                        return({
-                            id: alvo.key,
-                            nome: alvo.name,
-                            idPeriodoLetivo: this.props.periodoLetivo
-                        })
-                    }
-                    else
-                        return false
-                })
-                .filter(alvo => {
-                    return(alvo) // retorna somente se existir alvo
-                })
 
-                let turmas = this.props.simulado.alvos
-                .map(alvo =>{
-                    if(alvo.tipo === 'Turma'){
-                        return({
-                            id: alvo.key,
-                            nome: alvo.name,
-                            idPeriodoLetivo: this.props.periodoLetivo,
-                            idCurso: alvo.parentKey
-                        })
-                    }
-                    else return false
-                })
-                .filter(alvo => {
-                    return(alvo) // retorna somente se existir alvo
-                })
-
-                let disciplinas = this.props.simulado.alvos.map(alvo =>{
-                    if(alvo.tipo === 'Disciplina'){
-                        return({
-                            id: alvo.key,
-                            nome: alvo.name,
-                            idPeriodoLetivo: this.props.periodoLetivo,
-                            idTurma: alvo.parentKey
-                        })
-                    }
-                    else return false
-                })
-                .filter(alvo => {
-                    return(alvo) // retorna somente se existir alvo
-                })
-
-                var request = {
-                        id: this.props.simulado.id,
-                        nome: this.props.simulado.nome,
-                        rascunho: rascunho,
-                        dataHoraInicial: dateTimeInicial.format(),
-                        dataHoraFinal: dateTimeFinal.format(),
-                        questoes: questoes,
-                        cursos: cursos,
-                        turmas: turmas,
-                        disciplinas: disciplinas,
-                        status: 'Pendente'
+                var error = false
+                if(dateTimeFinal <= dateTimeInicial){
+                    error = true
+                    this.setState({
+                        dataHoraFinalValidation: {
+                            validateStatus: 'error',
+                            help: 'Data e Horário Final não podem ser menores ou iguais que Data e Horario Inicial'
+                        }
+                    })
                 }
+                else{
+                    this.setState({
+                        dataHoraFinalValidation: {
+                            validateStatus: 'success',
+                            help: ''
+                        }
+                    })
+                }
+                
+                if(!error){
+                    rascunho = mode === 'rascunho' ? true : false
+                    let questoes = this.props.simulado.questoes.map(questao => {
+                        return(
+                            {id: questao}
+                        )
+                    })
 
-                axios.post('http://localhost:5000/api/createUpdateSimulado', request)
-                .then(res => {
-                    this.successModal(this.props)
-                })
-                .catch(error =>{
-                    console.log('error: ', error)
-                })
-            }
-            else{
-                console.log(err)
+                    let cursos = this.props.simulado.alvos
+                    .map(alvo => {
+                        if(alvo.tipo === 'Curso'){
+                            return({
+                                id: alvo.key,
+                                nome: alvo.name,
+                                idPeriodoLetivo: this.props.periodoLetivo
+                            })
+                        }
+                        else
+                            return false
+                    })
+                    .filter(alvo => {
+                        return(alvo) // retorna somente se existir alvo
+                    })
+
+                    let turmas = this.props.simulado.alvos
+                    .map(alvo =>{
+                        if(alvo.tipo === 'Turma'){
+                            return({
+                                id: alvo.key,
+                                nome: alvo.name,
+                                idPeriodoLetivo: this.props.periodoLetivo,
+                                idCurso: alvo.parentKey
+                            })
+                        }
+                        else return false
+                    })
+                    .filter(alvo => {
+                        return(alvo) // retorna somente se existir alvo
+                    })
+
+                    let disciplinas = this.props.simulado.alvos.map(alvo =>{
+                        if(alvo.tipo === 'Disciplina'){
+                            return({
+                                id: alvo.key,
+                                nome: alvo.name,
+                                idPeriodoLetivo: this.props.periodoLetivo,
+                                idTurma: alvo.parentKey
+                            })
+                        }
+                        else return false
+                    })
+                    .filter(alvo => {
+                        return(alvo) // retorna somente se existir alvo
+                    })
+
+                    var request = {
+                            id: this.props.simulado.id,
+                            nome: this.props.simulado.nome,
+                            rascunho: rascunho,
+                            dataHoraInicial: dateTimeInicial.format(),
+                            dataHoraFinal: dateTimeFinal.format(),
+                            questoes: questoes,
+                            cursos: cursos,
+                            turmas: turmas,
+                            disciplinas: disciplinas,
+                            status: 'Pendente'
+                    }
+
+                    axios.post('http://localhost:5000/api/createUpdateSimulado', request)
+                    .then(res => {
+                        this.successModal(this.props)
+                    })
+                    .catch(error =>{
+                        console.log('error: ', error)
+                    })
+                }
+                else{
+                    console.log(err)
+                }
             }
         })
     }
@@ -249,6 +275,8 @@ class NovoSimulado4 extends Component {
                                 </Form.Item>
                                 <Form.Item
                                     label="Data Final"
+                                    validateStatus={this.state.dataHoraFinalValidation.validateStatus}
+                                    help={this.state.dataHoraFinalValidation.help}
                                 >
                                     {getFieldDecorator('dataFinal', {
                                         rules: [{ required: true, message: 'Por favor informe a data final' }]
@@ -263,6 +291,8 @@ class NovoSimulado4 extends Component {
                                 </Form.Item>
                                 <Form.Item
                                     label="Horário Final"
+                                    validateStatus={this.state.dataHoraFinalValidation.validateStatus}
+                                    help={this.state.dataHoraFinalValidation.help}
                                 >
                                     {getFieldDecorator('horarioFinal', {
                                         rules: [{ required: true, message: 'Por favor informe o horário final' }]
