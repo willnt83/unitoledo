@@ -2,6 +2,7 @@ const initState = {
     /*
     // Aluno
     contexto: null,
+    contextoData: null,
     usuarioId: 42312,
     usuarioNome: 'IZABELLA DO NASCIMENTO CARDOSO',
     authHeaders: null,
@@ -33,6 +34,7 @@ const initState = {
     /*
     // Coordenador
     contexto: null,
+    contextoData: null,
     usuarioId: null,
     usuarioNome: null,
     authHeaders: null,
@@ -64,6 +66,7 @@ const initState = {
 
     // Original
     contexto: null,
+    contextoData: null,
     usuarioId: null,
     usuarioNome: null,
     authHeaders: null,
@@ -98,6 +101,7 @@ const RootReducer = (state = initState, action) => {
         console.log('reducer RESET_ALL')
         return {
             contexto: null,
+            contextoData: null,
             usuarioId: null,
             usuarioNome: null,
             authHeaders: null,
@@ -147,6 +151,12 @@ const RootReducer = (state = initState, action) => {
         return {
             ...state,
             contexto: action.contexto
+        }
+    }
+    else if(action.type === 'SET_CONTEXTODATA'){
+        return {
+            ...state,
+            contextoData: action.contextoData
         }
     }
     else if(action.type === 'SET_MAINDATA'){

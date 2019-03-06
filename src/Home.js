@@ -24,7 +24,9 @@ class Home extends Component {
         axios.post('http://localhost:5000/api/statusSimulado', request)
         .then(res => {
 
-            axios.get('http://localhost:5000/api/getSimuladoIdAlunoQuestao/'+record.key+'/'+this.props.usuarioId)
+            console.log('contextoAluno....', this.props.contextoAluno)
+
+            axios.get('http://localhost:5000/api/getSimuladoIdAlunoQuestao/'+record.key+'/'+this.props.contextoAluno.idUtilizador)
             .then(res => {
                 this.setState({tableLoading: false})
                 var simulado = {
