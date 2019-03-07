@@ -1,5 +1,5 @@
 import React, { Component } from "react"
-import { Layout, Button, Table, Row, Col, Icon } from "antd"
+import { Layout, Button, Table, Row, Col, Icon, Modal } from "antd"
 import { withRouter } from "react-router-dom"
 import axios from "axios"
 import { connect } from 'react-redux'
@@ -16,7 +16,10 @@ class Simulados extends Component {
 
     state = {
         tableData: null,
-        tableLoading: false
+        tableLoading: false,
+        showModal: false,
+        simuladoId: null,
+        confirmarRemocaoLoading: false
     }
 
     compareByAlph = (a, b) => {
@@ -258,6 +261,33 @@ class Simulados extends Component {
         })
     }
 
+    deleteSimulado = (id) => {
+        this.setState({tableLoading: true, confirmarRemocaoLoading: true})
+        console.log('delete simulado '+id)
+        axios.get('http://localhost:5000/api/deleteSimulado/'+id)
+        .then(res => {
+            this.showModal(false, '')
+            this.setState({confirmarRemocaoLoading: false})
+            this.getSimulados()
+        })
+        .catch(error =>{
+            console.log('error: ', error)
+            this.setState({tableLoading: false, confirmarRemocaoLoading: false})
+        })
+    }
+
+    showModal = (bool, id) => {
+        this.setState({showModal: bool, simuladoId: id})
+    }
+
+    handleModalOk = () => {
+        this.deleteSimulado(this.state.simuladoId)
+    }
+
+    handleModalCancel = () => {
+        this.showModal(false, null)
+    }
+
     componentWillMount(){
         if(this.props.mainData === null || (this.props.contexto !== 'COORDENADOR' && this.props.contexto !== 'PROFESSOR')){
             this.props.resetAll()
@@ -321,7 +351,7 @@ class Simulados extends Component {
                             <Button className="actionButton buttonGreen" title="Publicar" onClick={() => this.changeSimuladoSituacao(record.key, record.rascunho)} disabled={publicarButtonDisabled}><Icon type="global" /></Button>
                             <Button className="actionButton buttonOrange" title="Mover para Rascunho" onClick={() => this.changeSimuladoSituacao(record.key, record.rascunho)} disabled={moverRascunhoButtonDisabled}><Icon type="file-text" /></Button>
                             <Button className="actionButton" title="Editar" type="primary" onClick={() => this.editSimulados(record)}><Icon type="edit" /></Button>
-                            <Button className="actionButton buttonRed" title="Excluir"><Icon type="delete" /></Button>
+                            <Button className="actionButton buttonRed" title="Excluir" onClick={() => this.showModal(true, record.key)}><Icon type="delete" /></Button>
                         </React.Fragment>
 					)
 				}
@@ -348,6 +378,20 @@ class Simulados extends Component {
                         </Col>
                     </Row>
                 </Content>
+                <Modal
+                    title="Atenção!"
+                    visible={this.state.showModal}
+                    onOk={this.handleModalOk}
+                    onCancel={this.handleModalCancel}
+                    footer={[
+                        <Button key="back" onClick={this.handleModalCancel}><Icon type="close" />Cancelar</Button>,
+                        <Button className="buttonGreen" key="submit" type="primary" onClick={this.handleModalOk}>
+                            <Icon type="check" />Confirmar
+                        </Button>,
+                    ]}
+                >
+                    <p>Confirma remoção do simulado?</p>
+                </Modal>
             </React.Fragment>
         )
     }

@@ -62,6 +62,11 @@ class AlunosIndex extends Component {
 	}
 
 	render() {
+		var periodoLetivo = ''
+		if(this.props.contextoAluno)
+			periodoLetivo = this.props.contextoAluno.descricao
+		else
+			periodoLetivo = ''
 		return (
 			<React.Fragment>
 				<Router>
@@ -72,7 +77,7 @@ class AlunosIndex extends Component {
 									<div className="mainLogo" onClick={() => this.goHome()} style={{cursor: 'pointer'}}>UNITOLEDO</div>
 								</Col>
 								<Col span={11} align="end">
-									<Icon type="user" /> {this.props.usuarioNome}
+									<Icon type="user" /> {this.props.usuarioNome} / {periodoLetivo}
 								</Col>
 								<Col span={1} align="end" title="Sair">
 									<Button onClick={() => this.showHideModalLogout(true)}><Icon type="poweroff" /></Button>
@@ -127,7 +132,8 @@ const MapStateToProps = (state) => {
 	return {
 		pageTitle: state.pageTitle,
 		usuarioNome: state.usuarioNome,
-		authHeaders: state.authHeaders
+		authHeaders: state.authHeaders,
+		contextoAluno: state.contextoAluno
 	}
 }
 

@@ -51,6 +51,7 @@ class Home extends Component {
 
     buildTableData = () => {
         var tableData = this.props.mainData.simulados.map(simulado => {
+            console.log('simulado', simulado)
             var inicioObj = moment(simulado.dataHoraInicial)
             var inicio = inicioObj.format('DD/MM/YYYY HH:mm')
             var terminoObj = moment(simulado.dataHoraFinal)
@@ -64,9 +65,8 @@ class Home extends Component {
             if(terminoObj <= currDate)
                 status = 'Expirado'
 
-            if(status === 'Expirado' || status === 'Finalizado')
+            if(status === 'Expirado' || status === 'Finalizado' || inicioObj > currDate)
                 btnExecutarDisabled = true
-
 
             return({
                 key: simulado.id,
@@ -95,9 +95,17 @@ class Home extends Component {
         }
 
         var requestData = this.props.contextoAluno
-        if(this.props.flagSimuladoFinalizado){
+
+
+        //if(this.props.flagSimuladoFinalizado){
+            var config = {
+                headers: {
+                    'Authorization': this.props.authHeaders.authorization,
+                    'CookieZ': this.props.authHeaders.cookie
+                }
+            }
             this.setState({tableLoading: true})
-            axios.post('http://localhost:5000/api/getData', requestData)
+            axios.post('http://localhost:5000/api/getData', requestData, config)
             .then(res => {
                 this.props.setMainData(res.data)
                 this.buildTableData()
@@ -106,10 +114,10 @@ class Home extends Component {
             .catch(error =>{
                 console.log(error)
             })
-        }
-        else{
+        //}
+        //else{
             this.buildTableData()
-        }
+        //}
         
     }
 
@@ -181,7 +189,8 @@ const MapStateToProps = (state) => {
         usuarioId: state.usuarioId,
         flagSimuladoFinalizado: state.flagSimuladoFinalizado,
         contextoAluno: state.contextoAluno,
-        contexto: state.contexto
+        contexto: state.contexto,
+        authHeaders: state.authHeaders
 	}
 }
 

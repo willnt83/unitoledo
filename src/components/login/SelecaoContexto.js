@@ -88,6 +88,16 @@ class ContextoSelection extends Component {
 				}
 			})
 		}
+		else{
+			var periodoDescricao = this.state.periodos
+			.filter(periodo => {
+				return(periodo.key === parseInt(value))
+			})
+			.map(periodo => {
+				return(periodo.description)
+			})
+			this.props.setPeriodoLetivoDescricao(periodoDescricao)
+		}
 
 		this.setState({
 			periodo: value,
@@ -120,6 +130,7 @@ class ContextoSelection extends Component {
 
 		axios.post('http://localhost:5000/api/getData', requestData, config)
 		.then(res => {
+			console.log('response getData', res.data)
 			this.props.setMainData(res.data)
 
 			if(this.state.periodo)
@@ -233,7 +244,8 @@ const mapDispatchToProps = (dispatch) => {
 			setContexto: (contexto) => { dispatch({ type: 'SET_CONTEXTO', contexto }) },
 			setMainData: (mainData) => { dispatch({ type: 'SET_MAINDATA', mainData }) },
 			setPeriodoLetivo: (periodo) => { dispatch({ type: 'SET_PERIODOLETIVO', periodo }) },
-			setContextoAluno: (contexto) => { dispatch({ type: 'SET_CONTEXTOALUNO', contexto }) }
+			setContextoAluno: (contexto) => { dispatch({ type: 'SET_CONTEXTOALUNO', contexto }) },
+			setPeriodoLetivoDescricao: (periodoDescricao) => { dispatch({ type: 'SET_PERIODOLETIVODESCRICAO', periodoDescricao }) },
     }
 }
 

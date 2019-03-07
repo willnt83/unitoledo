@@ -1,5 +1,5 @@
 import React, { Component } from "react"
-import { Layout, Icon } from "antd"
+import { Layout, Icon, Row, Col } from "antd"
 import { BrowserRouter as Router, Route } from "react-router-dom"
 import { connect } from 'react-redux'
 
@@ -97,6 +97,7 @@ class AdminIndex extends Component {
       collapsed: !this.state.collapsed
     });
   };
+
   render() {
     return (
       <Router>
@@ -107,12 +108,22 @@ class AdminIndex extends Component {
           </Sider>
           <Layout>
             <Header style={{ background: "#fff", padding: 0 }}>
-              <Icon
-                className="trigger"
-                type={this.state.collapsed ? "menu-unfold" : "menu-fold"}
-                onClick={this.toggle}
-              />
-              <PageTitle pageTitle={this.props.pageTitle} />
+              <Row style={{paddingRight: '24px'}}>
+                <Col span={10}>
+                  <Icon
+                    className="trigger"
+                    type={this.state.collapsed ? "menu-unfold" : "menu-fold"}
+                    onClick={this.toggle}
+                  />
+                  <PageTitle pageTitle={this.props.pageTitle} />
+                </Col>
+                <Col span={14} align="end">
+					<Icon type="user" style={{marginRight: '8px'}} />{this.props.usuarioNome} / {this.props.periodoLetivoDescricao}
+                </Col>
+              </Row>
+              
+              
+
             </Header>
 
               {routes.map((route, index) => (
@@ -134,7 +145,9 @@ class AdminIndex extends Component {
 
 const MapStateToProps = (state) => {
   return {
-    pageTitle: state.pageTitle
+    pageTitle: state.pageTitle,
+	usuarioNome: state.usuarioNome,
+	periodoLetivoDescricao: state.periodoLetivoDescricao
   }
 }
 

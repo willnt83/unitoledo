@@ -72,6 +72,7 @@ const initState = {
     authHeaders: null,
     mainData: null,
     periodoLetivo: null,
+    periodoLetivoDescricao: null,
     pageTitle: [],
     habilidades: [],
     conteudos: [],
@@ -107,6 +108,7 @@ const RootReducer = (state = initState, action) => {
             authHeaders: null,
             mainData: null,
             periodoLetivo: null,
+            periodoLetivoDescricao: null,
             pageTitle: [],
             habilidades: [],
             conteudos: [],
@@ -169,6 +171,12 @@ const RootReducer = (state = initState, action) => {
         return{
             ...state,
             periodoLetivo: action.periodo
+        }
+    }
+    else if(action.type === 'SET_PERIODOLETIVODESCRICAO'){
+        return{
+            ...state,
+            periodoLetivoDescricao: action.periodoDescricao
         }
     }
     else if(action.type === 'SET_PAGETITLE'){
