@@ -142,7 +142,18 @@ class NovoSimulado2 extends Component {
             this.setState({tableData: alvos})
         }
         else {
-            // Não possui cursos em mainData, fazer esse caso....
+            if(this.props.mainData.disciplinas && this.props.mainData.disciplinas.length > 0){
+                alvos = this.props.mainData.disciplinas
+                .map(disciplina => {
+                    // retorno de map disciplinas
+                    return({
+                        key: disciplina.id,
+                        name: disciplina.id+' - '+disciplina.nome,
+                        tipo: 'Disciplina'
+                    })
+                })
+            }
+            this.setState({tableData: alvos})
         }
         /**********/
     }
