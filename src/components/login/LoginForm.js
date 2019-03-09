@@ -25,7 +25,6 @@ class LoginForm extends Component {
 					senha: 'qw90PO@!'
 				})
 				.then(res => {
-					console.log('res', res)
 					if(res.headers['access-token']){
 						this.props.setHeader(res.headers['access-token'])
 					}

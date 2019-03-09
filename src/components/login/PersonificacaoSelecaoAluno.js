@@ -33,7 +33,6 @@ class PersonificacaoSelecaoAluno extends Component {
 				}
 				*/
 
-				console.log('this.props.authHeaders', this.props.authHeaders)
 				axios.defaults.headers = {
 					'Authorization': this.props.authHeaders.token
 				}

@@ -23,11 +23,6 @@ class ListMenu extends Component {
 
     handleConfirmLogout = () => {
         this.setState({btnConfirmarLoading: true})
-        axios.defaults.headers = {
-            'Authorization': this.props.authHeaders.authorization,
-            'CookieZ': this.props.authHeaders.cookie
-        }
-        
         var request = {}
         axios.post('http://localhost:5000/api/logout', request)
         .then(res => {

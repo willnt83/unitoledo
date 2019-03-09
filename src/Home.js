@@ -23,9 +23,6 @@ class Home extends Component {
 
         axios.post('http://localhost:5000/api/statusSimulado', request)
         .then(res => {
-
-            console.log('contextoAluno....', this.props.contextoAluno)
-
             axios.get('http://localhost:5000/api/getSimuladoIdAlunoQuestao/'+record.key+'/'+this.props.contextoAluno.idUtilizador)
             .then(res => {
                 this.setState({tableLoading: false})
@@ -95,16 +92,13 @@ class Home extends Component {
 
         var requestData = this.props.contextoAluno
 
+        axios.defaults.headers = {
+            'Authorization': this.props.authHeaders.token
+        }
 
         //if(this.props.flagSimuladoFinalizado){
-            var config = {
-                headers: {
-                    'Authorization': this.props.authHeaders.authorization,
-                    'CookieZ': this.props.authHeaders.cookie
-                }
-            }
             this.setState({tableLoading: true})
-            axios.post('http://localhost:5000/api/getData', requestData, config)
+            axios.post('http://localhost:5000/api/getData', requestData)
             .then(res => {
                 this.props.setMainData(res.data)
                 this.buildTableData()

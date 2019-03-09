@@ -116,7 +116,6 @@ class ContextoSelection extends Component {
 
 		axios.post('http://localhost:5000/api/getData', requestData)
 		.then(res => {
-			console.log('response getData', res.data)
 			this.props.setMainData(res.data)
 
 			if(this.state.periodo)
