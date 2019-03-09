@@ -133,6 +133,7 @@ class Simulados extends Component {
                     questoes: simulado.questoes,
                     situacao: situacao,
                     rascunho: simulado.rascunho,
+                    status: simulado.status,
                     inicio: inicio.format('DD/MM/YYYY HH:mm'),
                     termino: termino.format('DD/MM/YYYY HH:mm'),
                     inicioObj: inicio,
@@ -300,7 +301,7 @@ class Simulados extends Component {
     }
 
     render(){
-        //console.log('props', this.props)
+        //console.log('tableData', this.state.tableData)
         const columns = [
             {
 				title: "ID",
@@ -335,23 +336,33 @@ class Simulados extends Component {
                 width: 300,
                 className: "actionCol",
 				render: (text, record) => {
-                    var publicarButtonDisabled = null
-                    var moverRascunhoButtonDisabled = null
-                    if(this.props.contexto === 'COORDENADOR'){
-                        publicarButtonDisabled = record.rascunho ? false : true
-                        moverRascunhoButtonDisabled = record.rascunho ? true : false
-                    }
-                    else{
+                    var publicarButtonDisabled = false
+                    var moverRascunhoButtonDisabled = false
+                    var editarButtonDisabled = false
+                    var exlcuirButtonDisabled = false
+
+                    publicarButtonDisabled = record.rascunho ? false : true
+                    moverRascunhoButtonDisabled = record.rascunho ? true : false
+
+                    var currDateTime = moment()
+                    if(
+                        record.inicioObj <= currDateTime && currDateTime <= record.terminoObj ||
+                        record.status === 'Realizado'
+                    ){
+                        console.log('unable all')
                         publicarButtonDisabled = true
                         moverRascunhoButtonDisabled = true
+                        editarButtonDisabled = true
+                        exlcuirButtonDisabled = true
                     }
                     
+
 					return (
                         <React.Fragment>
                             <Button className="actionButton buttonGreen" title="Publicar" onClick={() => this.changeSimuladoSituacao(record.key, record.rascunho)} disabled={publicarButtonDisabled}><Icon type="global" /></Button>
                             <Button className="actionButton buttonOrange" title="Mover para Rascunho" onClick={() => this.changeSimuladoSituacao(record.key, record.rascunho)} disabled={moverRascunhoButtonDisabled}><Icon type="file-text" /></Button>
-                            <Button className="actionButton" title="Editar" type="primary" onClick={() => this.editSimulados(record)}><Icon type="edit" /></Button>
-                            <Button className="actionButton buttonRed" title="Excluir" onClick={() => this.showModal(true, record.key)}><Icon type="delete" /></Button>
+                            <Button className="actionButton" title="Editar" type="primary" onClick={() => this.editSimulados(record)} disabled={editarButtonDisabled}><Icon type="edit" /></Button>
+                            <Button className="actionButton buttonRed" title="Excluir" onClick={() => this.showModal(true, record.key)} disabled={exlcuirButtonDisabled}><Icon type="delete" /></Button>
                         </React.Fragment>
 					)
 				}

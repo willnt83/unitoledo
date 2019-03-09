@@ -71,7 +71,6 @@ class ContextoSelection extends Component {
 		if(this.state.contexto === 'PROFESSOR' || this.state.contexto === 'ALUNO'){
 			// Identificando o contexto do tipo e periodo
 			this.props.userInfos.forEach(userInfo => {
-				console.log('userInfo', userInfo)
 				if(userInfo.tipo === this.state.contexto){
 					userInfo.contextos.forEach(contexto => {
 						if(contexto.idPeriodoLetivo === parseInt(value)){
@@ -93,7 +92,6 @@ class ContextoSelection extends Component {
 			})
 			this.props.setPeriodoLetivoDescricao(periodoDescricao)
 		}
-		console.log('periodo value', value)
 		this.setState({
 			periodo: value,
 			showEnviarButton: 'block'
@@ -119,8 +117,6 @@ class ContextoSelection extends Component {
 		axios.post('http://localhost:5000/api/getData', requestData)
 		.then(res => {
 			this.props.setMainData(res.data)
-
-			console.log('this.state.periodo', this.state.periodo)
 			if(this.state.periodo)
 				this.props.setPeriodoLetivo(parseInt(this.state.periodo))
 
