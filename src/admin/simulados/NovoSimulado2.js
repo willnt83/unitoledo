@@ -143,11 +143,13 @@ class NovoSimulado2 extends Component {
         }
         else {
             if(this.props.mainData.disciplinas && this.props.mainData.disciplinas.length > 0){
+                console.log('this.props.mainData.disciplinas', this.props.mainData.disciplinas)
                 alvos = this.props.mainData.disciplinas
                 .map(disciplina => {
                     // retorno de map disciplinas
                     return({
                         key: disciplina.id,
+                        parentKey: disciplina.idTurma,
                         name: disciplina.id+' - '+disciplina.nome,
                         tipo: 'Disciplina'
                     })
@@ -396,6 +398,8 @@ class NovoSimulado2 extends Component {
     }
 
     render(){
+        console.log('this.props.simulado - 2', this.props.simulado)
+        console.log('this.state.tableData', this.state.tableData)
         const { selectedRowKeys } = this.state
         const columns = [
             {
@@ -419,6 +423,7 @@ class NovoSimulado2 extends Component {
                 this.setState({selectAction: true}) // Para indicar que o componentUpdate vem de uma ação de seleção
                 // Seleção
                 if(selected){
+                    console.log('selectedRows', selectedRows)
                     // Se a row possuir filhos, remove-os da seleção
                     if(record.children){
                         rowsToBeRemoved = this.searchKeyRemoveChildren(record.key)
