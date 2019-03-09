@@ -220,7 +220,6 @@ class NovoSimulado3 extends Component {
     }
 
     render(){
-        console.log('this.props.simulado - 3', this.props.simulado)
         const { getFieldDecorator } = this.props.form
         return(
             <React.Fragment>

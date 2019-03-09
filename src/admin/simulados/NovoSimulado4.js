@@ -97,7 +97,6 @@ class NovoSimulado4 extends Component {
                     .filter(alvo => {
                         return(alvo) // retorna somente se existir alvo
                     })
-                    console.log('this.props.simulado.alvos', this.props.simulado.alvos)
                     let turmas = this.props.simulado.alvos
                     .map(alvo =>{
                         if(alvo.tipo === 'Turma'){
@@ -202,7 +201,6 @@ class NovoSimulado4 extends Component {
     }
 
     render(){
-        console.log('this.props.simulado - 4', this.props.simulado)
         const { getFieldDecorator } = this.props.form
         return(
             <React.Fragment>
