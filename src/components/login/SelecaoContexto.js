@@ -29,14 +29,7 @@ class ContextoSelection extends Component {
 			})
 			this.setState({contextoData: selectedContexto})
 
-			var config = {
-				headers: {
-					'Authorization': this.props.authHeaders.authorization,
-					'CookieZ': this.props.authHeaders.cookie
-				}
-			}
-
-			axios.post('http://localhost:5000/api/getPeriodo', selectedContexto, config)
+			axios.post('http://localhost:5000/api/getPeriodo', selectedContexto)
 			.then(res => {
 				var periodos = res.data.periodos.map((item) => {
 					return ({
@@ -109,13 +102,6 @@ class ContextoSelection extends Component {
 		event.preventDefault()
 		this.setState({ enviarButtonLoading : true})
 
-		var config = {
-			headers: {
-				'Authorization': this.props.authHeaders.authorization,
-				'CookieZ': this.props.authHeaders.cookie
-			}
-		}
-
 		var requestData = null
 
 		if(this.state.contexto === 'COORDENADOR'){
@@ -128,7 +114,7 @@ class ContextoSelection extends Component {
 			requestData = this.state.contextoData
 		}
 
-		axios.post('http://localhost:5000/api/getData', requestData, config)
+		axios.post('http://localhost:5000/api/getData', requestData)
 		.then(res => {
 			console.log('response getData', res.data)
 			this.props.setMainData(res.data)
