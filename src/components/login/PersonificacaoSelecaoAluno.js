@@ -33,10 +33,9 @@ class PersonificacaoSelecaoAluno extends Component {
 				}
 				*/
 
-
+				console.log('this.props.authHeaders', this.props.authHeaders)
 				axios.defaults.headers = {
-					'Authorization': this.props.authHeaders.authorization,
-					'CookieZ': this.props.authHeaders.cookie
+					'Authorization': this.props.authHeaders.token
 				}
 
 				axios.get(`http://localhost:5000/api/getUser`, data)
@@ -67,14 +66,7 @@ class PersonificacaoSelecaoAluno extends Component {
 			id: usuarioId
 		}
 
-		var config = {
-			headers: {
-				'Authorization': this.props.authHeaders.authorization,
-				'CookieZ': this.props.authHeaders.cookie
-			}
-		}
-
-		axios.post(`http://localhost:5000/api/contexto`, data, config)
+		axios.post(`http://localhost:5000/api/contexto`, data)
 		.then(res => {
 			this.props.handleUserSelection(res.data.body)
 		})

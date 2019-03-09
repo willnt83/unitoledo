@@ -51,7 +51,6 @@ class Home extends Component {
 
     buildTableData = () => {
         var tableData = this.props.mainData.simulados.map(simulado => {
-            console.log('simulado', simulado)
             var inicioObj = moment(simulado.dataHoraInicial)
             var inicio = inicioObj.format('DD/MM/YYYY HH:mm')
             var terminoObj = moment(simulado.dataHoraFinal)

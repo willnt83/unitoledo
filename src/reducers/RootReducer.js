@@ -137,8 +137,7 @@ const RootReducer = (state = initState, action) => {
         return {
             ...state,
             authHeaders: {
-                authorization: action.headerFields.token,
-                cookie: action.headerFields.cookie
+                token: action.token
             }
         }
     }

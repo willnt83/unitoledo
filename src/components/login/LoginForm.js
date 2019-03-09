@@ -25,11 +25,9 @@ class LoginForm extends Component {
 					senha: 'qw90PO@!'
 				})
 				.then(res => {
-					if(res.headers['access-token'] && res.headers['cookie']){
-						this.props.setHeader({
-							token: res.headers['access-token'],
-							cookie: res.headers['cookie']
-						})
+					console.log('res', res)
+					if(res.headers['access-token']){
+						this.props.setHeader(res.headers['access-token'])
 					}
 
 					if(res.data){
@@ -120,7 +118,7 @@ class LoginForm extends Component {
 
 const mapDispatchToProps = (dispatch) => {
     return {
-		setHeader: (headerFields) => { dispatch({ type: 'SET_HEADERS', headerFields }) }
+		setHeader: (token) => { dispatch({ type: 'SET_HEADERS', token }) }
     }
 }
 
