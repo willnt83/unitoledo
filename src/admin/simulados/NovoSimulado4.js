@@ -192,7 +192,7 @@ class NovoSimulado4 extends Component {
 
     successModal(props){
         Modal.success({
-            title: 'Simulado criado com sucesso',
+            title: 'Simulado salvo com sucesso',
             onOk() {
                 props.resetSimulado()
                 props.history.push('/admin/simulados/')
@@ -341,13 +341,6 @@ class NovoSimulado4 extends Component {
                                             onClick={() => this.handleFinalizarButton('rascunho')}
                                         >
                                             <Icon type="save" />Salvar Como Rascunho
-                                        </Button>
-                                        <Button
-                                            className="buttonGreen"
-                                            style={{marginLeft: '30px'}}
-                                            onClick={() => this.handleFinalizarButton('publico')}
-                                        >
-                                            <Icon type="check" />Finalizar
                                         </Button>
                                     </Col>
                                 </Row>

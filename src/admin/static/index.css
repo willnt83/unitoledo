@@ -81,6 +81,18 @@
     border-color: #f3a449
 }
 
+.buttonPurple {
+    color: #fff;
+    background-color: #8a0df1;
+    border-color: #8a0df1
+}
+
+.buttonPurple:hover, .buttonPurple:focus {
+    color: #fff;
+    background-color: #a548f1;
+    border-color: #a548f1
+}
+
 .tableSelect .ant-table-thead .ant-checkbox {
     display: none
 }

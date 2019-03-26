@@ -85,7 +85,6 @@ class Simulados extends Component {
 
         axios.post('http://localhost:5000/api/getAllSimulado', request)
         .then(res => {
-            console.log('response', res.data)
             var inicio = null
             var termino = null
             var situacao = null
@@ -173,7 +172,7 @@ class Simulados extends Component {
         })
     }
 
-    editSimulados = (record) => {
+    editRepublicarSimulados = (record, op) => {
         axios.get('http://localhost:5000/api/getSimuladoId/'+record.key)
         .then(res => {
             var response = res.data[0]
@@ -240,18 +239,37 @@ class Simulados extends Component {
                 // Datas
                 var inicioObj = moment(response.dataHoraInicial)
                 var terminoObj = moment(response.dataHoraFinal)
-                var simulado = {
-                    id: response.id,
-                    nome: response.nome,
-                    alvos: alvos,
-                    questoes: questoes,
-                    inicio: {
-                        data: inicioObj.format('DD/MM/YYYY'),
-                        hora: inicioObj.format('HH:mm')
-                    },
-                    fim: {
-                        data: terminoObj.format('DD/MM/YYYY'),
-                        hora: terminoObj.format('HH:mm')
+
+                if(op == 'editar'){
+                    var simulado = {
+                        id: response.id,
+                        nome: response.nome,
+                        alvos: alvos,
+                        questoes: questoes,
+                        inicio: {
+                            data: inicioObj.format('DD/MM/YYYY'),
+                            hora: inicioObj.format('HH:mm')
+                        },
+                        fim: {
+                            data: terminoObj.format('DD/MM/YYYY'),
+                            hora: terminoObj.format('HH:mm')
+                        }
+                    }
+                }
+                else{
+                    var simulado = {
+                        id: null,
+                        nome: response.nome,
+                        alvos: alvos,
+                        questoes: questoes,
+                        inicio: {
+                            data: null,
+                            hora: null
+                        },
+                        fim: {
+                            data: null,
+                            hora: null
+                        }
                     }
                 }
 
@@ -315,10 +333,15 @@ class Simulados extends Component {
 				sorter: (a, b) => this.compareByAlph(a.nome, b.nome)
             },
             {
-				title: "Situação",
+				title: "Disponibilidade",
 				dataIndex: "situacao",
 				sorter: (a, b) => this.compareByAlph(a.situacao, b.situacao)
-			},
+            },
+            {
+				title: "Status",
+				dataIndex: "status",
+				sorter: (a, b) => this.compareByAlph(a.status, b.status)
+            },
 			{
 				title: "Início em",
 				dataIndex: "inicio",
@@ -337,24 +360,29 @@ class Simulados extends Component {
                 width: 300,
                 className: "actionCol",
 				render: (text, record) => {
+                    console.log('record', record)
                     var publicarButtonDisabled = false
                     var moverRascunhoButtonDisabled = false
                     var editarButtonDisabled = false
                     var exlcuirButtonDisabled = false
+                    var republicarButtonDisabled = false
 
-                    publicarButtonDisabled = record.rascunho ? true : false
-                    moverRascunhoButtonDisabled = record.rascunho ? false : true
+                    publicarButtonDisabled = record.rascunho ? false : true
+                    moverRascunhoButtonDisabled = record.rascunho ? true : false
 
                     var currDateTime = moment()
+                    
                     if(
-                        (record.inicioObj <= currDateTime && currDateTime <= record.terminoObj) ||
+                        (record.inicioObj <= currDateTime && currDateTime <= record.terminoObj && record.situacao !== 'Rascunho') ||
                         record.status === 'Realizado'
                     ){
-                        console.log('unable all')
                         publicarButtonDisabled = true
                         moverRascunhoButtonDisabled = true
                         editarButtonDisabled = true
                         exlcuirButtonDisabled = true
+                    }
+                    else{
+                        republicarButtonDisabled = true
                     }
                     
 
@@ -362,7 +390,8 @@ class Simulados extends Component {
                         <React.Fragment>
                             <Button className="actionButton buttonGreen" title="Publicar" onClick={() => this.changeSimuladoSituacao(record.key, record.rascunho)} disabled={publicarButtonDisabled}><Icon type="global" /></Button>
                             <Button className="actionButton buttonOrange" title="Mover para Rascunho" onClick={() => this.changeSimuladoSituacao(record.key, record.rascunho)} disabled={moverRascunhoButtonDisabled}><Icon type="file-text" /></Button>
-                            <Button className="actionButton" title="Editar" type="primary" onClick={() => this.editSimulados(record)} disabled={editarButtonDisabled}><Icon type="edit" /></Button>
+                            <Button className="actionButton buttonPurple" title="Republicar" onClick={() => this.editRepublicarSimulados(record, 'republicar')} disabled={republicarButtonDisabled}><Icon type="redo" /></Button>
+                            <Button className="actionButton" title="Editar" type="primary" onClick={() => this.editRepublicarSimulados(record, 'editar')} disabled={editarButtonDisabled}><Icon type="edit" /></Button>
                             <Button className="actionButton buttonRed" title="Excluir" onClick={() => this.showModal(true, record.key)} disabled={exlcuirButtonDisabled}><Icon type="delete" /></Button>
                         </React.Fragment>
 					)
