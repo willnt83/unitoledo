@@ -29,8 +29,10 @@ const initState = {
     },
     selectedQuestoes: [],
     flagSimuladoFinalizado: null,
-    contextoAluno: null
+    contextoAluno: null,
+    request: null
     */
+
     /*
     // Coordenador
     contexto: null,
@@ -61,7 +63,8 @@ const initState = {
     },
     selectedQuestoes: [],
     flagSimuladoFinalizado: null,
-    contextoAluno: null
+    contextoAluno: null,
+    request: null
     */
 
     // Original
@@ -94,7 +97,8 @@ const initState = {
     },
     selectedQuestoes: [],
     flagSimuladoFinalizado: null, //flag necessária para contornar a inconsistencia da chamada getData :(
-    contextoAluno: null // variável necessário para contornar a inconsitencia da chamada getData :(((((
+    contextoAluno: null, // variável necessário para contornar a inconsitencia da chamada getData :(((((
+    request: null
 }
 
 const RootReducer = (state = initState, action) => {
@@ -130,7 +134,8 @@ const RootReducer = (state = initState, action) => {
             },
             selectedQuestoes: [],
             flagSimuladoFinalizado: null,
-            contextoAluno: null
+            contextoAluno: null,
+            request: null
         }
     }
     else if(action.type === 'SET_HEADERS'){
@@ -372,6 +377,12 @@ const RootReducer = (state = initState, action) => {
         return{
             ...state,
             contextoAluno: action.contexto
+        }
+    }
+    else if(action.type === 'SET_REQUEST'){
+        return{
+            ...state,
+            request: action.request
         }
     }
 

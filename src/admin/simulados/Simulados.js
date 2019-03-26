@@ -85,6 +85,7 @@ class Simulados extends Component {
 
         axios.post('http://localhost:5000/api/getAllSimulado', request)
         .then(res => {
+            console.log('response', res.data)
             var inicio = null
             var termino = null
             var situacao = null
@@ -341,12 +342,12 @@ class Simulados extends Component {
                     var editarButtonDisabled = false
                     var exlcuirButtonDisabled = false
 
-                    publicarButtonDisabled = record.rascunho ? false : true
-                    moverRascunhoButtonDisabled = record.rascunho ? true : false
+                    publicarButtonDisabled = record.rascunho ? true : false
+                    moverRascunhoButtonDisabled = record.rascunho ? false : true
 
                     var currDateTime = moment()
                     if(
-                        record.inicioObj <= currDateTime && currDateTime <= record.terminoObj ||
+                        (record.inicioObj <= currDateTime && currDateTime <= record.terminoObj) ||
                         record.status === 'Realizado'
                     ){
                         console.log('unable all')

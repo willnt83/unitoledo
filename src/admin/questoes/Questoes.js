@@ -6,6 +6,7 @@ import { connect } from 'react-redux'
 import axios from "axios"
 import { withRouter } from "react-router-dom"
 import ModalCadastro from './ModalCadastro'
+import ModalViewQuestao from './ModalViewQuestao'
 
 const { Content } = Layout
 const Option = Select.Option
@@ -53,6 +54,7 @@ class Questoes extends Component {
 		selectedRowKeys: [],
 		tableLoading: false,
 		showModalCadastro: false,
+		showModalViewQuestao: false,
 		questao: null,
 		questoes: null,
 		buttonLoadingBuscar: false,
@@ -70,47 +72,60 @@ class Questoes extends Component {
 			tipo: {
 				id: 0
 			}
-		}
+		},
+		op: null
+	}
+
+	requestGetAlternativas = (row) => {
+		axios.get('http://localhost:5000/api/getAlternativas/'+row.key)
+		.then(res => {
+			this.setState({mode: 'edit'})
+			var alternativaLetras = ['A', 'B', 'C', 'D', 'E']
+			var alternativaCorreta = null
+			var alternativas = res.data.map((alternativa, index) => {
+				if(alternativa.correta)
+					alternativaCorreta = alternativaLetras[index]
+				return({
+					id: alternativa.id,
+					correta: alternativa.correta,
+					descricao: alternativa.descricao
+				})
+			})
+
+			row.valueAlternativaCorreta = alternativaCorreta
+			row.alternativas = alternativas
+			this.setState({questao: row})
+		})
+		.catch(error =>{
+			console.log(error)
+		})
+	}
+
+	setQuestao = (questao) => {
+		this.setState({questao})
 	}
 
 	resetQuestao = () => {
 		this.setState({questao: null})
 	}
 
-	showModalCadastro = (row) => {
-		/*
-		this.props.getHabilidades()
-		this.props.getConteudos()
-		this.props.getAreasDeConhecimento()
-		*/
+	loadModalViewQuestao = (row) => {
+		this.requestGetAlternativas(row)
+		this.showModalViewQuestaoF(true, 'view')
+	}
 
+	showModalViewQuestaoF = (bool, op = null) => {
+		this.setState({showModalViewQuestao: bool, op})
+	}
+
+	showModalCadastro = (row) => {
 		if (typeof row == "undefined") {
 			// Create
 			this.setState({mode: 'create', showModalCadastro: true})
 		} else {
 			// Edit
-			axios.get('http://localhost:5000/api/getAlternativas/'+row.key)
-			.then(res => {
-				this.setState({mode: 'edit'})
-				var alternativaLetras = ['A', 'B', 'C', 'D', 'E']
-				var alternativaCorreta = null
-				var alternativas = res.data.map((alternativa, index) => {
-					if(alternativa.correta)
-						alternativaCorreta = alternativaLetras[index]
-					return({
-						id: alternativa.id,
-						correta: alternativa.correta,
-						descricao: alternativa.descricao
-					})
-				})
-
-				row.valueAlternativaCorreta = alternativaCorreta
-				row.alternativas = alternativas
-				this.setState({questao: row, showModalCadastro: true})
-			})
-			.catch(error =>{
-				console.log(error)
-			})
+			this.requestGetAlternativas(row)
+			this.setState({showModalCadastro: true})
 		}
 	}
 
@@ -215,7 +230,6 @@ class Questoes extends Component {
     }
 
 	componentWillUpdate(nextProps, nextState) {
-		//console.log('nextProps.createUpdateQuestaoResponse', nextProps.createUpdateQuestaoResponse)
 		// Tratando response da requisição deleteQuestao
 		if(nextProps.deleteQuestaoResponse && nextProps.deleteQuestaoResponse !== this.props.deleteQuestaoResponse){
 			if(nextProps.deleteQuestaoResponse.success){
@@ -236,7 +250,6 @@ class Questoes extends Component {
 	}
 
 	render() {
-		//console.log('this.props', this.props)
 		const { getFieldDecorator } = this.props.form
 		const columns = [
 			{
@@ -294,8 +307,13 @@ class Questoes extends Component {
 					return (
 					<React.Fragment>
 						<Icon
+							type="eye"
+							style={{ cursor: 'pointer'}}
+							onClick={() => this.loadModalViewQuestao(record)}
+						/>
+						<Icon
 							type="edit"
-							style={{ cursor: "pointer" }}
+							style={{ cursor: 'pointer', marginLeft: 20 }}
 							onClick={() => this.showModalCadastro(record)}
 						/>
 						<Popconfirm
@@ -403,10 +421,20 @@ class Questoes extends Component {
 				<ModalCadastro
 					showModalCadastro={this.state.showModalCadastro}
 					hideModalCadastro={this.hideModalCadastro}
-					handleGetQuestoes={this.handleGetQuestoes}
+					showModalViewQuestaoF={this.showModalViewQuestaoF}
 					questao={this.state.questao}
 					mode={this.state.mode}
 					resetQuestao={this.resetQuestao}
+					setQuestao={this.setQuestao}
+				/>
+				<ModalViewQuestao
+					showModalViewQuestao={this.state.showModalViewQuestao}
+					showModalViewQuestaoF={this.showModalViewQuestaoF}
+					hideModalCadastro={this.hideModalCadastro}
+					handleGetQuestoes={this.handleGetQuestoes}
+					questao={this.state.questao}
+					resetQuestao={this.resetQuestao}
+					op={this.state.op}
 				/>
 			</Content>
 		)

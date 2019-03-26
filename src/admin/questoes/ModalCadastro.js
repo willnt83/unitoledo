@@ -114,7 +114,6 @@ class ModalCadastro extends Component {
         showModalAlternativas: false,
         alternativaCorreta: null,
         alternativas: [],
-        buttonConfirmarLoading: false,
         anoOptions: [],
         questaoId: '',
         alternativasTooltipVisible: false,
@@ -144,7 +143,7 @@ class ModalCadastro extends Component {
         }
     }
 
-    handleSubmitCadastro = (event) => {
+    handleViewQuestao = (event) => {
         event.preventDefault()
         this.props.form.validateFieldsAndScroll((err, values) => {
             var discursiva = this.stringToBool(values.discursiva)
@@ -190,8 +189,35 @@ class ModalCadastro extends Component {
                     this.setState({alternativasTooltipVisible: true})
                 }
                 else{
-                    this.setState({buttonConfirmarLoading: true, alternativasTooltipVisible: false})
-                    this.props.createUpdateQuestao(request)
+                    this.setState({alternativasTooltipVisible: false})
+                    this.props.setRequest(request)
+                    var questao = {
+                        key: this.state.questaoId,
+                        alternativas: this.state.alternativas,
+                        areaConhecimentoId: values.areaDeConhecimento,
+                        ano: values.ano,
+                        conteudoId: values.conteudo,
+                        description: values.descricao,
+                        fonte: values.fonte,
+                        habilidadeId: values.habilidade,
+                        imagem: null,
+                        tipoId: values.tipo,
+                        valueAlternativaCorreta: this.state.alternativaCorreta,
+                        valueAno: values.ano,
+                        valueDiscursiva: discursiva,
+                        valueEnade: this.stringToBool(values.padraoEnade),
+                        valueStatus: this.stringToBool(values.status)
+                    }
+
+                    this.props.setQuestao(questao)
+
+                    this.props.showModalViewQuestaoF(true, 'write')
+                    
+
+
+                    //this.props.hideModalCadastro()
+
+                    //this.props.createUpdateQuestao(request)
                 }
                    
             }
@@ -304,19 +330,9 @@ class ModalCadastro extends Component {
     }
 
     componentWillUpdate(nextProps, nextState) {
-        // Tratando response da requisição createUpdateQuestao
-		if(nextProps.createUpdateQuestaoResponse && nextProps.createUpdateQuestaoResponse !== this.props.createUpdateQuestaoResponse){
-			if(nextProps.createUpdateQuestaoResponse.success){
-                //this.resetInputStates()
-                this.handleModalClosure() // Limpa todas as variáveis e o formulário
-				this.props.hideModalCadastro()
-				this.props.handleGetQuestoes()
-			}
-			else{
-				this.openNotificationError(nextProps.createUpdateQuestaoResponse.message)
-				this.props.hideModalCadastro()
-            }
-            this.setState({buttonConfirmarLoading: false})
+        // Reset do modal
+        if(this.props.showModalCadastro === true && nextProps.showModalCadastro === false){
+            this.handleModalClosure()
         }
 
         // Populando campos do formulário
@@ -404,8 +420,7 @@ class ModalCadastro extends Component {
                         <Button
                             key="submit"
                             type="primary"
-                            onClick={this.handleSubmitCadastro}
-                            loading={this.state.buttonConfirmarLoading}
+                            onClick={this.handleViewQuestao}
                         >
                             <Icon type="check" />Confirmar
                         </Button>
@@ -701,6 +716,7 @@ const MapStateToProps = (state) => {
 }
 const mapDispatchToProps = (dispatch) => {
     return {
+        setRequest: (request) => { dispatch({ type: 'SET_REQUEST', request }) }
     }
 }
 
