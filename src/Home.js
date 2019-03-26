@@ -6,13 +6,21 @@ import moment from 'moment'
 import axios from 'axios'
 import "./static/style.css"
 
-const { Content } = Layout;
+const { Content } = Layout
 
 class Home extends Component {
     state = {
         tableData: [],
         tableLoading: false
-    };
+    }
+
+    compareByDates = (a, b) => {
+        a = moment(a, 'DD/MM/YYYY HH:mm')
+            b = moment(b, 'DD/MM/YYYY HH:mm')
+        if (a > b) return -1
+        if (a < b) return 1
+        return 0
+    }
 
     getSimulado = (record) => {
         this.setState({tableLoading: true})
@@ -76,14 +84,6 @@ class Home extends Component {
         this.setState({tableData})
     }
 
-    compareByAlph = (a, b) => {
-        if (a > b)
-            return -1
-        if (a < b)
-            return 1
-        return 0
-    }
-
     componentWillMount(){
         if(this.props.mainData === null || this.props.contexto !== 'ALUNO'){
             this.props.resetAll()
@@ -124,22 +124,23 @@ class Home extends Component {
 			{
 				title: "Descrição",
 				dataIndex: "nome",
-				sorter: (a, b) => this.compareByAlph(a.nome, b.nome)
+                sorter: (a, b) => { return a.nome.localeCompare(b.nome)},
+                width: 799
             },
             {
 				title: "Inicia em",
 				dataIndex: "inicio",
-				sorter: (a, b) => this.compareByAlph(a.inicio, b.inicio)
+				sorter: (a, b) => this.compareByDates(a.inicio, b.inicio)
 			},
             {
 				title: "Finaliza em",
 				dataIndex: "fim",
-				sorter: (a, b) => this.compareByAlph(a.fim, b.fim)
+				sorter: (a, b) => this.compareByDates(a.fim, b.fim)
             },
             {
                 title: 'Status',
                 dataIndex: 'status',
-                sorter: (a, b) => this.compareByAlph(a.status, b.status)
+                sorter: (a, b) => { return a.status.localeCompare(b.status)}
             },
             {
 				title: "Executar",
@@ -153,7 +154,7 @@ class Home extends Component {
                         <React.Fragment>
                             <Button className="actionButton buttonGreen" title="Executar" onClick={() => this.getSimulado(record)} disabled={record.btnExecutarDisabled}><Icon type="caret-right" /></Button>
                         </React.Fragment>
-					);
+					)
 				}
 			}
         ]
@@ -172,7 +173,7 @@ class Home extends Component {
                     />
                 </Content>
             </React.Fragment>
-        );
+        )
     }
 }
 

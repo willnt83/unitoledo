@@ -4,7 +4,6 @@ import { withRouter } from "react-router-dom"
 import axios from "axios"
 import { connect } from 'react-redux'
 import moment from 'moment'
-//moment.locale('pt-br')
 
 const { Content } = Layout
 
@@ -22,7 +21,9 @@ class Simulados extends Component {
         confirmarRemocaoLoading: false
     }
 
-    compareByAlph = (a, b) => {
+    compareByDates = (a, b) => {
+        a = moment(a, 'DD/MM/YYYY HH:mm')
+        b = moment(b, 'DD/MM/YYYY HH:mm')
 		if (a > b) return -1
 		if (a < b) return 1
 		return 0
@@ -239,9 +240,10 @@ class Simulados extends Component {
                 // Datas
                 var inicioObj = moment(response.dataHoraInicial)
                 var terminoObj = moment(response.dataHoraFinal)
+                var simulado = null
 
-                if(op == 'editar'){
-                    var simulado = {
+                if(op === 'editar'){
+                    simulado = {
                         id: response.id,
                         nome: response.nome,
                         alvos: alvos,
@@ -257,7 +259,7 @@ class Simulados extends Component {
                     }
                 }
                 else{
-                    var simulado = {
+                    simulado = {
                         id: null,
                         nome: response.nome,
                         alvos: alvos,
@@ -329,28 +331,29 @@ class Simulados extends Component {
             },
 			{
 				title: "Nome",
-				dataIndex: "nome",
-				sorter: (a, b) => this.compareByAlph(a.nome, b.nome)
+                dataIndex: "nome",
+                sorter: (a, b) => { return a.nome.localeCompare(b.nome)},
+                width: 576
             },
             {
 				title: "Disponibilidade",
 				dataIndex: "situacao",
-				sorter: (a, b) => this.compareByAlph(a.situacao, b.situacao)
+				sorter: (a, b) => { return a.situacao.localeCompare(b.situacao)}
             },
             {
 				title: "Status",
 				dataIndex: "status",
-				sorter: (a, b) => this.compareByAlph(a.status, b.status)
+				sorter: (a, b) => { return a.status.localeCompare(b.status)}
             },
 			{
 				title: "Início em",
 				dataIndex: "inicio",
-				sorter: (a, b) => this.compareByAlph(a.inicio, b.inicio)
+				sorter: (a, b) => this.compareByDates(a.inicio, b.inicio)
 			},
 			{
 				title: "Término em",
 				dataIndex: "termino",
-				sorter: (a, b) => this.compareByAlph(a.termino, b.termino)
+				sorter: (a, b) => this.compareByDates(a.termino, b.termino)
             },
             {
 				title: "Ações",
@@ -360,7 +363,6 @@ class Simulados extends Component {
                 width: 300,
                 className: "actionCol",
 				render: (text, record) => {
-                    console.log('record', record)
                     var publicarButtonDisabled = false
                     var moverRascunhoButtonDisabled = false
                     var editarButtonDisabled = false

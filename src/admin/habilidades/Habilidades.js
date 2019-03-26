@@ -125,14 +125,6 @@ class Habilidades extends Component {
         this.props.deleteHabilidade(id)
     }
 
-    compareByAlph = (a, b) => {
-        if (a > b)
-            return -1;
-        if (a < b)
-            return 1;
-        return 0;
-    }
-
     handleSearch = (selectedKeys, confirm) => () => {
         confirm();
         this.setState({ searchText: selectedKeys[0] });
@@ -216,7 +208,7 @@ class Habilidades extends Component {
         }, {
             title: 'Descrição',
             dataIndex: 'description',
-            sorter: (a, b) => this.compareByAlph(a.description, b.description),
+            sorter: (a, b) => { return a.description.localeCompare(b.description)},
             filterDropdown: ({ setSelectedKeys, selectedKeys, confirm, clearFilters }) => (
                 <div className={classes.customFilterDropdown}>
                     <Input
@@ -264,7 +256,8 @@ class Habilidades extends Component {
                 value: 'Inativo',
             }],
             filterMultiple: false,
-            onFilter: (value, record) => record.labelStatus.indexOf(value) === 0
+            onFilter: (value, record) => record.labelStatus.indexOf(value) === 0,
+            sorter: (a, b) => { return a.labelStatus.localeCompare(b.labelStatus)}
         }, {
             title: 'Operação',
             colSpan: 2,

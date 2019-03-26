@@ -145,13 +145,6 @@ class Questoes extends Component {
 		this.props.deleteQuestao(id)
 	}
 
-	// Filtros e Ordenação
-	compareByAlph = (a, b) => {
-		if (a > b) return -1
-		if (a < b) return 1
-		return 0
-	}
-
 	handleSearch = (selectedKeys, confirm) => () => {
 		confirm()
 		this.setState({ searchText: selectedKeys[0] })
@@ -260,23 +253,24 @@ class Questoes extends Component {
 			{
 				title: "Descrição",
 				dataIndex: "description",
-				sorter: (a, b) => this.compareByAlph(a.description, b.description),
+				width: 641,
+				sorter: (a, b) => { return a.description.localeCompare(b.description)}
 			},
 			{
 				title: "Habilidade",
 				dataIndex: "habilidade",
-				sorter: (a, b) => this.compareByAlph(a.habilidade, b.habilidade),
+				sorter: (a, b) => { return a.habilidade.localeCompare(b.habilidade)},
 				width: 139
 			},
 			{
 				title: "Conteúdo",
 				dataIndex: "conteudo",
-				sorter: (a, b) => this.compareByAlph(a.conteudo, b.conteudo)
+				sorter: (a, b) => { return a.conteudo.localeCompare(b.conteudo)}
 			},
 			{
 				title: "Área de Conhecimento",
 				dataIndex: "areaConhecimento",
-				sorter: (a, b) => this.compareByAlph(a.areaConhecimento, b.areaConhecimento),
+				sorter: (a, b) => { return a.areaConhecimento.localeCompare(b.areaConhecimento)},
 				width: 93
 			},
 			{
@@ -295,7 +289,8 @@ class Questoes extends Component {
 					}
 				],
 				filterMultiple: false,
-				onFilter: (value, record) => record.labelStatus.indexOf(value) === 0
+				onFilter: (value, record) => record.labelStatus.indexOf(value) === 0,
+				sorter: (a, b) => { return a.labelStatus.localeCompare(b.labelStatus)}
 			},
 			{
 				title: "Operação",
