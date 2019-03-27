@@ -335,6 +335,11 @@ class ModalCadastro extends Component {
             this.handleModalClosure()
         }
 
+        // Settando valor padrão para campo Status do form
+        if(this.props.showModalCadastro === false && nextProps.showModalCadastro === true && nextProps.questao === null){
+            this.props.form.setFieldsValue({status: 'true'})
+        }
+
         // Populando campos do formulário
         if(nextProps.questao !== null && nextProps.questao !== this.props.questao){
             var status = nextProps.questao.valueStatus === true ? 'true' : 'false'
