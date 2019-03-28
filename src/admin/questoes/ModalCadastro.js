@@ -356,6 +356,7 @@ class ModalCadastro extends Component {
             }
 
             var file = null
+            console.log('nextProps.questao', nextProps.questao)
             this.props.form.setFieldsValue({
                 habilidade: nextProps.questao.habilidadeId,
                 conteudo: nextProps.questao.conteudoId,

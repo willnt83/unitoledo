@@ -396,7 +396,7 @@ function BackEndRequestsWrapper(WrappedComponent) {
 						valueStatus: questao.status,
 						valueEnade: questao.enade,
 						valueDiscursiva: questao.discursiva,
-						fonte: questao.fonte,
+						fonte: parseInt(questao.fonte),
 						valueAno: questao.ano,
 						ano: questao.ano,
 						habilidade: questao.habilidade.description,
