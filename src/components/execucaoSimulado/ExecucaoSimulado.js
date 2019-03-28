@@ -15,7 +15,6 @@ class ExecucaoSimulado extends Component {
         value: null,
         questaoNo: 0,
         questoesRespondidas: 0,
-        periodoExecucao: null,
         showModal: false,
         btnSalvarRespostaLoading: false,
         btnFinalizarSimuladoLoading: false
@@ -54,7 +53,6 @@ class ExecucaoSimulado extends Component {
             // Atualizando redux simulado.questoes com a alternativa respondida na questão
             var questoes = this.props.simulado.questoes
             questoes[this.state.questaoNo].respondida = idAlternativa
-
             this.props.setQuestaoRespondida(questoes)
             this.countRespondidas()
             this.setState({btnSalvarRespostaLoading: false})
@@ -113,7 +111,7 @@ class ExecucaoSimulado extends Component {
         const args = {
             message: 'Resposta registrada',
             icon: <Icon type="check-circle" style={{color: '#13a54b', fontWeight: '800'}} />,
-            duration: 0
+            duration: 2
         }
         notification.open(args)
     }
@@ -132,16 +130,19 @@ class ExecucaoSimulado extends Component {
             this.props.resetAll()
             window.location.replace("/")
         }
-
-        // Settando periodoExecucao (em minutos) com a diferença entre as dataHoras Inicial e Final
-        var inicioObj = moment()
-        var terminoObj = moment(this.props.simulado.dataHoraFinal, 'DD/MM/YYYY HH:mm')
-        var periodoExecucaoObj = terminoObj.diff(inicioObj, 'minutes')
-        this.setState({periodoExecucao: periodoExecucaoObj})
         this.countRespondidas()
     }
 
     render() {
+        // Settando periodoExecucao (em minutos) com a diferença entre as dataHoras Inicial e Final
+        var periodoExecucaoObj = null
+        if(this.props.simulado){
+            
+            var inicioObj = moment()
+            var terminoObj = moment(this.props.simulado.fim.data+ ' '+this.props.simulado.fim.hora, 'DD/MM/YYYY HH:mm')
+            periodoExecucaoObj = terminoObj.diff(inicioObj, 'minutes')
+        }
+
         return (
             <Layout className="layout">
                 <Content
@@ -150,13 +151,14 @@ class ExecucaoSimulado extends Component {
                         padding: "0 30px 0 24px",
                         background: "#13a54b",
                         color: '#fff',
+                        maxHeight: 24
                     }}
                 >
                     <Row>
                         <Col span={24} align="end" style={{fontWeight: 500}}>
                             <Icon type="clock-circle"  style={{ marginRight: 10 }}/>
                             <span style={{ marginRight: 10 }}>Tempo restante:</span>
-                            <Countdown date={Date.now() + this.state.periodoExecucao * 60000} daysInHours={true} />
+                            <Countdown date={Date.now() + periodoExecucaoObj * 60000} daysInHours={true} />
                         </Col>
                     </Row>
                 </Content>

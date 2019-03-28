@@ -40,8 +40,8 @@ class QuestaoSimulado extends Component {
         var resposta = this.checkResponse(this.props.questaoNo)
 
         // Tempo total do simulado
-        var dataHoraInicialObj = moment(this.props.simulado.dataHoraInicial, 'DD/MM/YY HH:mm')
-        var dataHoraFinalObj = moment(this.props.simulado.dataHoraFinal, 'DD/MM/YY HH:mm')
+        var dataHoraInicialObj = moment(this.props.simulado.inicio.data+' '+this.props.simulado.inicio.hora, 'DD/MM/YY HH:mm')
+        var dataHoraFinalObj = moment(this.props.simulado.fim.data+' '+this.props.simulado.fim.hora, 'DD/MM/YY HH:mm')
 
 
         this.setState({
@@ -97,7 +97,6 @@ class QuestaoSimulado extends Component {
     }
 
     render() {
-        console.log('this.props', this.props)
         var simuladoFonteText = this.props.simulado.fonte ? '<h4>'+this.props.simulado.fonte+'</h4>' : null
 
         const radioStyle = {

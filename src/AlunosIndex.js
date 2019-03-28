@@ -103,7 +103,7 @@ class AlunosIndex extends Component {
 						<Layout className="layout">
 							<Header style={{padding: '0 25px 0 0'}}>
 								<Row style={{color: '#fff'}}>
-									<Col span={ {xs: 8, sm: 16, md: 24, lg: 32} } align="end">
+									<Col xs={8} sm={16} md={24} lg={32} align="end">
 										<Icon type="user" /> {this.props.usuarioNome} / {periodoLetivo}
 									</Col>
 								</Row>

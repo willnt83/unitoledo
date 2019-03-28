@@ -372,8 +372,8 @@ const RootReducer = (state = initState, action) => {
                 nome: state.simulado.nome,
                 alvos: state.simulado.alvos,
                 questoes: action.questoes,
-                inicio: state.dateTimeInicial,
-                fim: state.dateTimeFinal
+                inicio: state.simulado.inicio,
+                fim: state.simulado.fim
             }
         }
     }

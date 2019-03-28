@@ -23,6 +23,7 @@ class Simulados extends Component {
     }
 
     getSimulado = (record) => {
+        console.log('record', record)
         this.setState({tableLoading: true})
         var request = {
             "id": record.key,
@@ -34,11 +35,20 @@ class Simulados extends Component {
             axios.get('http://localhost:5000/api/getSimuladoIdAlunoQuestao/'+record.key+'/'+this.props.contextoAluno.idUtilizador)
             .then(res => {
                 this.setState({tableLoading: false})
+                var inicioObj = moment(record.inicio, 'DD/MM/YYYY HH:mm')
+                var fimObj = moment(record.fim, 'DD/MM/YYYY HH:mm')
+
                 var simulado = {
                     id: record.key,
                     nome: record.nome,
-                    dataHoraInicial: record.inicio,
-                    dataHoraFinal: record.fim,
+                    inicio: {
+                        data: inicioObj.format('DD/MM/YYYY'),
+                        hora: inicioObj.format('HH:mm')
+                    },
+                    fim: {
+                        data: fimObj.format('DD/MM/YYYY'),
+                        hora: fimObj.format('HH:mm')
+                    },
                     questoes: res.data
                 }
                 this.props.setSimulado(simulado)
