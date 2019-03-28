@@ -186,6 +186,7 @@ class ExecucaoSimulado extends Component {
                     ]}
                 >
                     <p>Você está prestes a finalizar o simulado e não poderá alterar suas respostas posteriormente.</p>
+                    <p><strong>Questões respondidas: {this.state.questoesRespondidas} de {this.props.simulado.questoes.length}</strong></p>
                     <p>Confirmar finalização do simulado?</p>
                 </Modal>
             </Layout>
@@ -199,7 +200,8 @@ const MapStateToProps = (state) => {
         usuarioId: state.usuarioId,
         mainData: state.mainData,
         contexto: state.contexto,
-        contextoAluno: state.contextoAluno
+        contextoAluno: state.contextoAluno,
+        questoesRespondidas: state.questoesRespondidas
 	}
 }
 
