@@ -68,6 +68,12 @@ class ListMenu extends Component {
                                 <span>Área de Conhecimento</span>
                             </Link>
                         </Menu.Item>
+                        <Menu.Item key="5">
+                            <Link to="/admin/cadastros/fontes">
+                                <Icon type="right-square" />
+                                <span>Fontes</span>
+                            </Link>
+                        </Menu.Item>
                     </SubMenu>
                     <Menu.Item key="6">
                         <Link to="/admin/area-do-gestor">

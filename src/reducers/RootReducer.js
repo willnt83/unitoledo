@@ -12,6 +12,7 @@ const initState = {
     habilidades: [],
     conteudos: [],
     areasDeConhecimento: [],
+    fontes: [],
     questoes: [],
     simulado: {
         id: '',
@@ -46,6 +47,7 @@ const initState = {
     habilidades: [],
     conteudos: [],
     areasDeConhecimento: [],
+    fontes: [],
     questoes: [],
     simulado: {
         id: '',
@@ -80,6 +82,7 @@ const initState = {
     habilidades: [],
     conteudos: [],
     areasDeConhecimento: [],
+    fontes: [],
     questoes: [],
     simulado: {
         id: '',
@@ -117,6 +120,7 @@ const RootReducer = (state = initState, action) => {
             habilidades: [],
             conteudos: [],
             areasDeConhecimento: [],
+            fontes: [],
             questoes: [],
             simulado: {
                 id: '',
@@ -205,6 +209,12 @@ const RootReducer = (state = initState, action) => {
         return{
             ...state,
             areasDeConhecimento: action.areasDeConhecimento
+        }
+    }
+    else if(action.type === 'SET_FONTES'){
+        return {
+            ...state,
+            fontes: action.fontes
         }
     }
     else if(action.type === 'SET_QUESTOES'){

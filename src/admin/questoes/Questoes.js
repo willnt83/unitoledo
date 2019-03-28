@@ -47,7 +47,8 @@ class Questoes extends Component {
 		props.setPageTitle('Banco de Questões')
 		props.getHabilidades('ativo')
         props.getConteudos('ativo')
-        props.getAreasDeConhecimento('ativo')
+		props.getAreasDeConhecimento('ativo')
+		props.getFontes('ativo')
 	}
 
 	state = {

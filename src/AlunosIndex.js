@@ -4,14 +4,15 @@ import { BrowserRouter as Router, Route, withRouter, Link } from "react-router-d
 
 import { connect } from 'react-redux'
 import axios from "axios"
-import PageTitle from "./layout/PageTitle"
+//import PageTitle from "./layout/PageTitle"
 import Simulados from './Simulados'
 import ExecucaoSimulado from './components/execucaoSimulado/ExecucaoSimulado'
 
 import "antd/dist/antd.css"
 import "./static/style.css"
 
-const { Header, Content, Footer, Sider } = Layout
+//const { Header, Content, Footer, Sider } = Layout
+const { Header, Footer, Sider } = Layout
 
 const routes = [
 	{

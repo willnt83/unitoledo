@@ -18,7 +18,7 @@ const statusOptions = [
 	}
 ]
 
-const enadeOptions = [
+/*const enadeOptions = [
 	{
 		value: 'true',
 		label: "Sim"
@@ -27,7 +27,7 @@ const enadeOptions = [
 		value: 'false',
 		label: "Não"
 	}
-]
+]*/
 
 const discursivaOptions = [
 	{
@@ -343,7 +343,7 @@ class ModalCadastro extends Component {
         // Populando campos do formulário
         if(nextProps.questao !== null && nextProps.questao !== this.props.questao){
             var status = nextProps.questao.valueStatus === true ? 'true' : 'false'
-            var padraoEnade = nextProps.questao.valueEnade === true ? 'Sim' : 'Não'
+            //var padraoEnade = nextProps.questao.valueEnade === true ? 'Sim' : 'Não'
 
             var discursiva = null
             if(nextProps.questao.valueDiscursiva === true){
@@ -361,7 +361,7 @@ class ModalCadastro extends Component {
                 conteudo: nextProps.questao.conteudoId,
                 areaDeConhecimento: nextProps.questao.areaConhecimentoId,
                 status: status,
-                padraoEnade: padraoEnade,
+                //padraoEnade: padraoEnade,
                 ano: nextProps.questao.valueAno,
                 descricao: nextProps.questao.description,
                 fonte: nextProps.questao.fonte,
@@ -527,7 +527,7 @@ class ModalCadastro extends Component {
                                     )}
                                 </Form.Item>
                             </Col>
-                            <Col span={8}>
+                            {/*<Col span={8}>
                                 <Form.Item label="Padrão ENADE">
                                     {getFieldDecorator('padraoEnade', {
                                         rules: [
@@ -549,16 +549,10 @@ class ModalCadastro extends Component {
                                         </Select>
                                     )}
                                 </Form.Item>
-                            </Col>
+                            </Col>*/}
                             <Col span={8}>
                                 <Form.Item label="Ano">
-                                    {getFieldDecorator('ano', {
-                                        rules: [
-                                            {
-                                                required: true, message: 'Por favor selecione o ano',
-                                            }
-                                        ]
-                                    })(
+                                    {getFieldDecorator('ano')(
                                         <Select
                                             name="ano"
                                             style={{ width: '100%' }}
@@ -595,13 +589,21 @@ class ModalCadastro extends Component {
                                     {getFieldDecorator('fonte', {
                                         rules: [
                                             {
-                                                required: true, message: 'Informe a fonte',
+                                                required: true, message: 'Por favor selecione a fonte',
                                             }
                                         ]
                                     })(
-                                        <Input
+                                        <Select
                                             name="fonte"
-                                        />
+                                            style={{ width: '100%' }}
+                                            placeholder="Selecione a fonte"
+                                        >
+                                            {
+                                                this.props.fontes.map((item) => {
+                                                    return (<Select.Option key={item.id} value={item.id}>{item.description}</Select.Option>)
+                                                })
+                                            }
+                                        </Select>
                                     )}
                                 </Form.Item>
                             </Col>
@@ -716,7 +718,8 @@ const MapStateToProps = (state) => {
 	return {
 		habilidades: state.habilidades,
 		conteudos: state.conteudos,
-		areasDeConhecimento: state.areasDeConhecimento
+        areasDeConhecimento: state.areasDeConhecimento,
+        fontes: state.fontes
 	}
 }
 const mapDispatchToProps = (dispatch) => {

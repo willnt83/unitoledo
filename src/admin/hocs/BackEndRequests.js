@@ -110,7 +110,6 @@ function BackEndRequestsWrapper(WrappedComponent) {
 			})
 		}
 
-
 		getConteudos = (status) => {
 			var ativo = status !== '' ? '/ativo' : ''
 			axios.get('http://localhost:5000/api/getConteudos'+ativo)
@@ -293,6 +292,96 @@ function BackEndRequestsWrapper(WrappedComponent) {
 			})
 		}
 
+		getFontes = (status) => {
+			var ativo = status !== '' ? '/ativo' : ''
+			axios
+			.get('http://localhost:5000/api/getFontes'+ativo)
+			.then(res => {
+				let tempArray = []
+				let key = 0
+				let labelStatus = null
+				let valueStatus = null
+				res.data.forEach((record, index) => {
+					labelStatus = record.status === true ? "Ativo" : "Inativo"
+					valueStatus = record.status === false ? false : true
+					tempArray.push({
+						key: key,
+						id: record.id,
+						description: record.description,
+						labelStatus: labelStatus,
+						valueStatus: valueStatus
+					})
+					key++
+				})
+				this.props.setFontes(tempArray)
+			})
+			.catch(error => {
+				console.log(error)
+			})
+		}
+
+		createUpdateFonte = (request) => {
+			axios.post('http://localhost:5000/api/createUpdateFonte', request)
+			.then(res => {
+				if(res.data.success){
+					this.setState({
+						createUpdateFonteResponse: {
+							success: true,
+							message: 'Fonte cadastrada / atualizada com sucesso.'
+						}
+					})
+				}
+				else{
+					this.setState({
+						createUpdateFonteResponse: {
+							success: false,
+							message: res.data.message
+						}
+					})
+				}
+			})
+			.catch(error =>{
+				console.log(error)
+				this.setState({
+					createUpdateFonteResponse: {
+						success: false,
+						message: 'Erro ao cadastrar / atualizar fonte.'
+					}
+				})
+			})
+		}
+
+		deleteFonte = (id) => {
+			axios.post('http://localhost:5000/api/deleteFonte', { id: id })
+			.then(res => {
+				if(res.data.success){
+					this.setState({
+						deleteFonteResponse: {
+							success: true,
+							message: 'Fonte removida com sucesso.'
+						}
+					})
+				}
+				else{
+					this.setState({
+						deleteFonteResponse: {
+							success: false,
+							message: res.data.message
+						}
+					})
+				}
+			})
+			.catch(error =>{
+				console.log(error)
+				this.setState({
+					deleteFonteResponse: {
+						success: false,
+						message: 'Erro ao remover fonte.'
+					}
+				})
+			})
+		}
+
 		getQuestoes = (request) => {
 			axios.post('http://localhost:5000/api/getQuestoesSimulado/questao', request)
 			.then(res => {
@@ -418,6 +507,12 @@ function BackEndRequestsWrapper(WrappedComponent) {
 					deleteAreaDeConhecimento={ this.deleteAreaDeConhecimento }
 					deleteAreaDeConhecimentoResponse={ this.state.deleteAreaDeConhecimentoResponse }
 
+					getFontes={ this.getFontes }
+					createUpdateFonte={ this.createUpdateFonte }
+					createUpdateFonteResponse={ this.state.createUpdateFonteResponse }
+					deleteFonte={ this.deleteFonte }
+					deleteFonteResponse={ this.state.deleteFonteResponse }
+
 					getQuestoes={ this.getQuestoes }
 					createUpdateQuestao={ this.createUpdateQuestao }
 					createUpdateQuestaoResponse={ this.state.createUpdateQuestaoResponse }
@@ -440,6 +535,7 @@ function BackEndRequestsWrapper(WrappedComponent) {
 			setHabilidades: (habilidades) => { dispatch({ type: 'SET_HABILIDADES', habilidades }) },
 			setConteudos: (conteudos) => { dispatch({ type: 'SET_CONTEUDOS', conteudos }) },
 			setAreasDeConhecimento: (areasDeConhecimento) => { dispatch({ type: 'SET_AREAS_DE_CONHECIMENTO', areasDeConhecimento }) },
+			setFontes: (fontes) => { dispatch({ type: 'SET_FONTES', fontes }) },
 			setQuestoes: (questoes) => { dispatch({ type: 'SET_QUESTOES', questoes }) }
 		}
 	}

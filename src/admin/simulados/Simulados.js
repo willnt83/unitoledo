@@ -333,7 +333,7 @@ class Simulados extends Component {
 				title: "Nome",
                 dataIndex: "nome",
                 sorter: (a, b) => { return a.nome.localeCompare(b.nome)},
-                width: 576
+                width: 480
             },
             {
 				title: "Disponibilidade",

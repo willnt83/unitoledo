@@ -9,9 +9,10 @@ import "./static/index.css"
 import PageTitle from "./layout/PageTitle"
 import ListMenu from "./layout/ListMenu"
 import Dashboard from "./Dashboard";
-import Conteudos from "./conteudos/Conteudos";
-import Habilidades from "./habilidades/Habilidades"
-import AreasDeConhecimento from "./areas-de-conhecimento/AreasDeConhecimento"
+import Conteudos from "./cadastros/Conteudos";
+import Habilidades from "./cadastros/Habilidades"
+import AreasDeConhecimento from "./cadastros/AreasDeConhecimento"
+import Fontes from "./cadastros/Fontes"
 import AreaGestor from "./area-do-gestor/AreaGestor"
 import Questoes from "./questoes/Questoes"
 import Simulados from "./simulados/Simulados"
@@ -43,6 +44,11 @@ const routes = [
     path: "/admin/cadastros/areas-de-conhecimento",
     sidebar: () => <div>Cadastro/Áreas de Conhecimento</div>,
     main: () => <AreasDeConhecimento />
+  },
+  {
+    path: "/admin/cadastros/fontes",
+    sidebar: () => <div>Cadastro/Fontes</div>,
+    main: () => <Fontes />
   },
   {
     path: "/admin/area-do-gestor",
