@@ -8,7 +8,7 @@ import "./static/style.css"
 
 const { Content } = Layout
 
-class Home extends Component {
+class Simulados extends Component {
     state = {
         tableData: [],
         tableLoading: false
@@ -196,4 +196,4 @@ const mapDispatchToProps = (dispatch) => {
     }
 }
 
-export default connect(MapStateToProps, mapDispatchToProps)(withRouter(Home))
+export default connect(MapStateToProps, mapDispatchToProps)(withRouter(Simulados))
