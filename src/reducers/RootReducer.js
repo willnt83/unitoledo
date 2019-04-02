@@ -336,7 +336,7 @@ const RootReducer = (state = initState, action) => {
         selectedQuestoes.push(action.questao)
         return{
             ...state,
-            selectedQuestoes 
+            selectedQuestoes
         }
     }
     else if(action.type === 'SET_SIMULADOSTARTFINISH'){

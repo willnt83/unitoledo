@@ -297,7 +297,6 @@ function BackEndRequestsWrapper(WrappedComponent) {
 			axios
 			.get('http://localhost:5000/api/getFontes'+ativo)
 			.then(res => {
-				console.log('response getFontes', res.data)
 				let tempArray = []
 				let key = 0
 				let labelStatus = null
@@ -386,7 +385,6 @@ function BackEndRequestsWrapper(WrappedComponent) {
 		getQuestoes = (request) => {
 			axios.post('http://localhost:5000/api/getQuestoesSimulado/questao', request)
 			.then(res => {
-				console.log('getQuestoes response: ', res.data)
 				var labelStatus = null
 				var tempArray = res.data.map(questao => {
 					labelStatus = questao.status === true ? 'Ativo' : 'Inativo'

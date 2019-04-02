@@ -58,7 +58,7 @@ class SelecaoQuestoes extends Component {
                                 <Row key={questao.id} style={{marginBottom: 20}}>
                                     <Col span={24}>
                                         <Card>
-                                            <h4>({questao.fonte})</h4>
+                                            <h4>({questao.fonte.description})</h4>
                                             <h4 style={{marginBottom: 20}}>{questao.id} - {questao.descricao}</h4>
                                                 {alternativas}
                                             <Row>

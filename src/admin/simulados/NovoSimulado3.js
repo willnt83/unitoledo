@@ -35,6 +35,21 @@ const simNaoOptions = [
 	}
 ]
 
+const dificuldadeOptions = [
+	{
+		value: 'facil',
+		label: 'Fácil'
+	},
+	{
+		value: 'medio',
+		label: "Médio"
+    },
+    {
+		value: 'dificil',
+		label: "Difícil"
+    }
+]
+
 class NovoSimulado3 extends Component {
     constructor(props) {
         super()
@@ -42,41 +57,59 @@ class NovoSimulado3 extends Component {
         props.getHabilidades()
         props.getConteudos()
         props.getAreasDeConhecimento()
+        props.getFontes()
     }
 
     state = {
         buttonLoadingBuscar: false,
         questoes: null,
-        quantidadeQuestoesSelecionadas: 'Questões',
         mode: null,
         anoOptions: [],
         showWarning: false,
-        btnProximoDisabled: true
+        btnProximoDisabled: true,
+        countEspecifico: null,
+        countGeral: null,
+        countFacil: null,
+        countMedio: null,
+        countDificil: null
     }
 
     getQuestoes = (request) => {
         this.setState({buttonLoadingBuscar: true, btnProximoDisabled: true})
         axios.post('http://localhost:5000/api/getQuestoesSimulado/simulado', request)
         .then(res => {
+            console.log('response getQuestoes', res.data)
             var questoes = []
-            /*
-            if(this.state.mode === 'edit'){
-                console.log('edit...')
-                questoes = res.data.filter(questao => {
-                    var hit = false
-                    this.props.simulado.questoes.forEach(questaoSelecionada => {
-                        if(questao.id === questaoSelecionada)
-                            hit = true
-                    })
-                    return hit
-                })
-            }
-            // Criação
-            else{
-            */
-                questoes = res.data
-            //}
+            var labelStatus = null
+            questoes = res.data
             this.setState({questoes, buttonLoadingBuscar: false, btnProximoDisabled: false})
+
+            var tempArray = questoes.map(questao => {
+                labelStatus = questao.status === true ? 'Ativo' : 'Inativo'
+
+                return ({
+                    key: questao.id,
+                    description: questao.descricao,
+                    labelStatus: labelStatus,
+                    valueStatus: questao.status,
+                    valueEnade: questao.enade,
+                    valueDiscursiva: questao.discursiva,
+                    valueAno: questao.ano,
+                    ano: questao.ano,
+                    habilidade: questao.habilidade.description,
+                    habilidadeId: questao.habilidade.id,
+                    conteudo: questao.conteudo.description,
+                    conteudoId: questao.conteudo.id,
+                    areaConhecimento: questao.areaConhecimento.description,
+                    areaConhecimentoId: questao.areaConhecimento.id,
+                    fonte: questao.fonte.description,
+                    fonteId: questao.fonte.id,
+                    dificuldade: questao.dificuldade,
+                    imagem: questao.imagem,
+                    tipoId: questao.tipo.id
+                })
+            })
+            this.props.setQuestoes(tempArray)
         })
         .catch(error =>{
             console.log(error)
@@ -85,8 +118,36 @@ class NovoSimulado3 extends Component {
 
     componentWillReceiveProps(props) {
         if(props.simulado.questoes && props.simulado.questoes.length > 0){
+            console.log('props.simulado.questoes', props.simulado.questoes)
+            console.log('props.questoes', props.questoes)
+
+            var countEspecifico = 0
+            var countGeral = 0
+            var countFacil = 0
+            var countMedio = 0
+            var countDificil = 0
+
+            props.questoes.filter(questao =>{
+                if(this.props.simulado.questoes.indexOf(questao.key) > -1)
+                    return true
+                else
+                    return false
+            })
+            .forEach(questao => {
+                console.log('questao.key', questao.key)
+                if(questao.tipoId === 1) countGeral++
+                else countEspecifico++
+                if(questao.dificuldade === 'facil') countFacil++
+                else if(questao.dificuldade === 'medio') countMedio++
+                else if(questao.dificuldade === 'dificil') countDificil++
+            })
+
             this.setState({
-                quantidadeQuestoesSelecionadas: 'Questoes | Selecionadas ('+props.simulado.questoes.length+')'
+                countEspecifico,
+                countGeral,
+                countFacil,
+                countMedio,
+                countDificil
             })
         }
     }
@@ -117,12 +178,12 @@ class NovoSimulado3 extends Component {
         // Se for edição e existir questões selecionadas
         if(this.props.simulado.questoes.length > 0){
             //this.setState({mode: 'edit'})
-
             var request = {
                 codigos: this.props.simulado.questoes,
                 enade: '',
                 discursiva: '',
-                fonte: '',
+                dificuldade: '',
+                fonte: [],
                 habilidades: [],
                 conteudos: [],
                 areaConhecimentos: [],
@@ -141,12 +202,13 @@ class NovoSimulado3 extends Component {
         this.props.form.validateFieldsAndScroll((err, values) => {
             if(!err){
                 var codigo = null
+                var dificuldade = null
                 var habilidades = []
                 var conteudos = []
                 var areasDeConhecimento = []
                 var padraoEnade = null
                 var anos = []
-                var fonte = null
+                var fontes = []
                 var discursiva = null
                 var tipo = null
 
@@ -166,18 +228,27 @@ class NovoSimulado3 extends Component {
                         return({id: parseInt(areaDeConhecimento)})
                     })
                 }
+                if(values.fontes){
+                    fontes = values.fontes.map(fonte =>{
+                        return({id: parseInt(fonte)})
+                    })
+                }
 
                 if(values.padraoEnade)
                     padraoEnade = values.padraoEnade
                 else
                     padraoEnade = ''
 
+                if(values.dificuldade)
+                    dificuldade = values.dificuldade
+                else
+                    dificuldade = ''
+
                 if(values.anos){
                     anos = values.anos.map(ano =>{
                         return({ano: ano})
                     })
                 }
-                fonte = values.fonte ? values.fonte : ''
                 
                 if(values.discursiva)
                     discursiva = values.discursiva
@@ -192,8 +263,9 @@ class NovoSimulado3 extends Component {
                 request = {
                     codigos: codigo,
                     enade: padraoEnade,
+                    dificuldade: dificuldade,
                     discursiva: discursiva,
-                    fonte: fonte,
+                    fonte: fontes,
                     habilidades: habilidades,
                     conteudos: conteudos,
                     areaConhecimentos: areasDeConhecimento,
@@ -221,6 +293,18 @@ class NovoSimulado3 extends Component {
 
     render(){
         const { getFieldDecorator } = this.props.form
+
+        var questaoQuantidades = this.props.simulado.questoes.length > 0 ? 
+        <React.Fragment>
+            <p>Questões Selecionadas ({this.props.simulado.questoes.length})</p>
+            <p>Conhecimento: Geral ({this.state.countGeral}) | Específico ({this.state.countEspecifico})</p>
+            <p>Dificuldade: Fácil ({this.state.countFacil}) | Médio ({this.state.countMedio}) | Difícil ({this.state.countDificil})</p>
+        </React.Fragment>
+        : 'Questões'
+
+            
+            
+
         return(
             <React.Fragment>
                 <SimuladoSteps step={2} />
@@ -240,6 +324,21 @@ class NovoSimulado3 extends Component {
                                 <FormItem label="Código">
                                     {getFieldDecorator('codigo')(
                                         <Input placeholder="Informe o código da questão" />
+                                    )}
+                                </FormItem>
+                                <FormItem label="Dificuldade">
+                                    {getFieldDecorator('dificuldade')(
+                                        <Select
+                                            style={{ width: '100%' }}
+                                            placeholder="Selecione a dificuldade"
+                                            allowClear={true}
+                                        >
+                                            {
+                                                dificuldadeOptions.map((item) => {
+                                                    return (<Option key={item.value} value={item.value}>{item.label}</Option>)
+                                                })
+                                            }
+                                        </Select>
                                     )}
                                 </FormItem>
                                 <FormItem label="Habilidades">
@@ -317,9 +416,20 @@ class NovoSimulado3 extends Component {
                                         </Select>
                                     )}
                                 </FormItem>
-                                <FormItem label="Fonte">
-                                    {getFieldDecorator('fonte')(
-                                        <Input placeholder="Fonte"/>
+                                <FormItem label="Fontes">
+                                    {getFieldDecorator('fontes')(
+                                        <Select
+                                            mode="multiple"
+                                            style={{ width: '100%' }}
+                                            placeholder="Selecione"
+                                            allowClear={true}
+                                        >
+                                            {
+                                                this.props.fontes.map((item) => {
+                                                    return (<Option key={item.id}>{item.description}</Option>)
+                                                })
+                                            }
+                                        </Select>
                                     )}
                                 </FormItem>
                                 <FormItem label="Discursiva">
@@ -366,7 +476,7 @@ class NovoSimulado3 extends Component {
                     </Col>
                     <Col span={16}>
                         <Card
-                            title={this.state.quantidadeQuestoesSelecionadas}
+                            title={questaoQuantidades}
                             bordered={false}
                             style={{
                                 margin: "4px 16px 4px 4px",
@@ -391,7 +501,6 @@ class NovoSimulado3 extends Component {
                                 minHeight: 60
                             }}
                         >
-                        
                             <Row>
                                 <Col span={12} align="start">
                                     <Link to="/admin/simulados/novo/step-2"><Button type="default"><Icon type="left" />Anterior</Button></Link>
@@ -414,7 +523,8 @@ const MapStateToProps = (state) => {
         contexto: state.contexto,
 		habilidades: state.habilidades,
 		conteudos: state.conteudos,
-		areasDeConhecimento: state.areasDeConhecimento,
+        areasDeConhecimento: state.areasDeConhecimento,
+        fontes: state.fontes,
         questoes: state.questoes,
         simulado: state.simulado,
         selectedQuestoes: state.selectedQuestoes
@@ -423,7 +533,8 @@ const MapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
     return {
         setPageTitle: (pageTitle) => { dispatch({ type: 'SET_PAGETITLE', pageTitle }) },
-        resetAll: () => { dispatch({ type: 'RESET_ALL' }) }
+        resetAll: () => { dispatch({ type: 'RESET_ALL' }) },
+        setQuestoes: (questoes) => { dispatch({ type: 'SET_QUESTOES', questoes }) }
     }
 }
 
