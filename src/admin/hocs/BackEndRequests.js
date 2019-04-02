@@ -297,6 +297,7 @@ function BackEndRequestsWrapper(WrappedComponent) {
 			axios
 			.get('http://localhost:5000/api/getFontes'+ativo)
 			.then(res => {
+				console.log('response getFontes', res.data)
 				let tempArray = []
 				let key = 0
 				let labelStatus = null
@@ -385,6 +386,7 @@ function BackEndRequestsWrapper(WrappedComponent) {
 		getQuestoes = (request) => {
 			axios.post('http://localhost:5000/api/getQuestoesSimulado/questao', request)
 			.then(res => {
+				console.log('getQuestoes response: ', res.data)
 				var labelStatus = null
 				var tempArray = res.data.map(questao => {
 					labelStatus = questao.status === true ? 'Ativo' : 'Inativo'
@@ -396,7 +398,6 @@ function BackEndRequestsWrapper(WrappedComponent) {
 						valueStatus: questao.status,
 						valueEnade: questao.enade,
 						valueDiscursiva: questao.discursiva,
-						fonte: parseInt(questao.fonte),
 						valueAno: questao.ano,
 						ano: questao.ano,
 						habilidade: questao.habilidade.description,
@@ -405,6 +406,9 @@ function BackEndRequestsWrapper(WrappedComponent) {
 						conteudoId: questao.conteudo.id,
 						areaConhecimento: questao.areaConhecimento.description,
 						areaConhecimentoId: questao.areaConhecimento.id,
+						fonte: questao.fonte.description,
+						fonteId: questao.fonte.id,
+						dificuldade: questao.dificuldade,
 						imagem: questao.imagem,
 						tipoId: questao.tipo.id
 					})

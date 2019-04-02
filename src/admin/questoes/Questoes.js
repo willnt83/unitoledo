@@ -178,6 +178,7 @@ class Questoes extends Component {
 		var habilidades = []
 		var conteudos = []
 		var areasDeConhecimento = []
+		var fontes = []
 
 		this.props.form.validateFieldsAndScroll((err, values) => {
 			if(values.habilidades){
@@ -195,12 +196,19 @@ class Questoes extends Component {
 					return({id: parseInt(areaDeConhecimento)})
 				})
 			}
+
+			if(values.fontes){
+				fontes = values.fontes.map(fonte =>{
+					return({id: parseInt(fonte)})
+				})
+			}
 			
 			request = {
 				codigos: [],
+				dificuldade: '',
 				enade: '',
 				discursiva: '',
-				fonte: '',
+				fonte: fontes,
 				habilidades: habilidades,
 				conteudos: conteudos,
 				areaConhecimentos: areasDeConhecimento,
@@ -389,6 +397,21 @@ class Questoes extends Component {
 									</Select>
 								)}
 							</Form.Item>
+							<Form.Item label="Fontes">
+								{getFieldDecorator('fontes')(
+									<Select
+										mode="multiple"
+										style={{ width: '100%' }}
+										placeholder="Selecione as Fontes"
+									>
+										{
+											this.props.fontes.map((item) => {
+												return (<Option key={item.id}>{item.description}</Option>)
+											})
+										}
+									</Select>
+								)}
+							</Form.Item>
 							<Form.Item>
 								<Button
 									type="primary"
@@ -444,7 +467,9 @@ const MapStateToProps = (state) => {
 		habilidades: state.habilidades,
 		conteudos: state.conteudos,
 		areasDeConhecimento: state.areasDeConhecimento,
+		fontes: state.fontes,
 		questoes: state.questoes
+		
 	}
 }
 const mapDispatchToProps = (dispatch) => {

@@ -18,16 +18,20 @@ const statusOptions = [
 	}
 ]
 
-/*const enadeOptions = [
+const dificuldadeOptions = [
 	{
-		value: 'true',
-		label: "Sim"
+		value: 'facil',
+		label: 'Fácil'
 	},
 	{
-		value: 'false',
-		label: "Não"
-	}
-]*/
+		value: 'medio',
+		label: "Médio"
+    },
+    {
+		value: 'dificil',
+		label: "Difícil"
+    }
+]
 
 const discursivaOptions = [
 	{
@@ -164,9 +168,8 @@ class ModalCadastro extends Component {
                     "id": this.state.questaoId,
                     "descricao": values.descricao,
                     "status": this.stringToBool(values.status),
-                    "enade": this.stringToBool(values.padraoEnade),
+                    "dificuldade": values.dificuldade,
                     "discursiva": discursiva,
-                    "fonte": values.fonte,
                     "ano": values.ano,
                     "alterCorreta": this.state.alternativaCorreta,
                     "imagem": this.state.fileBase64,
@@ -178,6 +181,9 @@ class ModalCadastro extends Component {
                     },
                     "areaConhecimento": {
                         "id": values.areaDeConhecimento
+                    },
+                    "fonte": {
+                        "id": values.fonte
                     },
                     "alternativas" : this.state.alternativas,
                     "tipo": {
@@ -195,6 +201,7 @@ class ModalCadastro extends Component {
                         key: this.state.questaoId,
                         alternativas: this.state.alternativas,
                         areaConhecimentoId: values.areaDeConhecimento,
+                        dificuldade: values.dificuldade,
                         ano: values.ano,
                         conteudoId: values.conteudo,
                         description: values.descricao,
@@ -209,12 +216,10 @@ class ModalCadastro extends Component {
                         valueStatus: this.stringToBool(values.status)
                     }
 
+                    console.log('questao', questao)
                     this.props.setQuestao(questao)
-
                     this.props.showModalViewQuestaoF(true, 'write')
                     
-
-
                     //this.props.hideModalCadastro()
 
                     //this.props.createUpdateQuestao(request)
@@ -361,11 +366,12 @@ class ModalCadastro extends Component {
                 habilidade: nextProps.questao.habilidadeId,
                 conteudo: nextProps.questao.conteudoId,
                 areaDeConhecimento: nextProps.questao.areaConhecimentoId,
+                dificuldade: nextProps.questao.dificuldade,
                 status: status,
                 //padraoEnade: padraoEnade,
                 ano: nextProps.questao.valueAno,
                 descricao: nextProps.questao.description,
-                fonte: nextProps.questao.fonte,
+                fonte: nextProps.questao.fonteId,
                 discursiva: discursiva,
                 tipo: nextProps.questao.tipoId
             })
@@ -505,6 +511,29 @@ class ModalCadastro extends Component {
                             </Col>
                         </Row>
                         <Row gutter={32}>
+                            <Col span={8}>
+                                <Form.Item label="Dificuldade">
+                                    {getFieldDecorator('dificuldade', {
+                                        rules: [
+                                            {
+                                                required: true, message: 'Por favor selecione a dificuldade',
+                                            }
+                                        ]
+                                    })(
+                                        <Select
+                                            name="dificuldade"
+                                            style={{ width: '100%' }}
+                                            placeholder="Selecione"
+                                        >
+                                            {
+                                                dificuldadeOptions.map((item) => {
+                                                    return (<Select.Option key={item.value} value={item.value}>{item.label}</Select.Option>)
+                                                })
+                                            }
+                                        </Select>
+                                    )}
+                                </Form.Item>
+                            </Col>
                             <Col span={8}>
                                 <Form.Item label="Status">
                                     {getFieldDecorator('status', {
