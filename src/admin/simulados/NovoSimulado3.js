@@ -71,7 +71,8 @@ class NovoSimulado3 extends Component {
         countGeral: null,
         countFacil: null,
         countMedio: null,
-        countDificil: null
+        countDificil: null,
+        firstLoad: true
     }
 
     getQuestoes = (request) => {
@@ -116,39 +117,78 @@ class NovoSimulado3 extends Component {
         })
     }
 
+    updateQuestionCounter = (questao, op) => {
+        console.log('updateQuestionCounter', questao)
+        var countEspecifico = this.state.countEspecifico
+        var countGeral = this.state.countGeral
+        var countFacil = this.state.countFacil
+        var countMedio = this.state.countMedio
+        var countDificil = this.state.countDificil
+        if(op === 'add'){
+            if(questao.tipo.id === 1) countGeral++
+            else if(questao.tipo.id === 2) countEspecifico++
+
+            if(questao.dificuldade === 'facil') countFacil++
+            else if(questao.dificuldade === 'medio') countMedio++
+            else if(questao.dificuldade === 'dificil') countDificil++
+        }
+        else{
+            if(questao.tipo.id === 1) countGeral--
+            else if(questao.tipo.id === 2) countEspecifico--
+
+            if(questao.dificuldade === 'facil') countFacil--
+            else if(questao.dificuldade === 'medio') countMedio--
+            else if(questao.dificuldade === 'dificil') countDificil--
+        }
+
+        this.setState({
+            countEspecifico,
+            countGeral,
+            countFacil,
+            countMedio,
+            countDificil
+        })
+    }
+
     componentWillReceiveProps(props) {
         if(props.simulado.questoes && props.simulado.questoes.length > 0){
-            console.log('props.simulado.questoes', props.simulado.questoes)
-            console.log('props.questoes', props.questoes)
+            //console.log('props.simulado.questoes', props.simulado.questoes)
+            //console.log('props.questoes', props.questoes)
 
-            var countEspecifico = 0
-            var countGeral = 0
-            var countFacil = 0
-            var countMedio = 0
-            var countDificil = 0
+            if(this.state.firstLoad){
+                var countEspecifico = 0
+                var countGeral = 0
+                var countFacil = 0
+                var countMedio = 0
+                var countDificil = 0
 
-            props.questoes.filter(questao =>{
-                if(this.props.simulado.questoes.indexOf(questao.key) > -1)
-                    return true
-                else
-                    return false
-            })
-            .forEach(questao => {
-                console.log('questao.key', questao.key)
-                if(questao.tipoId === 1) countGeral++
-                else countEspecifico++
-                if(questao.dificuldade === 'facil') countFacil++
-                else if(questao.dificuldade === 'medio') countMedio++
-                else if(questao.dificuldade === 'dificil') countDificil++
-            })
-
-            this.setState({
-                countEspecifico,
-                countGeral,
-                countFacil,
-                countMedio,
-                countDificil
-            })
+            
+                props.questoes.filter(questao =>{
+                    if(props.simulado.questoes.indexOf(questao.key) > -1)
+                        return true
+                    else{
+                        //console.log('retirando questao ', questao.key)
+                        return false
+                    }
+                })
+                .forEach(questao => {
+                    //console.log('questao.key', questao.key)
+                    if(questao.tipoId === 1) countGeral++
+                    else countEspecifico++
+                    if(questao.dificuldade === 'facil') countFacil++
+                    else if(questao.dificuldade === 'medio') countMedio++
+                    else if(questao.dificuldade === 'dificil') countDificil++
+                    //else console.log('dificuldade null')
+                })
+                this.setState({
+                    countEspecifico,
+                    countGeral,
+                    countFacil,
+                    countMedio,
+                    countDificil,
+                    firstLoad: false
+                })
+            }
         }
     }
 
@@ -487,7 +527,7 @@ class NovoSimulado3 extends Component {
                             }}
                         >
                             <WarningMessage message="Nenhuma questão selecionada" type="error" visible={this.state.showWarning} style={{marginBottom: 10}}/>
-                            <SelecaoQuestoes questoes={this.state.questoes} mode='edit' />
+                            <SelecaoQuestoes questoes={this.state.questoes} mode='edit' updateQuestionCounter={this.updateQuestionCounter} />
                         </Card>
                     </Col>
                 </Row>

@@ -9,6 +9,16 @@ class SelecaoQuestoes extends Component {
         first: true
     }
 
+    handleSelectedQuestao = (questao) => {
+        this.props.updateQuestionCounter(questao, 'add')
+        this.props.setSimuladoQuestao(questao)
+    }
+
+    handleRemovedQuestao = (questao) => {
+        this.props.updateQuestionCounter(questao, 'remove')
+        this.props.removeSimuladoQuestao(questao)
+    }
+
     componentWillReceiveProps(props) {
         if(props.questoes !== null){
             this.setState({
@@ -51,8 +61,8 @@ class SelecaoQuestoes extends Component {
                             }
                             if(this.props.mode === 'edit'){
                                 selectButton = (hit) ?
-                                    <Button  className="buttonOrange" onClick={() => this.props.removeSimuladoQuestao(questao)}><Icon type="check" />Remover Seleção</Button>
-                                    :<Button className="buttonGreen" onClick={() => this.props.setSimuladoQuestao(questao)}><Icon type="check" />Selecionar</Button>
+                                    <Button  className="buttonOrange" onClick={() => this.handleRemovedQuestao(questao)}><Icon type="check" />Remover Seleção</Button>
+                                    :<Button className="buttonGreen" onClick={() => this.handleSelectedQuestao(questao)}><Icon type="check" />Selecionar</Button>
                             }
                             return(
                                 <Row key={questao.id} style={{marginBottom: 20}}>
