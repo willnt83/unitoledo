@@ -150,18 +150,8 @@ class ModalCadastro extends Component {
     handleViewQuestao = (event) => {
         event.preventDefault()
         this.props.form.validateFieldsAndScroll((err, values) => {
+            console.log('values.fonte', values.fonte)
             var discursiva = this.stringToBool(values.discursiva)
-            /*
-            var alternativas = []
-            if(!discursiva){
-                // Se não for discursiva
-                alternativas = this.state.alternativas
-            }
-            else{
-                // Limpa state.alternativas
-                this.setState({alternativas: []})
-            }
-            */
 
             if(!err){
                 let request = {
@@ -196,7 +186,9 @@ class ModalCadastro extends Component {
                 }
                 else{
                     this.setState({alternativasTooltipVisible: false})
+                    console.log('request', request)
                     this.props.setRequest(request)
+                    /*
                     var questao = {
                         key: this.state.questaoId,
                         alternativas: this.state.alternativas,
@@ -215,9 +207,9 @@ class ModalCadastro extends Component {
                         valueEnade: this.stringToBool(values.padraoEnade),
                         valueStatus: this.stringToBool(values.status)
                     }
+                    */
 
-                    console.log('questao', questao)
-                    this.props.setQuestao(questao)
+                    //this.props.setQuestao(questao)
                     this.props.showModalViewQuestaoF(true, 'write')
                     
                     //this.props.hideModalCadastro()
@@ -394,6 +386,8 @@ class ModalCadastro extends Component {
     }
 
     render(){
+        //console.log('this.props.habilidades', this.props.habilidades)
+        //console.log('this.props.fontes', this.props.fontes)
         const { getFieldDecorator } = this.props.form
         var imagePreview = null
         if(this.state.file !== null){
@@ -557,29 +551,6 @@ class ModalCadastro extends Component {
                                     )}
                                 </Form.Item>
                             </Col>
-                            {/*<Col span={8}>
-                                <Form.Item label="Padrão ENADE">
-                                    {getFieldDecorator('padraoEnade', {
-                                        rules: [
-                                            {
-                                                required: true, message: 'Por favor selecione se é padrão ENADE',
-                                            }
-                                        ]
-                                    })(
-                                        <Select
-                                            name="padraoEnade"
-                                            style={{ width: '100%' }}
-                                            placeholder="Selecione"
-                                        >
-                                            {
-                                                enadeOptions.map((item) => {
-                                                    return (<Select.Option key={item.value} value={item.value}>{item.label}</Select.Option>)
-                                                })
-                                            }
-                                        </Select>
-                                    )}
-                                </Form.Item>
-                            </Col>*/}
                             <Col span={8}>
                                 <Form.Item label="Ano">
                                     {getFieldDecorator('ano')(

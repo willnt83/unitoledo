@@ -9,17 +9,19 @@ class ModalViewQuestao extends Component {
         questao: null,
         footerButtons: null
     }
-    /*
+
     handleModalClosure = () => {
+        /*
         // Resetando form
         this.props.resetQuestao()
         // Limpando state
         this.setState({
             questao: null
         })
+        */
         this.props.showModalViewQuestaoF(false)
     }
-    */
+
 
     handleImprimir = () => {
 
@@ -43,7 +45,7 @@ class ModalViewQuestao extends Component {
         const args = {
             message: msg,
             icon:  <Icon type={type} style={style} />,
-            duration: 3
+            duration: 5
         }
         notification.open(args)
     }
@@ -99,7 +101,8 @@ class ModalViewQuestao extends Component {
                 this.props.handleGetQuestoes()
             }
 			else{
-				this.openNotificationError(nextProps.createUpdateQuestaoResponse.message)
+                this.showNotification(nextProps.createUpdateQuestaoResponse.message, false)
+                this.props.showModalViewQuestaoF(false)
             }
         }
     }

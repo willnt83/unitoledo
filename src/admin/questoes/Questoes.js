@@ -186,11 +186,13 @@ class Questoes extends Component {
 					return({id: parseInt(habilidade)})
 				})
 			}
+
 			if(values.conteudos){
 				conteudos = values.conteudos.map(conteudo =>{
 					return({id: parseInt(conteudo)})
 				})
 			}
+
 			if(values.areasDeConhecimento){
 				areasDeConhecimento = values.areasDeConhecimento.map(areaDeConhecimento =>{
 					return({id: parseInt(areaDeConhecimento)})
