@@ -640,6 +640,7 @@ class ModalCadastro extends Component {
                                 <Form.Item label="Ano">
                                     {getFieldDecorator('ano')(
                                         <Select
+                                            allowClear={true}
                                             name="ano"
                                             style={{ width: '100%' }}
                                             placeholder="Selecione o ano"

@@ -246,7 +246,7 @@ class NovoSimulado3 extends Component {
                 var habilidades = []
                 var conteudos = []
                 var areasDeConhecimento = []
-                var padraoEnade = null
+                //var padraoEnade = null
                 var anos = []
                 var fontes = []
                 var discursiva = null
@@ -274,10 +274,11 @@ class NovoSimulado3 extends Component {
                     })
                 }
 
-                if(values.padraoEnade)
+                /*if(values.padraoEnade)
                     padraoEnade = values.padraoEnade
                 else
                     padraoEnade = ''
+                */
 
                 if(values.dificuldade)
                     dificuldade = values.dificuldade
@@ -302,7 +303,7 @@ class NovoSimulado3 extends Component {
                 
                 request = {
                     codigos: codigo,
-                    enade: padraoEnade,
+                    enade: '',
                     dificuldade: dificuldade,
                     discursiva: discursiva,
                     fonte: fontes,
@@ -421,21 +422,6 @@ class NovoSimulado3 extends Component {
                                             {
                                                 this.props.areasDeConhecimento.map((item) => {
                                                     return (<Option key={item.id}>{item.description}</Option>)
-                                                })
-                                            }
-                                        </Select>
-                                    )}
-                                </FormItem>
-                                <FormItem label="Padrão ENADE">
-                                    {getFieldDecorator('padraoEnade')(
-                                        <Select
-                                            style={{ width: '100%' }}
-                                            placeholder="Padrão ENADE"
-                                            allowClear={true}
-                                        >
-                                            {
-                                                simNaoOptions.map((item) => {
-                                                    return (<Option key={item.key}>{item.description}</Option>)
                                                 })
                                             }
                                         </Select>
