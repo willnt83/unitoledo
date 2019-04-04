@@ -431,6 +431,16 @@ class ModalCadastro extends Component {
                 discursiva: discursiva,
                 tipo: nextProps.questao.tipoId
             })
+
+            // Settando valor no campo descricao
+            const blocksFromHtml = htmlToDraft(nextProps.questao.description);
+            const { contentBlocks, entityMap } = blocksFromHtml;
+            const contentState = ContentState.createFromBlockArray(contentBlocks, entityMap);
+
+            this.setState({
+                editorState: EditorState.createWithContent(contentState)
+            })
+
             if(nextProps.questao.imagem) {
                 file = this.Base64ToFile(nextProps.questao.imagem, 'imagem.png')
                 Object.assign(file, {
