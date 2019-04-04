@@ -129,3 +129,25 @@ code {
 .ant-tooltip-arrow{
     border-top-color: #f5222d !important
 }
+
+.textEditorLabel{
+    color: rgba(0, 0, 0, 0.85) !important;
+    font-size: 14px !important;
+    padding: 0 0 8px !important;
+}
+
+.textEditorRequired{
+    display: inline-block !important;
+    margin-right: 4px !important;
+    font-family: SimSun !important;
+    line-height: 1 !important;
+    font-size: 14px !important;
+    color: #f5222d !important;
+}
+
+.textEditorArea{
+    border: 1px solid #d9d9d9 !important;
+    border-radius: 4px !important;
+}
+
+

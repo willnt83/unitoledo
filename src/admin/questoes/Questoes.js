@@ -63,6 +63,7 @@ class Questoes extends Component {
 		tableDisplay: 'none',
 		getQuestoesRequest: {
 			codigos: [],
+			dificuldade: '',
 			enade: '',
 			discursiva: '',
 			fonte: '',

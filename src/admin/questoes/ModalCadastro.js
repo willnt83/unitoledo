@@ -6,6 +6,17 @@ import BackEndRequests from '../hocs/BackEndRequests'
 import classNames from 'classnames'
 import Dropzone from 'react-dropzone'
 import moment from 'moment'
+import axios from "axios"
+/*import {MegadraftEditor, editorStateFromRaw, editorStateToJSON} from "megadraft"
+import "../../../node_modules/megadraft/dist/css/megadraft.css"*/
+
+import { EditorState, convertToRaw, ContentState } from 'draft-js'
+import { Editor } from 'react-draft-wysiwyg'
+import '../../../node_modules/react-draft-wysiwyg/dist/react-draft-wysiwyg.css'
+import draftToHtml from 'draftjs-to-html'
+import htmlToDraft from 'html-to-draftjs';
+
+
 
 const statusOptions = [
 	{
@@ -58,8 +69,7 @@ const tipoOptions = [
 const thumbsContainer = {
     display: 'flex',
     flexDirection: 'row',
-    flexWrap: 'wrap',
-    marginTop: 16
+    flexWrap: 'wrap'
 }
 const thumb = {
     display: 'inline-flex',
@@ -120,11 +130,14 @@ class ModalCadastro extends Component {
         alternativas: [],
         anoOptions: [],
         questaoId: '',
+        questaoContent: null,
         alternativasTooltipVisible: false,
         file: null,
         fileBase64: null,
         receivedFile: null,
-        resetAlternativasForm : false
+        resetAlternativasForm : false,
+        editorState: EditorState.createEmpty(),
+        images: []
     }
 
     stringToBool = (str) => {
@@ -156,13 +169,13 @@ class ModalCadastro extends Component {
             if(!err){
                 let request = {
                     "id": this.state.questaoId,
-                    "descricao": values.descricao,
+                    "descricao": this.state.questaoContent,
                     "status": this.stringToBool(values.status),
                     "dificuldade": values.dificuldade,
                     "discursiva": discursiva,
                     "ano": values.ano,
                     "alterCorreta": this.state.alternativaCorreta,
-                    "imagem": this.state.fileBase64,
+                    "imagem": '',
                     "conteudo": {
                         "id": values.conteudo
                     },
@@ -181,14 +194,14 @@ class ModalCadastro extends Component {
                     }
                 }
 
+                console.log('request', request)
                 if(!this.stringToBool(values.discursiva) && this.state.alternativas.length < 1){
                     this.setState({alternativasTooltipVisible: true})
                 }
                 else{
                     this.setState({alternativasTooltipVisible: false})
-                    console.log('request', request)
                     this.props.setRequest(request)
-                    /*
+
                     var questao = {
                         key: this.state.questaoId,
                         alternativas: this.state.alternativas,
@@ -196,8 +209,8 @@ class ModalCadastro extends Component {
                         dificuldade: values.dificuldade,
                         ano: values.ano,
                         conteudoId: values.conteudo,
-                        description: values.descricao,
-                        fonte: values.fonte,
+                        description: this.state.questaoContent,
+                        fonte: values.fonteId,
                         habilidadeId: values.habilidade,
                         imagem: null,
                         tipoId: values.tipo,
@@ -205,15 +218,14 @@ class ModalCadastro extends Component {
                         valueAno: values.ano,
                         valueDiscursiva: discursiva,
                         valueEnade: this.stringToBool(values.padraoEnade),
-                        valueStatus: this.stringToBool(values.status)
+                        valueStatus: this.stringToBool(values.status),
                     }
-                    */
 
-                    //this.props.setQuestao(questao)
+
+                    this.props.setQuestao(questao)
                     this.props.showModalViewQuestaoF(true, 'write')
                     
                     //this.props.hideModalCadastro()
-
                     //this.props.createUpdateQuestao(request)
                 }
                    
@@ -262,42 +274,106 @@ class ModalCadastro extends Component {
         
         reader.readAsDataURL(file)
         reader.onload = (event) => {
-            that.setState({fileBase64: event.target.result})
+
+            //that.setState({fileBase64: event.target.result})
+            console.log('event.target.result', event.target.result)
         }
         reader.onerror = function (error) {
             console.log('Error: ', error)
+            return false
         }
     }
 
     Base64ToFile = (file, filename) => {
         var arr = file.split(','), mime = arr[0].match(/:(.*?);/)[1],
-        bstr = atob(arr[1]), n = bstr.length, u8arr = new Uint8Array(n);
+        bstr = atob(arr[1]), n = bstr.length, u8arr = new Uint8Array(n)
         while(n--){
-            u8arr[n] = bstr.charCodeAt(n);
+            u8arr[n] = bstr.charCodeAt(n)
         }
-        return new File([u8arr], filename, {type:mime});
+        return new File([u8arr], filename, {type:mime})
     }
 
     onDrop = (acceptedFiles, rejectedFiles) => {
+
         this.setState({
             file: Object.assign(acceptedFiles[0], {
-              preview: URL.createObjectURL(acceptedFiles[0])
+                preview: URL.createObjectURL(acceptedFiles[0])
             })
-          });
-        this.fileToBase64(acceptedFiles[0], this)
+        })
+        var reader = new FileReader()
+        reader.readAsDataURL(acceptedFiles[0])
+        console.log('acceptedFiles nome', acceptedFiles[0].name)
+        reader.onload = (event) => {
+            //that.setState({fileBase64: event.target.result})
+            //console.log('event.target.result', event.target.result)
+            /*
+            var request = {
+                files: [
+                    event.target.result
+                ]
+            }*/
+            var bodyFormData = new FormData()
+            bodyFormData.append('files', acceptedFiles[0]) 
+
+
+
+            axios({
+                method: 'post',
+                url: 'http://localhost:5000/api/upload/imgs',
+                data: bodyFormData,
+                config: { headers: {'Content-Type': 'multipart/form-data' }}
+            })
+            .then(res => {
+                this.setState({
+                    images: [...this.state.images, {
+                        nome: res.data.nome,
+                        url: res.data.url
+                    }]
+                })
+            })
+            .catch(error =>{
+                console.log(error)
+            })
+
+        }
+        reader.onerror = function (error) {
+            console.log('Error: ', error)
+            return false
+        }
     }
 
     openImage = (image) => {
-        window.open(image, '_blank');
+        window.open(image, '_blank')
     }
 
-    removeImage = () => {
+    removeImage = (index) => {
+
         this.setState({
             file: null,
             fileBase64: null,
             receivedFile: null
         })
     }
+
+    onEditorStateChange = (editorState) => {
+        this.setState({
+            editorState,
+            questaoContent: draftToHtml(convertToRaw(editorState.getCurrentContent()))
+        })
+
+        /*
+        var teste = editorState
+        console.log('-----------------------')
+        console.log('state raw', teste)
+        teste = draftToHtml(convertToRaw(teste.getCurrentContent()))
+        console.log('state em html', teste)
+        const blocksFromHtml = htmlToDraft(teste);
+        const { contentBlocks, entityMap } = blocksFromHtml;
+        const contentState = ContentState.createFromBlockArray(contentBlocks, entityMap);
+        teste = EditorState.createWithContent(contentState);
+        console.log('html to raw', teste)
+        */
+      }
 
     openNotificationError = (message) => {
         const args = {
@@ -340,8 +416,6 @@ class ModalCadastro extends Component {
         // Populando campos do formulário
         if(nextProps.questao !== null && nextProps.questao !== this.props.questao){
             var status = nextProps.questao.valueStatus === true ? 'true' : 'false'
-            //var padraoEnade = nextProps.questao.valueEnade === true ? 'Sim' : 'Não'
-
             var discursiva = null
             if(nextProps.questao.valueDiscursiva === true){
                 discursiva = 1
@@ -362,7 +436,7 @@ class ModalCadastro extends Component {
                 status: status,
                 //padraoEnade: padraoEnade,
                 ano: nextProps.questao.valueAno,
-                descricao: nextProps.questao.description,
+                //descricao: nextProps.questao.description,
                 fonte: nextProps.questao.fonteId,
                 discursiva: discursiva,
                 tipo: nextProps.questao.tipoId
@@ -382,35 +456,82 @@ class ModalCadastro extends Component {
                 file
             })
         }
+    }
 
+    fallbackCopyTextToClipboard = (text) => {
+        var textArea = document.createElement("textarea")
+        textArea.value = text
+        document.body.appendChild(textArea)
+        textArea.focus()
+        textArea.select()
+
+        try {
+            var successful = document.execCommand("copy")
+            //var msg = successful ? "successful" : "unsuccessful"
+            //console.log("Fallback: Copying text command was " + msg)
+        } catch (err) {
+            //console.error("Fallback: Oops, unable to copy", err)
+        }
+
+        document.body.removeChild(textArea)
+    }
+
+    copyToClipboard = (text) => {
+        if (!navigator.clipboard) {
+            this.fallbackCopyTextToClipboard(text)
+            return
+        }
+        navigator.clipboard.writeText(text).then(
+            function() {
+            //console.log("Async: Copying to clipboard was successful!")
+            },
+            function(err) {
+            //console.error("Async: Could not copy text: ", err)
+            }
+        )
     }
 
     render(){
-        //console.log('this.props.habilidades', this.props.habilidades)
-        //console.log('this.props.fontes', this.props.fontes)
+        console.log('images', this.state.images)
+        const { editorState } = this.state
         const { getFieldDecorator } = this.props.form
+        /*
         var imagePreview = null
         if(this.state.file !== null){
             imagePreview = 
-                <aside style={thumbsContainer}>
-                    <div style={thumb}>
-                        <div style={thumbInner}>
-                            <img
-                                src={this.state.file.preview}
-                                style={img}
-                                alt=""
-                                onClick={() => this.openImage(this.state.fileBase64)}
-                            />
-                        </div>
-                    </div>
-                    <div>
-                        <Button className="buttonRed" onClick={this.removeImage}><Icon type="delete" />Remover Imagem</Button>
-                    </div>
-                </aside>
+                <Row style={{marginTop: 16}}>
+                    <Col span={12}>
+                        <aside style={thumbsContainer}>
+                            <div style={thumb}>
+                                <div style={thumbInner}>
+                                    <img
+                                        src={this.state.file.preview}
+                                        style={img}
+                                        alt=""
+                                        onClick={() => this.openImage(this.state.fileBase64)}
+                                    />
+                                </div>
+                            </div>
+                        </aside>
+                    </Col>
+                    <Col span={12}>
+                        <Row>
+                            <Col span={24}>
+                                <Button className="buttonGreen" onClick={this.copyToClipboard('TESTE BLA BLA')}><Icon type="copy" />Copiar Link da Imagem</Button>
+                            </Col>
+                        </Row>
+                        <Row style={{marginTop: 5}}>
+                            <Col span={24}>
+                                <Button className="buttonRed" onClick={this.removeImage}><Icon type="delete" />Remover Imagem</Button>
+                            </Col>
+                        </Row>
+                    </Col>
+                </Row>
+                
         }
         else
             imagePreview = null
-
+        */
         return(
             <React.Fragment>
                 <Modal
@@ -569,22 +690,100 @@ class ModalCadastro extends Component {
                                 </Form.Item>
                             </Col>
                         </Row>
-                        
-                        <Form.Item label="Descrição">
-                            {getFieldDecorator('descricao', {
-                                rules: [
-                                    {
-                                        required: true, message: 'Informe a descrição',
-                                    }
-                                ]
-                            })(
-                                <Input.TextArea
-                                    name="descricao"
-                                    autosize={{ minRows: 3}}
+
+
+                        <Row gutter={48}>
+                            <Col span={12}>
+                                <Dropzone 
+                                    accept="image/jpeg, image/png, image/gif"
+                                    onDrop={this.onDrop}
+                                >
+                                    {({getRootProps, getInputProps, isDragActive}) => {
+                                        return (
+                                            <div
+                                                {...getRootProps()}
+                                                className={classNames('dropzone', {'dropzone--isActive': isDragActive})}
+                                            >
+                                                <input {...getInputProps()} />
+                                                {
+                                                    <Button><Icon type="upload" />Imagens</Button>
+                                                }
+                                            </div>
+                                        )
+                                    }}
+                                </Dropzone>
+                                {
+                                    this.state.images.map((image, index) => {
+                                        var url = "http://localhost:5000/api/getFile?name="+image.nome
+                                        return(
+                                            <Row style={{marginTop: 16}} key={image.nome}>
+                                                <Col span={12}>
+                                                    <aside style={thumbsContainer}>
+                                                        <div style={thumb}>
+                                                            <div style={thumbInner}>
+                                                                <img
+                                                                    src={url}
+                                                                    style={img}
+                                                                    alt=""
+                                                                    onClick={() => this.openImage(url)}
+                                                                />
+                                                            </div>
+                                                        </div>
+                                                    </aside>
+                                                </Col>
+                                                <Col span={12}>
+                                                    <Row>
+                                                        <Col span={24}>
+                                                            <Button className="buttonGreen" onClick={() => this.copyToClipboard(url)}><Icon type="copy" />Copiar Link da Imagem</Button>
+                                                        </Col>
+                                                    </Row>
+                                                    <Row style={{marginTop: 5}}>
+                                                        <Col span={24}>
+                                                            <Button className="buttonRed" onClick={() => this.removeImage(index)}><Icon type="delete" />Remover Imagem</Button>
+                                                        </Col>
+                                                    </Row>
+                                                </Col>
+                                            </Row>
+                                        )
+                                    })
+                                }
+                            </Col>
+                            <Col span={12}>
+                                <Tooltip
+                                    placement="topLeft"
+                                    title="Informar alternativas"
+                                    visible={this.state.alternativasTooltipVisible}
+                                    trigger="contextMenu"
+                                >
+                                    <Button
+                                        disabled={this.state.alternativaCorretaDisabled}
+                                        key="submit"
+                                        type="primary"
+                                        onClick={() => this.showHideModalAlternativas(true)}
+                                        style={{float: "right"}}
+                                    >
+                                        <Icon type="ordered-list" />Alternativas
+                                    </Button>
+                                </Tooltip>
+                            </Col>
+                        </Row>
+
+
+                        <Row style={{marginTop: 15}}>
+                            <Col span={24} className='textEditorLabel'><span className="textEditorRequired">*</span>Descrição</Col>
+                            <Col span={24} className='textEditorArea' style={{padding: '0 10px 0 10px' }}>
+                                <Editor
+                                    editorState={editorState}
+                                    wrapperClassName="demo-wrapper"
+                                    editorClassName="demo-editor"
+                                    onEditorStateChange={this.onEditorStateChange}
+                                    localization={{
+                                        locale: 'pt',
+                                    }}
                                 />
-                            )}
-                        </Form.Item>
-                        <Row gutter={32}>
+                            </Col>
+                        </Row>
+                        <Row gutter={32} style={{marginTop: 15}}>
                             <Col span={8}>
                                 <Form.Item label="Fonte">
                                     {getFieldDecorator('fonte', {
@@ -656,47 +855,6 @@ class ModalCadastro extends Component {
                                 </Form.Item>
                             </Col>
                         </Row>
-                        <Row gutter={48}>
-                        <Col span={12}>
-                            <Dropzone 
-                                accept="image/jpeg, image/png, image/gif"
-                                onDrop={this.onDrop}
-                            >
-                                {({getRootProps, getInputProps, isDragActive}) => {
-                                    return (
-                                        <div
-                                            {...getRootProps()}
-                                            className={classNames('dropzone', {'dropzone--isActive': isDragActive})}
-                                        >
-                                            <input {...getInputProps()} />
-                                            {
-                                                <Button><Icon type="upload" />Imagens</Button>
-                                            }
-                                        </div>
-                                    )
-                                }}
-                            </Dropzone>
-                            {imagePreview}
-                        </Col>
-                        <Col span={12}>
-                            <Tooltip
-                                placement="topLeft"
-                                title="Informar alternativas"
-                                visible={this.state.alternativasTooltipVisible}
-                                trigger="contextMenu"
-                            >
-                                <Button
-                                    disabled={this.state.alternativaCorretaDisabled}
-                                    key="submit"
-                                    type="primary"
-                                    onClick={() => this.showHideModalAlternativas(true)}
-                                    style={{float: "right"}}
-                                >
-                                    <Icon type="ordered-list" />Alternativas
-                                </Button>
-                            </Tooltip>
-                        </Col>
-                    </Row>
                     </Form>
                 </Modal>
                 <ModalAlternativas
