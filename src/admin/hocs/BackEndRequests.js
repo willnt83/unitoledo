@@ -386,12 +386,16 @@ function BackEndRequestsWrapper(WrappedComponent) {
 			axios.post('http://localhost:5000/api/getQuestoesSimulado/questao', request)
 			.then(res => {
 				var labelStatus = null
+				var labelDescricao = null
 				var tempArray = res.data.map(questao => {
 					labelStatus = questao.status === true ? 'Ativo' : 'Inativo'
+
+					labelDescricao = questao.descricao.replace(/<\/?[^>]+(>|$)/g, "");
 
 					return ({
 						key: questao.id,
 						description: questao.descricao,
+						labelDescricao: labelDescricao,
 						labelStatus: labelStatus,
 						valueStatus: questao.status,
 						valueEnade: questao.enade,

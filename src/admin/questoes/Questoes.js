@@ -264,15 +264,15 @@ class Questoes extends Component {
 			},
 			{
 				title: "Descrição",
-				dataIndex: "description",
-				width: 641,
-				sorter: (a, b) => { return a.description.localeCompare(b.description)}
+				dataIndex: "labelDescricao",
+				width: 500,
+				sorter: (a, b) => { return a.labelDescricao.localeCompare(b.labelDescricao)}
 			},
 			{
 				title: "Habilidade",
 				dataIndex: "habilidade",
 				sorter: (a, b) => { return a.habilidade.localeCompare(b.habilidade)},
-				width: 139
+				//width: 139
 			},
 			{
 				title: "Conteúdo",
@@ -283,13 +283,13 @@ class Questoes extends Component {
 				title: "Área de Conhecimento",
 				dataIndex: "areaConhecimento",
 				sorter: (a, b) => { return a.areaConhecimento.localeCompare(b.areaConhecimento)},
-				width: 93
+				//width: 93
 			},
 			{
 				title: "Status",
 				dataIndex: "labelStatus",
 				align: "center",
-				width: 150,
+				//width: 150,
 				filters: [
 					{
 						text: "Ativo",

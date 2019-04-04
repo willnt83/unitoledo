@@ -163,7 +163,6 @@ class ModalCadastro extends Component {
     handleViewQuestao = (event) => {
         event.preventDefault()
         this.props.form.validateFieldsAndScroll((err, values) => {
-            console.log('values.fonte', values.fonte)
             var discursiva = this.stringToBool(values.discursiva)
 
             if(!err){
@@ -194,7 +193,6 @@ class ModalCadastro extends Component {
                     }
                 }
 
-                console.log('request', request)
                 if(!this.stringToBool(values.discursiva) && this.state.alternativas.length < 1){
                     this.setState({alternativasTooltipVisible: true})
                 }
@@ -254,7 +252,8 @@ class ModalCadastro extends Component {
             alternativaCorreta: null,
             alternativas: [],
             file: null,
-            resetAlternativasForm: true
+            resetAlternativasForm: true,
+            editorState: EditorState.createEmpty()
         })
 
         this.props.hideModalCadastro()
@@ -276,7 +275,6 @@ class ModalCadastro extends Component {
         reader.onload = (event) => {
 
             //that.setState({fileBase64: event.target.result})
-            console.log('event.target.result', event.target.result)
         }
         reader.onerror = function (error) {
             console.log('Error: ', error)
@@ -302,16 +300,8 @@ class ModalCadastro extends Component {
         })
         var reader = new FileReader()
         reader.readAsDataURL(acceptedFiles[0])
-        console.log('acceptedFiles nome', acceptedFiles[0].name)
         reader.onload = (event) => {
-            //that.setState({fileBase64: event.target.result})
-            //console.log('event.target.result', event.target.result)
-            /*
-            var request = {
-                files: [
-                    event.target.result
-                ]
-            }*/
+
             var bodyFormData = new FormData()
             bodyFormData.append('files', acceptedFiles[0]) 
 
@@ -415,6 +405,7 @@ class ModalCadastro extends Component {
 
         // Populando campos do formulário
         if(nextProps.questao !== null && nextProps.questao !== this.props.questao){
+            console.log('nextProps.questao', nextProps.questao)
             var status = nextProps.questao.valueStatus === true ? 'true' : 'false'
             var discursiva = null
             if(nextProps.questao.valueDiscursiva === true){
@@ -427,7 +418,6 @@ class ModalCadastro extends Component {
             }
 
             var file = null
-            console.log('nextProps.questao', nextProps.questao)
             this.props.form.setFieldsValue({
                 habilidade: nextProps.questao.habilidadeId,
                 conteudo: nextProps.questao.conteudoId,
@@ -492,8 +482,7 @@ class ModalCadastro extends Component {
     }
 
     render(){
-        console.log('images', this.state.images)
-        const { editorState } = this.state
+         const { editorState } = this.state
         const { getFieldDecorator } = this.props.form
         /*
         var imagePreview = null
