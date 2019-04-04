@@ -24,7 +24,8 @@ class NovoSimulado4 extends Component {
         dataHoraFinalValidation: {
             validateStatus: 'success',
             help: ''
-        }
+        },
+        buttonLoadingSalvar: false
     }
 
     componentWillMount(){
@@ -43,6 +44,7 @@ class NovoSimulado4 extends Component {
     }
 
     handleFinalizarButton = (mode) => {
+        this.setState({buttonLoadingSalvar: true})
         let rascunho = null
         this.props.form.validateFieldsAndScroll((err, values) => {
             if (!err) {
@@ -144,6 +146,7 @@ class NovoSimulado4 extends Component {
                     axios.post('http://localhost:5000/api/createUpdateSimulado', request)
                     .then(res => {
                         this.successModal(this.props)
+                        this.setState({buttonLoadingSalvar: false})
                     })
                     .catch(error =>{
                         console.log('error: ', error)
@@ -339,6 +342,7 @@ class NovoSimulado4 extends Component {
                                         <Button
                                             type="primary"
                                             onClick={() => this.handleFinalizarButton('rascunho')}
+                                            loading={this.state.buttonLoadingSalvar}
                                         >
                                             <Icon type="save" />Salvar Como Rascunho
                                         </Button>

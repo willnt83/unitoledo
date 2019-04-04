@@ -390,11 +390,20 @@ class Simulados extends Component {
 
 					return (
                         <React.Fragment>
-                            <Button className="actionButton buttonGreen" title="Publicar" onClick={() => this.changeSimuladoSituacao(record.key, record.rascunho)} disabled={publicarButtonDisabled}><Icon type="global" /></Button>
-                            <Button className="actionButton buttonOrange" title="Mover para Rascunho" onClick={() => this.changeSimuladoSituacao(record.key, record.rascunho)} disabled={moverRascunhoButtonDisabled}><Icon type="file-text" /></Button>
-                            <Button className="actionButton" title="Editar" type="primary" onClick={() => this.editRepublicarSimulados(record, 'editar')} disabled={editarButtonDisabled}><Icon type="edit" /></Button>
-                            <Button className="actionButton buttonRed" title="Excluir" onClick={() => this.showModal(true, record.key)} disabled={exlcuirButtonDisabled}><Icon type="delete" /></Button>
-                            <Button className="actionButton buttonPurple" title="Republicar" onClick={() => this.editRepublicarSimulados(record, 'republicar')} disabled={republicarButtonDisabled}><Icon type="redo" /></Button>
+                            <Row>
+                                <Col span={24}>
+                                    <Button className="actionButton buttonGreen" title="Publicar" onClick={() => this.changeSimuladoSituacao(record.key, record.rascunho)} disabled={publicarButtonDisabled}><Icon type="global" /></Button>
+                                    <Button className="actionButton buttonOrange" title="Mover para Rascunho" onClick={() => this.changeSimuladoSituacao(record.key, record.rascunho)} disabled={moverRascunhoButtonDisabled}><Icon type="file-text" /></Button>
+                                    <Button className="actionButton" title="Editar" type="primary" onClick={() => this.editRepublicarSimulados(record, 'editar')} disabled={editarButtonDisabled}><Icon type="edit" /></Button>
+                                </Col>
+                            </Row>
+                            <Row style={{marginTop: 5}}>
+                                <Col span={24}>
+                                    <Button className="actionButton buttonRed" title="Excluir" onClick={() => this.showModal(true, record.key)} disabled={exlcuirButtonDisabled}><Icon type="delete" /></Button>
+                                    <Button className="actionButton buttonPurple" title="Republicar" onClick={() => this.editRepublicarSimulados(record, 'republicar')} disabled={republicarButtonDisabled}><Icon type="redo" /></Button>
+                                    <Button className="actionButton buttonGreen" title="Imprimir"><Icon type="printer" /></Button>
+                                </Col>
+                            </Row>
                         </React.Fragment>
 					)
 				}

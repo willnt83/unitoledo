@@ -1,5 +1,5 @@
 import React, { Component } from "react"
-import { Icon, Modal, Form, Input, Button,  Row, Col, Select, Tooltip, notification } from "antd"
+import { Icon, Modal, Form, Button,  Row, Col, Select, Tooltip, notification } from "antd"
 import { connect } from 'react-redux'
 import ModalAlternativas from './ModalAlternativas'
 import BackEndRequests from '../hocs/BackEndRequests'
@@ -208,7 +208,7 @@ class ModalCadastro extends Component {
                         ano: values.ano,
                         conteudoId: values.conteudo,
                         description: this.state.questaoContent,
-                        fonte: values.fonteId,
+                        fonteId: values.fonte,
                         habilidadeId: values.habilidade,
                         imagem: null,
                         tipoId: values.tipo,
@@ -218,8 +218,6 @@ class ModalCadastro extends Component {
                         valueEnade: this.stringToBool(values.padraoEnade),
                         valueStatus: this.stringToBool(values.status),
                     }
-
-
                     this.props.setQuestao(questao)
                     this.props.showModalViewQuestaoF(true, 'write')
                     
@@ -253,7 +251,8 @@ class ModalCadastro extends Component {
             alternativas: [],
             file: null,
             resetAlternativasForm: true,
-            editorState: EditorState.createEmpty()
+            editorState: EditorState.createEmpty(),
+            images: []
         })
 
         this.props.hideModalCadastro()
@@ -405,7 +404,6 @@ class ModalCadastro extends Component {
 
         // Populando campos do formulário
         if(nextProps.questao !== null && nextProps.questao !== this.props.questao){
-            console.log('nextProps.questao', nextProps.questao)
             var status = nextProps.questao.valueStatus === true ? 'true' : 'false'
             var discursiva = null
             if(nextProps.questao.valueDiscursiva === true){
@@ -417,7 +415,6 @@ class ModalCadastro extends Component {
                 this.setState({alternativaCorretaDisabled: false})
             }
 
-            var file = null
             this.props.form.setFieldsValue({
                 habilidade: nextProps.questao.habilidadeId,
                 conteudo: nextProps.questao.conteudoId,
@@ -438,23 +435,22 @@ class ModalCadastro extends Component {
             const contentState = ContentState.createFromBlockArray(contentBlocks, entityMap);
 
             this.setState({
+                questaoId: nextProps.questao.key,
+                alternativas: nextProps.questao.alternativas,
+                alternativaCorreta: nextProps.questao.valueAlternativaCorreta,
+                questaoContent: nextProps.questao.description,
                 editorState: EditorState.createWithContent(contentState)
+                //fileBase64: nextProps.questao.imagem,
+                //file
             })
-
+            /*
             if(nextProps.questao.imagem) {
                 file = this.Base64ToFile(nextProps.questao.imagem, 'imagem.png')
                 Object.assign(file, {
                     preview: URL.createObjectURL(file)
                 })
             }
-
-            this.setState({
-                questaoId: nextProps.questao.key,
-                alternativas: nextProps.questao.alternativas,
-                alternativaCorreta: nextProps.questao.valueAlternativaCorreta,
-                fileBase64: nextProps.questao.imagem,
-                file
-            })
+            */
         }
     }
 
@@ -466,7 +462,7 @@ class ModalCadastro extends Component {
         textArea.select()
 
         try {
-            var successful = document.execCommand("copy")
+            //var successful = document.execCommand("copy")
             //var msg = successful ? "successful" : "unsuccessful"
             //console.log("Fallback: Copying text command was " + msg)
         } catch (err) {
@@ -492,7 +488,7 @@ class ModalCadastro extends Component {
     }
 
     render(){
-         const { editorState } = this.state
+        const { editorState } = this.state
         const { getFieldDecorator } = this.props.form
 
         return(

@@ -3,11 +3,13 @@ import { Icon, Modal, Form, Button,  Row, Col, notification } from "antd"
 import { connect } from 'react-redux'
 import BackEndRequests from '../hocs/BackEndRequests'
 
+const alternativasArray = ['A)', 'B)', 'C)', 'D)', 'E)']
 
 class ModalViewQuestao extends Component {
     state = {
         questao: null,
-        footerButtons: null
+        footerButtons: null,
+        buttonLoadingSalvar: false
     }
 
     handleModalClosure = () => {
@@ -28,6 +30,7 @@ class ModalViewQuestao extends Component {
     }
 
     handleSubmit = () => {
+        this.setState({buttonLoadingSalvar: true})
         this.props.createUpdateQuestao(this.props.request)
     }
 
@@ -76,6 +79,7 @@ class ModalViewQuestao extends Component {
                         key="submit"
                         className="buttonGreen"
                         onClick={this.handleSubmit}
+                        loading={this.state.buttonLoadingSalvar}
                     >
                         <Icon type="save" />Salvar
                     </Button>
@@ -90,12 +94,8 @@ class ModalViewQuestao extends Component {
         // Tratando response da requisição createUpdateQuestao
 		if(nextProps.createUpdateQuestaoResponse && nextProps.createUpdateQuestaoResponse !== this.props.createUpdateQuestaoResponse){
 			if(nextProps.createUpdateQuestaoResponse.success){
-                /*
-                this.handleModalClosure() // Limpa todas as variáveis e o formulário
-				this.props.hideModalCadastro()
-                */
                 this.showNotification('Questão salva com sucesso.', true)
-                this.setState({questao: null})
+                this.setState({questao: null, buttonLoadingSalvar: false})
                 this.props.showModalViewQuestaoF(false)
                 this.props.hideModalCadastro()
                 this.props.handleGetQuestoes()
@@ -111,8 +111,7 @@ class ModalViewQuestao extends Component {
         var title = 'Questão'
         var description = null
         var alternativas = []
-        
-        
+
         if(this.state.questao !== null){
             if(this.state.questao.key !== null)
                 title += ' '+this.state.questao.key
@@ -134,16 +133,13 @@ class ModalViewQuestao extends Component {
 
                 </Row>
                 <Row>
-                    <ul style={{marginTop: 10, paddingLeft: 20}}>
-                        {
-                            alternativas.map(alternativa => {
-                                var fontWeight = alternativa.correta ? 800 : 400
-                                return(
-                                    <li key={alternativa.id} style={{fontWeight: fontWeight}}>{alternativa.descricao}</li>
-                                )
-                            })
-                        }
-                    </ul>
+                    {
+                        alternativas.map((alternativa, index) => {
+                            return(
+                                <p key={alternativa.id} className="alternativa">{alternativasArray[index]} {alternativa.descricao}</p>
+                            )
+                        })
+                    }
                 </Row>
                 </Modal>
             </React.Fragment>
