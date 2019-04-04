@@ -494,43 +494,7 @@ class ModalCadastro extends Component {
     render(){
          const { editorState } = this.state
         const { getFieldDecorator } = this.props.form
-        /*
-        var imagePreview = null
-        if(this.state.file !== null){
-            imagePreview = 
-                <Row style={{marginTop: 16}}>
-                    <Col span={12}>
-                        <aside style={thumbsContainer}>
-                            <div style={thumb}>
-                                <div style={thumbInner}>
-                                    <img
-                                        src={this.state.file.preview}
-                                        style={img}
-                                        alt=""
-                                        onClick={() => this.openImage(this.state.fileBase64)}
-                                    />
-                                </div>
-                            </div>
-                        </aside>
-                    </Col>
-                    <Col span={12}>
-                        <Row>
-                            <Col span={24}>
-                                <Button className="buttonGreen" onClick={this.copyToClipboard('TESTE BLA BLA')}><Icon type="copy" />Copiar Link da Imagem</Button>
-                            </Col>
-                        </Row>
-                        <Row style={{marginTop: 5}}>
-                            <Col span={24}>
-                                <Button className="buttonRed" onClick={this.removeImage}><Icon type="delete" />Remover Imagem</Button>
-                            </Col>
-                        </Row>
-                    </Col>
-                </Row>
-                
-        }
-        else
-            imagePreview = null
-        */
+
         return(
             <React.Fragment>
                 <Modal
@@ -538,6 +502,7 @@ class ModalCadastro extends Component {
                     visible={this.props.showModalCadastro}
                     
                     onCancel={this.handleModalClosure}
+                    maskClosable={false}
                     width={900}
                     footer={[
                         <Button key="back" onClick={this.handleModalClosure}>
