@@ -133,9 +133,7 @@ class QuestaoSimulado extends Component {
                         </Col>
                     </Row>
                     <Row>
-                        <Col span={24}>
-                            {this.state.simulado.questoes[this.state.questaoNo].descricao}
-                        </Col>
+                        <Col span={24} dangerouslySetInnerHTML={{__html: this.state.simulado.questoes[this.state.questaoNo].descricao}} />
                     </Row>
                     <Row>
                         <Col span={24}>

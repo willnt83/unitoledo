@@ -15,7 +15,6 @@ import AreasDeConhecimento from "./cadastros/AreasDeConhecimento"
 import Fontes from "./cadastros/Fontes"
 import AreaGestor from "./area-do-gestor/AreaGestor"
 import Questoes from "./questoes/Questoes"
-import ImpressaoQuestao from "./questoes/ImpressaoQuestao"
 import Simulados from "./simulados/Simulados"
 import NovoSimulado1 from "./simulados/NovoSimulado1"
 import NovoSimulado2 from "./simulados/NovoSimulado2"
@@ -88,11 +87,6 @@ const routes = [
     main: () => <Questoes />
   },
   {
-    path: "/admin/impressao-questao",
-    sidebar: () => <div>Impressão/Questão</div>,
-    main: () => <ImpressaoQuestao />
-  },
-  {
     path: "/admin/meus-alunos",
     sidebar: () => <div>Cadastro/Conteudo</div>,
     main: () => <h1>Meus Alunos</h1>
@@ -130,17 +124,13 @@ class AdminIndex extends Component {
 					/>
 					*/}
 					<PageTitle pageTitle={this.props.pageTitle} />
-                </Col>
+				</Col>
               
                 <Col span={14} align="end">
-					<Icon type="user" style={{marginRight: '8px'}} />{this.props.usuarioNome} / {this.props.periodoLetivoDescricao}
+				    <Icon type="user" style={{marginRight: '8px'}} />{this.props.usuarioNome} / {this.props.periodoLetivoDescricao}
                 </Col>
               </Row>
-              
-              
-
             </Header>
-
               {routes.map((route, index) => (
                 <Route
                   key={index}
@@ -149,7 +139,6 @@ class AdminIndex extends Component {
                   component={route.main}
                 />
               ))}
-
             <Footer style={{ textAlign: "center" }}>UNITOLEDO ©2018</Footer>
           </Layout>
         </Layout>

@@ -401,7 +401,8 @@ class ModalCadastro extends Component {
     onEditorStateChange = (editorState) => {
         this.setState({
             editorState,
-            questaoContent: draftToHtml(convertToRaw(editorState.getCurrentContent()))
+            questaoContent: draftToHtml(convertToRaw(editorState.getCurrentContent())),
+            descricaoTooltip: false
         })
 
         /*
