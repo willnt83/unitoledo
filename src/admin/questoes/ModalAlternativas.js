@@ -1,7 +1,8 @@
 import React, { Component } from "react"
-import { Icon, Modal, Form, Input, Button, Select, Row, Col } from "antd"
+import { Icon, Input, Modal, Form, Button, Select, Row, Col } from "antd"
 import { connect } from 'react-redux'
 
+const {TextArea} = Input
 const letrasAlternativas = ['A', 'B', 'C', 'D', 'E']
 
 let id = 2
@@ -20,8 +21,6 @@ class ModalAlternativas extends Component {
         }
 
         if(this.props.alternativaCorreta !== nextProps.alternativaCorreta && nextProps.alternativas.length > 0){
-            console.log('nextProps.alternativas', nextProps.alternativas)
-
             var alternativasDescricao = nextProps.alternativas.map(alternativa => {
                 return(
                     alternativa.descricao
@@ -30,13 +29,6 @@ class ModalAlternativas extends Component {
             this.props.form.setFieldsValue({
                 alternativaCorreta: nextProps.alternativaCorreta,
                 alternativas: alternativasDescricao
-                /*
-                alternativaA: nextProps.alternativas[0].descricao,
-                alternativaB: nextProps.alternativas[1].descricao,
-                alternativaC: nextProps.alternativas[2].descricao,
-                alternativaD: nextProps.alternativas[3].descricao,
-                alternativaE: nextProps.alternativas[4].descricao
-                */
             })
         }
     }
@@ -44,54 +36,8 @@ class ModalAlternativas extends Component {
     submitAlternativasForm = (event) => {
         event.preventDefault()
         this.props.form.validateFieldsAndScroll((err, values) => {
-            console.log('values', values)
-            if(!err){
-                var alternativaIds = []
-                var corretaA = false, corretaB = false, corretaC = false, corretaD = false, corretaE = false
-                switch(values.alternativaCorreta){
-                    case 'A': {
-                        corretaA = true
-                        break
-                    }
-                    case 'B': {
-                        corretaB = true
-                        break
-                    }
-                    case 'C': {
-                        corretaC = true
-                        break
-                    }
-                    case 'D': {
-                        corretaD = true
-                        break
-                    }
-                    case 'E': {
-                        corretaE = true
-                        break
-                    }
-                    default:
-                        break
-                }
-                /*
-                if(this.props.alternativas.length === 0){
-                    alternativaIds = ['', '', '', '', '']
-                }
-                else{
-                    this.props.alternativas.forEach(alternativa => {
-                        alternativaIds.push(alternativa.id)
-                    })
-                }
 
-                alternativas.push({
-                    id: alternativaIds[0],
-                    descricao: values.alternativaA,
-                    correta: corretaA
-                })
-                alternativas.push({id: alternativaIds[1], descricao: values.alternativaB, correta: corretaB})
-                alternativas.push({id: alternativaIds[2], descricao: values.alternativaC, correta: corretaC})
-                alternativas.push({id: alternativaIds[3], descricao: values.alternativaD, correta: corretaD})
-                alternativas.push({id: alternativaIds[4], descricao: values.alternativaE, correta: corretaE})
-                */
+            if(!err){
                 var id = null
                 var corretaIndex = null, correta = false
                 var alternativas = values.alternativas.map((alternativa, index) => {
@@ -102,11 +48,6 @@ class ModalAlternativas extends Component {
                         id = this.props.alternativas[0].id
                     }
 
-                    // Fazer o campo correta
-                    console.log('letrasAlternativas', letrasAlternativas)
-                    console.log('values.alternativaCorreta', values.alternativaCorreta)
-                    console.log('correta index: ', letrasAlternativas.indexOf(values.alternativaCorreta))
-
                     corretaIndex = letrasAlternativas.indexOf(values.alternativaCorreta)
                     correta = corretaIndex === index ? true : false
 
@@ -116,8 +57,8 @@ class ModalAlternativas extends Component {
                         correta: correta
                     })
                 })
-                console.log('alternativas', alternativas)
 
+                alternativas = alternativas.filter(Boolean);
 
                 this.props.updateAlternativas(values.alternativaCorreta, alternativas)
                 this.props.showHideModalAlternativas(false)
@@ -140,9 +81,8 @@ class ModalAlternativas extends Component {
 
     removeComposicaoRow = (k) => {
         const { form } = this.props
-        // can use data-binding to get
         const keys = form.getFieldValue('keys')
-        // We need at least one passenger
+
         if (keys.length === 1){
             return
         }
@@ -151,6 +91,9 @@ class ModalAlternativas extends Component {
         form.setFieldsValue({
             keys: keys.filter(key => key !== k),
         })
+
+        this.props.limpaAlternativaCorreta()
+        this.props.form.setFieldsValue({alternativaCorreta: null})
     }
 
 
@@ -178,8 +121,9 @@ class ModalAlternativas extends Component {
                             }
                         ]
                     })(
-                        <Input
+                        <TextArea
                             style={{width: '90%'}}
+                            rows={4}
                         />
                     )}
                     {keys.length >= 3 ? (
@@ -200,6 +144,7 @@ class ModalAlternativas extends Component {
                 title="Alternativas"
                 visible={this.props.showModalAlternativas}
                 onCancel={() => this.props.showHideModalAlternativas(false)}
+                maskClosable={false}
                 footer={[
                     <Button
                         key="back"

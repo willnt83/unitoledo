@@ -13,17 +13,8 @@ class ModalViewQuestao extends Component {
     }
 
     handleModalClosure = () => {
-        /*
-        // Resetando form
-        this.props.resetQuestao()
-        // Limpando state
-        this.setState({
-            questao: null
-        })
-        */
         this.props.showModalViewQuestaoF(false)
     }
-
 
     handleImprimir = () => {
 
@@ -136,7 +127,7 @@ class ModalViewQuestao extends Component {
                     {
                         alternativas.map((alternativa, index) => {
                             return(
-                                <p key={alternativa.id} className="alternativa">{alternativasArray[index]} {alternativa.descricao}</p>
+                                <p key={alternativa.descricao} className="alternativa">{alternativasArray[index]} {alternativa.descricao}</p>
                             )
                         })
                     }

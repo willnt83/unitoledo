@@ -148,9 +148,9 @@ class ModalCadastro extends Component {
         questaoContent: null,
         alternativasTooltipVisible: false,
         descricaoTooltip: false,
-        file: null,
-        fileBase64: null,
-        receivedFile: null,
+        //file: null,
+        //fileBase64: null,
+        //receivedFile: null,
         resetAlternativasForm : false,
         editorState: EditorState.createEmpty(),
         images: []
@@ -178,20 +178,26 @@ class ModalCadastro extends Component {
     }
     */
 
+    limpaAlternativaCorreta = () => {
+        this.setState({alternativaCorreta: null})
+    }
+
     handleTipoRespostaChange = (value) => {
+        // Se alterar para tipoResposta = Discursiva
+        if(value === 2){
+            this.setState({
+                alternativas: [],
+                alternativaCorreta: null,
+                resetAlternativasForm: true,
+                buttonAlternativas: true
+            })
+        }
+        
         value = value === 2 ? true : false
 		this.setState({
             buttonAlternativas: value,
             alternativasTooltipVisible: false
         })
-
-        // Se alterar para tipoResposta = Discursiva
-        if(!value){
-            this.setState({
-                alternativas: [],
-                alternativaCorreta: null
-            })
-        }
     }
 
     handleViewQuestao = (event) => {
@@ -230,14 +236,12 @@ class ModalCadastro extends Component {
 
                 // Validação Descrição
                 if(!this.state.editorState.getCurrentContent().hasText()){
-                    console.log('validacao descricao')
                     this.setState({descricaoTooltip: true})
                     validation = false
                 }
 
                 // Validação alternativas
                 if(values.tipoResposta !== 2 && this.state.alternativas.length < 1){
-                    console.log('validacao alternativas')
                     this.setState({alternativasTooltipVisible: true})
                     validation = false
                 }
@@ -264,7 +268,7 @@ class ModalCadastro extends Component {
                         //valueDiscursiva: discursiva,
                         valueEnade: this.stringToBool(values.padraoEnade),
                         valueStatus: this.stringToBool(values.status),
-                        tipoResposta: values.tipoResposta
+                        tipoRespostaId: values.tipoResposta //aaaqui
                     }
                     this.props.setQuestao(questao)
                     this.props.showModalViewQuestaoF(true, 'write')
@@ -297,7 +301,7 @@ class ModalCadastro extends Component {
             questaoId: '',
             alternativaCorreta: null,
             alternativas: [],
-            file: null,
+            //file: null,
             resetAlternativasForm: true,
             editorState: EditorState.createEmpty(),
             images: []
@@ -314,7 +318,7 @@ class ModalCadastro extends Component {
 		this.setState({showModalAlternativas: bool})
     }
 
-
+    /*
     fileToBase64 = (file, that) => {
         var reader = new FileReader()
         
@@ -337,6 +341,7 @@ class ModalCadastro extends Component {
         }
         return new File([u8arr], filename, {type:mime})
     }
+    */
 
     onDrop = (acceptedFiles, rejectedFiles) => {
 
@@ -383,14 +388,15 @@ class ModalCadastro extends Component {
         window.open(image, '_blank')
     }
 
+    /*
     removeImage = (index) => {
-
         this.setState({
             file: null,
             fileBase64: null,
             receivedFile: null
         })
     }
+    */
 
     onEditorStateChange = (editorState) => {
         this.setState({
@@ -422,8 +428,6 @@ class ModalCadastro extends Component {
     }
 
     componentWillReceiveProps(nextProps){
-        console.log('componentWillReceiveProps')
-        console.log('nextProps.questao', nextProps.questao)
         if(nextProps.questao && (nextProps.questao.tipoRespostaId === 1 || nextProps.questao.tipoRespostaId === 3)){
             this.setState({buttonAlternativas: false})
         }
@@ -462,18 +466,7 @@ class ModalCadastro extends Component {
         // Populando campos do formulário
         if(nextProps.questao !== null && nextProps.questao !== this.props.questao){
             var status = nextProps.questao.valueStatus === true ? 'true' : 'false'
-            /*
-            var discursiva = null
-            if(nextProps.questao.valueDiscursiva === true){
-                discursiva = 1
-                this.setState({alternativaCorretaDisabled: true})
-            }
-            else{
-                discursiva = 0
-                this.setState({alternativaCorretaDisabled: false})
-            }
-            */
-            console.log('nextProps.questao', nextProps.questao)
+
             this.props.form.setFieldsValue({
                 habilidade: nextProps.questao.habilidadeId,
                 conteudo: nextProps.questao.conteudoId,
@@ -556,7 +549,6 @@ class ModalCadastro extends Component {
                 <Modal
                     title="Questão"
                     visible={this.props.showModalCadastro}
-                    
                     onCancel={this.handleModalClosure}
                     maskClosable={false}
                     width={900}
@@ -896,6 +888,7 @@ class ModalCadastro extends Component {
                     mode={this.props.mode}
                     resetAlternativasForm={this.state.resetAlternativasForm}
                     updateResetAlternativasFormState={this.updateResetAlternativasFormState}
+                    limpaAlternativaCorreta={this.limpaAlternativaCorreta}
 
                 />
             </React.Fragment>

@@ -15,6 +15,7 @@ import AreasDeConhecimento from "./cadastros/AreasDeConhecimento"
 import Fontes from "./cadastros/Fontes"
 import AreaGestor from "./area-do-gestor/AreaGestor"
 import Questoes from "./questoes/Questoes"
+import ImpressaoQuestao from "./questoes/ImpressaoQuestao"
 import Simulados from "./simulados/Simulados"
 import NovoSimulado1 from "./simulados/NovoSimulado1"
 import NovoSimulado2 from "./simulados/NovoSimulado2"
@@ -83,8 +84,13 @@ const routes = [
   },
   {
     path: "/admin/banco-de-questoes",
-    sidebar: () => <div>Cadastro/Conteudo</div>,
+    sidebar: () => <div>Questões</div>,
     main: () => <Questoes />
+  },
+  {
+    path: "/admin/impressao-questao",
+    sidebar: () => <div>Impressão/Questão</div>,
+    main: () => <ImpressaoQuestao />
   },
   {
     path: "/admin/meus-alunos",
