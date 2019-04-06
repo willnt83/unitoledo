@@ -16,8 +16,6 @@ import '../../../node_modules/react-draft-wysiwyg/dist/react-draft-wysiwyg.css'
 import draftToHtml from 'draftjs-to-html'
 import htmlToDraft from 'html-to-draftjs';
 
-
-
 const statusOptions = [
 	{
 		value: 'true',
@@ -44,6 +42,7 @@ const dificuldadeOptions = [
     }
 ]
 
+/*
 const discursivaOptions = [
 	{
 		value: 1,
@@ -54,6 +53,7 @@ const discursivaOptions = [
 		label: "Não"
 	}
 ]
+*/
 
 const tipoOptions = [
 	{
@@ -63,6 +63,21 @@ const tipoOptions = [
 	{
 		value: 2,
 		label: 'Conhecimento específico'
+	}
+]
+
+const tipoRespostaOptions = [
+	{
+		value: 1,
+		label: 'Alternativas'
+	},
+	{
+		value: 2,
+		label: 'Discursiva'
+    },
+    {
+		value: 3,
+		label: 'Verdadeiro ou Falso'
 	}
 ]
 
@@ -124,7 +139,7 @@ const img = {
 
 class ModalCadastro extends Component {
     state = {
-        alternativaCorretaDisabled: true,
+        buttonAlternativas: true,
         showModalAlternativas: false,
         alternativaCorreta: null,
         alternativas: [],
@@ -132,6 +147,7 @@ class ModalCadastro extends Component {
         questaoId: '',
         questaoContent: null,
         alternativasTooltipVisible: false,
+        descricaoTooltip: false,
         file: null,
         fileBase64: null,
         receivedFile: null,
@@ -144,6 +160,7 @@ class ModalCadastro extends Component {
         return (str === 1 || str === 'true')
     }
 
+    /*
     handleDiscursivaChange = (value) => {
         value = value === 1 ? true : false
 		this.setState({
@@ -159,19 +176,33 @@ class ModalCadastro extends Component {
             })
         }
     }
+    */
+
+    handleTipoRespostaChange = (value) => {
+        value = value === 2 ? true : false
+		this.setState({
+            buttonAlternativas: value,
+            alternativasTooltipVisible: false
+        })
+
+        // Se alterar para tipoResposta = Discursiva
+        if(!value){
+            this.setState({
+                alternativas: [],
+                alternativaCorreta: null
+            })
+        }
+    }
 
     handleViewQuestao = (event) => {
         event.preventDefault()
         this.props.form.validateFieldsAndScroll((err, values) => {
-            var discursiva = this.stringToBool(values.discursiva)
-
             if(!err){
                 let request = {
                     "id": this.state.questaoId,
                     "descricao": this.state.questaoContent,
                     "status": this.stringToBool(values.status),
                     "dificuldade": values.dificuldade,
-                    "discursiva": discursiva,
                     "ano": values.ano,
                     "alterCorreta": this.state.alternativaCorreta,
                     "imagem": '',
@@ -187,16 +218,32 @@ class ModalCadastro extends Component {
                     "fonte": {
                         "id": values.fonte
                     },
-                    "alternativas" : this.state.alternativas,
                     "tipo": {
                         "id": values.tipo
-                    }
+                    },
+                    "tipoResposta": {
+                        "id": values.tipoResposta
+                    },
+                    "alternativas" : this.state.alternativas
+                }
+                var validation = true
+
+                // Validação Descrição
+                if(!this.state.editorState.getCurrentContent().hasText()){
+                    console.log('validacao descricao')
+                    this.setState({descricaoTooltip: true})
+                    validation = false
                 }
 
-                if(!this.stringToBool(values.discursiva) && this.state.alternativas.length < 1){
+                // Validação alternativas
+                if(values.tipoResposta !== 2 && this.state.alternativas.length < 1){
+                    console.log('validacao alternativas')
                     this.setState({alternativasTooltipVisible: true})
+                    validation = false
                 }
-                else{
+
+
+                if(validation){
                     this.setState({alternativasTooltipVisible: false})
                     this.props.setRequest(request)
 
@@ -214,9 +261,10 @@ class ModalCadastro extends Component {
                         tipoId: values.tipo,
                         valueAlternativaCorreta: this.state.alternativaCorreta,
                         valueAno: values.ano,
-                        valueDiscursiva: discursiva,
+                        //valueDiscursiva: discursiva,
                         valueEnade: this.stringToBool(values.padraoEnade),
                         valueStatus: this.stringToBool(values.status),
+                        tipoResposta: values.tipoResposta
                     }
                     this.props.setQuestao(questao)
                     this.props.showModalViewQuestaoF(true, 'write')
@@ -373,6 +421,15 @@ class ModalCadastro extends Component {
         notification.open(args)
     }
 
+    componentWillReceiveProps(nextProps){
+        console.log('componentWillReceiveProps')
+        console.log('nextProps.questao', nextProps.questao)
+        if(nextProps.questao && (nextProps.questao.tipoRespostaId === 1 || nextProps.questao.tipoRespostaId === 3)){
+            this.setState({buttonAlternativas: false})
+        }
+
+    }
+
     componentWillMount(){
         // Construindo opções de seleção do campo Ano
         var currDate = moment()
@@ -405,6 +462,7 @@ class ModalCadastro extends Component {
         // Populando campos do formulário
         if(nextProps.questao !== null && nextProps.questao !== this.props.questao){
             var status = nextProps.questao.valueStatus === true ? 'true' : 'false'
+            /*
             var discursiva = null
             if(nextProps.questao.valueDiscursiva === true){
                 discursiva = 1
@@ -414,7 +472,8 @@ class ModalCadastro extends Component {
                 discursiva = 0
                 this.setState({alternativaCorretaDisabled: false})
             }
-
+            */
+            console.log('nextProps.questao', nextProps.questao)
             this.props.form.setFieldsValue({
                 habilidade: nextProps.questao.habilidadeId,
                 conteudo: nextProps.questao.conteudoId,
@@ -425,8 +484,9 @@ class ModalCadastro extends Component {
                 ano: nextProps.questao.valueAno,
                 //descricao: nextProps.questao.description,
                 fonte: nextProps.questao.fonteId,
-                discursiva: discursiva,
-                tipo: nextProps.questao.tipoId
+                //discursiva: discursiva,
+                tipo: nextProps.questao.tipoId,
+                tipoResposta: nextProps.questao.tipoRespostaId
             })
 
             // Settando valor no campo descricao
@@ -709,39 +769,27 @@ class ModalCadastro extends Component {
                                     })
                                 }
                             </Col>
-                            <Col span={12}>
-                                <Tooltip
-                                    placement="topLeft"
-                                    title="Informar alternativas"
-                                    visible={this.state.alternativasTooltipVisible}
-                                    trigger="contextMenu"
-                                >
-                                    <Button
-                                        disabled={this.state.alternativaCorretaDisabled}
-                                        key="submit"
-                                        type="primary"
-                                        onClick={() => this.showHideModalAlternativas(true)}
-                                        style={{float: "right"}}
-                                    >
-                                        <Icon type="ordered-list" />Alternativas
-                                    </Button>
-                                </Tooltip>
-                            </Col>
                         </Row>
-
-
                         <Row style={{marginTop: 15}}>
                             <Col span={24} className='textEditorLabel'><span className="textEditorRequired">*</span>Descrição</Col>
-                            <Col span={24} className='textEditorArea' style={{padding: '0 10px 0 10px' }}>
-                                <Editor
-                                    editorState={editorState}
-                                    wrapperClassName="demo-wrapper"
-                                    editorClassName="demo-editor"
-                                    onEditorStateChange={this.onEditorStateChange}
-                                    localization={{
-                                        locale: 'pt',
-                                    }}
-                                />
+                            <Col span={24} id="textEditor" className='textEditorArea' style={{padding: '0 10px 0 10px' }}>
+                                <Tooltip
+                                        placement="topRight"
+                                        title="Informar a descrição da questão"
+                                        visible={this.state.descricaoTooltip}
+                                        trigger="contextMenu"
+                                        getPopupContainer={() => document.getElementById('textEditor')}
+                                >
+                                    <Editor
+                                        editorState={editorState}
+                                        wrapperClassName="demo-wrapper"
+                                        editorClassName="demo-editor"
+                                        onEditorStateChange={this.onEditorStateChange}
+                                        localization={{
+                                            locale: 'pt',
+                                        }}
+                                    />
+                                </Tooltip>
                             </Col>
                         </Row>
                         <Row gutter={32} style={{marginTop: 15}}>
@@ -792,28 +840,49 @@ class ModalCadastro extends Component {
                                 </Form.Item>
                             </Col>
                             <Col span={8}>
-                                <Form.Item label="Discursiva">
-                                    {getFieldDecorator('discursiva', {
+                                <Form.Item label="Tipo de Resposta">
+                                    {getFieldDecorator('tipoResposta', {
                                         rules: [
                                             {
-                                                required: true, message: 'Selecione se é discursiva',
+                                                required: true, message: 'Selecione o tipo de resposta',
                                             }
                                         ]
                                     })(
                                         <Select
-                                            name="discursiva"
+                                            name="tipoResposta"
                                             style={{ width: '100%' }}
                                             placeholder="Selecione"
-                                            onChange={this.handleDiscursivaChange}
+                                            onChange={this.handleTipoRespostaChange}
                                         >
                                             {
-                                                discursivaOptions.map((item) => {
+                                                tipoRespostaOptions.map((item) => {
                                                     return (<Select.Option key={item.value} value={item.value}>{item.label}</Select.Option>)
                                                 })
                                             }
                                         </Select>
                                     )}
                                 </Form.Item>
+                            </Col>
+                        </Row>
+                        <Row>
+                            <Col id="colAlternativas" span={24}>
+                                <Tooltip
+                                    placement="topLeft"
+                                    title="Informar alternativas"
+                                    visible={this.state.alternativasTooltipVisible}
+                                    trigger="contextMenu"
+                                    getPopupContainer={() => document.getElementById('colAlternativas')}
+                                >
+                                    <Button
+                                        disabled={this.state.buttonAlternativas}
+                                        key="submit"
+                                        type="primary"
+                                        onClick={() => this.showHideModalAlternativas(true)}
+                                        style={{float: "right"}}
+                                    >
+                                        <Icon type="ordered-list" />Alternativas
+                                    </Button>
+                                </Tooltip>
                             </Col>
                         </Row>
                     </Form>

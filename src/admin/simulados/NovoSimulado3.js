@@ -111,6 +111,38 @@ class NovoSimulado3 extends Component {
                 })
             })
             this.props.setQuestoes(tempArray)
+
+            if(this.state.firstLoad){
+                console.log('contando no primeiro load')
+                var countEspecifico = 0
+                var countGeral = 0
+                var countFacil = 0
+                var countMedio = 0
+                var countDificil = 0
+
+                tempArray.filter(questao =>{
+                    if(this.props.simulado.questoes.indexOf(questao.key) > -1)
+                        return true
+                    else{
+                        return false
+                    }
+                })
+                .forEach(questao => {
+                    if(questao.tipoId === 1) countGeral++
+                    else countEspecifico++
+                    if(questao.dificuldade === 'facil') countFacil++
+                    else if(questao.dificuldade === 'medio') countMedio++
+                    else if(questao.dificuldade === 'dificil') countDificil++
+                })
+                this.setState({
+                    countEspecifico,
+                    countGeral,
+                    countFacil,
+                    countMedio,
+                    countDificil,
+                    firstLoad: false
+                })
+            }
         })
         .catch(error =>{
             console.log(error)
@@ -150,47 +182,17 @@ class NovoSimulado3 extends Component {
         })
     }
 
+
+    /*
     componentWillReceiveProps(props) {
         if(props.simulado.questoes && props.simulado.questoes.length > 0){
             //console.log('props.simulado.questoes', props.simulado.questoes)
             //console.log('props.questoes', props.questoes)
 
-            if(this.state.firstLoad){
-                var countEspecifico = 0
-                var countGeral = 0
-                var countFacil = 0
-                var countMedio = 0
-                var countDificil = 0
-
             
-                props.questoes.filter(questao =>{
-                    if(props.simulado.questoes.indexOf(questao.key) > -1)
-                        return true
-                    else{
-                        //console.log('retirando questao ', questao.key)
-                        return false
-                    }
-                })
-                .forEach(questao => {
-                    //console.log('questao.key', questao.key)
-                    if(questao.tipoId === 1) countGeral++
-                    else countEspecifico++
-                    if(questao.dificuldade === 'facil') countFacil++
-                    else if(questao.dificuldade === 'medio') countMedio++
-                    else if(questao.dificuldade === 'dificil') countDificil++
-                    //else console.log('dificuldade null')
-                })
-                this.setState({
-                    countEspecifico,
-                    countGeral,
-                    countFacil,
-                    countMedio,
-                    countDificil,
-                    firstLoad: false
-                })
-            }
         }
     }
+    */
 
     componentWillMount(){
         if(this.props.mainData === null || (this.props.contexto !== 'COORDENADOR' && this.props.contexto !== 'PROFESSOR')){

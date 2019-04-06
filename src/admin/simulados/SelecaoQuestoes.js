@@ -68,9 +68,15 @@ class SelecaoQuestoes extends Component {
                                 <Row key={questao.id} style={{marginBottom: 20}}>
                                     <Col span={24}>
                                         <Card>
-                                            <h4>({questao.fonte.description})</h4>
-                                            <h4 style={{marginBottom: 20}}>{questao.id} - {questao.descricao}</h4>
-                                                {alternativas}
+                                            <h4>{questao.id} ({questao.fonte.description})</h4>
+                                            <Row>
+                                                <Col span={24} dangerouslySetInnerHTML={{__html: questao.descricao}} />
+                                            </Row>
+                                            <Row>
+                                                <Col span={24}>
+                                                    {alternativas}
+                                                </Col>
+                                            </Row>
                                             <Row>
                                                 <Col span={24} align="end">
                                                     {selectButton}

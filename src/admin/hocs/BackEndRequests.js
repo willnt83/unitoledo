@@ -389,7 +389,6 @@ function BackEndRequestsWrapper(WrappedComponent) {
 				var labelDescricao = null
 				var tempArray = res.data.map(questao => {
 					labelStatus = questao.status === true ? 'Ativo' : 'Inativo'
-
 					labelDescricao = questao.descricao.replace(/<\/?[^>]+(>|$)/g, "");
 
 					return ({
@@ -412,7 +411,9 @@ function BackEndRequestsWrapper(WrappedComponent) {
 						fonteId: questao.fonte.id,
 						dificuldade: questao.dificuldade,
 						imagem: questao.imagem,
-						tipoId: questao.tipo.id
+						tipoId: questao.tipo.id,
+						tipoResposta: questao.tipoResposta.descricao,
+						tipoRespostaId: questao.tipoResposta.id
 					})
 				})
 				this.props.setQuestoes(tempArray)

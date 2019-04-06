@@ -1,29 +1,10 @@
 import React, { Component } from "react"
-import { Icon, Modal, Form, Input, Button, Select } from "antd"
+import { Icon, Modal, Form, Input, Button, Select, Row, Col } from "antd"
 import { connect } from 'react-redux'
 
-const alternativaOptions = [
-	{
-		value: "A",
-		label: "A"
-	},
-	{
-		value: "B",
-		label: "B"
-	},
-	{
-		value: "C",
-		label: "C"
-	},
-	{
-		value: "D",
-		label: "D"
-	},
-	{
-		value: "E",
-		label: "E"
-	}
-]
+const letrasAlternativas = ['A', 'B', 'C', 'D', 'E']
+
+let id = 2
 
 class ModalAlternativas extends Component {
     componentWillUpdate(nextProps, nextState){
@@ -39,13 +20,23 @@ class ModalAlternativas extends Component {
         }
 
         if(this.props.alternativaCorreta !== nextProps.alternativaCorreta && nextProps.alternativas.length > 0){
+            console.log('nextProps.alternativas', nextProps.alternativas)
+
+            var alternativasDescricao = nextProps.alternativas.map(alternativa => {
+                return(
+                    alternativa.descricao
+                )
+            })
             this.props.form.setFieldsValue({
                 alternativaCorreta: nextProps.alternativaCorreta,
+                alternativas: alternativasDescricao
+                /*
                 alternativaA: nextProps.alternativas[0].descricao,
                 alternativaB: nextProps.alternativas[1].descricao,
                 alternativaC: nextProps.alternativas[2].descricao,
                 alternativaD: nextProps.alternativas[3].descricao,
                 alternativaE: nextProps.alternativas[4].descricao
+                */
             })
         }
     }
@@ -53,8 +44,8 @@ class ModalAlternativas extends Component {
     submitAlternativasForm = (event) => {
         event.preventDefault()
         this.props.form.validateFieldsAndScroll((err, values) => {
+            console.log('values', values)
             if(!err){
-                var alternativas = []
                 var alternativaIds = []
                 var corretaA = false, corretaB = false, corretaC = false, corretaD = false, corretaE = false
                 switch(values.alternativaCorreta){
@@ -81,6 +72,7 @@ class ModalAlternativas extends Component {
                     default:
                         break
                 }
+                /*
                 if(this.props.alternativas.length === 0){
                     alternativaIds = ['', '', '', '', '']
                 }
@@ -90,11 +82,43 @@ class ModalAlternativas extends Component {
                     })
                 }
 
-                alternativas.push({id: alternativaIds[0], descricao: values.alternativaA, correta: corretaA})
+                alternativas.push({
+                    id: alternativaIds[0],
+                    descricao: values.alternativaA,
+                    correta: corretaA
+                })
                 alternativas.push({id: alternativaIds[1], descricao: values.alternativaB, correta: corretaB})
                 alternativas.push({id: alternativaIds[2], descricao: values.alternativaC, correta: corretaC})
                 alternativas.push({id: alternativaIds[3], descricao: values.alternativaD, correta: corretaD})
                 alternativas.push({id: alternativaIds[4], descricao: values.alternativaE, correta: corretaE})
+                */
+                var id = null
+                var corretaIndex = null, correta = false
+                var alternativas = values.alternativas.map((alternativa, index) => {
+                    if(this.props.alternativas.length === 0){
+                        id = ''
+                    }
+                    else{
+                        id = this.props.alternativas[0].id
+                    }
+
+                    // Fazer o campo correta
+                    console.log('letrasAlternativas', letrasAlternativas)
+                    console.log('values.alternativaCorreta', values.alternativaCorreta)
+                    console.log('correta index: ', letrasAlternativas.indexOf(values.alternativaCorreta))
+
+                    corretaIndex = letrasAlternativas.indexOf(values.alternativaCorreta)
+                    correta = corretaIndex === index ? true : false
+
+                    return({
+                        id: id,
+                        descricao: alternativa,
+                        correta: correta
+                    })
+                })
+                console.log('alternativas', alternativas)
+
+
                 this.props.updateAlternativas(values.alternativaCorreta, alternativas)
                 this.props.showHideModalAlternativas(false)
             }
@@ -104,9 +128,72 @@ class ModalAlternativas extends Component {
         })
     }
 
+    addComposicaoRow = () => {
+        const { form } = this.props
+        const keys = form.getFieldValue('keys')
+        const nextKeys = keys.concat(id++)
+
+        form.setFieldsValue({
+            keys: nextKeys,
+        })
+    }
+
+    removeComposicaoRow = (k) => {
+        const { form } = this.props
+        // can use data-binding to get
+        const keys = form.getFieldValue('keys')
+        // We need at least one passenger
+        if (keys.length === 1){
+            return
+        }
+
+        // can use data-binding to set
+        form.setFieldsValue({
+            keys: keys.filter(key => key !== k),
+        })
+    }
+
 
     render(){
-        const { getFieldDecorator } = this.props.form
+        const { getFieldDecorator, getFieldValue } = this.props.form
+        getFieldDecorator('keys', { initialValue: [0, 1] })
+        const keys = getFieldValue('keys')
+
+        var alternativaCorretaOptions = []
+        keys.forEach((key, index) => {
+            alternativaCorretaOptions.push({
+                value: letrasAlternativas[index],
+                label: letrasAlternativas[index]
+            })
+        })
+
+        const alternativaItens = keys.map((k, i) => {
+            var label = 'Alternativa '+letrasAlternativas[(i)]
+            return(
+                <Form.Item label={label} key={i}>
+                    {getFieldDecorator(`alternativas[${k}]`, {
+                    rules: [
+                            {
+                                required: true, message: 'Campo obrigatório',
+                            }
+                        ]
+                    })(
+                        <Input
+                            style={{width: '90%'}}
+                        />
+                    )}
+                    {keys.length >= 3 ? (
+                        <Icon
+                            className="dynamic-delete-button"
+                            type="minus-circle-o"
+                            disabled={keys.length === 1}
+                            onClick={() => this.removeComposicaoRow(k)}
+                            style={{marginLeft: 10}}
+                        />
+                    ) : null}
+                </Form.Item>
+            )
+        })
 
         return(
             <Modal
@@ -129,6 +216,16 @@ class ModalAlternativas extends Component {
                     </Button>
                 ]}
             >
+                {alternativaItens}
+                {keys.length < 5 ?
+                    (
+                        <Row style={{marginBottom: 10}}>
+                            <Col span={24}>
+                                <Button key="primary" title="Nova alternativa" onClick={this.addComposicaoRow}><Icon type="plus" /></Button>
+                            </Col>
+                        </Row>
+                    ) : null
+                }
                 <Form.Item label="Alternativa Correta">
                     {getFieldDecorator('alternativaCorreta', {
                         rules: [
@@ -143,78 +240,11 @@ class ModalAlternativas extends Component {
                             placeholder="Selecione a alternativa correta"
                         >
                             {
-                                alternativaOptions.map((item) => {
+                                alternativaCorretaOptions.map((item) => {
                                     return (<Select.Option key={item.value}>{item.label}</Select.Option>)
                                 })
                             }
                         </Select>
-                    )}
-                </Form.Item>
-
-
-                <Form.Item label="Alternativa A">
-                    {getFieldDecorator('alternativaA', {
-                        rules: [
-                            {
-                                required: true, message: 'Informe a alternativa A',
-                            }
-                        ]
-                    })(
-                        <Input
-                            name="alternativaA"
-                        />
-                    )}
-                </Form.Item>
-                <Form.Item label="Alternativa B">
-                    {getFieldDecorator('alternativaB', {
-                        rules: [
-                            {
-                                required: true, message: 'Informe a alternativa B',
-                            }
-                        ]
-                    })(
-                        <Input
-                            name="alternativaB"
-                        />
-                    )}
-                </Form.Item>
-                <Form.Item label="Alternativa C">
-                    {getFieldDecorator('alternativaC', {
-                        rules: [
-                            {
-                                required: true, message: 'Informe a alternativa C',
-                            }
-                        ]
-                    })(
-                        <Input
-                            name="alternativaC"
-                        />
-                    )}
-                </Form.Item>
-                <Form.Item label="Alternativa D">
-                    {getFieldDecorator('alternativaD', {
-                        rules: [
-                            {
-                                required: true, message: 'Informe a alternativa D',
-                            }
-                        ]
-                    })(
-                        <Input
-                            name="alternativaD"
-                        />
-                    )}
-                </Form.Item>
-                <Form.Item label="Alternativa E">
-                    {getFieldDecorator('alternativaE', {
-                        rules: [
-                            {
-                                required: true, message: 'Informe a alternativa E',
-                            }
-                        ]
-                    })(
-                        <Input
-                            name="alternativaE"
-                        />
                     )}
                 </Form.Item>
             </Modal>

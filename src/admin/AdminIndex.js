@@ -115,14 +115,17 @@ class AdminIndex extends Component {
           <Layout>
             <Header style={{ background: "#fff", padding: 0 }}>
               <Row style={{paddingRight: '24px'}}>
-                <Col span={10}>
-                  <Icon
-                    className="trigger"
-                    type={this.state.collapsed ? "menu-unfold" : "menu-fold"}
-                    onClick={this.toggle}
-                  />
-                  <PageTitle pageTitle={this.props.pageTitle} />
+                <Col span={10} style={{paddingLeft: 20}}>
+					{/*
+					<Icon
+					className="trigger"
+					type={this.state.collapsed ? "menu-unfold" : "menu-fold"}
+					onClick={this.toggle}
+					/>
+					*/}
+					<PageTitle pageTitle={this.props.pageTitle} />
                 </Col>
+              
                 <Col span={14} align="end">
 					<Icon type="user" style={{marginRight: '8px'}} />{this.props.usuarioNome} / {this.props.periodoLetivoDescricao}
                 </Col>
