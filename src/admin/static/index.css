@@ -153,3 +153,18 @@ code {
 .alternativa{
     margin-bottom: 0px !important
 }
+
+.descricalHtml {
+    display: block !important;
+    text-align: center !important
+
+}
+
+.descricaoHtml p{
+    width: 100%;
+    float: left;
+}
+
+.descricaoHtml > img {
+    text-align: center
+}

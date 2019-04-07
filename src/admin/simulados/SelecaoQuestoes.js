@@ -70,7 +70,7 @@ class SelecaoQuestoes extends Component {
                                         <Card>
                                             <h4>{questao.id} ({questao.fonte.description})</h4>
                                             <Row>
-                                                <Col span={24} dangerouslySetInnerHTML={{__html: questao.descricao}} />
+                                                <Col className="descricaoHtml" span={24} dangerouslySetInnerHTML={{__html: questao.descricao}} />
                                             </Row>
                                             <Row>
                                                 <Col span={24}>

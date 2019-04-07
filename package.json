@@ -5,10 +5,11 @@
   "dependencies": {
     "@material-ui/core": "^3.9.0",
     "@material-ui/icons": "^3.0.2",
-    "@react-pdf/renderer": "^1.4.2",
     "antd": "^3.13.0",
     "axios": "^0.18.0",
     "draftjs-to-html": "^0.8.4",
+    "html2canvas": "^1.0.0-alpha.12",
+    "jspdf": "^1.5.3",
     "megadraft": "^0.6.3",
     "moment": "^2.24.0",
     "prop-types": "^15.6.2",

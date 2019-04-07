@@ -120,8 +120,7 @@ class ModalViewQuestao extends Component {
                     footer={this.state.footerButtons}
                 >
                 <Row>
-                    <Col span={24} dangerouslySetInnerHTML={{__html: description}} />
-
+                    <Col className="descricaoHtml" span={24} dangerouslySetInnerHTML={{__html: description}} />
                 </Row>
                 <Row>
                     {

@@ -14,8 +14,6 @@ import RootReducer from './reducers/RootReducer'
 import AdminIndex from './admin/AdminIndex'
 import SignIn from './SignIn'
 import AlunosIndex from './AlunosIndex'
-import ImpressaoQuestao from './admin/questoes/ImpressaoQuestao'
-
 
 
 const persistConfig = {
@@ -40,15 +38,9 @@ const routes = [
         main: () => <AlunosIndex />
 	},
     {
-	  path: "/admin",
-	  exact: true,
+      path: "/admin",
       main: () => <AdminIndex />
-    },
-	{
-	  path: "/admin/impressao-questao",
-	  sidebar: () => <div>Impressão/Questão</div>,
-	  main: () => <ImpressaoQuestao />
-	}
+    }
 ]
 
 class App extends Component {
