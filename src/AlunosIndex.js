@@ -1,7 +1,6 @@
 import React, { Component } from "react"
 import { Layout, Icon, Row, Col, Button, Modal, Menu } from "antd"
 import { BrowserRouter as Router, Route, withRouter, Link } from "react-router-dom"
-
 import { connect } from 'react-redux'
 import axios from "axios"
 //import PageTitle from "./layout/PageTitle"
