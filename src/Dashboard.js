@@ -1,9 +1,9 @@
 import React, { Component } from 'react'
-import { Layout, Table, Row, Col } from 'antd'
+import { Layout, Table, Row, Col, Icon } from 'antd'
 import { withRouter } from "react-router-dom"
 import { connect } from 'react-redux'
 import moment from 'moment'
-import CircularProgressbar from 'react-circular-progressbar';
+//import CircularProgressbar from 'react-circular-progressbar';
 import 'react-circular-progressbar/dist/styles.css';
 
 import "./static/style.css"
@@ -63,12 +63,12 @@ class Dashboard extends Component {
                 sorter: (a, b) => a.id - b.id
             },
             {
-				title: "Início",
+				title: "Iniciou em",
 				dataIndex: "dataInicio",
 				sorter: (a, b) => this.compareByDates(a.dataInicio, b.dataInicio)
             },
             {
-				title: "Fim",
+				title: "Finalizou em",
 				dataIndex: "dataFim",
 				sorter: (a, b) => this.compareByDates(a.dataFim, b.dataFim)
             },
@@ -83,6 +83,7 @@ class Dashboard extends Component {
                 sorter: (a, b) => a.respostasCorretas - b.respostasCorretas
             },
         ]
+        console.log('this.props.mainData.dash_aluno.total.totalQuestoesCertas', this.props.mainData.dash_aluno.total.totalQuestoesCertas)
         return (
             <React.Fragment>
                 <Content style={{
@@ -93,30 +94,62 @@ class Dashboard extends Component {
                     <h3>Dashboard</h3>
                     
                     <Row>
-                        <Col span={8} align="middle">
-                            <Label>Questões Respondidas</Label>
-                            <div style={{ width: '100px' }}>
-                            <CircularProgressbar percentage={83} text='83%' />
-                            </div>
+                        <Col span={8}>
+                            <Row type="flex"  align="middle">
+                                <Col span={10} align="end" style={{paddingRight: 25}}>
+                                    <Icon type="edit" style={{fontSize: 35, color: '#4286f4'}} />
+                                </Col>
+                                <Col span={14}>
+                                    <Col span={24} align="start" style={{fontSize: 20, fontWeight: 800, color: '#4286f4'}}>
+                                        {this.props.mainData.dash_aluno.total.totalQuestoesCertas}
+                                    </Col>
+                                    <Col span={24} align="start" style={{fontSize: 17}}>
+                                        Questões Respondidas
+                                    </Col>
+                                </Col>
+                            </Row>
                         </Col>
-                        <Col span={8} align="middle">
-                            <Label>Acertos</Label>
-                            <div style={{ width: '100px' }}>
-                            <CircularProgressbar percentage={83} text='83%' />
-                            </div>
+                        <Col span={8}>
+                            <Row type="flex"  align="middle">
+                                <Col span={10} align="end" style={{paddingRight: 25}}>
+                                    <Icon type="smile" style={{fontSize: 35, color: '#f88b0e'}} />
+                                </Col>
+                                <Col span={14}>
+                                    <Col span={24} align="start" style={{fontSize: 20, fontWeight: 800, color: '#f88b0e'}}>
+                                        {this.props.mainData.dash_aluno.total.totalQuestoesRespondidas}
+                                    </Col>
+                                    <Col span={24} align="start" style={{fontSize: 17}}>
+                                        Respondidas Corretamente
+                                    </Col>
+                                </Col>
+                            </Row>
                         </Col>
-                        <Col span={8} align="middle">
-                            <Label>Simulados Concluídos</Label>
-                            <div style={{ width: '100px' }}>
-                            <CircularProgressbar percentage={83} text='83%' />
-                            </div>
+                        <Col span={8}>
+                            <Row type="flex"  align="middle">
+                                <Col span={10} align="end" style={{paddingRight: 25}}>
+                                    <Icon type="check" style={{fontSize: 35, color: '#13a54b'}} />
+                                </Col>
+                                <Col span={14}>
+                                    <Col span={24} align="start" style={{fontSize: 20, fontWeight: 800, color: '#13a54b'}}>
+                                        {this.props.mainData.dash_aluno.total.totalSimulado}
+                                    </Col>
+                                    <Col span={24} align="start" style={{fontSize: 17}}>
+                                        Simulados Realizados
+                                    </Col>
+                                </Col>
+                            </Row>
                         </Col>
                     </Row>
+                </Content>
+                <Content style={{
+                    margin: "20px 25px 0 25px",
+                    padding: 24,
+                    background: "#fff"
+                }}>
                     <Table
                         columns={ columns } 
                         dataSource={ this.state.tableData }
                         loading={this.state.tableLoading}
-                        style={{marginTop: 30}}
                     />
                 </Content>
             </React.Fragment>
