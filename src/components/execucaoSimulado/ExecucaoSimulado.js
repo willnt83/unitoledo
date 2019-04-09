@@ -76,6 +76,18 @@ class ExecucaoSimulado extends Component {
         this.setState({btnFinalizarSimuladoLoading: true})
         this.displayModal(false)
 
+        axios.get('http://localhost:5000/api/finalizaSimulado/'+this.props.simulado.id+'/'+this.props.contextoAluno.idUtilizador)
+        .then(res => {
+            this.setState({btnFinalizarSimuladoLoading: false})
+            this.openNotificationFinalizado()
+            this.props.setSimuladoFinalizado(true)
+            this.props.history.push('/alunos')
+        })
+        .catch(error =>{
+            console.log(error)
+        })
+
+        /*
         var request = {
             "id": this.props.simulado.id,
             "status": "Finalizado"
@@ -91,6 +103,7 @@ class ExecucaoSimulado extends Component {
         .catch(error =>{
             console.log(error)
         })
+        */
     }
 
     handleModalCancel = () => {
@@ -130,10 +143,16 @@ class ExecucaoSimulado extends Component {
             this.props.resetAll()
             window.location.replace("/")
         }
+
+        console.log('this.props.simulado', this.props.simulado)
         this.countRespondidas()
     }
 
     render() {
+        console.log('simulado', this.props.simulado)
+        console.log('usuarioId', this.props.usuarioId)
+        console.log('contextoAluno', this.props.contextoAluno)
+        
         // Settando periodoExecucao (em minutos) com a diferença entre as dataHoras Inicial e Final
         var periodoExecucaoObj = null
         if(this.props.simulado){

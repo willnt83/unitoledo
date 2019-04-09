@@ -5,6 +5,7 @@ import { BrowserRouter as Router, Route, withRouter, Link } from "react-router-d
 import { connect } from 'react-redux'
 import axios from "axios"
 //import PageTitle from "./layout/PageTitle"
+import Dashboard from './Dashboard'
 import Simulados from './Simulados'
 import ExecucaoSimulado from './components/execucaoSimulado/ExecucaoSimulado'
 
@@ -18,7 +19,7 @@ const routes = [
 	{
 		path: "/alunos",
 		exact: true,
-		main: () => <h1>Dashboard</h1>
+		main: () => <Dashboard />
 	},
 	{
 		path: "/alunos/simulados",

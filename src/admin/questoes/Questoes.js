@@ -117,6 +117,14 @@ class Questoes extends Component {
 	}
 
 	showModalViewQuestaoF = (bool, op = null) => {
+		/*
+		// Se for fechamento e a op = 'view'
+		if(!bool && op === 'view'){
+			console.log('fechando e op view')
+			this.setState({questao: null})
+		}
+		*/
+
 		this.setState({showModalViewQuestao: bool, op})
 	}
 
@@ -443,11 +451,13 @@ class Questoes extends Component {
 				<ModalCadastro
 					showModalCadastro={this.state.showModalCadastro}
 					hideModalCadastro={this.hideModalCadastro}
+					showModalViewQuestao={this.state.showModalViewQuestao}
 					showModalViewQuestaoF={this.showModalViewQuestaoF}
 					questao={this.state.questao}
 					mode={this.state.mode}
 					resetQuestao={this.resetQuestao}
 					setQuestao={this.setQuestao}
+					op={this.state.op}
 				/>
 				<ModalViewQuestao
 					showModalViewQuestao={this.state.showModalViewQuestao}

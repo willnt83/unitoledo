@@ -51,6 +51,7 @@ class Simulados extends Component {
                     },
                     questoes: res.data
                 }
+                console.log('setSimulado', simulado)
                 this.props.setSimulado(simulado)
                 this.props.history.push('/alunos/execucao-simulado')
             })

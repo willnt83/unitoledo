@@ -13,7 +13,8 @@ class ModalViewQuestao extends Component {
     }
 
     handleModalClosure = () => {
-        this.props.showModalViewQuestaoF(false)
+        console.log('handleModalClosure, op', this.props.op)
+        this.props.showModalViewQuestaoF(false, this.props.op)
     }
 
     handleImprimir = () => {
@@ -87,13 +88,13 @@ class ModalViewQuestao extends Component {
 			if(nextProps.createUpdateQuestaoResponse.success){
                 this.showNotification('Questão salva com sucesso.', true)
                 this.setState({questao: null, buttonLoadingSalvar: false})
-                this.props.showModalViewQuestaoF(false)
+                this.props.showModalViewQuestaoF(false, this.props.op)
                 this.props.hideModalCadastro()
                 this.props.handleGetQuestoes()
             }
 			else{
                 this.showNotification(nextProps.createUpdateQuestaoResponse.message, false)
-                this.props.showModalViewQuestaoF(false)
+                this.props.showModalViewQuestaoF(false, this.props.op)
             }
         }
     }

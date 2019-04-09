@@ -301,7 +301,6 @@ class ModalCadastro extends Component {
             questaoId: '',
             alternativaCorreta: null,
             alternativas: [],
-            //file: null,
             resetAlternativasForm: true,
             editorState: EditorState.createEmpty(),
             images: []
@@ -458,6 +457,9 @@ class ModalCadastro extends Component {
         if(this.props.showModalCadastro === true && nextProps.showModalCadastro === false){
             this.handleModalClosure()
         }
+        if(this.props.showModalViewQuestao === true && nextProps.showModalViewQuestao === false && nextProps.op === 'view'){
+            this.handleModalClosure()
+        }
 
         // Settando valor padrão para campo Status do form
         if(this.props.showModalCadastro === false && nextProps.showModalCadastro === true && nextProps.questao === null){
@@ -466,6 +468,9 @@ class ModalCadastro extends Component {
 
         // Populando campos do formulário
         if(nextProps.questao !== null && nextProps.questao !== this.props.questao){
+            console.log('populando campos do form')
+            console.log('this.props.questao', this.props.questao)
+            console.log('nextProps.questao', nextProps.questao)
             var status = nextProps.questao.valueStatus === true ? 'true' : 'false'
 
             this.props.form.setFieldsValue({
@@ -474,11 +479,8 @@ class ModalCadastro extends Component {
                 areaDeConhecimento: nextProps.questao.areaConhecimentoId,
                 dificuldade: nextProps.questao.dificuldade,
                 status: status,
-                //padraoEnade: padraoEnade,
                 ano: nextProps.questao.valueAno,
-                //descricao: nextProps.questao.description,
                 fonte: nextProps.questao.fonteId,
-                //discursiva: discursiva,
                 tipo: nextProps.questao.tipoId,
                 tipoResposta: nextProps.questao.tipoRespostaId
             })
@@ -494,17 +496,7 @@ class ModalCadastro extends Component {
                 alternativaCorreta: nextProps.questao.valueAlternativaCorreta,
                 questaoContent: nextProps.questao.description,
                 editorState: EditorState.createWithContent(contentState)
-                //fileBase64: nextProps.questao.imagem,
-                //file
             })
-            /*
-            if(nextProps.questao.imagem) {
-                file = this.Base64ToFile(nextProps.questao.imagem, 'imagem.png')
-                Object.assign(file, {
-                    preview: URL.createObjectURL(file)
-                })
-            }
-            */
         }
     }
 
