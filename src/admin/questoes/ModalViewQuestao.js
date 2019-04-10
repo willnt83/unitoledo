@@ -2,6 +2,8 @@ import React, { Component } from "react"
 import { Icon, Modal, Form, Button,  Row, Col, notification } from "antd"
 import { connect } from 'react-redux'
 import BackEndRequests from '../hocs/BackEndRequests'
+import html2canvas from 'html2canvas'
+import jsPDF from 'jspdf'
 
 const alternativasArray = ['A)', 'B)', 'C)', 'D)', 'E)']
 
@@ -9,15 +11,43 @@ class ModalViewQuestao extends Component {
     state = {
         questao: null,
         footerButtons: null,
-        buttonLoadingSalvar: false
+        buttonLoadingSalvar: false,
+        //imgData: null
     }
 
     handleModalClosure = () => {
-        console.log('handleModalClosure, op', this.props.op)
         this.props.showModalViewQuestaoF(false, this.props.op)
     }
 
     handleImprimir = () => {
+        const input = document.getElementById('questao');
+        var HTML_Width = input.offsetWidth;
+        var HTML_Height = input.offsetHeight;
+        var top_left_margin = 15;
+        var PDF_Width = HTML_Width+(top_left_margin*2);
+        var PDF_Height = (PDF_Width*1.5)+(top_left_margin*2);
+        var canvas_image_width = HTML_Width;
+        var canvas_image_height = HTML_Height;
+        var totalPDFPages = Math.ceil(HTML_Height/PDF_Height)-1;
+
+
+
+        html2canvas(input, {useCORS: true})
+        .then((canvas) => {
+            canvas.getContext('2d');
+            console.log(canvas.height+"  "+canvas.width);
+
+            var imgData = canvas.toDataURL("image/jpeg", 1.0);
+            var pdf = new jsPDF('p', 'pt',  [PDF_Width, PDF_Height]);
+            pdf.addImage(imgData, 'JPG', top_left_margin, top_left_margin,canvas_image_width,canvas_image_height);
+            
+            
+            for (var i = 1; i <= totalPDFPages; i++) { 
+                pdf.addPage(PDF_Width, PDF_Height);
+                pdf.addImage(imgData, 'JPG', top_left_margin, -(PDF_Height*i)+(top_left_margin*4),canvas_image_width,canvas_image_height);
+            }
+            pdf.save('questao-'+this.props.questao.key+'.pdf');
+        })
 
     }
 
@@ -120,18 +150,20 @@ class ModalViewQuestao extends Component {
                     width={900}
                     footer={this.state.footerButtons}
                 >
-                <Row>
-                    <Col className="descricaoHtml" span={24} dangerouslySetInnerHTML={{__html: description}} />
-                </Row>
-                <Row>
-                    {
-                        alternativas.map((alternativa, index) => {
-                            return(
-                                <p key={alternativa.descricao} className="alternativa">{alternativasArray[index]} {alternativa.descricao}</p>
-                            )
-                        })
-                    }
-                </Row>
+                    <div id="questao">
+                        <Row>
+                            <Col className="descricaoHtml" span={24} dangerouslySetInnerHTML={{__html: description}} />
+                        </Row>
+                        <Row>
+                            {
+                                alternativas.map((alternativa, index) => {
+                                    return(
+                                        <p key={alternativa.descricao} className="alternativa">{alternativasArray[index]} {alternativa.descricao}</p>
+                                    )
+                                })
+                            }
+                        </Row>
+                    </div>
                 </Modal>
             </React.Fragment>
         )
