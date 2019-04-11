@@ -101,7 +101,7 @@ class Dashboard extends Component {
                                 </Col>
                                 <Col span={14}>
                                     <Col span={24} align="start" style={{fontSize: 20, fontWeight: 800, color: '#4286f4'}}>
-                                        {this.props.mainData.dash_aluno.total.totalQuestoesCertas}
+                                        {this.props.mainData.dash_aluno.total.totalQuestoesRespondidas}
                                     </Col>
                                     <Col span={24} align="start" style={{fontSize: 17}}>
                                         Questões Respondidas
@@ -116,7 +116,7 @@ class Dashboard extends Component {
                                 </Col>
                                 <Col span={14}>
                                     <Col span={24} align="start" style={{fontSize: 20, fontWeight: 800, color: '#f88b0e'}}>
-                                        {this.props.mainData.dash_aluno.total.totalQuestoesRespondidas}
+                                        {this.props.mainData.dash_aluno.total.totalQuestoesCertas}
                                     </Col>
                                     <Col span={24} align="start" style={{fontSize: 17}}>
                                         Respondidas Corretamente
