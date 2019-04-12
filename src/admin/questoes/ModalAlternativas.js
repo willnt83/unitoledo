@@ -9,7 +9,6 @@ let id = 2
 
 class ModalAlternativas extends Component {
     state = {
-        keys: [0, 1],
         fieldsLoaded: false
     }
 
@@ -22,18 +21,19 @@ class ModalAlternativas extends Component {
                 var corretaIndex = null, correta = false
                 console.log('values.alternativas', values.alternativas)
                 var alternativas = values.alternativas.map((alternativa, index) => {
-                    if(this.props.alternativas.length === 0){
+                    /*if(this.props.alternativas.length === 0){
                         id = ''
                     }
                     else{
                         id = this.props.alternativas[index].id
                     }
+                    */
 
                     corretaIndex = letrasAlternativas.indexOf(values.alternativaCorreta)
                     correta = corretaIndex === index ? true : false
 
                     return({
-                        id: id,
+                        id: '',
                         descricao: alternativa,
                         correta: correta
                     })
@@ -53,9 +53,13 @@ class ModalAlternativas extends Component {
     addComposicaoRow = () => {
         const { form } = this.props
         const keys = form.getFieldValue('keys')
-        console.log('add keys', keys)
-        const nextKeys = keys.concat(id++)
-        console.log('nextKeys', nextKeys)
+        //console.log('add keys', keys)
+        var lastIndex = keys.length
+        //console.log('lastIndex', lastIndex)
+
+        //const nextKeys = keys.concat(id++)
+        const nextKeys = keys.concat(lastIndex)
+        //console.log('nextKeys', nextKeys)
 
 
         form.setFieldsValue({
@@ -64,16 +68,21 @@ class ModalAlternativas extends Component {
     }
 
     removeComposicaoRow = (k) => {
-        const { form } = this.props
-        const keys = form.getFieldValue('keys')
-
-        if (keys.length === 1){
+        const keys = this.props.form.getFieldValue('keys')
+        if(keys.length === 1){
             return
         }
-
-        // can use data-binding to set
-        form.setFieldsValue({
-            keys: keys.filter(key => key !== k),
+        console.log('-k', k)
+        console.log('-keys', keys)
+        var newKeys = keys.filter(key => key !== k)
+        /*
+        console.log('-newKeys', newKeys)
+        newKeys = newKeys.filter(Boolean);
+        sortedKeys = newKeys.map(key => {
+        })*/
+        console.log('-newKeys2', newKeys)
+        this.props.form.setFieldsValue({
+            keys: newKeys
         })
 
         this.props.limpaAlternativaCorreta()
@@ -93,7 +102,9 @@ class ModalAlternativas extends Component {
             this.props.updateResetAlternativasFormState(false)
         }
 
-        if(this.props.alternativaCorreta !== nextProps.alternativaCorreta && nextProps.alternativas.length > 0){
+        //if(this.props.alternativaCorreta !== nextProps.alternativaCorreta && nextProps.alternativaCorreta !== null && nextProps.alternativas.length > 0){
+        if(this.props.alternativas.length === 0 && nextProps.alternativas.length > 0){
+            console.log('settando novas keys...')
             /*
             var alternativasDescricao = nextProps.alternativas.map(alternativa => {
                 return(
@@ -113,7 +124,7 @@ class ModalAlternativas extends Component {
                 fieldsLoaded: true
             })
 
-            console.log('settando novas keys...')
+            
             this.props.form.setFieldsValue({
                 keys,
                 /*alternativaCorreta: nextProps.alternativaCorreta,
@@ -202,37 +213,46 @@ class ModalAlternativas extends Component {
                     </Button>
                 ]}
             >
-                {alternativaItens}
-                {keys.length < 5 ?
-                    (
-                        <Row style={{marginBottom: 10}}>
-                            <Col span={24}>
-                                <Button key="primary" title="Nova alternativa" onClick={this.addComposicaoRow}><Icon type="plus" /></Button>
-                            </Col>
-                        </Row>
-                    ) : null
-                }
-                <Form.Item label="Alternativa Correta">
-                    {getFieldDecorator('alternativaCorreta', {
-                        rules: [
-                            {
-                                required: true, message: 'Selecione a alterativa correta',
-                            }
-                        ]
-                    })(
-                        <Select
-                            name="alternativaCorreta"
-                            style={{ width: '100%' }}
-                            placeholder="Selecione a alternativa correta"
-                        >
-                            {
-                                alternativaCorretaOptions.map((item) => {
-                                    return (<Select.Option key={item.value}>{item.label}</Select.Option>)
-                                })
-                            }
-                        </Select>
-                    )}
-                </Form.Item>
+                <Row>
+                    <Col span={24}>
+                        {alternativaItens}
+                        {keys.length < 5 ?
+                            (
+                                <Row style={{marginBottom: 10}}>
+                                    <Col span={24}>
+                                        <Button key="primary" title="Nova alternativa" onClick={this.addComposicaoRow}><Icon type="plus" /></Button>
+                                    </Col>
+                                </Row>
+                            ) : null
+                        }
+                    </Col>
+                </Row>
+                <Row>
+                    <Col span={24} id="colAlternativaCorreta">
+                        <Form.Item label="Alternativa Correta">
+                            {getFieldDecorator('alternativaCorreta', {
+                                rules: [
+                                    {
+                                        required: true, message: 'Selecione a alterativa correta',
+                                    }
+                                ]
+                            })(
+                                <Select
+                                    name="alternativaCorreta"
+                                    style={{ width: '100%' }}
+                                    placeholder="Selecione a alternativa correta"
+                                    getPopupContainer={() => document.getElementById("colAlternativaCorreta")}
+                                >
+                                    {
+                                        alternativaCorretaOptions.map((item) => {
+                                            return (<Select.Option key={item.value}>{item.label}</Select.Option>)
+                                        })
+                                    }
+                                </Select>
+                            )}
+                        </Form.Item>
+                    </Col>
+                </Row>
             </Modal>
         )
     }
