@@ -5,8 +5,6 @@ import { connect } from 'react-redux'
 const {TextArea} = Input
 const letrasAlternativas = ['A', 'B', 'C', 'D', 'E']
 
-let id = 2
-
 class ModalAlternativas extends Component {
     state = {
         fieldsLoaded: false
@@ -17,18 +15,8 @@ class ModalAlternativas extends Component {
         this.props.form.validateFieldsAndScroll((err, values) => {
 
             if(!err){
-                var id = null
                 var corretaIndex = null, correta = false
-                console.log('values.alternativas', values.alternativas)
                 var alternativas = values.alternativas.map((alternativa, index) => {
-                    /*if(this.props.alternativas.length === 0){
-                        id = ''
-                    }
-                    else{
-                        id = this.props.alternativas[index].id
-                    }
-                    */
-
                     corretaIndex = letrasAlternativas.indexOf(values.alternativaCorreta)
                     correta = corretaIndex === index ? true : false
 
@@ -53,14 +41,8 @@ class ModalAlternativas extends Component {
     addComposicaoRow = () => {
         const { form } = this.props
         const keys = form.getFieldValue('keys')
-        //console.log('add keys', keys)
         var lastIndex = keys.length
-        //console.log('lastIndex', lastIndex)
-
-        //const nextKeys = keys.concat(id++)
         const nextKeys = keys.concat(lastIndex)
-        //console.log('nextKeys', nextKeys)
-
 
         form.setFieldsValue({
             keys: nextKeys,
@@ -72,15 +54,8 @@ class ModalAlternativas extends Component {
         if(keys.length === 1){
             return
         }
-        console.log('-k', k)
-        console.log('-keys', keys)
+
         var newKeys = keys.filter(key => key !== k)
-        /*
-        console.log('-newKeys', newKeys)
-        newKeys = newKeys.filter(Boolean);
-        sortedKeys = newKeys.map(key => {
-        })*/
-        console.log('-newKeys2', newKeys)
         this.props.form.setFieldsValue({
             keys: newKeys
         })
@@ -104,21 +79,11 @@ class ModalAlternativas extends Component {
 
         //if(this.props.alternativaCorreta !== nextProps.alternativaCorreta && nextProps.alternativaCorreta !== null && nextProps.alternativas.length > 0){
         if(this.props.alternativas.length === 0 && nextProps.alternativas.length > 0){
-            console.log('settando novas keys...')
-            /*
-            var alternativasDescricao = nextProps.alternativas.map(alternativa => {
-                return(
-                    alternativa.descricao
-                )
-            })
-            console.log('alternativasDescricao', alternativasDescricao)
-            */
             var keys = nextProps.alternativas.map((alternativa, index) => {
                 return(
                     index
                 )
             })
-            console.log('keys', keys)
             this.setState({
                 keys,
                 fieldsLoaded: true
@@ -141,8 +106,6 @@ class ModalAlternativas extends Component {
                 )
             })
 
-            console.log('alternativasDescricao', alternativasDescricao)
-            console.log('settando valores')
             this.props.form.setFieldsValue({
                 alternativaCorreta: this.props.alternativaCorreta,
                 alternativas: alternativasDescricao

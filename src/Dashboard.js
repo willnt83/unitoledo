@@ -10,10 +10,6 @@ import "./static/style.css"
 
 const { Content } = Layout
 
-function Label(props) {
-    return <div style={{ marginTop: 25, marginBottom: 5 }}>{props.children}</div>;
-  }
-
 class Dashboard extends Component {
     state = {
         tableData: [],
@@ -29,9 +25,6 @@ class Dashboard extends Component {
     }
 
     componentWillMount(){
-        console.log('this.props.contexto', this.props.contexto)
-        console.log('this.props.mainData', this.props.mainData)
-
         if(this.props.mainData === null || this.props.contexto !== 'ALUNO'){
             this.props.resetAll()
             window.location.replace("/")
@@ -40,10 +33,10 @@ class Dashboard extends Component {
 
         this.setState({
             tableData: this.props.mainData.dash_aluno.list.map(simulado => {
-                var dataInicio = moment(simulado.dataInicio, 'YYYY-MM-DD').format('DD/MM/YYYY')
-                var dataFim = moment(simulado.dataFinal, 'YYYY-MM-DD').format('DD/MM/YYYY')
+                var dataInicio = simulado.dataInicio !== null ? moment(simulado.dataInicio, 'YYYY-MM-DD').format('DD/MM/YYYY') : null
+                var dataFim = simulado.dataFinal !== null ? moment(simulado.dataFinal, 'YYYY-MM-DD').format('DD/MM/YYYY') : null
                 return({
-                    id: simulado.idSimulado,
+                    key: simulado.idSimulado,
                     dataInicio,
                     dataFim,
                     questoesRespondidas: simulado.questoesRespondidas,
@@ -59,8 +52,8 @@ class Dashboard extends Component {
         const columns = [
             {
                 title: 'ID',
-                dataIndex: 'id',
-                sorter: (a, b) => a.id - b.id
+                dataIndex: 'key',
+                sorter: (a, b) => a.key - b.key
             },
             {
 				title: "Iniciou em",
@@ -83,7 +76,7 @@ class Dashboard extends Component {
                 sorter: (a, b) => a.respostasCorretas - b.respostasCorretas
             },
         ]
-        console.log('this.props.mainData.dash_aluno.total.totalQuestoesCertas', this.props.mainData.dash_aluno.total.totalQuestoesCertas)
+
         return (
             <React.Fragment>
                 <Content style={{
