@@ -156,8 +156,8 @@ code {
 
 .descricalHtml {
     display: block !important;
-    text-align: center !important
-
+    text-align: center !important;
+    font-variant: normal !important
 }
 
 .descricaoHtml p{

@@ -30,9 +30,10 @@ class ModalViewQuestao extends Component {
         var canvas_image_height = HTML_Height;
         var totalPDFPages = Math.ceil(HTML_Height/PDF_Height)-1;
 
-
-
-        html2canvas(input, {useCORS: true})
+        html2canvas(input, {
+            useCORS: true,
+            scale: 3
+        })
         .then((canvas) => {
             canvas.getContext('2d');
             console.log(canvas.height+"  "+canvas.width);
@@ -150,7 +151,7 @@ class ModalViewQuestao extends Component {
                     width={900}
                     footer={this.state.footerButtons}
                 >
-                    <div id="questao">
+                    <div id="questao" style={{fontVariant: 'normal'}}>
                         <Row>
                             <Col className="descricaoHtml" span={24} dangerouslySetInnerHTML={{__html: description}} />
                         </Row>

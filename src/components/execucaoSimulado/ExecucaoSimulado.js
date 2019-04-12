@@ -86,24 +86,6 @@ class ExecucaoSimulado extends Component {
         .catch(error =>{
             console.log(error)
         })
-
-        /*
-        var request = {
-            "id": this.props.simulado.id,
-            "status": "Finalizado"
-        }
-
-        axios.post('http://localhost:5000/api/statusSimulado', request)
-        .then(res => {
-            this.setState({btnFinalizarSimuladoLoading: false})
-            this.openNotificationFinalizado()
-            this.props.setSimuladoFinalizado(true)
-            this.props.history.push('/alunos')
-        })
-        .catch(error =>{
-            console.log(error)
-        })
-        */
     }
 
     handleModalCancel = () => {

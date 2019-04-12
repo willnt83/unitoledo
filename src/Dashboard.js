@@ -5,6 +5,7 @@ import { connect } from 'react-redux'
 import moment from 'moment'
 //import CircularProgressbar from 'react-circular-progressbar';
 import 'react-circular-progressbar/dist/styles.css';
+import axios from 'axios'
 
 import "./static/style.css"
 
@@ -25,11 +26,12 @@ class Dashboard extends Component {
     }
 
     componentWillMount(){
+        console.log('component will mount')
+        console.log('this.props.contextoAluno', this.props.contextoAluno)
         if(this.props.mainData === null || this.props.contexto !== 'ALUNO'){
             this.props.resetAll()
             window.location.replace("/")
         }
-
 
         this.setState({
             tableData: this.props.mainData.dash_aluno.list.map(simulado => {
@@ -42,10 +44,22 @@ class Dashboard extends Component {
                     questoesRespondidas: simulado.questoesRespondidas,
                     respostasCorretas: simulado.questoesCertas
                 })
-            })
+            }),
+            tableLoading: true
         })
 
-
+        axios.defaults.headers = {
+            'Authorization': this.props.authHeaders.token
+        }
+        // Atualizando dados do dashboard
+        axios.post('http://localhost:5000/api/getData', this.props.contextoAluno)
+		.then(res => {
+            this.props.setMainData(res.data)
+            this.setState({tableLoading: false})
+		})
+		.catch(error =>{
+			console.log(error)
+        })
     }
 
     render() {
@@ -76,7 +90,7 @@ class Dashboard extends Component {
                 sorter: (a, b) => a.respostasCorretas - b.respostasCorretas
             },
         ]
-
+        console.log('this.props.flagSimuladoFinalizado', this.props.flagSimuladoFinalizado)
         return (
             <React.Fragment>
                 <Content style={{
@@ -94,7 +108,11 @@ class Dashboard extends Component {
                                 </Col>
                                 <Col span={14}>
                                     <Col span={24} align="start" style={{fontSize: 20, fontWeight: 800, color: '#4286f4'}}>
-                                        {this.props.mainData.dash_aluno.total.totalQuestoesRespondidas}
+                                        {   this.props.mainData ?
+                                            this.props.mainData.dash_aluno.total.totalQuestoesRespondidas
+                                            :
+                                            null
+                                        }
                                     </Col>
                                     <Col span={24} align="start" style={{fontSize: 17}}>
                                         Questões Respondidas
@@ -109,7 +127,12 @@ class Dashboard extends Component {
                                 </Col>
                                 <Col span={14}>
                                     <Col span={24} align="start" style={{fontSize: 20, fontWeight: 800, color: '#f88b0e'}}>
-                                        {this.props.mainData.dash_aluno.total.totalQuestoesCertas}
+                                        {
+                                            this.props.mainData ?
+                                            this.props.mainData.dash_aluno.total.totalQuestoesCertas
+                                            :
+                                            null
+                                        }
                                     </Col>
                                     <Col span={24} align="start" style={{fontSize: 17}}>
                                         Respondidas Corretamente
@@ -124,7 +147,12 @@ class Dashboard extends Component {
                                 </Col>
                                 <Col span={14}>
                                     <Col span={24} align="start" style={{fontSize: 20, fontWeight: 800, color: '#13a54b'}}>
-                                        {this.props.mainData.dash_aluno.total.totalSimulado}
+                                        {
+                                            this.props.mainData ?
+                                            this.props.mainData.dash_aluno.total.totalSimulado
+                                            :
+                                            null
+                                        }
                                     </Col>
                                     <Col span={24} align="start" style={{fontSize: 17}}>
                                         Simulados Realizados
@@ -153,13 +181,18 @@ class Dashboard extends Component {
 const MapStateToProps = (state) => {
 	return {
         mainData: state.mainData,
-        contexto: state.contexto
+        contexto: state.contexto,
+        contextoAluno: state.contextoAluno,
+        flagSimuladoFinalizado: state.flagSimuladoFinalizado,
+        authHeaders: state.authHeaders
 	}
 }
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        resetAll: () => { dispatch({ type: 'RESET_ALL' }) }
+        resetAll: () => { dispatch({ type: 'RESET_ALL' }) },
+        setSimuladoFinalizado: (simuladoFinalizado) => { dispatch({ type: 'SET_SIMULADOFINALIZADO', simuladoFinalizado }) },
+        setMainData: (mainData) => { dispatch({ type: 'SET_MAINDATA', mainData }) }
     }
 }
 
