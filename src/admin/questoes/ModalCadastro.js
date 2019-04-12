@@ -160,24 +160,6 @@ class ModalCadastro extends Component {
         return (str === 1 || str === 'true')
     }
 
-    /*
-    handleDiscursivaChange = (value) => {
-        value = value === 1 ? true : false
-		this.setState({
-            alternativaCorretaDisabled: value,
-            alternativasTooltipVisible: false
-        })
-
-        // Se alterar para Discursiva = Sim
-        if(value){
-            this.setState({
-                alternativas: [],
-                alternativaCorreta: null
-            })
-        }
-    }
-    */
-
     limpaAlternativaCorreta = () => {
         this.setState({alternativaCorreta: null})
     }
@@ -343,7 +325,6 @@ class ModalCadastro extends Component {
     */
 
     onDrop = (acceptedFiles, rejectedFiles) => {
-
         this.setState({
             file: Object.assign(acceptedFiles[0], {
                 preview: URL.createObjectURL(acceptedFiles[0])
@@ -352,12 +333,8 @@ class ModalCadastro extends Component {
         var reader = new FileReader()
         reader.readAsDataURL(acceptedFiles[0])
         reader.onload = (event) => {
-
             var bodyFormData = new FormData()
             bodyFormData.append('files', acceptedFiles[0]) 
-
-
-
             axios({
                 method: 'post',
                 url: 'http://localhost:5000/api/upload/imgs',
@@ -383,19 +360,16 @@ class ModalCadastro extends Component {
         }
     }
 
+    removeImage = (index) => {
+        var images = this.state.images
+        console.log('images', images)
+        images.splice(index, 1)
+        this.setState({images})
+    }
+
     openImage = (image) => {
         window.open(image, '_blank')
     }
-
-    /*
-    removeImage = (index) => {
-        this.setState({
-            file: null,
-            fileBase64: null,
-            receivedFile: null
-        })
-    }
-    */
 
     onEditorStateChange = (editorState) => {
         this.setState({
@@ -468,9 +442,6 @@ class ModalCadastro extends Component {
 
         // Populando campos do formulário
         if(nextProps.questao !== null && nextProps.questao !== this.props.questao){
-            console.log('populando campos do form')
-            console.log('this.props.questao', this.props.questao)
-            console.log('nextProps.questao', nextProps.questao)
             var status = nextProps.questao.valueStatus === true ? 'true' : 'false'
 
             this.props.form.setFieldsValue({
@@ -490,12 +461,15 @@ class ModalCadastro extends Component {
             const { contentBlocks, entityMap } = blocksFromHtml;
             const contentState = ContentState.createFromBlockArray(contentBlocks, entityMap);
 
+            var buttonAlternativas = nextProps.questao.tipoRespostaId === 2 ? true : false
+
             this.setState({
                 questaoId: nextProps.questao.key,
                 alternativas: nextProps.questao.alternativas,
                 alternativaCorreta: nextProps.questao.valueAlternativaCorreta,
                 questaoContent: nextProps.questao.description,
-                editorState: EditorState.createWithContent(contentState)
+                editorState: EditorState.createWithContent(contentState),
+                buttonAlternativas
             })
         }
     }
@@ -534,6 +508,7 @@ class ModalCadastro extends Component {
     }
 
     render(){
+        console.log('this.state.alternativaCorreta', this.state.alternativaCorreta)
         const { editorState } = this.state
         const { getFieldDecorator } = this.props.form
 

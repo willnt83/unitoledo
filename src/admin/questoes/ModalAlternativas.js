@@ -8,29 +8,9 @@ const letrasAlternativas = ['A', 'B', 'C', 'D', 'E']
 let id = 2
 
 class ModalAlternativas extends Component {
-    componentWillUpdate(nextProps, nextState){
-        // Reset nos fields na criação da questão
-        /*
-        if(this.props.mode !== nextProps.mode && nextProps.mode === 'create'){
-            this.props.form.resetFields()
-        }
-        */
-        if(nextProps.resetAlternativasForm){
-            this.props.form.resetFields()
-            this.props.updateResetAlternativasFormState(false)
-        }
-
-        if(this.props.alternativaCorreta !== nextProps.alternativaCorreta && nextProps.alternativas.length > 0){
-            var alternativasDescricao = nextProps.alternativas.map(alternativa => {
-                return(
-                    alternativa.descricao
-                )
-            })
-            this.props.form.setFieldsValue({
-                alternativaCorreta: nextProps.alternativaCorreta,
-                alternativas: alternativasDescricao
-            })
-        }
+    state = {
+        keys: [0, 1],
+        fieldsLoaded: false
     }
 
     submitAlternativasForm = (event) => {
@@ -40,12 +20,13 @@ class ModalAlternativas extends Component {
             if(!err){
                 var id = null
                 var corretaIndex = null, correta = false
+                console.log('values.alternativas', values.alternativas)
                 var alternativas = values.alternativas.map((alternativa, index) => {
                     if(this.props.alternativas.length === 0){
                         id = ''
                     }
                     else{
-                        id = this.props.alternativas[0].id
+                        id = this.props.alternativas[index].id
                     }
 
                     corretaIndex = letrasAlternativas.indexOf(values.alternativaCorreta)
@@ -61,7 +42,7 @@ class ModalAlternativas extends Component {
                 alternativas = alternativas.filter(Boolean);
 
                 this.props.updateAlternativas(values.alternativaCorreta, alternativas)
-                this.props.showHideModalAlternativas(false)
+                this.handleModalClosure()
             }
             else{
                 console.log('erro', err)
@@ -72,7 +53,10 @@ class ModalAlternativas extends Component {
     addComposicaoRow = () => {
         const { form } = this.props
         const keys = form.getFieldValue('keys')
+        console.log('add keys', keys)
         const nextKeys = keys.concat(id++)
+        console.log('nextKeys', nextKeys)
+
 
         form.setFieldsValue({
             keys: nextKeys,
@@ -96,12 +80,69 @@ class ModalAlternativas extends Component {
         this.props.form.setFieldsValue({alternativaCorreta: null})
     }
 
+    handleModalClosure = () => {
+        this.props.showHideModalAlternativas(false)
+    }
+
+    componentWillUpdate(nextProps, nextState){
+        if(nextProps.resetAlternativasForm){
+            this.props.form.resetFields()
+            this.setState({
+                fieldsLoaded: false
+            })
+            this.props.updateResetAlternativasFormState(false)
+        }
+
+        if(this.props.alternativaCorreta !== nextProps.alternativaCorreta && nextProps.alternativas.length > 0){
+            /*
+            var alternativasDescricao = nextProps.alternativas.map(alternativa => {
+                return(
+                    alternativa.descricao
+                )
+            })
+            console.log('alternativasDescricao', alternativasDescricao)
+            */
+            var keys = nextProps.alternativas.map((alternativa, index) => {
+                return(
+                    index
+                )
+            })
+            console.log('keys', keys)
+            this.setState({
+                keys,
+                fieldsLoaded: true
+            })
+
+            console.log('settando novas keys...')
+            this.props.form.setFieldsValue({
+                keys,
+                /*alternativaCorreta: nextProps.alternativaCorreta,
+                alternativas: alternativasDescricao*/
+            })
+        }
+    }
+
+    componentDidUpdate(prevProps, prevState){
+        if(prevState.fieldsLoaded === false && this.state.fieldsLoaded === true){
+            var alternativasDescricao = this.props.alternativas.map(alternativa => {
+                return(
+                    alternativa.descricao
+                )
+            })
+
+            console.log('alternativasDescricao', alternativasDescricao)
+            console.log('settando valores')
+            this.props.form.setFieldsValue({
+                alternativaCorreta: this.props.alternativaCorreta,
+                alternativas: alternativasDescricao
+            })
+        }
+    }
 
     render(){
         const { getFieldDecorator, getFieldValue } = this.props.form
         getFieldDecorator('keys', { initialValue: [0, 1] })
         const keys = getFieldValue('keys')
-
         var alternativaCorretaOptions = []
         keys.forEach((key, index) => {
             alternativaCorretaOptions.push({
@@ -143,12 +184,12 @@ class ModalAlternativas extends Component {
             <Modal
                 title="Alternativas"
                 visible={this.props.showModalAlternativas}
-                onCancel={() => this.props.showHideModalAlternativas(false)}
+                onCancel={this.handleModalClosure}
                 maskClosable={false}
                 footer={[
                     <Button
                         key="back"
-                        onClick={() => this.props.showHideModalAlternativas(false)}
+                        onClick={this.handleModalClosure}
                     >
                         <Icon type="close" />Cancelar
                     </Button>,
