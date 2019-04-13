@@ -4,6 +4,7 @@ import { withRouter } from "react-router-dom"
 import axios from "axios"
 import { connect } from 'react-redux'
 import moment from 'moment'
+import ModalImprimir from './ModalImprimirSimulado'
 
 const { Content } = Layout
 
@@ -18,7 +19,8 @@ class Simulados extends Component {
         tableLoading: false,
         showModal: false,
         simuladoId: null,
-        confirmarRemocaoLoading: false
+        confirmarRemocaoLoading: false,
+        showModalImprimir: false
     }
 
     compareByDates = (a, b) => {
@@ -257,8 +259,10 @@ class Simulados extends Component {
                             hora: terminoObj.format('HH:mm')
                         }
                     }
+                    this.props.setFullSimulado(simulado)
+                    this.props.history.push('/admin/simulados/novo/step-1')
                 }
-                else{
+                else if(op === 'republicar'){
                     simulado = {
                         id: null,
                         nome: response.nome,
@@ -273,10 +277,13 @@ class Simulados extends Component {
                             hora: null
                         }
                     }
+                    this.props.setFullSimulado(simulado)
+                    this.props.history.push('/admin/simulados/novo/step-1')
                 }
-
-                this.props.setFullSimulado(simulado)
-                this.props.history.push('/admin/simulados/novo/step-1')
+                else{ // imprimir
+                    this.props.setFullSimulado(simulado)
+                    
+                }
         })
         .catch(error =>{
             console.log(error)
@@ -300,6 +307,10 @@ class Simulados extends Component {
 
     showModal = (bool, id) => {
         this.setState({showModal: bool, simuladoId: id})
+    }
+
+    showModalImprimir = (bool) => {
+        this.setState({showModalImprimir: bool})
     }
 
     handleModalOk = () => {
@@ -401,7 +412,7 @@ class Simulados extends Component {
                                 <Col span={24}>
                                     <Button className="actionButton buttonRed" title="Excluir" onClick={() => this.showModal(true, record.key)} disabled={exlcuirButtonDisabled}><Icon type="delete" /></Button>
                                     <Button className="actionButton buttonPurple" title="Republicar" onClick={() => this.editRepublicarSimulados(record, 'republicar')} disabled={republicarButtonDisabled}><Icon type="redo" /></Button>
-                                    <Button className="actionButton buttonGreen" title="Imprimir"><Icon type="printer" /></Button>
+                                    <Button className="actionButton buttonGreen" title="Imprimir" onClick={() => this.editRepublicarSimulados(record, 'imprimir')}><Icon type="printer" /></Button>
                                 </Col>
                             </Row>
                         </React.Fragment>
@@ -444,6 +455,10 @@ class Simulados extends Component {
                 >
                     <p>Confirma remoção do simulado?</p>
                 </Modal>
+
+                <ModalImprimir
+					showModalImprimir={this.showModalImprimir}
+				/>
             </React.Fragment>
         )
     }

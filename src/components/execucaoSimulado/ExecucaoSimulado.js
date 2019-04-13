@@ -97,7 +97,7 @@ class ExecucaoSimulado extends Component {
             message: 'Simulado Finalizado',
             icon: <Icon type="check-circle" style={{color: '#13a54b', fontWeight: '800'}} />,
             //description: 'Simulado finalizado com sucesso.',
-            duration: 0
+            duration: 5
         }
         notification.open(args)
     }

@@ -26,13 +26,12 @@ class Dashboard extends Component {
     }
 
     componentWillMount(){
-        console.log('component will mount')
-        console.log('this.props.contextoAluno', this.props.contextoAluno)
         if(this.props.mainData === null || this.props.contexto !== 'ALUNO'){
             this.props.resetAll()
             window.location.replace("/")
         }
 
+        console.log('this.props.mainData', this.props.mainData)
         this.setState({
             tableData: this.props.mainData.dash_aluno.list.map(simulado => {
                 var dataInicio = simulado.dataInicio !== null ? moment(simulado.dataInicio, 'YYYY-MM-DD').format('DD/MM/YYYY') : null

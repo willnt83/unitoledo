@@ -508,7 +508,6 @@ class ModalCadastro extends Component {
     }
 
     render(){
-        console.log('this.state.alternativaCorreta', this.state.alternativaCorreta)
         const { editorState } = this.state
         const { getFieldDecorator } = this.props.form
 

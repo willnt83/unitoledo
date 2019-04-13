@@ -66,7 +66,7 @@ class Questoes extends Component {
 			dificuldade: '',
 			enade: '',
 			discursiva: '',
-			fonte: '',
+			fonte: [],
 			habilidades: [],
 			conteudos: [],
 			areaConhecimentos: [],

@@ -7,7 +7,8 @@ const letrasAlternativas = ['A', 'B', 'C', 'D', 'E']
 
 class ModalAlternativas extends Component {
     state = {
-        fieldsLoaded: false
+        fieldsLoaded: false,
+        keys: 0
     }
 
     submitAlternativasForm = (event) => {
@@ -41,24 +42,29 @@ class ModalAlternativas extends Component {
     addComposicaoRow = () => {
         const { form } = this.props
         const keys = form.getFieldValue('keys')
-        var lastIndex = keys.length
+        console.log('keys add', keys)
+        console.log('max', Math.max.apply(null, keys))
+        var lastIndex = (Math.max.apply(null, keys) + 1)
         const nextKeys = keys.concat(lastIndex)
 
-        form.setFieldsValue({
+        this.setState({keys: nextKeys})
+        /*form.setFieldsValue({
             keys: nextKeys,
-        })
+        })*/
     }
 
     removeComposicaoRow = (k) => {
         const keys = this.props.form.getFieldValue('keys')
+        console.log('keys sub', keys)
         if(keys.length === 1){
             return
         }
 
         var newKeys = keys.filter(key => key !== k)
-        this.props.form.setFieldsValue({
+        this.setState({keys: newKeys})
+        /*this.props.form.setFieldsValue({
             keys: newKeys
-        })
+        })*/
 
         this.props.limpaAlternativaCorreta()
         this.props.form.setFieldsValue({alternativaCorreta: null})
@@ -89,11 +95,18 @@ class ModalAlternativas extends Component {
                 fieldsLoaded: true
             })
 
-            
+            console.log('componentWillUpdate keys', keys)
+
             this.props.form.setFieldsValue({
-                keys,
-                /*alternativaCorreta: nextProps.alternativaCorreta,
-                alternativas: alternativasDescricao*/
+                keys
+            })
+        }
+
+        if(this.state.keys.length !== nextState.keys.length){
+            console.log('keys changed')
+            console.log('nextState.keys', nextState.keys)
+            this.props.form.setFieldsValue({
+                keys: nextState.keys,
             })
         }
     }
