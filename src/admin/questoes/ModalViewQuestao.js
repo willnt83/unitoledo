@@ -10,7 +10,7 @@ const alternativasArray = ['A)', 'B)', 'C)', 'D)', 'E)']
 class ModalViewQuestao extends Component {
     state = {
         questao: null,
-        footerButtons: null,
+        //footerButtons: null,
         buttonLoadingSalvar: false,
         //imgData: null
     }
@@ -78,6 +78,7 @@ class ModalViewQuestao extends Component {
 
     componentWillReceiveProps(nextProps){
         if(nextProps.questao !== null){
+            /*
             var footerButtons = null
             if(nextProps.op === 'view'){
                 footerButtons = [
@@ -107,13 +108,18 @@ class ModalViewQuestao extends Component {
                         <Icon type="save" />Salvar
                     </Button>
                 ]
-            }
-            
-            this.setState({questao: nextProps.questao, footerButtons})
+            }*/
+            //this.setState({questao: nextProps.questao, footerButtons})
+            this.setState({questao: nextProps.questao})
         }
     }
 
     componentWillUpdate(nextProps, nextState) {
+        /*
+        console.log('commponent will update')
+        console.log('state: ', this.state.buttonLoadingSalvar)
+        console.log('nextState: ', nextState.buttonLoadingSalvar)
+        */
         // Tratando response da requisição createUpdateQuestao
 		if(nextProps.createUpdateQuestaoResponse && nextProps.createUpdateQuestaoResponse !== this.props.createUpdateQuestaoResponse){
 			if(nextProps.createUpdateQuestaoResponse.success){
@@ -134,12 +140,43 @@ class ModalViewQuestao extends Component {
         var title = 'Questão'
         var description = null
         var alternativas = []
+        var footerButtons = null
 
         if(this.state.questao !== null){
             if(this.state.questao.key !== null)
                 title += ' '+this.state.questao.key
             description = this.state.questao.description
             alternativas = this.state.questao.alternativas
+        }
+
+        if(this.props.op === 'view'){
+            footerButtons = [
+                <Button
+                    key="print"
+                    type="primary"
+                    onClick={this.handleImprimir}>
+                    <Icon type="printer" />Imprimir
+                </Button>,
+                <Button
+                    key="back"
+                    className="buttonRed"
+                    onClick={this.handleModalClosure}
+                >
+                    <Icon type="close" />Fechar
+                </Button>
+            ]
+        }
+        else if(this.props.op === 'write'){
+            footerButtons = [
+                <Button
+                    key="submit"
+                    className="buttonGreen"
+                    onClick={this.handleSubmit}
+                    loading={this.state.buttonLoadingSalvar}
+                >
+                    <Icon type="save" />Salvar
+                </Button>
+            ]
         }
 
         return(
@@ -149,7 +186,7 @@ class ModalViewQuestao extends Component {
                     visible={this.props.showModalViewQuestao}
                     onCancel={this.handleModalClosure}
                     width={900}
-                    footer={this.state.footerButtons}
+                    footer={footerButtons}
                 >
                     <div id="questao" style={{fontVariant: 'normal'}}>
                         <Row>

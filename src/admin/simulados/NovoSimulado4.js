@@ -21,7 +21,11 @@ class NovoSimulado4 extends Component {
 
     state = {
         quantidadeQuestoesSelecionadas: 'Questões Selecionadas',
-        dataHoraFinalValidation: {
+        dataFinalValidation: {
+            validateStatus: 'success',
+            help: ''
+        },
+        horaFinalValidation: {
             validateStatus: 'success',
             help: ''
         },
@@ -44,10 +48,9 @@ class NovoSimulado4 extends Component {
     }
 
     handleFinalizarButton = (mode) => {
-        this.setState({buttonLoadingSalvar: true})
         let rascunho = null
         this.props.form.validateFieldsAndScroll((err, values) => {
-            if (!err) {
+            if(!err){
                 let dataInicial = values.dataInicial.format('YYYY-MM-DD')
                 let horarioInicial = values.horarioInicial.format('HH:mm')
                 let dateTimeInicial = moment(dataInicial + ' ' + horarioInicial, 'YYYY/MM/DD HH:mm')
@@ -61,7 +64,11 @@ class NovoSimulado4 extends Component {
                 if(dateTimeFinal <= dateTimeInicial){
                     error = true
                     this.setState({
-                        dataHoraFinalValidation: {
+                        dataFinalValidation:{
+                            validateStatus: 'error',
+                            help: 'Data e Horário Final não podem ser menores ou iguais que Data e Horario Inicial'
+                        },
+                        horaFinalValidation:{
                             validateStatus: 'error',
                             help: 'Data e Horário Final não podem ser menores ou iguais que Data e Horario Inicial'
                         }
@@ -69,7 +76,11 @@ class NovoSimulado4 extends Component {
                 }
                 else{
                     this.setState({
-                        dataHoraFinalValidation: {
+                        dataFinalValidation:{
+                            validateStatus: 'success',
+                            help: ''
+                        },
+                        horaFinalValidation:{
                             validateStatus: 'success',
                             help: ''
                         }
@@ -77,6 +88,7 @@ class NovoSimulado4 extends Component {
                 }
                 
                 if(!error){
+                    this.setState({buttonLoadingSalvar: true})
                     rascunho = mode === 'rascunho' ? true : false
                     let questoes = this.props.simulado.questoes.map(questao => {
                         return(
@@ -150,10 +162,48 @@ class NovoSimulado4 extends Component {
                     })
                     .catch(error =>{
                         console.log('error: ', error)
+                        this.setState({buttonLoadingSalvar: false})
                     })
                 }
                 else{
                     console.log(err)
+                }
+            }
+            else{
+                if(typeof(values.dataFinal) === 'undefined'){
+                    console.log('dataFinal vazia')
+                    this.setState({
+                        dataFinalValidation:{
+                            validateStatus: 'error',
+                            help: 'Por favor informe a data final'
+                        }
+                    })
+                }
+                else{
+                    this.setState({
+                        dataFinalValidation:{
+                            validateStatus: 'success',
+                            help: ''
+                        }
+                    })
+                }
+
+                if(typeof(values.horaFinal) === 'undefined'){
+                    console.log('horaFinal vazia')
+                    this.setState({
+                        horaFinalValidation:{
+                            validateStatus: 'error',
+                            help: 'Por favor informe a hora final'
+                        }
+                    })
+                }
+                else{
+                    this.setState({
+                        horaFinalValidation:{
+                            validateStatus: 'success',
+                            help: ''
+                        }
+                    })
                 }
             }
         })
@@ -276,8 +326,8 @@ class NovoSimulado4 extends Component {
                                 </Form.Item>
                                 <Form.Item
                                     label="Data Final"
-                                    validateStatus={this.state.dataHoraFinalValidation.validateStatus}
-                                    help={this.state.dataHoraFinalValidation.help}
+                                    validateStatus={this.state.dataFinalValidation.validateStatus}
+                                    help={this.state.dataFinalValidation.help}
                                 >
                                     {getFieldDecorator('dataFinal', {
                                         rules: [{ required: true, message: 'Por favor informe a data final' }]
@@ -292,8 +342,8 @@ class NovoSimulado4 extends Component {
                                 </Form.Item>
                                 <Form.Item
                                     label="Horário Final"
-                                    validateStatus={this.state.dataHoraFinalValidation.validateStatus}
-                                    help={this.state.dataHoraFinalValidation.help}
+                                    validateStatus={this.state.horaFinalValidation.validateStatus}
+                                    help={this.state.horaFinalValidation.help}
                                 >
                                     {getFieldDecorator('horarioFinal', {
                                         rules: [{ required: true, message: 'Por favor informe o horário final' }]
