@@ -14,14 +14,14 @@ class ModalAlternativas extends Component {
     submitAlternativasForm = (event) => {
         event.preventDefault()
         this.props.form.validateFieldsAndScroll((err, values) => {
-            console.log('values.alternativas', values.alternativas)
+            //console.log('values.alternativas', values.alternativas)
             if(!err){
                 var corretaIndex = null, correta = false
                 var tempAlternativas = values.alternativas.filter(Boolean)
-                console.log('tempAlternativas', tempAlternativas)
+                //console.log('tempAlternativas', tempAlternativas)
                 var alternativas = tempAlternativas.map((alternativa, index) => {
                     corretaIndex = letrasAlternativas.indexOf(values.alternativaCorreta)
-                    console.log('corretaIndex', corretaIndex)
+                    //console.log('corretaIndex', corretaIndex)
                     correta = corretaIndex === index ? true : false
 
                     return({
@@ -32,7 +32,6 @@ class ModalAlternativas extends Component {
                 })
 
                 //alternativas = alternativas.filter(Boolean)
-
                 this.props.updateAlternativas(values.alternativaCorreta, alternativas)
                 this.handleModalClosure()
             }
@@ -45,8 +44,10 @@ class ModalAlternativas extends Component {
     addComposicaoRow = () => {
         const { form } = this.props
         const keys = form.getFieldValue('keys')
+        /*
         console.log('keys add', keys)
         console.log('max', Math.max.apply(null, keys))
+        */
         var lastIndex = (Math.max.apply(null, keys) + 1)
         const nextKeys = keys.concat(lastIndex)
 
@@ -58,7 +59,7 @@ class ModalAlternativas extends Component {
 
     removeComposicaoRow = (k) => {
         const keys = this.props.form.getFieldValue('keys')
-        console.log('keys sub', keys)
+        //console.log('keys sub', keys)
         if(keys.length === 1){
             return
         }
@@ -98,7 +99,7 @@ class ModalAlternativas extends Component {
                 fieldsLoaded: true
             })
 
-            console.log('componentWillUpdate keys', keys)
+            //console.log('componentWillUpdate keys', keys)
 
             this.props.form.setFieldsValue({
                 keys
@@ -106,8 +107,10 @@ class ModalAlternativas extends Component {
         }
 
         if(this.state.keys.length !== nextState.keys.length){
+            /*
             console.log('keys changed')
             console.log('nextState.keys', nextState.keys)
+            */
             this.props.form.setFieldsValue({
                 keys: nextState.keys,
             })
