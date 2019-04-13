@@ -14,11 +14,14 @@ class ModalAlternativas extends Component {
     submitAlternativasForm = (event) => {
         event.preventDefault()
         this.props.form.validateFieldsAndScroll((err, values) => {
-
+            console.log('values.alternativas', values.alternativas)
             if(!err){
                 var corretaIndex = null, correta = false
-                var alternativas = values.alternativas.map((alternativa, index) => {
+                var tempAlternativas = values.alternativas.filter(Boolean)
+                console.log('tempAlternativas', tempAlternativas)
+                var alternativas = tempAlternativas.map((alternativa, index) => {
                     corretaIndex = letrasAlternativas.indexOf(values.alternativaCorreta)
+                    console.log('corretaIndex', corretaIndex)
                     correta = corretaIndex === index ? true : false
 
                     return({
@@ -28,7 +31,7 @@ class ModalAlternativas extends Component {
                     })
                 })
 
-                alternativas = alternativas.filter(Boolean);
+                //alternativas = alternativas.filter(Boolean)
 
                 this.props.updateAlternativas(values.alternativaCorreta, alternativas)
                 this.handleModalClosure()
