@@ -171,7 +171,6 @@ class NovoSimulado4 extends Component {
             }
             else{
                 if(typeof(values.dataFinal) === 'undefined'){
-                    console.log('dataFinal vazia')
                     this.setState({
                         dataFinalValidation:{
                             validateStatus: 'error',
@@ -189,7 +188,6 @@ class NovoSimulado4 extends Component {
                 }
 
                 if(typeof(values.horaFinal) === 'undefined'){
-                    console.log('horaFinal vazia')
                     this.setState({
                         horaFinalValidation:{
                             validateStatus: 'error',
@@ -254,6 +252,7 @@ class NovoSimulado4 extends Component {
     }
 
     render(){
+        console.log('this.props.selectedQuestoes', this.props.selectedQuestoes)
         const { getFieldDecorator } = this.props.form
         return(
             <React.Fragment>

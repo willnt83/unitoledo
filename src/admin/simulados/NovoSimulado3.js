@@ -79,7 +79,6 @@ class NovoSimulado3 extends Component {
         this.setState({buttonLoadingBuscar: true, btnProximoDisabled: true})
         axios.post('http://localhost:5000/api/getQuestoesSimulado/simulado', request)
         .then(res => {
-            console.log('response getQuestoes', res.data)
             var questoes = []
             var labelStatus = null
             questoes = res.data
@@ -113,7 +112,6 @@ class NovoSimulado3 extends Component {
             this.props.setQuestoes(tempArray)
 
             if(this.state.firstLoad){
-                console.log('contando no primeiro load')
                 var countEspecifico = 0
                 var countGeral = 0
                 var countFacil = 0
@@ -150,7 +148,6 @@ class NovoSimulado3 extends Component {
     }
 
     updateQuestionCounter = (questao, op) => {
-        console.log('updateQuestionCounter', questao)
         var countEspecifico = this.state.countEspecifico
         var countGeral = this.state.countGeral
         var countFacil = this.state.countFacil
@@ -181,18 +178,6 @@ class NovoSimulado3 extends Component {
             countDificil
         })
     }
-
-
-    /*
-    componentWillReceiveProps(props) {
-        if(props.simulado.questoes && props.simulado.questoes.length > 0){
-            //console.log('props.simulado.questoes', props.simulado.questoes)
-            //console.log('props.questoes', props.questoes)
-
-            
-        }
-    }
-    */
 
     componentWillMount(){
         if(this.props.mainData === null || (this.props.contexto !== 'COORDENADOR' && this.props.contexto !== 'PROFESSOR')){
@@ -346,8 +331,6 @@ class NovoSimulado3 extends Component {
         : 'Questões'
 
             
-            
-
         return(
             <React.Fragment>
                 <SimuladoSteps step={2} />
