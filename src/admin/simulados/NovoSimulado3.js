@@ -261,12 +261,6 @@ class NovoSimulado3 extends Component {
                     })
                 }
 
-                /*if(values.padraoEnade)
-                    padraoEnade = values.padraoEnade
-                else
-                    padraoEnade = ''
-                */
-
                 if(values.dificuldade)
                     dificuldade = values.dificuldade
                 else

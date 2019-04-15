@@ -19,7 +19,7 @@ class SelecaoQuestoes extends Component {
         this.props.removeSimuladoQuestao(questao)
     }
 
-    componentWillReceiveProps(props) {
+    componentWillReceiveProps(props){
         if(props.questoes !== null){
             this.setState({
                 questoes: props.questoes

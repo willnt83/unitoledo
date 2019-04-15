@@ -10,7 +10,6 @@ import SimuladoSteps from './SimuladoSteps'
 import SelecaoQuestoes from './SelecaoQuestoes'
 moment.locale('pt-br')
 
-
 const { Content } = Layout
 
 class NovoSimulado4 extends Component {
@@ -29,13 +28,46 @@ class NovoSimulado4 extends Component {
             validateStatus: 'success',
             help: ''
         },
-        buttonLoadingSalvar: false
+        buttonLoadingSalvar: false,
+        questoes: null
+    }
+
+    getQuestoes = (request) => {
+        this.setState({buttonLoadingBuscar: true, btnProximoDisabled: true})
+        axios.post('http://localhost:5000/api/getQuestoesSimulado/simulado', request)
+        .then(res => {
+            var questoes = []
+            questoes = res.data
+            this.setState({questoes})
+        })
+        .catch(error =>{
+            console.log(error)
+        })
     }
 
     componentWillMount(){
         if(this.props.mainData === null || (this.props.contexto !== 'COORDENADOR' && this.props.contexto !== 'PROFESSOR')){
             this.props.resetAll()
             window.location.replace("/")
+        }
+
+        if(this.props.simulado.questoes.length > 0){
+            //this.setState({mode: 'edit'})
+            var request = {
+                codigos: this.props.simulado.questoes,
+                enade: '',
+                discursiva: '',
+                dificuldade: '',
+                fonte: [],
+                habilidades: [],
+                conteudos: [],
+                areaConhecimentos: [],
+                anos: [],
+                tipo: {
+                    id: 0
+                }
+            }
+            this.getQuestoes(request)
         }
     }
 
@@ -57,9 +89,6 @@ class NovoSimulado4 extends Component {
                 let dataFinal = values.dataFinal.format('YYYY-MM-DD')
                 let horarioFinal = values.horarioFinal.format('HH:mm')
                 let dateTimeFinal = moment(dataFinal + ' ' + horarioFinal, 'YYYY/MM/DD HH:mm')
-                this.props.setStartFinish({dateTimeInicial: dateTimeInicial.format(), dateTimeFinal: dateTimeFinal.format()})
-
-
                 var error = false
                 if(dateTimeFinal <= dateTimeInicial){
                     error = true
@@ -88,6 +117,7 @@ class NovoSimulado4 extends Component {
                 }
                 
                 if(!error){
+                    this.props.setStartFinish({dateTimeInicial: dateTimeInicial.format(), dateTimeFinal: dateTimeFinal.format()})
                     this.setState({buttonLoadingSalvar: true})
                     rascunho = mode === 'rascunho' ? true : false
                     let questoes = this.props.simulado.questoes.map(questao => {
@@ -238,7 +268,6 @@ class NovoSimulado4 extends Component {
                 horarioFinal: moment(this.props.simulado.fim.hora, 'HH:mm')
             })
         }
-        
     }
 
     successModal(props){
@@ -252,7 +281,6 @@ class NovoSimulado4 extends Component {
     }
 
     render(){
-        console.log('this.props.selectedQuestoes', this.props.selectedQuestoes)
         const { getFieldDecorator } = this.props.form
         return(
             <React.Fragment>
@@ -369,7 +397,7 @@ class NovoSimulado4 extends Component {
                                     height: 'calc(100% - 8px)'
                                 }}
                             >
-                                {<SelecaoQuestoes questoes={this.props.selectedQuestoes} mode='read' />}
+                                {<SelecaoQuestoes questoes={this.state.questoes} mode='read' />}
                             </Card>
                         </Col>
                     </Row>
@@ -411,6 +439,7 @@ const MapStateToProps = (state) => {
         mainData: state.mainData,
         contexto: state.contexto,
         simulado: state.simulado,
+        questoes: state.questoes,
         selectedQuestoes: state.selectedQuestoes,
         periodoLetivo: state.periodoLetivo
 	}

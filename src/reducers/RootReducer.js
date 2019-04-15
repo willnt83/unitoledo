@@ -106,7 +106,7 @@ const initState = {
 
 const RootReducer = (state = initState, action) => {
     if(action.type === 'RESET_ALL'){
-        console.log('reducer RESET_ALL')
+        console.log('RESET_ALL')
         return {
             contexto: null,
             contextoData: null,
@@ -224,6 +224,7 @@ const RootReducer = (state = initState, action) => {
         }
     }
     else if(action.type === 'RESET_SIMULADO'){
+        console.log('RESET_SIMULADO')
         return{
             ...state,
             simulado: {
@@ -282,6 +283,7 @@ const RootReducer = (state = initState, action) => {
         }
     }
     else if(action.type === 'SET_SIMULADOQUESTAO'){
+        console.log('SET_SIMULADOQUESTAO')
         var selectedQuestoes = state.selectedQuestoes
         selectedQuestoes.push(action.questao)
 
@@ -305,6 +307,7 @@ const RootReducer = (state = initState, action) => {
         }
     }
     else if(action.type === 'REMOVE_SIMULADOQUESTAO'){
+        console.log('REMOVE_SIMULADOQUESTAO')
         var questoes = state.simulado.questoes
         questoes.splice(questoes.indexOf(action.questao.id), 1)
 
@@ -332,6 +335,7 @@ const RootReducer = (state = initState, action) => {
         }
     }
     else if(action.type === 'SET_SELECTEDQUESTAO'){
+        console.log('SET_SELECTEDQUESTAO')
         selectedQuestoes = state.selectedQuestoes
         selectedQuestoes.push(action.questao)
         return{
@@ -340,6 +344,7 @@ const RootReducer = (state = initState, action) => {
         }
     }
     else if(action.type === 'SET_SIMULADOSTARTFINISH'){
+        console.log('SET_SIMULADOSTARTFINISH')
         return{
             ...state,
             simulado: {
