@@ -115,11 +115,6 @@ class ModalViewQuestao extends Component {
     }
 
     componentWillUpdate(nextProps, nextState) {
-        /*
-        console.log('commponent will update')
-        console.log('state: ', this.state.buttonLoadingSalvar)
-        console.log('nextState: ', nextState.buttonLoadingSalvar)
-        */
         // Tratando response da requisição createUpdateQuestao
 		if(nextProps.createUpdateQuestaoResponse && nextProps.createUpdateQuestaoResponse !== this.props.createUpdateQuestaoResponse){
 			if(nextProps.createUpdateQuestaoResponse.success){
@@ -132,6 +127,7 @@ class ModalViewQuestao extends Component {
 			else{
                 this.showNotification(nextProps.createUpdateQuestaoResponse.message, false)
                 this.props.showModalViewQuestaoF(false, this.props.op)
+                this.setState({buttonLoadingSalvar: false})
             }
         }
     }

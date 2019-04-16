@@ -9,14 +9,12 @@ const alternativasArray = ['A)', 'B)', 'C)', 'D)', 'E)']
 
 class ModalImprimirSimulado extends Component {
     state = {
-        questao: null,
         footerButtons: null,
         buttonLoadingSalvar: false,
-        //imgData: null
     }
 
     handleModalClosure = () => {
-        this.props.ModalImprimir(false)
+        this.props.handleShowModalImprimir(false)
     }
 
     handleImprimir = () => {
@@ -47,30 +45,19 @@ class ModalImprimirSimulado extends Component {
                 pdf.addPage(PDF_Width, PDF_Height);
                 pdf.addImage(imgData, 'JPG', top_left_margin, -(PDF_Height*i)+(top_left_margin*4),canvas_image_width,canvas_image_height);
             }
-            pdf.save('questao-'+this.props.questao.key+'.pdf');
+            pdf.save('simulado-'+this.props.simulado.id+'.pdf');
         })
 
     }
 
     render(){
+        console.log('this.props.simulado', this.props.simulado)
         var title = 'Impressão do Simulado'
-        var description = null
-        var alternativas = []
-
-        /*
-        if(this.state.questao !== null){
-            if(this.state.questao.key !== null)
-                title += ' '+this.state.questao.key
-            description = this.state.questao.description
-            alternativas = this.state.questao.alternativas
-        }
-        */
-
         return(
             <React.Fragment>
                 <Modal
                     title={title}
-                    visible={this.props.showModalViewQuestao}
+                    visible={this.props.showModalImprimir}
                     onCancel={this.handleModalClosure}
                     width={900}
                     footer={
@@ -83,9 +70,52 @@ class ModalImprimirSimulado extends Component {
                     }
                 >
                     <div id="simulado" style={{fontVariant: 'normal'}}>
-                        <Row>
-                            <Col span={24}><h4>Nome Simulado</h4></Col>
+                        <Row style={{marginBottom: 0}}>
+                            <Col span={24}><h4>Simulado: {this.props.simulado ? this.props.simulado.nome : null}</h4></Col>
                         </Row>
+                        {   this.props.simulado ?
+                            this.props.simulado.questoes.map((questao, index) => {
+                                return(
+                                    <React.Fragment key={questao.id}>
+                                        <Row style={{marginTop: 15, marginBottom: 0}}>
+                                            <Col className="descricaoHtml2" span={24} dangerouslySetInnerHTML={{__html: 'Questao '+ (index + 1) + ' ('+ questao.fonte.description + ')' + questao.descricao}} />
+                                        </Row>
+                                        <Row>
+                                            <Col span={24}>
+                                                {
+                                                    questao.alternativas.map((alternativa, index) => {
+                                                        return(
+                                                            <p key={alternativa.descricao} className="alternativa">{alternativasArray[index]} {alternativa.descricao}</p>
+                                                        )
+                                                    })
+                                                }
+                                            </Col>
+                                        </Row>
+                                    </React.Fragment>
+                                )
+                            })
+                            : null
+                        }
+                        {/*
+                            this.props.simulado.questoes.map(questao => {
+                                return(
+                                    <React.Fragment>
+                                        <Row>
+                                            <Col className="descricaoHtml" span={24} dangerouslySetInnerHTML={{__html: questao.description}} />
+                                        </Row>
+                                        <Row>
+                                            <Col span={24}>
+                                            {
+                                                questao.alternativas.map((alternativa, index) => {
+                                                    <p key={alternativa.descricao} className="alternativa">{alternativasArray[index]} {alternativa.descricao}</p>
+                                                })
+                                            }
+                                            </Col>
+                                        </Row>
+                                    </React.Fragment>
+                                )
+                            })
+                        */}
                         {/*
                         <Row>
                             <Col className="descricaoHtml" span={24} dangerouslySetInnerHTML={{__html: description}} />

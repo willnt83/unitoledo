@@ -20,7 +20,8 @@ class Simulados extends Component {
         showModal: false,
         simuladoId: null,
         confirmarRemocaoLoading: false,
-        showModalImprimir: false
+        showModalImprimir: false,
+        simulado: null
     }
 
     compareByDates = (a, b) => {
@@ -309,8 +310,16 @@ class Simulados extends Component {
         this.setState({showModal: bool, simuladoId: id})
     }
 
-    showModalImprimir = (bool) => {
-        this.setState({showModalImprimir: bool})
+    handleShowModalImprimir = (record, bool) => {
+        console.log('record', record)
+        axios.get('http://localhost:5000/api/getSimuladoId/'+record.key)
+        .then(res => {
+            console.log('response', res.data[0])
+            this.setState({showModalImprimir: bool, simulado: res.data[0]})
+        })
+        .catch(error =>{
+            console.log(error)
+        })
     }
 
     handleModalOk = () => {
@@ -412,7 +421,7 @@ class Simulados extends Component {
                                 <Col span={24}>
                                     <Button className="actionButton buttonRed" title="Excluir" onClick={() => this.showModal(true, record.key)} disabled={exlcuirButtonDisabled}><Icon type="delete" /></Button>
                                     <Button className="actionButton buttonPurple" title="Republicar" onClick={() => this.editRepublicarSimulados(record, 'republicar')} disabled={republicarButtonDisabled}><Icon type="redo" /></Button>
-                                    <Button className="actionButton buttonGreen" title="Imprimir" onClick={() => this.editRepublicarSimulados(record, 'imprimir')}><Icon type="printer" /></Button>
+                                    <Button className="actionButton buttonGreen" title="Imprimir" onClick={() => this.handleShowModalImprimir(record, true)}><Icon type="printer" /></Button>
                                 </Col>
                             </Row>
                         </React.Fragment>
@@ -457,7 +466,9 @@ class Simulados extends Component {
                 </Modal>
 
                 <ModalImprimir
-					showModalImprimir={this.showModalImprimir}
+					showModalImprimir = {this.state.showModalImprimir}
+                    handleShowModalImprimir = {this.handleShowModalImprimir}
+                    simulado = {this.state.simulado}
 				/>
             </React.Fragment>
         )

@@ -168,3 +168,12 @@ code {
 .descricaoHtml > img {
     text-align: center
 }
+
+.descricaoHtml2{
+    font-weight: 700
+}
+
+.descricaoHtml2 p{
+    margin-bottom: 0px !important;
+    
+}
