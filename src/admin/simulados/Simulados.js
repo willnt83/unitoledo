@@ -311,15 +311,18 @@ class Simulados extends Component {
     }
 
     handleShowModalImprimir = (record, bool) => {
-        console.log('record', record)
-        axios.get('http://localhost:5000/api/getSimuladoId/'+record.key)
-        .then(res => {
-            console.log('response', res.data[0])
-            this.setState({showModalImprimir: bool, simulado: res.data[0]})
-        })
-        .catch(error =>{
-            console.log(error)
-        })
+        if(bool){
+            axios.get('http://localhost:5000/api/getSimuladoId/'+record.key)
+            .then(res => {
+                console.log('response', res.data[0])
+                this.setState({showModalImprimir: bool, simulado: res.data[0]})
+            })
+            .catch(error =>{
+                console.log(error)
+            })
+        }
+        else
+            this.setState({showModalImprimir: bool})
     }
 
     handleModalOk = () => {

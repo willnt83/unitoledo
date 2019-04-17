@@ -65,7 +65,7 @@ class ModalImprimirSimulado extends Component {
                             key="print"
                             type="primary"
                             onClick={this.handleImprimir}>
-                            <Icon type="printer" />Imprimir
+                            <Icon type="file-pdf" />Gerar PDF
                         </Button>
                     }
                 >
