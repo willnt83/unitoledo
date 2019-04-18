@@ -1,5 +1,5 @@
 import React, { Component } from "react"
-import { Icon, Modal, Form, Button,  Row, Col, notification } from "antd"
+import { Icon, Modal, Form, Button,  Row, Col, Divider } from "antd"
 import { connect } from 'react-redux'
 import BackEndRequests from '../hocs/BackEndRequests'
 import html2canvas from 'html2canvas'
@@ -70,27 +70,36 @@ class ModalImprimirSimulado extends Component {
                     }
                 >
                     <div id="simulado" style={{fontVariant: 'normal'}}>
-                        <Row style={{marginBottom: 0}}>
+                        <Row>
+                            <Col span={24}>
+                                <strong>UNITOLEDO</strong>
+                            </Col>
+                        </Row>
+                        <Row style={{marginBottom: 0, marginTop: 10}}>
                             <Col span={24}><h4>Simulado: {this.props.simulado ? this.props.simulado.nome : null}</h4></Col>
                         </Row>
+                        <Divider style={{marginTop: 10}} />
+                        
                         {   this.props.simulado ?
                             this.props.simulado.questoes.map((questao, index) => {
                                 return(
                                     <React.Fragment key={questao.id}>
-                                        <Row style={{marginTop: 15, marginBottom: 0}}>
-                                            <Col className="descricaoHtml2" span={24} dangerouslySetInnerHTML={{__html: 'Questao '+ (index + 1) + ' ('+ questao.fonte.description + ')' + questao.descricao}} />
-                                        </Row>
-                                        <Row>
-                                            <Col span={24}>
-                                                {
-                                                    questao.alternativas.map((alternativa, index) => {
-                                                        return(
-                                                            <p key={alternativa.descricao} className="alternativa">{alternativasArray[index]} {alternativa.descricao}</p>
-                                                        )
-                                                    })
-                                                }
-                                            </Col>
-                                        </Row>
+                                        <div className="questaoSimuladoImpressao">
+                                            <Row style={{marginTop: 0, marginBottom: 0}}>
+                                                <Col className="descricaoHtml2" span={24} dangerouslySetInnerHTML={{__html: 'Questao '+ (index + 1) + ' ('+ questao.fonte.description + ')' + questao.descricao}} />
+                                            </Row>
+                                            <Row>
+                                                <Col span={24}>
+                                                    {
+                                                        questao.alternativas.map((alternativa, index) => {
+                                                            return(
+                                                                <p key={alternativa.descricao} className="alternativa">{alternativasArray[index]} {alternativa.descricao}</p>
+                                                            )
+                                                        })
+                                                    }
+                                                </Col>
+                                            </Row>
+                                        </div>
                                     </React.Fragment>
                                 )
                             })
