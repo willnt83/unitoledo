@@ -15,14 +15,14 @@ class LoginForm extends Component {
 		this.props.form.validateFieldsAndScroll((err, values) => {
             if (!err) {
 				this.setState({ entrarButtonLoading: true })
-				/*
-				usuario: values.userName,
-				senha: values.password
-				*/
 
 				axios.post(`http://localhost:5000/api/login/user`, {
+					usuario: values.userName,
+					senha: values.password
+					/*
 					usuario: 'appprova',
 					senha: 'qw90PO@!'
+					*/
 				})
 				.then(res => {
 					if(res.headers['access-token']){
