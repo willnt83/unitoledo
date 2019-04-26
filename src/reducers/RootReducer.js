@@ -113,6 +113,8 @@ const initState = {
 const RootReducer = (state = initState, action) => {
     if(action.type === 'RESET_ALL'){
         return {
+            //backEndPoint: 'http://localhost:5000',
+            backEndPoint: 'https://app-prova.toledo.br',
             contexto: null,
             contextoData: null,
             usuarioId: null,
