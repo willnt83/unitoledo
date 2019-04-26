@@ -37,7 +37,7 @@ class PersonificacaoSelecaoAluno extends Component {
 					'Authorization': this.props.authHeaders.token
 				}
 
-				axios.get(`http://localhost:5000/api/getUser`, data)
+				axios.get(this.props.backEndPoint+'/api/getUser', data)
 				.then(res => {
 					this.setState({
 						buscarButtonLoading: false,
@@ -65,7 +65,7 @@ class PersonificacaoSelecaoAluno extends Component {
 			id: usuarioId
 		}
 
-		axios.post(`http://localhost:5000/api/contexto`, data)
+		axios.post(this.props.backEndPoint+'/api/contexto', data)
 		.then(res => {
 			this.props.handleUserSelection(res.data.body)
 		})
@@ -152,6 +152,7 @@ class PersonificacaoSelecaoAluno extends Component {
 
 const MapStateToProps = (state) => {
 	return {
+		backEndPoint: state.backEndPoint,
 		authHeaders: state.authHeaders
 	}
 }

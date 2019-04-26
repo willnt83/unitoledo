@@ -155,8 +155,8 @@ class AdminIndex extends Component {
 const MapStateToProps = (state) => {
   return {
     pageTitle: state.pageTitle,
-	usuarioNome: state.usuarioNome,
-	periodoLetivoDescricao: state.periodoLetivoDescricao
+    usuarioNome: state.usuarioNome,
+    periodoLetivoDescricao: state.periodoLetivoDescricao
   }
 }
 

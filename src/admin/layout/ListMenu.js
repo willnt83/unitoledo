@@ -27,7 +27,7 @@ class ListMenu extends Component {
         axios.defaults.headers = {
             'Authorization': this.props.authHeaders.token
         }
-        axios.post('http://localhost:5000/api/logout', request)
+        axios.post(this.props.backEndPoint+'/api/logout', request)
         .then(res => {
             this.setState({btnConfirmarLoading: false})
             this.props.resetAll()
@@ -125,6 +125,7 @@ class ListMenu extends Component {
 
 const MapStateToProps = (state) => {
 	return {
+        backEndPoint: state.backEndPoint,
         authHeaders: state.authHeaders
 	}
 }

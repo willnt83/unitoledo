@@ -16,7 +16,7 @@ class LoginForm extends Component {
             if (!err) {
 				this.setState({ entrarButtonLoading: true })
 
-				axios.post(`http://localhost:5000/api/login/user`, {
+				axios.post(this.props.backEndPoint+'/api/login/user', {
 					usuario: values.userName,
 					senha: values.password
 					/*
@@ -25,6 +25,7 @@ class LoginForm extends Component {
 					*/
 				})
 				.then(res => {
+					console.log('response', res)
 					if(res.headers['access-token']){
 						this.props.setHeader(res.headers['access-token'])
 					}
@@ -115,10 +116,16 @@ class LoginForm extends Component {
 	}
 }
 
+const MapStateToProps = (state) => {
+	return {
+		backEndPoint: state.backEndPoint
+	}
+}
+
 const mapDispatchToProps = (dispatch) => {
     return {
-		setHeader: (token) => { dispatch({ type: 'SET_HEADERS', token }) }
+			setHeader: (token) => { dispatch({ type: 'SET_HEADERS', token }) }
     }
 }
 
-export default connect(null, mapDispatchToProps)(Form.create()(LoginForm))
+export default connect(MapStateToProps, mapDispatchToProps)(Form.create()(LoginForm))

@@ -79,7 +79,7 @@ class Questoes extends Component {
 	}
 
 	requestGetAlternativas = (row) => {
-		axios.get('http://localhost:5000/api/getAlternativas/'+row.key)
+		axios.get(this.props.backEndPoint+'/api/getAlternativas/'+row.key)
 		.then(res => {
 			this.setState({mode: 'edit'})
 			var alternativaLetras = ['A', 'B', 'C', 'D', 'E']
@@ -475,6 +475,7 @@ class Questoes extends Component {
 
 const MapStateToProps = (state) => {
 	return {
+		backEndPoint: state.backEndPoint,
 		mainData: state.mainData,
 		contexto: state.contexto,
 		habilidades: state.habilidades,

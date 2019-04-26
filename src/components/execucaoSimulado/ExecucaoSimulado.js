@@ -48,7 +48,7 @@ class ExecucaoSimulado extends Component {
             idUltilizador: this.props.contextoAluno.idUtilizador
         }
 
-        axios.post('http://localhost:5000/api/simuladoResposta', request)
+        axios.post(this.props.backEndPoint+'/api/simuladoResposta', request)
         .then(res => {
             // Atualizando redux simulado.questoes com a alternativa respondida na questão
             var questoes = this.props.simulado.questoes
@@ -76,7 +76,7 @@ class ExecucaoSimulado extends Component {
         this.setState({btnFinalizarSimuladoLoading: true})
         this.displayModal(false)
 
-        axios.get('http://localhost:5000/api/finalizaSimulado/'+this.props.simulado.id+'/'+this.props.contextoAluno.idUtilizador)
+        axios.get(this.props.backEndPoint+'/api/finalizaSimulado/'+this.props.simulado.id+'/'+this.props.contextoAluno.idUtilizador)
         .then(res => {
             this.setState({btnFinalizarSimuladoLoading: false})
             this.openNotificationFinalizado()
@@ -197,6 +197,7 @@ class ExecucaoSimulado extends Component {
 
 const MapStateToProps = (state) => {
 	return {
+        backEndPoint: state.backEndPoint,
         simulado: state.simulado,
         usuarioId: state.usuarioId,
         mainData: state.mainData,

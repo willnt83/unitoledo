@@ -29,7 +29,7 @@ class ContextoSelection extends Component {
 			})
 			this.setState({contextoData: selectedContexto})
 
-			axios.post('http://localhost:5000/api/getPeriodo', selectedContexto)
+			axios.post(this.props.backEndPoint+'/api/getPeriodo', selectedContexto)
 			.then(res => {
 				var periodos = res.data.periodos.map((item) => {
 					return ({
@@ -114,7 +114,7 @@ class ContextoSelection extends Component {
 			requestData = this.state.contextoData
 		}
 
-		axios.post('http://localhost:5000/api/getData', requestData)
+		axios.post(this.props.backEndPoint+'/api/getData', requestData)
 		.then(res => {
 			this.props.setMainData(res.data)
 			if(this.state.periodo)
@@ -219,6 +219,7 @@ class ContextoSelection extends Component {
 
 const MapStateToProps = (state) => {
 	return {
+		backEndPoint: state.backEndPoint,
 		authHeaders: state.authHeaders
 	}
 }

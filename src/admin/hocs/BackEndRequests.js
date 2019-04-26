@@ -22,7 +22,7 @@ function BackEndRequestsWrapper(WrappedComponent) {
 		getHabilidades = (status) => {
 			var ativo = status !== '' ? '/ativo' : ''
 			axios
-			.get('http://localhost:5000/api/getHabilidades'+ativo)
+			.get(this.props.backEndPoint+'/api/getHabilidades'+ativo)
 			.then(res => {
 				let tempArray = []
 				let key = 0
@@ -49,7 +49,7 @@ function BackEndRequestsWrapper(WrappedComponent) {
 		}
 
 		createUpdateHabilidade = (request) => {
-			axios.post('http://localhost:5000/api/createUpdateHabilidade', request)
+			axios.post(this.props.backEndPoint+'/api/createUpdateHabilidade', request)
 			.then(res => {
 				if(res.data.success){
 					this.setState({
@@ -80,7 +80,7 @@ function BackEndRequestsWrapper(WrappedComponent) {
 		}
 
 		deleteHabilidade = (id) => {
-			axios.post('http://localhost:5000/api/deleteHabilidade', { id: id })
+			axios.post(this.props.backEndPoint+'/api/deleteHabilidade', { id: id })
 			.then(res => {
 				if(res.data.success){
 					this.setState({
@@ -112,7 +112,7 @@ function BackEndRequestsWrapper(WrappedComponent) {
 
 		getConteudos = (status) => {
 			var ativo = status !== '' ? '/ativo' : ''
-			axios.get('http://localhost:5000/api/getConteudos'+ativo)
+			axios.get(this.props.backEndPoint+'/api/getConteudos'+ativo)
 			.then(res => {
 				let tempArray = []
 				let key = 0
@@ -138,7 +138,7 @@ function BackEndRequestsWrapper(WrappedComponent) {
 		}
 
 		createUpdateConteudo = (request) => {
-			axios.post('http://localhost:5000/api/createUpdateConteudo', request)
+			axios.post(this.props.backEndPoint+'/api/createUpdateConteudo', request)
 			.then(res => {
 				console.log('response conteudo', res.data)
 				if(res.data.success){
@@ -170,7 +170,7 @@ function BackEndRequestsWrapper(WrappedComponent) {
 		}
 
 		deleteConteudo = (id) => {
-			axios.post('http://localhost:5000/api/deleteConteudo', {id: id})
+			axios.post(this.props.backEndPoint+'/api/deleteConteudo', {id: id})
 			.then(res => {
 				if(res.data.success){
 					this.setState({
@@ -203,7 +203,7 @@ function BackEndRequestsWrapper(WrappedComponent) {
 
 		getAreasDeConhecimento = (status) => {
 			var ativo = status !== '' ? '/ativo' : ''
-			axios.get('http://localhost:5000/api/getAreaConhecimento'+ativo)
+			axios.get(this.props.backEndPoint+'/api/getAreaConhecimento'+ativo)
 			.then(res => {
 				let tempArray = []
 				let key = 0
@@ -230,7 +230,7 @@ function BackEndRequestsWrapper(WrappedComponent) {
 		}
 
 		createUpdateAreaDeConhecimento = (request) => {
-			axios.post('http://localhost:5000/api/createUpdateAreaConhecimento', request)
+			axios.post(this.props.backEndPoint+'/api/createUpdateAreaConhecimento', request)
 			.then(res => {
 				if(res.data.success){
 					this.setState({
@@ -262,7 +262,7 @@ function BackEndRequestsWrapper(WrappedComponent) {
 		}
 
 		deleteAreaDeConhecimento = (id) => {
-			axios.post('http://localhost:5000/api/deleteAreaConhecimento', { id: id })
+			axios.post(this.props.backEndPoint+'/api/deleteAreaConhecimento', { id: id })
 			.then(res => {
 				if(res.data.success){
 					this.setState({
@@ -295,7 +295,7 @@ function BackEndRequestsWrapper(WrappedComponent) {
 		getFontes = (status) => {
 			var ativo = status !== '' ? '/ativo' : ''
 			axios
-			.get('http://localhost:5000/api/getFontes'+ativo)
+			.get(this.props.backEndPoint+'/api/getFontes'+ativo)
 			.then(res => {
 				let tempArray = []
 				let key = 0
@@ -321,7 +321,7 @@ function BackEndRequestsWrapper(WrappedComponent) {
 		}
 
 		createUpdateFonte = (request) => {
-			axios.post('http://localhost:5000/api/createUpdateFonte', request)
+			axios.post(this.props.backEndPoint+'/api/createUpdateFonte', request)
 			.then(res => {
 				if(res.data.success){
 					this.setState({
@@ -352,7 +352,7 @@ function BackEndRequestsWrapper(WrappedComponent) {
 		}
 
 		deleteFonte = (id) => {
-			axios.post('http://localhost:5000/api/deleteFonte', { id: id })
+			axios.post(this.props.backEndPoint+'/api/deleteFonte', { id: id })
 			.then(res => {
 				if(res.data.success){
 					this.setState({
@@ -383,7 +383,7 @@ function BackEndRequestsWrapper(WrappedComponent) {
 		}
 
 		getQuestoes = (request) => {
-			axios.post('http://localhost:5000/api/getQuestoesSimulado/questao', request)
+			axios.post(this.props.backEndPoint+'/api/getQuestoesSimulado/questao', request)
 			.then(res => {
 				var labelStatus = null
 				var labelDescricao = null
@@ -430,7 +430,7 @@ function BackEndRequestsWrapper(WrappedComponent) {
 		}
 
 		createUpdateQuestao = (request) => {
-			axios.post('http://localhost:5000/api/createUpdateQuestao', request)
+			axios.post(this.props.backEndPoint+'/api/createUpdateQuestao', request)
 			.then(res => {
 				if(res.data.success){
 					this.setState({
@@ -462,7 +462,7 @@ function BackEndRequestsWrapper(WrappedComponent) {
 
 		deleteQuestao = (id) => {
 			axios
-			.post('http://localhost:5000/api/deleteQuestao', { id: id })
+			.post(this.props.backEndPoint+'/api/deleteQuestao', { id: id })
 			.then(res => {
 				if(res.data.success){
 					this.setState({
@@ -533,6 +533,7 @@ function BackEndRequestsWrapper(WrappedComponent) {
 
 	const MapStateToProps = (state) => {
 		return {
+			backEndPoint: state.backEndPoint,
 			habilidades: state.habilidades
 		}
 	}

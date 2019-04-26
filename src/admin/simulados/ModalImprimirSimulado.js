@@ -79,8 +79,8 @@ class ModalImprimirSimulado extends Component {
                             <Col span={24}><h4>Simulado: {this.props.simulado ? this.props.simulado.nome : null}</h4></Col>
                         </Row>
                         <Divider style={{marginTop: 10}} />
-                        
-                        {   this.props.simulado ?
+                        {
+                            this.props.simulado ?
                             this.props.simulado.questoes.map((questao, index) => {
                                 return(
                                     <React.Fragment key={questao.id}>

@@ -337,7 +337,7 @@ class ModalCadastro extends Component {
             bodyFormData.append('files', acceptedFiles[0]) 
             axios({
                 method: 'post',
-                url: 'http://localhost:5000/api/upload/imgs',
+                url: this.props.backEndPoint+'/api/upload/imgs',
                 data: bodyFormData,
                 config: { headers: {'Content-Type': 'multipart/form-data' }}
             })
@@ -694,7 +694,7 @@ class ModalCadastro extends Component {
                                 </Dropzone>
                                 {
                                     this.state.images.map((image, index) => {
-                                        var url = "http://localhost:5000/api/getFile?name="+image.nome
+                                        var url = this.props.backEndPoint+"/api/getFile?name="+image.nome
                                         return(
                                             <Row style={{marginTop: 16}} key={image.nome}>
                                                 <Col span={12}>
@@ -865,6 +865,7 @@ class ModalCadastro extends Component {
 
 const MapStateToProps = (state) => {
 	return {
+        backEndPoint: state.backEndPoint,
 		habilidades: state.habilidades,
 		conteudos: state.conteudos,
         areasDeConhecimento: state.areasDeConhecimento,

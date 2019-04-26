@@ -87,7 +87,7 @@ class Simulados extends Component {
             disciplinas: disciplinas
         }
 
-        axios.post('http://localhost:5000/api/getAllSimulado', request)
+        axios.post(this.props.backEndPoint+'/api/getAllSimulado', request)
         .then(res => {
             var inicio = null
             var termino = null
@@ -166,7 +166,7 @@ class Simulados extends Component {
             "rascunho": turnTo
         }
 
-        axios.post('http://localhost:5000/api/updateStatus', request)
+        axios.post(this.props.backEndPoint+'/api/updateStatus', request)
         .then(res => {
             this.getSimulados()
         })
@@ -177,7 +177,7 @@ class Simulados extends Component {
     }
 
     editRepublicarSimulados = (record, op) => {
-        axios.get('http://localhost:5000/api/getSimuladoId/'+record.key)
+        axios.get(this.props.backEndPoint+'/api/getSimuladoId/'+record.key)
         .then(res => {
             var response = res.data[0]
                 // Transformando record para o formato de redux simulado
@@ -294,7 +294,7 @@ class Simulados extends Component {
     deleteSimulado = (id) => {
         this.setState({tableLoading: true, confirmarRemocaoLoading: true})
         console.log('delete simulado '+id)
-        axios.get('http://localhost:5000/api/deleteSimulado/'+id)
+        axios.get(this.props.backEndPoint+'/api/deleteSimulado/'+id)
         .then(res => {
             this.showModal(false, '')
             this.setState({confirmarRemocaoLoading: false})
@@ -312,7 +312,7 @@ class Simulados extends Component {
 
     handleShowModalImprimir = (record, bool) => {
         if(bool){
-            axios.get('http://localhost:5000/api/getSimuladoId/'+record.key)
+            axios.get(this.props.backEndPoint+'/api/getSimuladoId/'+record.key)
             .then(res => {
                 console.log('response', res.data[0])
                 this.setState({showModalImprimir: bool, simulado: res.data[0]})
@@ -480,6 +480,7 @@ class Simulados extends Component {
 
 const MapStateToProps = (state) => {
 	return {
+        backEndPoint: state.backEndPoint,
         contexto: state.contexto,
         mainData: state.mainData,
         periodoLetivo: state.periodoLetivo,

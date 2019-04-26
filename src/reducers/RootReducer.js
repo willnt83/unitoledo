@@ -1,6 +1,8 @@
 const initState = {
     /*
     // Aluno
+    backEndPoint: 'http://localhost:5000',
+    backEndPoint: 'https://app-prova.toledo.br',
     contexto: null,
     contextoData: null,
     usuarioId: 42312,
@@ -36,6 +38,8 @@ const initState = {
 
     /*
     // Coordenador
+    backEndPoint: 'http://localhost:5000',
+    backEndPoint: 'https://app-prova.toledo.br',
     contexto: null,
     contextoData: null,
     usuarioId: null,
@@ -70,6 +74,8 @@ const initState = {
     */
 
     // Original
+    //backEndPoint: 'http://localhost:5000',
+    backEndPoint: 'https://app-prova.toledo.br',
     contexto: null,
     contextoData: null,
     usuarioId: null,

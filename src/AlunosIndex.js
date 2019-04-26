@@ -54,7 +54,7 @@ class AlunosIndex extends Component {
         axios.defaults.headers = {
             'Authorization': this.props.authHeaders.token
         }
-        axios.post('http://localhost:5000/api/logout', request)
+        axios.post(this.props.backEndPoint+'/api/logout', request)
         .then(res => {
             this.setState({btnConfirmarLoading: false})
             this.props.resetAll()
@@ -155,6 +155,7 @@ class AlunosIndex extends Component {
 
 const MapStateToProps = (state) => {
 	return {
+		backEndPoint: state.backEndPoint,
 		pageTitle: state.pageTitle,
 		usuarioNome: state.usuarioNome,
 		authHeaders: state.authHeaders,

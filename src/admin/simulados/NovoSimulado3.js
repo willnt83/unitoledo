@@ -77,7 +77,7 @@ class NovoSimulado3 extends Component {
 
     getQuestoes = (request) => {
         this.setState({buttonLoadingBuscar: true, btnProximoDisabled: true})
-        axios.post('http://localhost:5000/api/getQuestoesSimulado/simulado', request)
+        axios.post(this.props.backEndPoint+'/api/getQuestoesSimulado/simulado', request)
         .then(res => {
             var questoes = []
             var labelStatus = null
@@ -524,6 +524,7 @@ class NovoSimulado3 extends Component {
 
 const MapStateToProps = (state) => {
 	return {
+        backEndPoint: state.backEndPoint,
         mainData: state.mainData,
         contexto: state.contexto,
 		habilidades: state.habilidades,

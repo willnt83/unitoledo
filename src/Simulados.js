@@ -30,9 +30,9 @@ class Simulados extends Component {
             "status": "Em andamento"
         }
 
-        axios.post('http://localhost:5000/api/statusSimulado', request)
+        axios.post(this.props.backEndPoint+'/api/statusSimulado', request)
         .then(res => {
-            axios.get('http://localhost:5000/api/getSimuladoIdAlunoQuestao/'+record.key+'/'+this.props.contextoAluno.idUtilizador)
+            axios.get(this.props.backEndPoint+'/api/getSimuladoIdAlunoQuestao/'+record.key+'/'+this.props.contextoAluno.idUtilizador)
             .then(res => {
                 this.setState({tableLoading: false})
                 var inicioObj = moment(record.inicio, 'DD/MM/YYYY HH:mm')
@@ -109,7 +109,7 @@ class Simulados extends Component {
 
         //if(this.props.flagSimuladoFinalizado){
             this.setState({tableLoading: true})
-            axios.post('http://localhost:5000/api/getData', requestData)
+            axios.post(this.props.backEndPoint+'/api/getData', requestData)
             .then(res => {
                 this.props.setMainData(res.data)
                 this.buildTableData()
@@ -190,6 +190,7 @@ class Simulados extends Component {
 
 const MapStateToProps = (state) => {
 	return {
+        backEndPoint: state.backEndPoint,
         mainData: state.mainData,
         usuarioId: state.usuarioId,
         flagSimuladoFinalizado: state.flagSimuladoFinalizado,

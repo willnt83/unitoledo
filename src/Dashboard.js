@@ -51,7 +51,7 @@ class Dashboard extends Component {
             'Authorization': this.props.authHeaders.token
         }
         // Atualizando dados do dashboard
-        axios.post('http://localhost:5000/api/getData', this.props.contextoAluno)
+        axios.post(this.props.backEndPoint+'/api/getData', this.props.contextoAluno)
 		.then(res => {
             this.props.setMainData(res.data)
             this.setState({tableLoading: false})
@@ -179,6 +179,7 @@ class Dashboard extends Component {
 
 const MapStateToProps = (state) => {
 	return {
+        backEndPoint: state.backEndPoint,
         mainData: state.mainData,
         contexto: state.contexto,
         contextoAluno: state.contextoAluno,
