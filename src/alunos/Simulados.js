@@ -4,7 +4,7 @@ import { withRouter } from "react-router-dom"
 import { connect } from 'react-redux'
 import moment from 'moment'
 import axios from 'axios'
-import "./static/style.css"
+import "../static/style.css"
 
 const { Content } = Layout
 

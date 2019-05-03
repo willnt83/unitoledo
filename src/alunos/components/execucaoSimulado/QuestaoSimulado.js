@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import { Layout, Row, Col, Radio, Button, Icon } from 'antd'
 import { connect } from 'react-redux'
 import moment from 'moment'
-import "../../static/style.css"
+import "../../../static/style.css"
 
 const { Content } = Layout
 const RadioGroup = Radio.Group

@@ -7,7 +7,7 @@ import moment from 'moment'
 import 'react-circular-progressbar/dist/styles.css';
 import axios from 'axios'
 
-import "./static/style.css"
+import "../static/style.css"
 
 const { Content } = Layout
 
@@ -31,21 +31,24 @@ class Dashboard extends Component {
             window.location.replace("/")
         }
 
-        console.log('this.props.mainData', this.props.mainData)
-        this.setState({
-            tableData: this.props.mainData.dash_aluno.list.map(simulado => {
-                var dataInicio = simulado.dataInicio !== null ? moment(simulado.dataInicio, 'YYYY-MM-DD').format('DD/MM/YYYY') : null
-                var dataFim = simulado.dataFinal !== null ? moment(simulado.dataFinal, 'YYYY-MM-DD').format('DD/MM/YYYY') : null
-                return({
-                    key: simulado.idSimulado,
-                    dataInicio,
-                    dataFim,
-                    questoesRespondidas: simulado.questoesRespondidas,
-                    respostasCorretas: simulado.questoesCertas
-                })
-            }),
-            tableLoading: true
-        })
+
+        if(this.props.mainData.dash_aluno){
+            this.setState({
+                tableData: this.props.mainData.dash_aluno.list.map(simulado => {
+                    var dataInicio = simulado.dataInicio !== null ? moment(simulado.dataInicio, 'YYYY-MM-DD').format('DD/MM/YYYY') : null
+                    var dataFim = simulado.dataFinal !== null ? moment(simulado.dataFinal, 'YYYY-MM-DD').format('DD/MM/YYYY') : null
+                    return({
+                        key: simulado.idSimulado,
+                        dataInicio,
+                        dataFim,
+                        questoesRespondidas: simulado.questoesRespondidas,
+                        respostasCorretas: simulado.questoesCertas
+                    })
+                }),
+                tableLoading: true
+            })
+        }
+        
 
         axios.defaults.headers = {
             'Authorization': this.props.authHeaders.token
@@ -107,7 +110,7 @@ class Dashboard extends Component {
                                 </Col>
                                 <Col span={14}>
                                     <Col span={24} align="start" style={{fontSize: 20, fontWeight: 800, color: '#4286f4'}}>
-                                        {   this.props.mainData ?
+                                        {   this.props.mainData.dash_aluno ?
                                             this.props.mainData.dash_aluno.total.totalQuestoesRespondidas
                                             :
                                             null
@@ -127,7 +130,7 @@ class Dashboard extends Component {
                                 <Col span={14}>
                                     <Col span={24} align="start" style={{fontSize: 20, fontWeight: 800, color: '#f88b0e'}}>
                                         {
-                                            this.props.mainData ?
+                                            this.props.mainData.dash_aluno ?
                                             this.props.mainData.dash_aluno.total.totalQuestoesCertas
                                             :
                                             null
@@ -147,7 +150,7 @@ class Dashboard extends Component {
                                 <Col span={14}>
                                     <Col span={24} align="start" style={{fontSize: 20, fontWeight: 800, color: '#13a54b'}}>
                                         {
-                                            this.props.mainData ?
+                                            this.props.mainData.dash_aluno ?
                                             this.props.mainData.dash_aluno.total.totalSimulado
                                             :
                                             null

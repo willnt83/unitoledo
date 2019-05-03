@@ -13,7 +13,7 @@ import { PersistGate } from 'redux-persist/lib/integration/react'
 import RootReducer from './reducers/RootReducer'
 import AdminIndex from './admin/AdminIndex'
 import SignIn from './SignIn'
-import AlunosIndex from './AlunosIndex'
+import AlunosIndex from './alunos/AlunosIndex'
 
 
 const persistConfig = {

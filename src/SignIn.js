@@ -1,9 +1,9 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { withRouter } from "react-router-dom"
-import LoginForm from './components/login/LoginForm'
-import PersonificacaoSelecaoAluno from './components/login/PersonificacaoSelecaoAluno'
-import SelecaoContexto from './components/login/SelecaoContexto'
+import LoginForm from './login/LoginForm'
+import PersonificacaoSelecaoAluno from './login/PersonificacaoSelecaoAluno'
+import SelecaoContexto from './login/SelecaoContexto'
 
 class SignIn extends Component {
 	constructor(props) {
