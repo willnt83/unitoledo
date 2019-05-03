@@ -22,12 +22,10 @@ const routes = [
 	},
 	{
 		path: "/alunos/simulados",
-		exact: true,
 		main: () => <Simulados />
 	},
 	{
 		path: "/alunos/execucao-simulado",
-		exact: true,
 		main: () => <ExecucaoSimulado />
 	}
 ];
