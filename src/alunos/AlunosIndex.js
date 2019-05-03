@@ -1,6 +1,6 @@
 import React, { Component } from "react"
 import { Layout, Icon, Row, Col, Button, Modal, Menu } from "antd"
-import { BrowserRouter as Router, Route, withRouter, Link } from "react-router-dom"
+import { Router, Route, withRouter, Link } from "react-router-dom"
 import { connect } from 'react-redux'
 import axios from "axios"
 //import PageTitle from "./layout/PageTitle"
@@ -16,16 +16,16 @@ const { Header, Footer, Sider } = Layout
 
 const routes = [
 	{
-		path: "/app-prova/alunos",
+		path: "/alunos",
 		exact: true,
 		main: () => <Dashboard />
 	},
 	{
-		path: "/app-prova/alunos/simulados",
+		path: "/alunos/simulados",
 		main: () => <Simulados />
 	},
 	{
-		path: "/app-prova/alunos/execucao-simulado",
+		path: "/alunos/execucao-simulado",
 		main: () => <ExecucaoSimulado />
 	}
 ];
