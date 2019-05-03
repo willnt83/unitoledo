@@ -144,7 +144,7 @@ class Habilidades extends Component {
     componentWillMount(){
         if(this.props.mainData === null || (this.props.contexto !== 'COORDENADOR' && this.props.contexto !== 'PROFESSOR')){
             this.props.resetAll()
-            window.location.replace("/")
+            window.location.replace("/app-prova")
         }
     }
 

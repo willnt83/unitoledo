@@ -32,7 +32,7 @@ class ListMenu extends Component {
             this.setState({btnConfirmarLoading: false})
             this.props.resetAll()
             this.showHideModalLogout(false)
-            window.location.replace("/")
+            window.location.replace("/app-prova")
         })
         .catch(error =>{
             console.log(error)

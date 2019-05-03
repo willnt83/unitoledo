@@ -98,7 +98,7 @@ class Simulados extends Component {
     componentWillMount(){
         if(this.props.mainData === null || this.props.contexto !== 'ALUNO'){
             this.props.resetAll()
-            window.location.replace("/")
+            window.location.replace("/app-prova")
         }
 
         var requestData = this.props.contextoAluno
