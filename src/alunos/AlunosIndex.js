@@ -16,16 +16,16 @@ const { Header, Footer, Sider } = Layout
 
 const routes = [
 	{
-		path: "/alunos",
+		path: "/app-prova/alunos",
 		exact: true,
 		main: () => <Dashboard />
 	},
 	{
-		path: "/alunos/simulados",
+		path: "/app-prova/alunos/simulados",
 		main: () => <Simulados />
 	},
 	{
-		path: "/alunos/execucao-simulado",
+		path: "/app-prova/alunos/execucao-simulado",
 		main: () => <ExecucaoSimulado />
 	}
 ];
@@ -37,7 +37,7 @@ class AlunosIndex extends Component {
 	};
 
 	goHome = () => {
-		window.location.replace("/alunos")
+		window.location.replace("/app-prova/alunos")
 	}
 
 	showHideModalLogout = (bool) => {
@@ -57,7 +57,7 @@ class AlunosIndex extends Component {
             this.setState({btnConfirmarLoading: false})
             this.props.resetAll()
             this.showHideModalLogout(false)
-            window.location.replace("/")
+            window.location.replace("/app-prova")
         })
         .catch(error =>{
             console.log(error)

@@ -25,69 +25,69 @@ const { Header, Sider, Footer } = Layout
 
 const routes = [
   {
-    path: "/admin",
+    path: "/app-prova/admin",
     exact: true,
     sidebar: () => <div>Cadastro/Conteudo</div>,
     main: () => <Dashboard />
   },
   {
-    path: "/admin/cadastros/habilidades",
+    path: "/app-prova/admin/cadastros/habilidades",
     sidebar: () => <div>Cadastro/Habilidade</div>,
     main: () => <Habilidades />
   },
   {
-    path: "/admin/cadastros/conteudos",
+    path: "/app-prova/admin/cadastros/conteudos",
     sidebar: () => <div>Cadastro/Conteudo</div>,
     main: () => <Conteudos />
   },
   {
-    path: "/admin/cadastros/areas-de-conhecimento",
+    path: "/app-prova/admin/cadastros/areas-de-conhecimento",
     sidebar: () => <div>Cadastro/Áreas de Conhecimento</div>,
     main: () => <AreasDeConhecimento />
   },
   {
-    path: "/admin/cadastros/fontes",
+    path: "/app-prova/admin/cadastros/fontes",
     sidebar: () => <div>Cadastro/Fontes</div>,
     main: () => <Fontes />
   },
   {
-    path: "/admin/area-do-gestor",
+    path: "/app-prova/admin/area-do-gestor",
     sidebar: () => <div>Cadastro/Conteudo</div>,
     main: () => <AreaGestor />
   },
   {
-    path: "/admin/simulados",
+    path: "/app-prova/admin/simulados",
     exact: true,
     sidebar: () => <div>Simulados</div>,
     main: () => <Simulados />
   },
   {
-    path: "/admin/simulados/novo/step-1",
+    path: "/app-prova/admin/simulados/novo/step-1",
     sidebar: () => <div>Simulados</div>,
     main: () => <NovoSimulado1 />
   },
   {
-    path: "/admin/simulados/novo/step-2",
+    path: "/app-prova/admin/simulados/novo/step-2",
     sidebar: () => <div>Simulados</div>,
     main: () => <NovoSimulado2 />
   },
   {
-    path: "/admin/simulados/novo/step-3",
+    path: "/app-prova/admin/simulados/novo/step-3",
     sidebar: () => <div>Simulados</div>,
     main: () => <NovoSimulado3 />
   },
   {
-    path: "/admin/simulados/novo/step-4",
+    path: "/app-prova/admin/simulados/novo/step-4",
     sidebar: () => <div>Simulados</div>,
     main: () => <NovoSimulado4 />
   },
   {
-    path: "/admin/banco-de-questoes",
+    path: "/app-prova/admin/banco-de-questoes",
     sidebar: () => <div>Questões</div>,
     main: () => <Questoes />
   },
   {
-    path: "/admin/meus-alunos",
+    path: "/app-prova/admin/meus-alunos",
     sidebar: () => <div>Cadastro/Conteudo</div>,
     main: () => <h1>Meus Alunos</h1>
   }

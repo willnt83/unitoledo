@@ -65,6 +65,8 @@ class Dashboard extends Component {
     }
 
     render() {
+        console.log('this.props.mainData', this.props.mainData)
+
         const columns = [
             {
                 title: 'ID',
@@ -92,7 +94,7 @@ class Dashboard extends Component {
                 sorter: (a, b) => a.respostasCorretas - b.respostasCorretas
             },
         ]
-        console.log('this.props.flagSimuladoFinalizado', this.props.flagSimuladoFinalizado)
+
         return (
             <React.Fragment>
                 <Content style={{
@@ -101,80 +103,93 @@ class Dashboard extends Component {
                     background: "#fff"
                 }}>
                     <h3>Dashboard</h3>
-                    
-                    <Row>
-                        <Col span={8}>
-                            <Row type="flex"  align="middle">
-                                <Col span={10} align="end" style={{paddingRight: 25}}>
-                                    <Icon type="edit" style={{fontSize: 35, color: '#4286f4'}} />
+                    {
+                        this.props.mainData.dash_aluno ?
+
+                            <Row>
+                                <Col span={8}>
+                                    <Row type="flex"  align="middle">
+                                        <Col span={10} align="end" style={{paddingRight: 25}}>
+                                            <Icon type="edit" style={{fontSize: 35, color: '#4286f4'}} />
+                                        </Col>
+                                        <Col span={14}>
+                                            <Col span={24} align="start" style={{fontSize: 20, fontWeight: 800, color: '#4286f4'}}>
+                                                {   this.props.mainData.dash_aluno ?
+                                                    this.props.mainData.dash_aluno.total.totalQuestoesRespondidas
+                                                    :
+                                                    null
+                                                }
+                                            </Col>
+                                            <Col span={24} align="start" style={{fontSize: 17}}>
+                                                Questões Respondidas
+                                            </Col>
+                                        </Col>
+                                    </Row>
                                 </Col>
-                                <Col span={14}>
-                                    <Col span={24} align="start" style={{fontSize: 20, fontWeight: 800, color: '#4286f4'}}>
-                                        {   this.props.mainData.dash_aluno ?
-                                            this.props.mainData.dash_aluno.total.totalQuestoesRespondidas
-                                            :
-                                            null
-                                        }
-                                    </Col>
-                                    <Col span={24} align="start" style={{fontSize: 17}}>
-                                        Questões Respondidas
-                                    </Col>
+                                <Col span={8}>
+                                    <Row type="flex"  align="middle">
+                                        <Col span={10} align="end" style={{paddingRight: 25}}>
+                                            <Icon type="smile" style={{fontSize: 35, color: '#f88b0e'}} />
+                                        </Col>
+                                        <Col span={14}>
+                                            <Col span={24} align="start" style={{fontSize: 20, fontWeight: 800, color: '#f88b0e'}}>
+                                                {
+                                                    this.props.mainData.dash_aluno ?
+                                                    this.props.mainData.dash_aluno.total.totalQuestoesCertas
+                                                    :
+                                                    null
+                                                }
+                                            </Col>
+                                            <Col span={24} align="start" style={{fontSize: 17}}>
+                                                Respondidas Corretamente
+                                            </Col>
+                                        </Col>
+                                    </Row>
+                                </Col>
+                                <Col span={8}>
+                                    <Row type="flex"  align="middle">
+                                        <Col span={10} align="end" style={{paddingRight: 25}}>
+                                            <Icon type="check" style={{fontSize: 35, color: '#13a54b'}} />
+                                        </Col>
+                                        <Col span={14}>
+                                            <Col span={24} align="start" style={{fontSize: 20, fontWeight: 800, color: '#13a54b'}}>
+                                                {
+                                                    this.props.mainData.dash_aluno ?
+                                                    this.props.mainData.dash_aluno.total.totalSimulado
+                                                    :
+                                                    null
+                                                }
+                                            </Col>
+                                            <Col span={24} align="start" style={{fontSize: 17}}>
+                                                Simulados Realizados
+                                            </Col>
+                                        </Col>
+                                    </Row>
                                 </Col>
                             </Row>
-                        </Col>
-                        <Col span={8}>
-                            <Row type="flex"  align="middle">
-                                <Col span={10} align="end" style={{paddingRight: 25}}>
-                                    <Icon type="smile" style={{fontSize: 35, color: '#f88b0e'}} />
-                                </Col>
-                                <Col span={14}>
-                                    <Col span={24} align="start" style={{fontSize: 20, fontWeight: 800, color: '#f88b0e'}}>
-                                        {
-                                            this.props.mainData.dash_aluno ?
-                                            this.props.mainData.dash_aluno.total.totalQuestoesCertas
-                                            :
-                                            null
-                                        }
-                                    </Col>
-                                    <Col span={24} align="start" style={{fontSize: 17}}>
-                                        Respondidas Corretamente
-                                    </Col>
+                            :
+                            <Row>
+                                <Col span={24}>
+                                    Nenhum simulado disponível.
                                 </Col>
                             </Row>
-                        </Col>
-                        <Col span={8}>
-                            <Row type="flex"  align="middle">
-                                <Col span={10} align="end" style={{paddingRight: 25}}>
-                                    <Icon type="check" style={{fontSize: 35, color: '#13a54b'}} />
-                                </Col>
-                                <Col span={14}>
-                                    <Col span={24} align="start" style={{fontSize: 20, fontWeight: 800, color: '#13a54b'}}>
-                                        {
-                                            this.props.mainData.dash_aluno ?
-                                            this.props.mainData.dash_aluno.total.totalSimulado
-                                            :
-                                            null
-                                        }
-                                    </Col>
-                                    <Col span={24} align="start" style={{fontSize: 17}}>
-                                        Simulados Realizados
-                                    </Col>
-                                </Col>
-                            </Row>
-                        </Col>
-                    </Row>
+                    }
                 </Content>
-                <Content style={{
-                    margin: "20px 25px 0 25px",
-                    padding: 24,
-                    background: "#fff"
-                }}>
-                    <Table
-                        columns={ columns } 
-                        dataSource={ this.state.tableData }
-                        loading={this.state.tableLoading}
-                    />
-                </Content>
+                {
+                    this.props.mainData.dash_aluno ?
+                    <Content style={{
+                        margin: "20px 25px 0 25px",
+                        padding: 24,
+                        background: "#fff"
+                    }}>
+                        <Table
+                            columns={ columns } 
+                            dataSource={ this.state.tableData }
+                            loading={this.state.tableLoading}
+                        />
+                    </Content>
+                    : null
+                }
             </React.Fragment>
         )
     }
