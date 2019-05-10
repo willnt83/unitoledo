@@ -2,11 +2,7 @@
   "name": "ut-prova-front",
   "version": "0.1.0",
   "private": true,
-<<<<<<< HEAD
   "homepage": "http://localhost/app-prova/",
-=======
-  "homepage": "/app-prova",
->>>>>>> 116da8e56d1d477e12caf7a309e00b4f8c5efe53
   "dependencies": {
     "@material-ui/core": "^3.9.0",
     "@material-ui/icons": "^3.0.2",
