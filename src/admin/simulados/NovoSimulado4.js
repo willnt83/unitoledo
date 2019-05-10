@@ -275,7 +275,7 @@ class NovoSimulado4 extends Component {
             title: 'Simulado salvo com sucesso',
             onOk() {
                 props.resetSimulado()
-                props.history.push('/admin/simulados/')
+                props.history.push('/app-prova/admin/simulados/')
             }
         })
     }

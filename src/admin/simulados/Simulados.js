@@ -155,7 +155,7 @@ class Simulados extends Component {
     }
 
     newSimulado = () => {
-        this.props.history.push('/admin/simulados/novo/step-1')
+        this.props.history.push('/app-prova/admin/simulados/novo/step-1')
     }
 
     changeSimuladoSituacao = (id, rascunho) => {
@@ -261,7 +261,7 @@ class Simulados extends Component {
                         }
                     }
                     this.props.setFullSimulado(simulado)
-                    this.props.history.push('/admin/simulados/novo/step-1')
+                    this.props.history.push('/app-prova/admin/simulados/novo/step-1')
                 }
                 else if(op === 'republicar'){
                     simulado = {
@@ -279,7 +279,7 @@ class Simulados extends Component {
                         }
                     }
                     this.props.setFullSimulado(simulado)
-                    this.props.history.push('/admin/simulados/novo/step-1')
+                    this.props.history.push('/app-prova/admin/simulados/novo/step-1')
                 }
                 else{ // imprimir
                     this.props.setFullSimulado(simulado)
@@ -293,7 +293,6 @@ class Simulados extends Component {
 
     deleteSimulado = (id) => {
         this.setState({tableLoading: true, confirmarRemocaoLoading: true})
-        console.log('delete simulado '+id)
         axios.get(this.props.backEndPoint+'/api/deleteSimulado/'+id)
         .then(res => {
             this.showModal(false, '')
@@ -314,7 +313,6 @@ class Simulados extends Component {
         if(bool){
             axios.get(this.props.backEndPoint+'/api/getSimuladoId/'+record.key)
             .then(res => {
-                console.log('response', res.data[0])
                 this.setState({showModalImprimir: bool, simulado: res.data[0]})
             })
             .catch(error =>{
@@ -345,7 +343,6 @@ class Simulados extends Component {
     }
 
     render(){
-        //console.log('tableData', this.state.tableData)
         const columns = [
             {
 				title: "ID",

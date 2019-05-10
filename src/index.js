@@ -29,16 +29,16 @@ const persistor = persistStore(store)
 
 const routes = [
     {
-        path: "/",
+        path: "/app-prova",
         exact: true,
         main: () => <SignIn />
 	},
 	{
-		path: "/alunos",
+		path: "/app-prova/alunos",
         main: () => <AlunosIndex />
 	},
     {
-      path: "/admin",
+      path: "/app-prova/admin",
       main: () => <AdminIndex />
     }
 ]

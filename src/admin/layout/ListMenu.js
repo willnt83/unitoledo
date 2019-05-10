@@ -44,57 +44,57 @@ class ListMenu extends Component {
             <React.Fragment>
                 <Menu theme="dark" mode="inline" defaultSelectedKeys={['1']}>
                     <Menu.Item key="1">
-                        <Link to="/admin">
+                        <Link to="/app-prova/admin">
                             <Icon type="dashboard" />
                             <span>Dashboard</span>
                         </Link>
                     </Menu.Item>
                     <SubMenu key="sub1" title={<span><Icon type="bars" /><span>Cadastros</span></span>}>
                         <Menu.Item key="2">
-                            <Link to="/admin/cadastros/habilidades">
+                            <Link to="/app-prova/admin/cadastros/habilidades">
                                 <Icon type="right-square" />
                                 <span>Habilidade</span>
                             </Link>
                         </Menu.Item>
                         <Menu.Item key="3">
-                            <Link to="/admin/cadastros/conteudos">
+                            <Link to="/app-prova/admin/cadastros/conteudos">
                                 <Icon type="right-square" />
                                 <span>Conteúdo</span>
                             </Link>
                         </Menu.Item>
                         <Menu.Item key="4">
-                            <Link to="/admin/cadastros/areas-de-conhecimento">
+                            <Link to="/app-prova/admin/cadastros/areas-de-conhecimento">
                                 <Icon type="right-square" />
                                 <span>Área de Conhecimento</span>
                             </Link>
                         </Menu.Item>
                         <Menu.Item key="5">
-                            <Link to="/admin/cadastros/fontes">
+                            <Link to="/app-prova/admin/cadastros/fontes">
                                 <Icon type="right-square" />
                                 <span>Fontes</span>
                             </Link>
                         </Menu.Item>
                     </SubMenu>
                     <Menu.Item key="6">
-                        <Link to="/admin/area-do-gestor">
+                        <Link to="/app-prova/admin/area-do-gestor">
                             <Icon type="area-chart" />
                             <span>Área do Gestor</span>
                         </Link>
                     </Menu.Item>
                     <Menu.Item key="7">
-                        <Link to="/admin/simulados">
+                        <Link to="/app-prova/admin/simulados">
                             <Icon type="file-done" />
                             <span>Simulados</span>
                         </Link>
                     </Menu.Item>
                     <Menu.Item key="8">
-                        <Link to="/admin/banco-de-questoes">
+                        <Link to="/app-prova/admin/banco-de-questoes">
                             <Icon type="hdd" />
                             <span>Banco de Questões</span>
                         </Link>
                     </Menu.Item>
                     <Menu.Item key="9">
-                        <Link to="/admin/meus-alunos">
+                        <Link to="/app-prova/admin/meus-alunos">
                             <Icon type="team" />
                             <span>Meus Alunos</span>
                         </Link>

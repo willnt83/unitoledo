@@ -29,7 +29,7 @@ class NovoSimulado2 extends Component {
             })
         }
         else
-            this.props.history.push('/admin/simulados/novo/step-3')
+            this.props.history.push('/app-prova/admin/simulados/novo/step-3')
     }
 
     componentWillMount(){

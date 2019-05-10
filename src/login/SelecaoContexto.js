@@ -123,10 +123,10 @@ class ContextoSelection extends Component {
 			this.props.setContexto(this.state.contexto)
 
 			if(this.state.contexto === 'ALUNO'){
-				this.props.history.push('/alunos')
+				this.props.history.push('/app-prova/alunos')
 			}
 			else{
-				this.props.history.push('/admin')
+				this.props.history.push('/app-prova/admin')
 			}
 			
 		})

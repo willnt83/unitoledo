@@ -1,11 +1,26 @@
 import React, { Component } from "react"
-import { Icon, Modal, Form, Button,  Row, Col, Divider } from "antd"
+import { Icon, Modal, Form, Button,  Row, Col, Divider, Select } from "antd"
 import { connect } from 'react-redux'
 import BackEndRequests from '../hocs/BackEndRequests'
 import html2canvas from 'html2canvas'
 import jsPDF from 'jspdf'
 
 const alternativasArray = ['A)', 'B)', 'C)', 'D)', 'E)']
+
+const tipoQuestaoOptions = [
+    {
+        value: 0,
+        description: 'Todas as quetões'
+    },
+    {
+        value: 1,
+        description: 'Somente questões de alternativas'
+    },
+    {
+        value: 2,
+        description: 'Somente questões discursivas'
+    }
+]
 
 class ModalImprimirSimulado extends Component {
     state = {
@@ -50,8 +65,14 @@ class ModalImprimirSimulado extends Component {
 
     }
 
+    componentWillMount(){
+        this.props.form.setFieldsValue({tipoResposta: 0})
+    }
+
     render(){
         console.log('this.props.simulado', this.props.simulado)
+        const { getFieldDecorator } = this.props.form
+
         var title = 'Impressão do Simulado'
         return(
             <React.Fragment>
@@ -69,6 +90,25 @@ class ModalImprimirSimulado extends Component {
                         </Button>
                     }
                 >
+                    <Row>
+                        <Col span={24}>
+                            <Form.Item label="Tipo de Questões">
+                                {getFieldDecorator('tipoResposta')(
+                                    <Select
+                                        name="tipoResposta"
+                                        style={{ width: '100%' }}
+                                        placeholder="Selecione o tipo da questão"
+                                    >
+                                        {
+                                            tipoQuestaoOptions.map((item) => {
+                                                return (<Select.Option key={item.value} value={item.value}>{item.description}</Select.Option>)
+                                            })
+                                        }
+                                    </Select>
+                                )}
+                            </Form.Item>
+                        </Col>
+                    </Row>
                     <div id="simulado" style={{fontVariant: 'normal'}}>
                         <Row>
                             <Col span={24}>
@@ -91,11 +131,13 @@ class ModalImprimirSimulado extends Component {
                                             <Row>
                                                 <Col span={24}>
                                                     {
+                                                        questao.alternativas ?
                                                         questao.alternativas.map((alternativa, index) => {
                                                             return(
                                                                 <p key={alternativa.descricao} className="alternativa">{alternativasArray[index]} {alternativa.descricao}</p>
                                                             )
                                                         })
+                                                        :null
                                                     }
                                                 </Col>
                                             </Row>

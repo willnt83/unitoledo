@@ -17,7 +17,7 @@ class NovoSimulado1 extends Component {
         this.props.form.validateFieldsAndScroll((err, values) => {
             if (!err) {
               this.props.setSimuladoNome(values.nome)
-              this.props.history.push('/admin/simulados/novo/step-2')
+              this.props.history.push('/app-prova/admin/simulados/novo/step-2')
             }
             else{
 

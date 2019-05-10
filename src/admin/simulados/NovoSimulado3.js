@@ -310,7 +310,7 @@ class NovoSimulado3 extends Component {
             this.setState({showWarning: true})
         }
         else
-            this.props.history.push('/admin/simulados/novo/step-4')
+            this.props.history.push('/app-prova/admin/simulados/novo/step-4')
     }
 
     render(){

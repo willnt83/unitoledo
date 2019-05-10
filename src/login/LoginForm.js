@@ -11,11 +11,9 @@ class LoginForm extends Component {
 	}
 	handleLoginSubmit = (event) => {
 		event.preventDefault();
-		console.log('this.props.backEndPoint', this.props.backEndPoint)
 		this.props.form.validateFieldsAndScroll((err, values) => {
             if (!err) {
 				this.setState({ entrarButtonLoading: true })
-
 				axios.post(this.props.backEndPoint+'/api/login/user', {
 					usuario: values.userName,
 					senha: values.password

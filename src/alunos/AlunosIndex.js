@@ -83,13 +83,13 @@ class AlunosIndex extends Component {
 							<div className="logo" onClick={() => this.goHome()}>UNITOLEDO</div>
 							<Menu theme="dark" mode="inline">
 								<Menu.Item key='1'>
-									<Link to='/alunos'>
+									<Link to="/app-prova/alunos">
 										<Icon type="right-square" />
 										<span className="nav-text">Dashboard</span>
 									</Link>
 								</Menu.Item>
 								<Menu.Item key='2'>
-									<Link to='/alunos/simulados'>
+									<Link to="/app-prova/alunos/simulados">
 										<Icon type="right-square" />
 										<span className="nav-text">Simulados</span>
 									</Link>
