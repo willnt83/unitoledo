@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import ReactDOM from 'react-dom'
 import * as serviceWorker from './serviceWorker'
-import { BrowserRouter as Router, Route } from "react-router-dom"
+import {  BrowserRouter, Router, Route } from "react-router-dom"
 import { createStore } from 'redux'
 import { Provider } from 'react-redux'
 import { persistStore, persistReducer } from 'redux-persist'
@@ -46,24 +46,27 @@ const routes = [
 class App extends Component {
     render() {
 			return (
-				<Provider store={ store }>
-					<PersistGate loading="carregando" persistor={persistor}>
-						<Router>
-							<React.Fragment>
-								{
-									routes.map((route, index) => (
-										<Route
-											key={index}
-											path={route.path}
-											exact={route.exact}
-											component={route.main}
-										/>
-									))
-								}
-							</React.Fragment>
-						</Router>
-					</PersistGate>
-				</Provider>
+				<React.Fragment>
+					<Provider store={ store }>
+						<PersistGate loading="carregando" persistor={persistor}>
+							<BrowserRouter basename="/app-prova">
+								<Router>
+									
+										{
+											routes.map((route, index) => (
+												<Route
+													key={index}
+													path={route.path}
+													exact={route.exact}
+													component={route.main}
+												/>
+											))
+										}
+								</Router>
+							</BrowserRouter>
+						</PersistGate>
+					</Provider>
+				</React.Fragment>
 			);
     }
 }
