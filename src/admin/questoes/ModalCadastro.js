@@ -74,11 +74,7 @@ const tipoRespostaOptions = [
 	{
 		value: 2,
 		label: 'Discursiva'
-    },
-    {
-		value: 3,
-		label: 'Verdadeiro ou Falso'
-	}
+    }
 ]
 
 const thumbsContainer = {

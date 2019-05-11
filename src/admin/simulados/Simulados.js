@@ -311,12 +311,14 @@ class Simulados extends Component {
 
     handleShowModalImprimir = (record, bool) => {
         if(bool){
+            this.setState({tableLoading: true})
             axios.get(this.props.backEndPoint+'/api/getSimuladoId/'+record.key)
             .then(res => {
-                this.setState({showModalImprimir: bool, simulado: res.data[0]})
+                this.setState({showModalImprimir: bool, simulado: res.data[0], tableLoading: false})
             })
             .catch(error =>{
                 console.log(error)
+                this.setState({tableLoading: false})
             })
         }
         else

@@ -10,7 +10,7 @@ const alternativasArray = ['A)', 'B)', 'C)', 'D)', 'E)']
 const tipoQuestaoOptions = [
     {
         value: 0,
-        description: 'Todas as quetões'
+        description: 'Todas as questões'
     },
     {
         value: 1,
@@ -26,6 +26,8 @@ class ModalImprimirSimulado extends Component {
     state = {
         footerButtons: null,
         buttonLoadingSalvar: false,
+        questoes: [],
+        buttonLoadingGerarPDF: false
     }
 
     handleModalClosure = () => {
@@ -33,6 +35,7 @@ class ModalImprimirSimulado extends Component {
     }
 
     handleImprimir = () => {
+        this.setState({buttonLoadingGerarPDF: true})
         const input = document.getElementById('simulado');
         var HTML_Width = input.offsetWidth;
         var HTML_Height = input.offsetHeight;
@@ -55,25 +58,45 @@ class ModalImprimirSimulado extends Component {
             var pdf = new jsPDF('p', 'pt',  [PDF_Width, PDF_Height]);
             pdf.addImage(imgData, 'JPG', top_left_margin, top_left_margin,canvas_image_width,canvas_image_height);
             
-            
             for (var i = 1; i <= totalPDFPages; i++) { 
                 pdf.addPage(PDF_Width, PDF_Height);
                 pdf.addImage(imgData, 'JPG', top_left_margin, -(PDF_Height*i)+(top_left_margin*4),canvas_image_width,canvas_image_height);
             }
             pdf.save('simulado-'+this.props.simulado.id+'.pdf');
+            this.setState({buttonLoadingGerarPDF: false})
         })
 
     }
 
-    componentWillMount(){
+    changeTipoResposta = (value) => {
+        var questoes = this.props.simulado.questoes
+        var questoesExibidas = []
+        if(value !== 0){
+            questoesExibidas = questoes.filter(questao => {
+                return(questao.tipoResposta.id === value)
+            })
+            this.setState({questoes: questoesExibidas})
+        }
+        else{
+            this.setState({questoes})
+        }
+    }
+
+    componentDidMount(){
         this.props.form.setFieldsValue({tipoResposta: 0})
     }
 
-    render(){
-        console.log('this.props.simulado', this.props.simulado)
-        const { getFieldDecorator } = this.props.form
+    componentWillReceiveProps(nextProps){
+        if(this.props.simulado !== nextProps.simulado){
+            this.setState({questoes: nextProps.simulado.questoes})
+        }
+    }
 
+    render(){
+        const { getFieldDecorator } = this.props.form
         var title = 'Impressão do Simulado'
+        var heightQuestao = null
+
         return(
             <React.Fragment>
                 <Modal
@@ -85,34 +108,40 @@ class ModalImprimirSimulado extends Component {
                         <Button
                             key="print"
                             type="primary"
-                            onClick={this.handleImprimir}>
+                            onClick={this.handleImprimir}
+                            loading={this.state.buttonLoadingGerarPDF}
+                        >
                             <Icon type="file-pdf" />Gerar PDF
                         </Button>
                     }
                 >
                     <Row>
                         <Col span={24}>
-                            <Form.Item label="Tipo de Questões">
-                                {getFieldDecorator('tipoResposta')(
-                                    <Select
-                                        name="tipoResposta"
-                                        style={{ width: '100%' }}
-                                        placeholder="Selecione o tipo da questão"
-                                    >
-                                        {
-                                            tipoQuestaoOptions.map((item) => {
-                                                return (<Select.Option key={item.value} value={item.value}>{item.description}</Select.Option>)
-                                            })
-                                        }
-                                    </Select>
-                                )}
-                            </Form.Item>
+                            <Form layout="vertical">
+                                <Form.Item label="Tipo de Questões">
+                                    {getFieldDecorator('tipoResposta')(
+                                        <Select
+                                            name="tipoResposta"
+                                            style={{ width: '100%' }}
+                                            placeholder="Selecione o tipo da questão"
+                                            onChange={this.changeTipoResposta}
+                                        >
+                                            {
+                                                tipoQuestaoOptions.map((item) => {
+                                                    return (<Select.Option key={item.value} value={item.value}>{item.description}</Select.Option>)
+                                                })
+                                            }
+                                        </Select>
+                                    )}
+                                </Form.Item>
+                            </Form>
                         </Col>
                     </Row>
+                    <Divider />
                     <div id="simulado" style={{fontVariant: 'normal'}}>
                         <Row>
                             <Col span={24}>
-                                <strong>UNITOLEDO</strong>
+                                <img src="/app-prova/img/logo_unitoledo.png" style={{width: 200}} />
                             </Col>
                         </Row>
                         <Row style={{marginBottom: 0, marginTop: 10}}>
@@ -120,12 +149,15 @@ class ModalImprimirSimulado extends Component {
                         </Row>
                         <Divider style={{marginTop: 10}} />
                         {
-                            this.props.simulado ?
-                            this.props.simulado.questoes.map((questao, index) => {
+                            this.state.questoes.length > 0 ?
+                            this.state.questoes.map((questao, index) => {
+                                questao.tipoResposta.id === 2 ?
+                                heightQuestao = 300
+                                : heightQuestao = 'auto'
                                 return(
                                     <React.Fragment key={questao.id}>
                                         <div className="questaoSimuladoImpressao">
-                                            <Row style={{marginTop: 0, marginBottom: 0}}>
+                                            <Row style={{marginTop: 0, marginBottom: 0}} style={{height: heightQuestao}}>
                                                 <Col className="descricaoHtml2" span={24} dangerouslySetInnerHTML={{__html: 'Questao '+ (index + 1) + ' ('+ questao.fonte.description + ')' + questao.descricao}} />
                                             </Row>
                                             <Row>
@@ -147,39 +179,6 @@ class ModalImprimirSimulado extends Component {
                             })
                             : null
                         }
-                        {/*
-                            this.props.simulado.questoes.map(questao => {
-                                return(
-                                    <React.Fragment>
-                                        <Row>
-                                            <Col className="descricaoHtml" span={24} dangerouslySetInnerHTML={{__html: questao.description}} />
-                                        </Row>
-                                        <Row>
-                                            <Col span={24}>
-                                            {
-                                                questao.alternativas.map((alternativa, index) => {
-                                                    <p key={alternativa.descricao} className="alternativa">{alternativasArray[index]} {alternativa.descricao}</p>
-                                                })
-                                            }
-                                            </Col>
-                                        </Row>
-                                    </React.Fragment>
-                                )
-                            })
-                        */}
-                        {/*
-                        <Row>
-                            <Col className="descricaoHtml" span={24} dangerouslySetInnerHTML={{__html: description}} />
-                        </Row>
-                        <Row>
-                            {
-                                alternativas.map((alternativa, index) => {
-                                    return(
-                                        <p key={alternativa.descricao} className="alternativa">{alternativasArray[index]} {alternativa.descricao}</p>
-                                    )
-                                })
-                            }
-                        </Row>*/}
                     </div>
                 </Modal>
             </React.Fragment>

@@ -96,7 +96,7 @@ class Questoes extends Component {
 
 			row.valueAlternativaCorreta = alternativaCorreta
 			row.alternativas = alternativas
-			this.setState({questao: row})
+			this.setState({questao: row, tableLoading: false})
 		})
 		.catch(error =>{
 			console.log(error)
@@ -112,6 +112,8 @@ class Questoes extends Component {
 	}
 
 	loadModalViewQuestao = (row) => {
+		this.setState({tableLoading: true})
+
 		this.requestGetAlternativas(row)
 		this.showModalViewQuestaoF(true, 'view')
 	}

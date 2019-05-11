@@ -13,6 +13,7 @@ class ModalViewQuestao extends Component {
         //footerButtons: null,
         buttonLoadingSalvar: false,
         //imgData: null
+        buttonLoadingGerarPDF: false
     }
 
     handleModalClosure = () => {
@@ -20,6 +21,7 @@ class ModalViewQuestao extends Component {
     }
 
     handleImprimir = () => {
+        this.setState({buttonLoadingGerarPDF: true})
         const input = document.getElementById('questao');
         var HTML_Width = input.offsetWidth;
         var HTML_Height = input.offsetHeight;
@@ -48,8 +50,8 @@ class ModalViewQuestao extends Component {
                 pdf.addImage(imgData, 'JPG', top_left_margin, -(PDF_Height*i)+(top_left_margin*4),canvas_image_width,canvas_image_height);
             }
             pdf.save('questao-'+this.props.questao.key+'.pdf');
+            this.setState({buttonLoadingGerarPDF: false})
         })
-
     }
 
     handleSubmit = () => {
@@ -78,38 +80,6 @@ class ModalViewQuestao extends Component {
 
     componentWillReceiveProps(nextProps){
         if(nextProps.questao !== null){
-            /*
-            var footerButtons = null
-            if(nextProps.op === 'view'){
-                footerButtons = [
-                    <Button
-                        key="print"
-                        type="primary"
-                        onClick={this.handleImprimir}>
-                        <Icon type="printer" />Imprimir
-                    </Button>,
-                    <Button
-                        key="back"
-                        className="buttonRed"
-                        onClick={this.handleModalClosure}
-                    >
-                        <Icon type="close" />Fechar
-                    </Button>
-                ]
-            }
-            else if(nextProps.op === 'write'){
-                footerButtons = [
-                    <Button
-                        key="submit"
-                        className="buttonGreen"
-                        onClick={this.handleSubmit}
-                        loading={this.state.buttonLoadingSalvar}
-                    >
-                        <Icon type="save" />Salvar
-                    </Button>
-                ]
-            }*/
-            //this.setState({questao: nextProps.questao, footerButtons})
             this.setState({questao: nextProps.questao})
         }
     }
@@ -132,15 +102,23 @@ class ModalViewQuestao extends Component {
         }
     }
 
+    dePara = (str) => {
+        if(str === 'facil') return 'Fácil'
+        else if(str === 'medio') return 'Médio'
+        else if (str === 'dificil') return 'Difícil'
+        else return '-'
+    }
+
     render(){
-        var title = 'Questão'
+        console.log('this.state.questao', this.state.questao)
+        //var title = 'Questão'
         var description = null
         var alternativas = []
         var footerButtons = null
 
         if(this.state.questao !== null){
-            if(this.state.questao.key !== null)
-                title += ' '+this.state.questao.key
+            /*if(this.state.questao.key !== null)
+                title += ' '+this.state.questao.key*/
             description = this.state.questao.description
             alternativas = this.state.questao.alternativas
         }
@@ -150,7 +128,9 @@ class ModalViewQuestao extends Component {
                 <Button
                     key="print"
                     type="primary"
-                    onClick={this.handleImprimir}>
+                    onClick={this.handleImprimir}
+                    loading={this.state.buttonLoadingGerarPDF}
+                >
                     <Icon type="file-pdf" />Gerar PDF
                 </Button>,
                 <Button
@@ -178,13 +158,36 @@ class ModalViewQuestao extends Component {
         return(
             <React.Fragment>
                 <Modal
-                    title={title}
+                    title={'Visualização'}
                     visible={this.props.showModalViewQuestao}
                     onCancel={this.handleModalClosure}
                     width={900}
                     footer={footerButtons}
                 >
                     <div id="questao" style={{fontVariant: 'normal'}}>
+                        <Row>
+                            <Col className="descricaoHtml2" span={24}>
+                                Questão {this.state.questao ? this.state.questao.key : null}
+                                {
+                                    this.state.questao ?
+                                        <span style={{marginLeft: 15}}>Fonte: {this.state.questao.fonte}</span>
+                                        :null
+                                }
+                                {
+                                    this.state.questao ?
+                                        <span style={{marginLeft: 15}}>Ano: {this.state.questao.ano}</span>
+                                        :null
+                                }
+                                {
+                                    this.state.questao ?
+                                        <span style={{marginLeft: 15}}>Dificuldade: {this.dePara(this.state.questao.dificuldade)}</span>
+                                        :null
+                                }
+                                
+                                <span></span>
+                                <span></span>
+                            </Col>
+                        </Row>
                         <Row>
                             <Col className="descricaoHtml" span={24} dangerouslySetInnerHTML={{__html: description}} />
                         </Row>
