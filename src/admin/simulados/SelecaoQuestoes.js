@@ -44,6 +44,13 @@ class SelecaoQuestoes extends Component {
         }
     }
 
+    dePara = (str) => {
+        if(str === 'facil') return 'Fácil'
+        else if(str === 'medio') return 'Médio'
+        else if (str === 'dificil') return 'Difícil'
+        else return '-'
+    }
+
     render(){
         if(this.state.questoes){
             return(
@@ -68,7 +75,25 @@ class SelecaoQuestoes extends Component {
                                 <Row key={questao.id} style={{marginBottom: 20}}>
                                     <Col span={24}>
                                         <Card>
-                                            <h4>{questao.id} ({questao.fonte.description})</h4>
+                                            <h4>
+                                                Questão {questao.id}
+                                                {
+                                                    questao && questao.fonte ?
+                                                        <span style={{marginLeft: 15}}>Fonte: {questao.fonte.description}</span>
+                                                        :null
+                                                }
+                                                {
+                                                    questao && questao.ano?
+                                                        <span style={{marginLeft: 15}}>Ano: {questao.ano}</span>
+                                                        :null
+                                                }
+                                                {
+                                                    questao && questao.dificuldade ?
+                                                        <span style={{marginLeft: 15}}>Dificuldade: {this.dePara(questao.dificuldade)}</span>
+                                                        :null
+                                                }
+                                                
+                                            </h4>
                                             <Row>
                                                 <Col className="descricaoHtml" span={24} dangerouslySetInnerHTML={{__html: questao.descricao}} />
                                             </Row>

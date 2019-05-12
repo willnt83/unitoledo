@@ -52,8 +52,6 @@ class ModalImprimirSimulado extends Component {
         })
         .then((canvas) => {
             canvas.getContext('2d');
-            console.log(canvas.height+"  "+canvas.width);
-
             var imgData = canvas.toDataURL("image/jpeg", 1.0);
             var pdf = new jsPDF('p', 'pt',  [PDF_Width, PDF_Height]);
             pdf.addImage(imgData, 'JPG', top_left_margin, top_left_margin,canvas_image_width,canvas_image_height);
@@ -95,7 +93,6 @@ class ModalImprimirSimulado extends Component {
     render(){
         const { getFieldDecorator } = this.props.form
         var title = 'Impressão do Simulado'
-        var heightQuestao = null
 
         return(
             <React.Fragment>
@@ -141,7 +138,7 @@ class ModalImprimirSimulado extends Component {
                     <div id="simulado" style={{fontVariant: 'normal'}}>
                         <Row>
                             <Col span={24}>
-                                <img src="/app-prova/img/logo_unitoledo.png" style={{width: 200}} />
+                                <img src="/app-prova/img/logo_unitoledo.png" alt="Logo UNITOLEDO" style={{width: 200}} />
                             </Col>
                         </Row>
                         <Row style={{marginBottom: 0, marginTop: 10}}>
@@ -151,28 +148,46 @@ class ModalImprimirSimulado extends Component {
                         {
                             this.state.questoes.length > 0 ?
                             this.state.questoes.map((questao, index) => {
-                                questao.tipoResposta.id === 2 ?
-                                heightQuestao = 300
-                                : heightQuestao = 'auto'
                                 return(
                                     <React.Fragment key={questao.id}>
                                         <div className="questaoSimuladoImpressao">
-                                            <Row style={{marginTop: 0, marginBottom: 0}} style={{height: heightQuestao}}>
+                                            <Row style={{marginTop: 0, marginBottom: 0}}>
                                                 <Col className="descricaoHtml2" span={24} dangerouslySetInnerHTML={{__html: 'Questao '+ (index + 1) + ' ('+ questao.fonte.description + ')' + questao.descricao}} />
                                             </Row>
-                                            <Row>
-                                                <Col span={24}>
-                                                    {
-                                                        questao.alternativas ?
-                                                        questao.alternativas.map((alternativa, index) => {
-                                                            return(
-                                                                <p key={alternativa.descricao} className="alternativa">{alternativasArray[index]} {alternativa.descricao}</p>
-                                                            )
-                                                        })
-                                                        :null
-                                                    }
-                                                </Col>
-                                            </Row>
+                                            {
+                                                questao.tipoResposta.id === 1 ?
+                                                <Row>
+                                                    <Col span={24}>
+                                                        {
+                                                            questao.alternativas ?
+                                                            questao.alternativas.map((alternativa, index) => {
+                                                                return(
+                                                                    <p key={alternativa.descricao} className="alternativa">{alternativasArray[index]} {alternativa.descricao}</p>
+                                                                )
+                                                            })
+                                                            :null
+                                                        }
+                                                    </Col>
+                                                </Row>
+                                                :
+                                                <Row style={{marginTop: 10, marginBottom: 10}}>
+                                                    <Col span={24} style={{height: 20, borderBottom: '1px solid #e8e8e8'}}></Col>
+                                                    <Col span={24} style={{height: 20, borderBottom: '1px solid #e8e8e8'}}></Col>
+                                                    <Col span={24} style={{height: 20, borderBottom: '1px solid #e8e8e8'}}></Col>
+                                                    <Col span={24} style={{height: 20, borderBottom: '1px solid #e8e8e8'}}></Col>
+                                                    <Col span={24} style={{height: 20, borderBottom: '1px solid #e8e8e8'}}></Col>
+                                                    <Col span={24} style={{height: 20, borderBottom: '1px solid #e8e8e8'}}></Col>
+                                                    <Col span={24} style={{height: 20, borderBottom: '1px solid #e8e8e8'}}></Col>
+                                                    <Col span={24} style={{height: 20, borderBottom: '1px solid #e8e8e8'}}></Col>
+                                                    <Col span={24} style={{height: 20, borderBottom: '1px solid #e8e8e8'}}></Col>
+                                                    <Col span={24} style={{height: 20, borderBottom: '1px solid #e8e8e8'}}></Col>
+                                                    <Col span={24} style={{height: 20, borderBottom: '1px solid #e8e8e8'}}></Col>
+                                                    <Col span={24} style={{height: 20, borderBottom: '1px solid #e8e8e8'}}></Col>
+                                                    <Col span={24} style={{height: 20, borderBottom: '1px solid #e8e8e8'}}></Col>
+                                                    <Col span={24} style={{height: 20, borderBottom: '1px solid #e8e8e8'}}></Col>
+                                                    <Col span={24} style={{height: 20, borderBottom: '1px solid #e8e8e8'}}></Col>
+                                                </Row>
+                                            }
                                         </div>
                                     </React.Fragment>
                                 )

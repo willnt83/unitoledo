@@ -38,7 +38,7 @@ class ModalViewQuestao extends Component {
         })
         .then((canvas) => {
             canvas.getContext('2d');
-            console.log(canvas.height+"  "+canvas.width);
+            //console.log(canvas.height+"  "+canvas.width);
 
             var imgData = canvas.toDataURL("image/jpeg", 1.0);
             var pdf = new jsPDF('p', 'pt',  [PDF_Width, PDF_Height]);
@@ -110,7 +110,6 @@ class ModalViewQuestao extends Component {
     }
 
     render(){
-        console.log('this.state.questao', this.state.questao)
         //var title = 'Questão'
         var description = null
         var alternativas = []
@@ -169,17 +168,17 @@ class ModalViewQuestao extends Component {
                             <Col className="descricaoHtml2" span={24}>
                                 Questão {this.state.questao ? this.state.questao.key : null}
                                 {
-                                    this.state.questao ?
+                                    this.state.questao && this.state.questao.fonte ?
                                         <span style={{marginLeft: 15}}>Fonte: {this.state.questao.fonte}</span>
                                         :null
                                 }
                                 {
-                                    this.state.questao ?
+                                    this.state.questao && this.state.questao.ano?
                                         <span style={{marginLeft: 15}}>Ano: {this.state.questao.ano}</span>
                                         :null
                                 }
                                 {
-                                    this.state.questao ?
+                                    this.state.questao && this.state.questao.dificuldade ?
                                         <span style={{marginLeft: 15}}>Dificuldade: {this.dePara(this.state.questao.dificuldade)}</span>
                                         :null
                                 }
@@ -188,7 +187,7 @@ class ModalViewQuestao extends Component {
                                 <span></span>
                             </Col>
                         </Row>
-                        <Row>
+                        <Row style={{marginTop: 10}}>
                             <Col className="descricaoHtml" span={24} dangerouslySetInnerHTML={{__html: description}} />
                         </Row>
                         <Row>
