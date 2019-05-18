@@ -35,6 +35,10 @@ function BackEndRequestsWrapper(WrappedComponent) {
 						key: key,
 						id: record.id,
 						description: record.description,
+						areaDeConhecimento: {
+							id: record.areaConhecimento.id,
+							description: record.areaConhecimento.description
+						},
 						labelStatus: labelStatus,
 						valueStatus: valueStatus
 					})
@@ -125,6 +129,10 @@ function BackEndRequestsWrapper(WrappedComponent) {
 						key: key,
 						id: record.id,
 						description: record.description,
+						areaDeConhecimento:{
+							id: record.areaConhecimento.id,
+							description: record.areaConhecimento.description
+						},
 						labelStatus: labelStatus,
 						valueStatus: valueStatus
 					})
@@ -205,6 +213,7 @@ function BackEndRequestsWrapper(WrappedComponent) {
 			var ativo = status !== '' ? '/ativo' : ''
 			axios.get(this.props.backEndPoint+'/api/getAreaConhecimento'+ativo)
 			.then(res => {
+				console.log('ressss', res.data)
 				let tempArray = []
 				let key = 0
 				let labelStatus = null

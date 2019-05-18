@@ -49,6 +49,7 @@ class Conteudos extends Component {
         tableLoading: false,
         inId: '',
         inDescricao: '',
+        inAreaDeConhecimento: '',
         inStatus: true,
         searchText: ''
     };
@@ -76,6 +77,7 @@ class Conteudos extends Component {
             this.setState({
                 inId: this.props.conteudos[rowId].id,
                 inDescricao: this.props.conteudos[rowId].description,
+                inAreaDeConhecimento: this.props.conteudos[rowId].areaDeConhecimento.id,
                 inStatus: this.props.conteudos[rowId].valueStatus
             })
         }
@@ -97,6 +99,10 @@ class Conteudos extends Component {
         });
     }
 
+    handleGetAreasDeConhecimento = () => {
+        this.props.getAreasDeConhecimento('ativo');
+    }
+
     handleGetConteudos = () => {
         this.setState({tableLoading: true})
         this.props.getConteudos('');
@@ -107,6 +113,7 @@ class Conteudos extends Component {
         let request = {
             id: this.state.inId,
             description: this.state.inDescricao,
+            areaConhecimento: {id: this.state.inAreaDeConhecimento},
             status: this.state.inStatus
         }
         this.props.createUpdateConteudo(request)
@@ -149,6 +156,7 @@ class Conteudos extends Component {
 
     componentDidMount() {
         this.handleGetConteudos()
+        this.handleGetAreasDeConhecimento()
     }
 
     componentWillUpdate(nextProps, nextState) {
@@ -184,6 +192,7 @@ class Conteudos extends Component {
     }
 
     openNotificationError = (message) => {
+        console.log('message', message)
         const args = {
             message: message,
             icon: <Icon type="stop" style={{color: '#f5222d', fontWeight: '800'}} />,
@@ -313,6 +322,30 @@ class Conteudos extends Component {
                         required
                     />
                     <TextField
+                        id="areaDeConhecimento"
+                        select
+                        label="Área de Conhecimento"
+                        fullWidth={true}
+                        className={classes.textField}
+                        value={this.state.inAreaDeConhecimento}
+                        onChange={this.handleChange('inAreaDeConhecimento')}
+                        InputLabelProps={{ shrink: true }}
+                        SelectProps={{
+                            MenuProps: {
+                                className: classes.menu,
+                            },
+                        }}
+                        margin="normal"
+                    >
+                        {
+                            this.props.areasDeConhecimento.map(option => (
+                                <MenuItem key={option.id} value={option.id}>
+                                    {option.description}
+                                </MenuItem>
+                            ))
+                        }
+                    </TextField>
+                    <TextField
                         id="status"
                         select
                         label="Status"
@@ -350,7 +383,8 @@ const MapStateToProps = (state) => {
 	return {
         mainData: state.mainData,
         contexto: state.contexto,
-        conteudos: state.conteudos
+        conteudos: state.conteudos,
+        areasDeConhecimento: state.areasDeConhecimento
 	}
 }
 const mapDispatchToProps = (dispatch) => {

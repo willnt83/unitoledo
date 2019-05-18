@@ -42,19 +42,6 @@ const dificuldadeOptions = [
     }
 ]
 
-/*
-const discursivaOptions = [
-	{
-		value: 1,
-		label: "Sim"
-	},
-	{
-		value: 0,
-		label: "Não"
-	}
-]
-*/
-
 const tipoOptions = [
 	{
 		value: 1,
@@ -107,32 +94,6 @@ const img = {
     height: 'auto'
 }
 
-/*
-const thumb = {
-    display: 'inline-flex',
-    borderRadius: 2,
-    border: '1px solid #eaeaea',
-    marginBottom: 8,
-    marginRight: 8,
-    width: 'auto',
-    height: 150,
-    padding: 4,
-    boxSizing: 'border-box'
-}
-
-const thumbInner = {
-    display: 'flex',
-    minWidth: 0,
-    overflow: 'hidden'
-}
-
-const img = {
-    display: 'block',
-    width: 'auto',
-    height: '100%'
-}
-*/
-
 class ModalCadastro extends Component {
     state = {
         buttonAlternativas: true,
@@ -144,9 +105,6 @@ class ModalCadastro extends Component {
         questaoContent: null,
         alternativasTooltipVisible: false,
         descricaoTooltip: false,
-        //file: null,
-        //fileBase64: null,
-        //receivedFile: null,
         resetAlternativasForm : false,
         editorState: EditorState.createEmpty(),
         images: []
@@ -295,30 +253,15 @@ class ModalCadastro extends Component {
 		this.setState({showModalAlternativas: bool})
     }
 
-    /*
-    fileToBase64 = (file, that) => {
-        var reader = new FileReader()
-        
-        reader.readAsDataURL(file)
-        reader.onload = (event) => {
-
-            //that.setState({fileBase64: event.target.result})
-        }
-        reader.onerror = function (error) {
-            console.log('Error: ', error)
-            return false
-        }
+    changeAreaDeConhecimento = (value) => {
+        axios.get(this.props.backEndPoint+'/api/getHabilidades/'+value)
+		.then(res => {
+			console.log('response', res)
+		})
+		.catch(error =>{
+			console.log(error)
+		})
     }
-
-    Base64ToFile = (file, filename) => {
-        var arr = file.split(','), mime = arr[0].match(/:(.*?);/)[1],
-        bstr = atob(arr[1]), n = bstr.length, u8arr = new Uint8Array(n)
-        while(n--){
-            u8arr[n] = bstr.charCodeAt(n)
-        }
-        return new File([u8arr], filename, {type:mime})
-    }
-    */
 
     onDrop = (acceptedFiles, rejectedFiles) => {
         this.setState({
@@ -358,7 +301,6 @@ class ModalCadastro extends Component {
 
     removeImage = (index) => {
         var images = this.state.images
-        console.log('images', images)
         images.splice(index, 1)
         this.setState({images})
     }
@@ -373,19 +315,6 @@ class ModalCadastro extends Component {
             questaoContent: draftToHtml(convertToRaw(editorState.getCurrentContent())),
             descricaoTooltip: false
         })
-
-        /*
-        var teste = editorState
-        console.log('-----------------------')
-        console.log('state raw', teste)
-        teste = draftToHtml(convertToRaw(teste.getCurrentContent()))
-        console.log('state em html', teste)
-        const blocksFromHtml = htmlToDraft(teste);
-        const { contentBlocks, entityMap } = blocksFromHtml;
-        const contentState = ContentState.createFromBlockArray(contentBlocks, entityMap);
-        teste = EditorState.createWithContent(contentState);
-        console.log('html to raw', teste)
-        */
       }
 
     openNotificationError = (message) => {
@@ -531,6 +460,30 @@ class ModalCadastro extends Component {
                     <Form layout="vertical">
                         <Row gutter={32}>
                             <Col span={8}>
+                                <Form.Item label="Área de Conhecimento">
+                                    {getFieldDecorator('areaDeConhecimento', {
+                                        rules: [
+                                            {
+                                                required: true, message: 'Por favor selecione a área de conhecimento',
+                                            }
+                                        ]
+                                    })(
+                                        <Select
+                                            name="areaDeConhecimento"
+                                            style={{ width: '100%' }}
+                                            placeholder="Selecione a área de conhecimento"
+                                            onChange={this.changeAreaDeConhecimento}
+                                        >
+                                            {
+                                                this.props.areasDeConhecimento.map((item) => {
+                                                    return (<Select.Option key={item.id} value={item.id}>{item.description}</Select.Option>)
+                                                })
+                                            }
+                                        </Select>
+                                    )}
+                                </Form.Item>
+                            </Col>
+                            <Col span={8}>
                                 <Form.Item label="Habilidade">
                                     {getFieldDecorator('habilidade', {
                                         rules: [
@@ -570,29 +523,6 @@ class ModalCadastro extends Component {
                                             {
                                                 this.props.conteudos.map((item) => {
                                                     return (<Select.Option key={item.key} value={item.id}>{item.description}</Select.Option>)
-                                                })
-                                            }
-                                        </Select>
-                                    )}
-                                </Form.Item>
-                            </Col>
-                            <Col span={8}>
-                                <Form.Item label="Área de Conhecimento">
-                                    {getFieldDecorator('areaDeConhecimento', {
-                                        rules: [
-                                            {
-                                                required: true, message: 'Por favor selecione a área de conhecimento',
-                                            }
-                                        ]
-                                    })(
-                                        <Select
-                                            name="areaDeConhecimento"
-                                            style={{ width: '100%' }}
-                                            placeholder="Selecione a área de conhecimento"
-                                        >
-                                            {
-                                                this.props.areasDeConhecimento.map((item) => {
-                                                    return (<Select.Option key={item.id} value={item.id}>{item.description}</Select.Option>)
                                                 })
                                             }
                                         </Select>
