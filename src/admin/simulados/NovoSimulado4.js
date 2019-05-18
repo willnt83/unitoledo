@@ -182,7 +182,8 @@ class NovoSimulado4 extends Component {
                             cursos: cursos,
                             turmas: turmas,
                             disciplinas: disciplinas,
-                            status: 'Pendente'
+                            status: 'Pendente',
+                            enade: this.props.simulado.enade
                     }
 
                     axios.post(this.props.backEndPoint+'/api/createUpdateSimulado', request)
@@ -413,7 +414,7 @@ class NovoSimulado4 extends Component {
                             >
                                 <Row>
                                     <Col span={12} align="start">
-                                        <Link to="/admin/simulados/novo/step-3"><Button type="default"><Icon type="left" />Anterior</Button></Link>
+                                        <Link to="/app-prova/admin/simulados/novo/step-3"><Button type="default"><Icon type="left" />Anterior</Button></Link>
                                     </Col>
                                     <Col span={12} align="end">
                                         <Button

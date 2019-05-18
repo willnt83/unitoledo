@@ -102,7 +102,8 @@ const initState = {
         fim: {
             data: null,
             hora: null
-        }
+        },
+        enade: null
     },
     selectedQuestoes: [],
     flagSimuladoFinalizado: null, //flag necessária para contornar a inconsistencia da chamada getData :(
@@ -141,7 +142,8 @@ const RootReducer = (state = initState, action) => {
                 fim: {
                     data: null,
                     hora: null
-                }
+                },
+                enade: null
             },
             selectedQuestoes: [],
             flagSimuladoFinalizado: null,
@@ -265,7 +267,8 @@ const RootReducer = (state = initState, action) => {
                 fim: {
                     data: state.simulado.fim.data,
                     hora: state.simulado.fim.hora
-                }
+                },
+                enade: action.enade
             }
         }
     }

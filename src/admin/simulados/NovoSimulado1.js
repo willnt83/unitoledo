@@ -1,5 +1,5 @@
 import React, { Component } from "react"
-import { Layout, Row, Col, Form, Input, Button, Card, Icon } from "antd"
+import { Layout, Row, Col, Form, Input, Button, Card, Icon, Checkbox } from "antd"
 import { Link, withRouter } from "react-router-dom"
 import SimuladoSteps from './SimuladoSteps'
 import { connect } from 'react-redux'
@@ -15,9 +15,11 @@ class NovoSimulado1 extends Component {
 
     handleProximoButton = () => {
         this.props.form.validateFieldsAndScroll((err, values) => {
+            console.log('values', values)
             if (!err) {
-              this.props.setSimuladoNome(values.nome)
-              this.props.history.push('/app-prova/admin/simulados/novo/step-2')
+                var enade = values.enade ? true : false
+                this.props.setSimuladoNome(values.nome, enade)
+                this.props.history.push('/app-prova/admin/simulados/novo/step-2')
             }
             else{
 
@@ -35,12 +37,14 @@ class NovoSimulado1 extends Component {
     componentDidMount(){
         if(this.props.simulado.nome !== null || this.props.simulado.nome !== ''){
             this.props.form.setFieldsValue({
-                nome: this.props.simulado.nome
+                nome: this.props.simulado.nome,
+                enade: this.props.simulado.enade
             })
         }
     }
 
     render(){
+        console.log('this.props.simulado', this.props.simulado)
         const { getFieldDecorator } = this.props.form;
         return(
             <React.Fragment>
@@ -55,26 +59,39 @@ class NovoSimulado1 extends Component {
                         minHeight: 620
                     }}>
                     <Row style={{ marginBottom: 20 }}>
-                        <Form layout="vertical">
-                            <FormItem
-                                label="Nome"
-                            >
-                                {getFieldDecorator('nome', {
-                                    rules: [
-                                        {
-                                            required: true, message: 'Por favor informe o nome do simulado',
-                                        }
-                                    ]
+                        <Col span={24}>
+                            <Form layout="vertical">
+                                <FormItem
+                                    label="Nome"
+                                >
+                                    {getFieldDecorator('nome', {
+                                        rules: [
+                                            {
+                                                required: true, message: 'Por favor informe o nome do simulado',
+                                            }
+                                        ]
+                                    })(
+                                        <Input
+                                            id="nome"
+                                            placeholder="Digite o nome do simulado"
+                                            onChange={this.handleInput}
+                                            autoFocus={true}
+                                        />
+                                    )}
+                                </FormItem>
+                            </Form>
+                        </Col>
+                        <Col span={24}>
+                            <Form.Item layout="vertical">
+                                {getFieldDecorator('enade', {
+                                    valuePropName: 'checked',
                                 })(
-                                    <Input
-                                        id="nome"
-                                        placeholder="Digite o nome do simulado"
-                                        onChange={this.handleInput}
-                                        autoFocus={true}
-                                    />
+                                    <Checkbox>
+                                        ENADE
+                                    </Checkbox>,
                                 )}
-                            </FormItem>
-                        </Form>
+                            </Form.Item>
+                        </Col>
                     </Row>
                 </Card>
                 <Content
@@ -87,7 +104,7 @@ class NovoSimulado1 extends Component {
                 >
                     <Row>
                         <Col span={12}>
-                            <Link to="/admin/simulados/"><Button type="default"><Icon type="left" />Cancelar</Button></Link>
+                            <Link to="app-prova/admin/simulados/"><Button type="default"><Icon type="left" />Cancelar</Button></Link>
                         </Col>
                         <Col span={12} align="end">
                             <Button type="primary" onClick={this.handleProximoButton}>Próximo<Icon type="right" /></Button>
@@ -111,7 +128,7 @@ const MapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
     return {
         setPageTitle: (pageTitle) => { dispatch({ type: 'SET_PAGETITLE', pageTitle }) },
-        setSimuladoNome: (simuladoNome) => { dispatch({ type: 'SET_SIMULADO_NOME', simuladoNome }) },
+        setSimuladoNome: (simuladoNome, enade) => { dispatch({ type: 'SET_SIMULADO_NOME', simuladoNome, enade }) },
         resetAll: () => { dispatch({ type: 'RESET_ALL' }) }
     }
 }
