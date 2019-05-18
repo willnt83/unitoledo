@@ -107,7 +107,9 @@ class ModalCadastro extends Component {
         descricaoTooltip: false,
         resetAlternativasForm : false,
         editorState: EditorState.createEmpty(),
-        images: []
+        images: [],
+        habilidadesOptions: [],
+        conteudosOptions: []
     }
 
     stringToBool = (str) => {
@@ -254,9 +256,38 @@ class ModalCadastro extends Component {
     }
 
     changeAreaDeConhecimento = (value) => {
+        this.props.form.setFieldsValue({
+            habilidade: null,
+            conteudo: null
+        })
+
+        // Recuperando habilidades da área de conhecimento
         axios.get(this.props.backEndPoint+'/api/getHabilidades/'+value)
 		.then(res => {
-			console.log('response', res)
+			this.setState({
+                habilidadesOptions: res.data.map(habilidade => {
+                    return({
+                        id: habilidade.id,
+                        description: habilidade.description
+                    })
+                })
+            })
+		})
+		.catch(error =>{
+			console.log(error)
+        })
+        
+        // Recuperando conteúdos da área de conhecimento
+        axios.get(this.props.backEndPoint+'/api/getConteudos/'+value)
+		.then(res => {
+			this.setState({
+                conteudosOptions: res.data.map(conteudo => {
+                    return({
+                        id: conteudo.id,
+                        description: conteudo.description
+                    })
+                })
+            })
 		})
 		.catch(error =>{
 			console.log(error)
@@ -498,7 +529,7 @@ class ModalCadastro extends Component {
                                             placeholder="Selecione a habilidade"
                                         >
                                             {
-                                                this.props.habilidades.map((item) => {
+                                                this.state.habilidadesOptions.map((item) => {
                                                     return (<Select.Option key={item.id} value={item.id}>{item.description}</Select.Option>)
                                                 })
                                             }
@@ -521,8 +552,8 @@ class ModalCadastro extends Component {
                                             placeholder="Selecione o conteúdo"
                                         >
                                             {
-                                                this.props.conteudos.map((item) => {
-                                                    return (<Select.Option key={item.key} value={item.id}>{item.description}</Select.Option>)
+                                                this.state.conteudosOptions.map((item) => {
+                                                    return (<Select.Option key={item.id} value={item.id}>{item.description}</Select.Option>)
                                                 })
                                             }
                                         </Select>

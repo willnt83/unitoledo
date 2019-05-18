@@ -148,7 +148,6 @@ function BackEndRequestsWrapper(WrappedComponent) {
 		createUpdateConteudo = (request) => {
 			axios.post(this.props.backEndPoint+'/api/createUpdateConteudo', request)
 			.then(res => {
-				console.log('response conteudo', res.data)
 				if(res.data.success){
 					this.setState({
 						createUpdateConteudoResponse: {
@@ -213,7 +212,6 @@ function BackEndRequestsWrapper(WrappedComponent) {
 			var ativo = status !== '' ? '/ativo' : ''
 			axios.get(this.props.backEndPoint+'/api/getAreaConhecimento'+ativo)
 			.then(res => {
-				console.log('ressss', res.data)
 				let tempArray = []
 				let key = 0
 				let labelStatus = null
