@@ -53,7 +53,7 @@ class Simulados extends Component {
                 }
                 console.log('setSimulado', simulado)
                 this.props.setSimulado(simulado)
-                this.props.history.push('/alunos/execucao-simulado')
+                this.props.history.push('/app-prova/alunos/execucao-simulado')
             })
             .catch(error =>{
                 this.setState({tableLoading: false})
