@@ -72,7 +72,9 @@ class NovoSimulado3 extends Component {
         countFacil: null,
         countMedio: null,
         countDificil: null,
-        firstLoad: true
+        firstLoad: true,
+        habilidadesOptions: [],
+        conteudosOptions: []
     }
 
     getQuestoes = (request) => {
@@ -178,6 +180,49 @@ class NovoSimulado3 extends Component {
             countDificil
         })
     }
+
+    changeAreaDeConhecimento = (values) => {
+		this.props.form.setFieldsValue({
+            habilidades: [],
+            conteudos: []
+		})
+
+		var request = values.map(value => {
+			return(
+				{id: value}
+			)
+		})
+
+		axios.post(this.props.backEndPoint+'/api/getHabilidades/areas', request)
+		.then(res => {
+			this.setState({
+				habilidadesOptions: res.data.map(habilidade => {
+					return({
+						id: habilidade.id,
+						description: habilidade.description
+					})
+				})
+			})
+		})
+		.catch(error =>{
+			console.log(error)
+		})
+
+		axios.post(this.props.backEndPoint+'/api/getConteudos/areas', request)
+		.then(res => {
+			this.setState({
+				conteudosOptions: res.data.map(conteudo => {
+					return({
+						id: conteudo.id,
+						description: conteudo.description
+					})
+				})
+			})
+		})
+		.catch(error =>{
+			console.log(error)
+		})
+	}
 
     componentWillMount(){
         if(this.props.mainData === null || (this.props.contexto !== 'COORDENADOR' && this.props.contexto !== 'PROFESSOR')){
@@ -314,7 +359,6 @@ class NovoSimulado3 extends Component {
     }
 
     render(){
-        console.log('this.props.simulado', this.props.simulado)
         const { getFieldDecorator } = this.props.form
 
         var questaoQuantidades = this.props.simulado.questoes.length > 0 ? 
@@ -347,6 +391,52 @@ class NovoSimulado3 extends Component {
                                         <Input placeholder="Informe o código da questão" />
                                     )}
                                 </FormItem>
+                                <FormItem label="Áreas de Conhecimento">
+                                    {getFieldDecorator('areasDeConhecimento')(
+                                        <Select
+                                            mode="multiple"
+                                            style={{ width: '100%' }}
+                                            placeholder="Selecione as Áreas de Conhecimento"
+                                            onChange={this.changeAreaDeConhecimento}
+                                        >
+                                            {
+                                                this.props.areasDeConhecimento.map((item) => {
+                                                    return (<Option key={item.id}>{item.description}</Option>)
+                                                })
+                                            }
+                                        </Select>
+                                    )}
+                                </FormItem>
+                                <FormItem label="Habilidades">
+                                    {getFieldDecorator('habilidades')(
+                                        <Select
+                                            mode="multiple"
+                                            style={{ width: '100%' }}
+                                            placeholder="Selecione as Habilidades"
+                                        >
+                                            {
+                                                this.state.habilidadesOptions.map((item) => {
+                                                    return (<Option key={item.id}>{item.description}</Option>)
+                                                })
+                                            }
+                                        </Select>
+                                    )}
+                                </FormItem>
+                                <FormItem label="Conteúdos">
+                                    {getFieldDecorator('conteudos')(
+                                        <Select
+                                            mode="multiple"
+                                            style={{ width: '100%' }}
+                                            placeholder="Selecione os Conteúdos"
+                                        >
+                                            {
+                                                this.state.conteudosOptions.map((item) => {
+                                                    return (<Option key={item.id}>{item.description}</Option>)
+                                                })
+                                            }
+                                        </Select>
+                                    )}
+                                </FormItem>
                                 <FormItem label="Dificuldade">
                                     {getFieldDecorator('dificuldade')(
                                         <Select
@@ -362,51 +452,7 @@ class NovoSimulado3 extends Component {
                                         </Select>
                                     )}
                                 </FormItem>
-                                <FormItem label="Habilidades">
-                                    {getFieldDecorator('habilidades')(
-                                        <Select
-                                            mode="multiple"
-                                            style={{ width: '100%' }}
-                                            placeholder="Selecione as Habilidades"
-                                        >
-                                            {
-                                                this.props.habilidades.map((item) => {
-                                                    return (<Option key={item.id}>{item.description}</Option>)
-                                                })
-                                            }
-                                        </Select>
-                                    )}
-                                </FormItem>
-                                <FormItem label="Conteúdos">
-                                    {getFieldDecorator('conteudos')(
-                                        <Select
-                                            mode="multiple"
-                                            style={{ width: '100%' }}
-                                            placeholder="Selecione os Conteúdos"
-                                        >
-                                            {
-                                                this.props.conteudos.map((item) => {
-                                                    return (<Option key={item.id}>{item.description}</Option>)
-                                                })
-                                            }
-                                        </Select>
-                                    )}
-                                </FormItem>
-                                <FormItem label="Áreas de Conhecimento">
-                                    {getFieldDecorator('areasDeConhecimento')(
-                                        <Select
-                                            mode="multiple"
-                                            style={{ width: '100%' }}
-                                            placeholder="Selecione as Áreas de Conhecimento"
-                                        >
-                                            {
-                                                this.props.areasDeConhecimento.map((item) => {
-                                                    return (<Option key={item.id}>{item.description}</Option>)
-                                                })
-                                            }
-                                        </Select>
-                                    )}
-                                </FormItem>
+                                
                                 <FormItem label="Anos">
                                     {getFieldDecorator('anos')(
                                         <Select
