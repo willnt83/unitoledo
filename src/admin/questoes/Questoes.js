@@ -183,6 +183,11 @@ class Questoes extends Component {
 	}
 	
 	changeAreaDeConhecimento = (values) => {
+		this.props.form.setFieldsValue({
+            habilidades: [],
+            conteudos: []
+		})
+
 		var request = values.map(value => {
 			return(
 				{id: value}
