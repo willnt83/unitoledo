@@ -45,8 +45,6 @@ class Questoes extends Component {
 	constructor(props) {
         super()
 		props.setPageTitle('Banco de Questões')
-		//props.getHabilidades('ativo')
-        //props.getConteudos('ativo')
 		props.getAreasDeConhecimento('ativo')
 		props.getFontes('ativo')
 	}
@@ -75,7 +73,9 @@ class Questoes extends Component {
 				id: 0
 			}
 		},
-		op: null
+		op: null,
+		habilidadesOptions: [],
+		conteudosOptions: []
 	}
 
 	requestGetAlternativas = (row) => {
@@ -180,7 +180,45 @@ class Questoes extends Component {
             duration: 0
         }
         notification.open(args)
-    }
+	}
+	
+	changeAreaDeConhecimento = (values) => {
+		var request = values.map(value => {
+			return(
+				{id: value}
+			)
+		})
+
+		axios.post(this.props.backEndPoint+'/api/getHabilidades/areas', request)
+		.then(res => {
+			this.setState({
+				habilidadesOptions: res.data.map(habilidade => {
+					return({
+						id: habilidade.id,
+						description: habilidade.description
+					})
+				})
+			})
+		})
+		.catch(error =>{
+			console.log(error)
+		})
+
+		axios.post(this.props.backEndPoint+'/api/getConteudos/areas', request)
+		.then(res => {
+			this.setState({
+				conteudosOptions: res.data.map(conteudo => {
+					return({
+						id: conteudo.id,
+						description: conteudo.description
+					})
+				})
+			})
+		})
+		.catch(error =>{
+			console.log(error)
+		})
+	}
 
 	handleSearchSubmit = (event) => {
 		event.preventDefault()
@@ -365,6 +403,22 @@ class Questoes extends Component {
 				<Row>
 					<Col span={24}>
 						<Form layout="vertical" onSubmit={this.handleSearchSubmit}>
+							<Form.Item label="Áreas de Conhecimento">
+								{getFieldDecorator('areasDeConhecimento')(
+									<Select
+										mode="multiple"
+										style={{ width: '100%' }}
+										placeholder="Selecione as Áreas de Conhecimento"
+										onChange={this.changeAreaDeConhecimento}
+									>
+										{
+											this.props.areasDeConhecimento.map((item) => {
+												return (<Option key={item.id}>{item.description}</Option>)
+											})
+										}
+									</Select>
+								)}
+							</Form.Item>
 							<Form.Item label="Habilidades">
 								{getFieldDecorator('habilidades')(
 									<Select
@@ -373,7 +427,7 @@ class Questoes extends Component {
 										placeholder="Selecione as Habilidades"
 									>
 										{
-											this.props.habilidades.map((item) => {
+											this.state.habilidadesOptions.map((item) => {
 												return (<Option key={item.id}>{item.description}</Option>)
 											})
 										}
@@ -388,22 +442,7 @@ class Questoes extends Component {
 										placeholder="Selecione os Conteúdos"
 									>
 										{
-											this.props.conteudos.map((item) => {
-												return (<Option key={item.id}>{item.description}</Option>)
-											})
-										}
-									</Select>
-								)}
-							</Form.Item>
-							<Form.Item label="Áreas de Conhecimento">
-								{getFieldDecorator('areasDeConhecimento')(
-									<Select
-										mode="multiple"
-										style={{ width: '100%' }}
-										placeholder="Selecione as Áreas de Conhecimento"
-									>
-										{
-											this.props.areasDeConhecimento.map((item) => {
+											this.state.conteudosOptions.map((item) => {
 												return (<Option key={item.id}>{item.description}</Option>)
 											})
 										}
