@@ -397,6 +397,7 @@ class NovoSimulado2 extends Component {
     }
 
     render(){
+        console.log('this.props.simulado', this.props.simulado)
         const { selectedRowKeys } = this.state
         const columns = [
             {

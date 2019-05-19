@@ -247,7 +247,8 @@ const RootReducer = (state = initState, action) => {
                 fim: {
                     data: null,
                     hora: null
-                }
+                },
+                enade: null
             },
             selectedQuestoes: []
         }
@@ -287,7 +288,8 @@ const RootReducer = (state = initState, action) => {
                 fim: {
                     data: state.simulado.fim.data,
                     hora: state.simulado.fim.hora
-                }
+                },
+                enade: state.simulado.enade
             }
         }
     }
@@ -309,7 +311,8 @@ const RootReducer = (state = initState, action) => {
                 fim: {
                     data: state.simulado.fim.data,
                     hora: state.simulado.fim.hora
-                }
+                },
+                enade: state.simulado.enade
             },
             selectedQuestoes
         }
@@ -336,7 +339,8 @@ const RootReducer = (state = initState, action) => {
                 fim: {
                     data: state.simulado.fim.data,
                     hora: state.simulado.fim.hora
-                }
+                },
+                enade: state.simulado.enade
             },
             selectedQuestoes
         }
@@ -358,7 +362,8 @@ const RootReducer = (state = initState, action) => {
                 alvos: state.simulado.alvos,
                 questoes: state.simulado.questoes,
                 inicio: action.startFinish.dateTimeInicial,
-                fim: action.startFinish.dateTimeFinal
+                fim: action.startFinish.dateTimeFinal,
+                enade: state.simulado.enade
             }
         }
     }
@@ -383,7 +388,8 @@ const RootReducer = (state = initState, action) => {
                 alvos: state.simulado.alvos,
                 questoes: action.questoes,
                 inicio: state.simulado.inicio,
-                fim: state.simulado.fim
+                fim: state.simulado.fim,
+                enade: state.simulado.enade
             }
         }
     }

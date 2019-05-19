@@ -282,6 +282,7 @@ class NovoSimulado4 extends Component {
     }
 
     render(){
+        console.log('this.props.simulado', this.props.simulado)
         const { getFieldDecorator } = this.props.form
         return(
             <React.Fragment>

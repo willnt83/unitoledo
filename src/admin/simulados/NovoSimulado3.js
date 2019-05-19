@@ -314,6 +314,7 @@ class NovoSimulado3 extends Component {
     }
 
     render(){
+        console.log('this.props.simulado', this.props.simulado)
         const { getFieldDecorator } = this.props.form
 
         var questaoQuantidades = this.props.simulado.questoes.length > 0 ? 
