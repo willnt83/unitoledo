@@ -20,6 +20,7 @@ import NovoSimulado1 from "./simulados/NovoSimulado1"
 import NovoSimulado2 from "./simulados/NovoSimulado2"
 import NovoSimulado3 from "./simulados/NovoSimulado3"
 import NovoSimulado4 from "./simulados/NovoSimulado4"
+import LancamentoNotas from "./simulados/LancamentoNotas"
 
 const { Header, Sider, Footer } = Layout
 
@@ -80,6 +81,11 @@ const routes = [
     path: "/app-prova/admin/simulados/novo/step-4",
     sidebar: () => <div>Simulados</div>,
     main: () => <NovoSimulado4 />
+  },
+  {
+    path: "/app-prova/admin/lancamento-de-notas",
+    sidebar: () => <div>Questões</div>,
+    main: () => <LancamentoNotas />
   },
   {
     path: "/app-prova/admin/banco-de-questoes",

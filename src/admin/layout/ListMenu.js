@@ -88,18 +88,24 @@ class ListMenu extends Component {
                         </Link>
                     </Menu.Item>
                     <Menu.Item key="8">
+                        <Link to="/app-prova/admin/lancamento-de-notas">
+                            <Icon type="solution" />
+                            <span>Lançamento de Notas</span>
+                        </Link>
+                    </Menu.Item>
+                    <Menu.Item key="9">
                         <Link to="/app-prova/admin/banco-de-questoes">
                             <Icon type="hdd" />
                             <span>Banco de Questões</span>
                         </Link>
                     </Menu.Item>
-                    <Menu.Item key="9">
+                    <Menu.Item key="10">
                         <Link to="/app-prova/admin/meus-alunos">
                             <Icon type="team" />
                             <span>Meus Alunos</span>
                         </Link>
                     </Menu.Item>
-                    <Menu.Item key="10" onClick={() => this.logout()}>
+                    <Menu.Item key="11" onClick={() => this.logout()}>
                         <Icon type="export" />
                         <span>Sair</span>
                     </Menu.Item>
