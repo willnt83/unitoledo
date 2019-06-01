@@ -390,8 +390,10 @@ function BackEndRequestsWrapper(WrappedComponent) {
 		}
 
 		getQuestoes = (request) => {
+			console.log('request', request)
 			axios.post(this.props.backEndPoint+'/api/getQuestoesSimulado/questao', request)
 			.then(res => {
+				console.log('response', res)
 				var labelStatus = null
 				var labelDescricao = null
 				var tempArray = res.data.map(questao => {
