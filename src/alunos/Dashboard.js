@@ -74,6 +74,11 @@ class Dashboard extends Component {
                 sorter: (a, b) => a.key - b.key
             },
             {
+				title: "Simulado",
+				dataIndex: "simulado",
+				sorter: (a, b) => { return a.nome.localeCompare(b.nome)},
+            },
+            {
 				title: "Iniciou em",
 				dataIndex: "dataInicio",
 				sorter: (a, b) => this.compareByDates(a.dataInicio, b.dataInicio)
@@ -107,7 +112,7 @@ class Dashboard extends Component {
                         this.props.mainData.dash_aluno ?
 
                             <Row>
-                                <Col span={8}>
+                                <Col sm={24} md={6}>
                                     <Row type="flex"  align="middle">
                                         <Col span={10} align="end" style={{paddingRight: 25}}>
                                             <Icon type="edit" style={{fontSize: 35, color: '#4286f4'}} />
@@ -126,7 +131,7 @@ class Dashboard extends Component {
                                         </Col>
                                     </Row>
                                 </Col>
-                                <Col span={8}>
+                                <Col sm={24} md={6}>
                                     <Row type="flex"  align="middle">
                                         <Col span={10} align="end" style={{paddingRight: 25}}>
                                             <Icon type="smile" style={{fontSize: 35, color: '#f88b0e'}} />
@@ -146,7 +151,7 @@ class Dashboard extends Component {
                                         </Col>
                                     </Row>
                                 </Col>
-                                <Col span={8}>
+                                <Col sm={24} md={6}>
                                     <Row type="flex"  align="middle">
                                         <Col span={10} align="end" style={{paddingRight: 25}}>
                                             <Icon type="check" style={{fontSize: 35, color: '#13a54b'}} />
@@ -162,6 +167,26 @@ class Dashboard extends Component {
                                             </Col>
                                             <Col span={24} align="start" style={{fontSize: 17}}>
                                                 Simulados Realizados
+                                            </Col>
+                                        </Col>
+                                    </Row>
+                                </Col>
+                                <Col sm={24} md={6}>
+                                    <Row type="flex"  align="middle">
+                                        <Col span={10} align="end" style={{paddingRight: 25}}>
+                                            <Icon type="percentage" style={{fontSize: 35, color: '#13a54b'}} />
+                                        </Col>
+                                        <Col span={14}>
+                                            <Col span={24} align="start" style={{fontSize: 20, fontWeight: 800, color: '#13a54b'}}>
+                                                {
+                                                    this.props.mainData.dash_aluno ?
+                                                    this.props.mainData.dash_aluno.total.totalPercentual
+                                                    :
+                                                    null
+                                                }
+                                            </Col>
+                                            <Col span={24} align="start" style={{fontSize: 17}}>
+                                                Percentual
                                             </Col>
                                         </Col>
                                     </Row>
@@ -186,6 +211,7 @@ class Dashboard extends Component {
                             columns={ columns } 
                             dataSource={ this.state.tableData }
                             loading={this.state.tableLoading}
+                            scroll={{ y: 950 }}
                         />
                     </Content>
                     : null

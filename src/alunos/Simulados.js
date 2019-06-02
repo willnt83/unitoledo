@@ -131,13 +131,13 @@ class Simulados extends Component {
             {
                 title: 'ID',
                 dataIndex: 'key',
-                sorter: (a, b) => a.key - b.key,
+                sorter: (a, b) => a.key - b.key
             },
 			{
 				title: "Descrição",
 				dataIndex: "nome",
                 sorter: (a, b) => { return a.nome.localeCompare(b.nome)},
-                width: 799
+                width: 300
             },
             {
 				title: "Inicia em",
@@ -182,6 +182,7 @@ class Simulados extends Component {
                         columns={ columns } 
                         dataSource={ this.state.tableData }
                         loading={this.state.tableLoading}
+                        scroll={{ y: 950 }}
                     />
                 </Content>
             </React.Fragment>
