@@ -1,5 +1,5 @@
 import React, { Component } from "react"
-import { Layout, Button, Form, Row, Col, Select } from "antd"
+import { Layout, Button, Form, Row, Col, Select, Input, Icon, notification } from "antd"
 import { withRouter } from "react-router-dom"
 import axios from "axios"
 import { connect } from 'react-redux'
@@ -15,7 +15,28 @@ class LancamentoNotas extends Component {
 
     state = {
         simuladosOptions: [],
-        alunosOptions: []
+        linhas: [],
+        notasFormacaoGeral: [],
+        notasConhecimentoEspecifico: []
+    }
+
+    showNotification = (msg, success) => {
+        var type = null
+        var style = null
+        if(success){
+            type = 'check-circle'
+            style = {color: '#4ac955', fontWeight: '800'}
+        }
+        else {
+            type = 'exclamation-circle'
+            style = {color: '#f5222d', fontWeight: '800'}
+        }
+        const args = {
+            message: msg,
+            icon:  <Icon type={type} style={style} />,
+            duration: 1
+        }
+        notification.open(args)
     }
 
     getSimulados = () => {
@@ -64,10 +85,47 @@ class LancamentoNotas extends Component {
     }
 
     changeSimulado = (value) => {
-        console.log('changeSimulado', value)
+        this.setState({
+            linhas: [],
+            notasFormacaoGeral: [],
+            notasConhecimentoEspecifico: []
+        })
+
         axios.get(this.props.backEndPoint+'/api/getAlunoDiscursiva/'+value)
 		.then(res => {
-			console.log('res', res)
+            this.setState({
+                linhas: res.data
+            })
+            /*
+            this.setState({
+               linhas: [
+                    {
+                        id: 2,
+                        idAluno: "52654",
+                        nomeAluno: "IZABELLA DO NASCIMENTO CARDOSO",
+                        simulado: {
+                            Simulado: 477
+                        },
+                        notas: {
+                            notaFormacaoGeral: 3,
+                            notaConhecimentoEspecifico: 10
+                        }
+                    },
+                    {
+                        id: 4,
+                        idAluno: "99999",
+                        nomeAluno: "ALUNO TESTE",
+                        simulado: {
+                            Simulado: 477
+                        },
+                        notas: {
+                            notaFormacaoGeral: 8,
+                            notaConhecimentoEspecifico: 7
+                        }
+                    }
+                ]
+            })
+            */
 		})
 		.catch(error =>{
 			console.log(error)
@@ -75,16 +133,123 @@ class LancamentoNotas extends Component {
 
     }
 
-    changeAluno = () => {
-        console.log('change aluno')
+    handleNotaFormacaoGeralBlur = (element) => {
+        var idAluno = parseInt(element.target.id.replace('notaFormacaoGeral_', ''))
+        var nota = parseInt(element.target.value)
+        var notasFormacaoGeral = this.state.notasFormacaoGeral
+
+        var notasFormacaoGeral2 = notasFormacaoGeral.filter(nota => {
+            return (!nota.idAluno || nota.idAluno !== idAluno)
+        })
+
+        notasFormacaoGeral2.push({
+            idAluno: idAluno,
+            nota: nota
+        })
+        this.setState({notasFormacaoGeral: notasFormacaoGeral2})
+
+    }
+
+    handleNotaConhecimentoEspecificoBlur = (element) => {
+        var idAluno = parseInt(element.target.id.replace('notaConhecimentoEspecifico_', ''))
+        var nota = parseInt(element.target.value)
+        var notasConhecimentoEspecifico = this.state.notasConhecimentoEspecifico
+
+        var notasConhecimentoEspecifico2 = notasConhecimentoEspecifico.filter(nota => {
+            return (!nota.idAluno || nota.idAluno !== idAluno)
+        })
+
+        notasConhecimentoEspecifico2.push({
+            idAluno: idAluno,
+            nota: nota
+        })
+        this.setState({notasConhecimentoEspecifico: notasConhecimentoEspecifico2})
+    }
+
+    salvar = () => {
+        var request = []
+        var idAluno = null
+        var notaFormacaoGeralValor = null
+        var notaConhecimentoEspecificoValor = null
+        this.state.linhas.forEach(linha => {
+            idAluno = linha.idAluno
+            notaFormacaoGeralValor = 0
+            notaConhecimentoEspecificoValor = 0
+
+            this.state.notasFormacaoGeral.forEach(notaFormacaoGeral => {
+                if(parseInt(notaFormacaoGeral.idAluno) === parseInt(idAluno)){
+                    notaFormacaoGeralValor = notaFormacaoGeral.nota
+                }
+            })
+
+            this.state.notasConhecimentoEspecifico.forEach(notaConhecimentoEspecifico => {
+                if(parseInt(notaConhecimentoEspecifico.idAluno) === parseInt(idAluno)){
+                    notaConhecimentoEspecificoValor = notaConhecimentoEspecifico.nota
+                }
+            })
+
+
+            request.push({
+                id: linha.id,
+                idAluno: linha.idAluno,
+                nomeAluno: linha.nomeAluno,
+                simulado: {
+                    id: linha.simulado.id
+                },
+                notas: {
+                    notaFormacaoGeral: notaFormacaoGeralValor,
+                    notaConhecimentoEspecifico: notaConhecimentoEspecificoValor
+                }
+            })
+        })
+
+        console.log('request', request)
+
+        axios.post(this.props.backEndPoint+'/api/createUpdateNotaDiscursiva', request)
+		.then(res => {
+            console.log('response', res.data)
+            this.showNotification('Notas salvas com sucesso.', true)
+		})
+		.catch(error =>{
+            console.log(error)
+            this.showNotification('Erro ao salvar notas.', false)
+        })
     }
 
     componentWillMount(){
         this.getSimulados()
     }
 
+    componentDidUpdate(prevProps, prevState){
+        if(prevState.linhas.length !== this.state.linhas.length){
+            var notaFormacaoGeral = null
+            var notaConhecimentoEspecifico = null
+            var strObj = '{'
+            var comma = ''
+            this.state.linhas.forEach((linha, index) => {
+                notaFormacaoGeral = linha.notas.notaFormacaoGeral !== null ? linha.notas.notaFormacaoGeral : ''
+                notaConhecimentoEspecifico = linha.notas.notaConhecimentoEspecifico !== null ? linha.notas.notaConhecimentoEspecifico : ''
+
+                comma = index === 0 ? '' : ', '
+                strObj += comma+'"notaFormacaoGeral_'+linha.idAluno+'": "'+notaFormacaoGeral+'"'
+            })
+            strObj += '}'
+            var obj  = JSON.parse(strObj)
+            this.props.form.setFieldsValue(obj)
+
+            strObj = '{'
+            comma = ''
+            this.state.linhas.forEach((linha, index) => {
+                comma = index === 0 ? '' : ', '
+                strObj += comma+'"notaConhecimentoEspecifico_'+linha.idAluno+'": "'+notaConhecimentoEspecifico+'"'
+            })
+            strObj += '}'
+            obj  = JSON.parse(strObj)
+            this.props.form.setFieldsValue(obj)
+        }
+    }
+
     render(){
-        console.log('this.props.mainData', this.props.mainData)
         const { getFieldDecorator } = this.props.form
         return(
             <Content
@@ -95,7 +260,6 @@ class LancamentoNotas extends Component {
                     minHeight: 200
                 }}
             >
-
                 <Row>
 					<Col span={24}>
 						<Form layout="vertical" onSubmit={this.handleSearchSubmit}>
@@ -114,24 +278,68 @@ class LancamentoNotas extends Component {
 									</Select>
 								)}
 							</Form.Item>
-                            <Form.Item label="Aluno">
-								{getFieldDecorator('aluno')(
-									<Select
-										style={{ width: '100%' }}
-										placeholder="Selecione o aluno"
-										onChange={this.changeAluno}
-									>
-										{
-											this.state.alunosOptions.map((item) => {
-												return (<Option key={item.id}>{item.nome}</Option>)
-											})
-										}
-									</Select>
-								)}
-							</Form.Item>
                         </Form>
                     </Col>
                 </Row>
+                {
+                    this.state.linhas.length > 0 ?
+                    <Row style={{fontWeight: 800}}>
+                        <Col span={6}>Nome</Col>
+                        <Col span={3}>Formação Geral</Col>
+                        <Col span={3}>Conhecimento Específico</Col>
+                    </Row>
+                    
+                    :
+                    <Row>
+                        <Col span={24}>
+                            Nenhum registro encontrado.
+                        </Col>
+                    </Row>
+                }
+                {
+                    this.state.linhas.map(linha => {
+                        return(
+                            <React.Fragment key={linha.idAluno}>
+                                <Row gutter={5}>
+                                    <Col span={6}>
+                                        {linha.nomeAluno}
+                                    </Col>
+                                    <Col span={3}>
+                                        <Form.Item>
+                                            {getFieldDecorator(`notaFormacaoGeral_${linha.idAluno}`)(
+                                                <Input onBlur={this.handleNotaFormacaoGeralBlur} />
+                                            )}
+                                        </Form.Item>
+                                    </Col>
+                                    <Col span={3}>
+                                        <Form.Item>
+                                            {getFieldDecorator(`notaConhecimentoEspecifico_${linha.idAluno}`)(
+                                                <Input onBlur={this.handleNotaConhecimentoEspecificoBlur} />
+                                            )}
+                                        </Form.Item>
+                                    </Col>
+                                </Row>
+                            </React.Fragment>
+                        )
+                    })
+                }
+                {
+                    this.state.linhas.length > 0 ?
+                    <Row>
+                        <Col span={24}>
+                            <Button
+                                type="primary"
+                                className="buttonGreen"
+                                onClick={this.salvar}
+                            >
+                                <Icon type="save" />Salvar
+                            </Button>
+                        </Col>
+                    </Row>
+                    :
+                    null
+                }
+                
             </Content>
         )
     }
