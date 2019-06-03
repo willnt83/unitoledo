@@ -21,6 +21,9 @@ import NovoSimulado2 from "./simulados/NovoSimulado2"
 import NovoSimulado3 from "./simulados/NovoSimulado3"
 import NovoSimulado4 from "./simulados/NovoSimulado4"
 import LancamentoNotas from "./simulados/LancamentoNotas"
+import PercentualDeAcertos from "./relatorios/PercentualDeAcertos"
+import HabilidadesConteudos from "./relatorios/HabilidadesConteudos"
+import Detalhado from "./relatorios/Detalhado"
 
 const { Header, Sider, Footer } = Layout
 
@@ -84,13 +87,28 @@ const routes = [
   },
   {
     path: "/app-prova/admin/lancamento-de-notas",
-    sidebar: () => <div>Questões</div>,
+    sidebar: () => <div>Lançamento de Notas</div>,
     main: () => <LancamentoNotas />
   },
   {
     path: "/app-prova/admin/banco-de-questoes",
     sidebar: () => <div>Questões</div>,
     main: () => <Questoes />
+  },
+  {
+    path: "/app-prova/admin/relatorios/percentual-de-acertos",
+    sidebar: () => <div>Percentual de Acertos</div>,
+    main: () => <PercentualDeAcertos />
+  },
+  {
+    path: "/app-prova/admin/relatorios/habilidades-e-conteudos",
+    sidebar: () => <div>Habilidades e Conteúdos</div>,
+    main: () => <HabilidadesConteudos />
+  },
+  {
+    path: "/app-prova/admin/relatorios/detalhado",
+    sidebar: () => <div>Detalhado</div>,
+    main: () => <Detalhado />
   },
   {
     path: "/app-prova/admin/meus-alunos",
@@ -112,48 +130,42 @@ class AdminIndex extends Component {
 
   render() {
     return (
-      <Router>
-        <Layout style={{ minHeight: "100vh" }}>
-          <Sider trigger={null} collapsible collapsed={this.state.collapsed}>
-            <div className="logo">UNITOLEDO</div>
-            <ListMenu />
-          </Sider>
-          <Layout>
-            <Header style={{ background: "#fff", padding: 0 }}>
-              <Row style={{paddingRight: '24px'}}>
-                <Col span={10} style={{paddingLeft: 20}}>
-					{/*
-					<Icon
-					className="trigger"
-					type={this.state.collapsed ? "menu-unfold" : "menu-fold"}
-					onClick={this.toggle}
-					/>
-					*/}
-					<PageTitle pageTitle={this.props.pageTitle} />
-                </Col>
-              
-                <Col sm={24} align="end">
-					        <Icon type="user" style={{marginRight: '8px'}} />{this.props.usuarioNome} / {this.props.periodoLetivoDescricao}
-                </Col>
-              </Row>
-              
-              
-
-            </Header>
-
-              {routes.map((route, index) => (
-                <Route
-                  key={index}
-                  path={route.path}
-                  exact={route.exact}
-                  component={route.main}
-                />
-              ))}
-
-            <Footer style={{ textAlign: "center" }}>UNITOLEDO ©2018</Footer>
-          </Layout>
-        </Layout>
-      </Router>
+		<Router>
+			<Layout style={{ minHeight: "100vh" }}>
+				<Sider trigger={null} collapsible collapsed={this.state.collapsed}>
+					<div className="logo">UNITOLEDO</div>
+					<ListMenu />
+				</Sider>
+				<Layout>
+					<Header style={{ background: "#fff", padding: 0 }}>
+						<Row style={{paddingRight: '24px'}}>
+							<Col span={10} style={{paddingLeft: 20}}>
+								{/*
+								<Icon
+								className="trigger"
+								type={this.state.collapsed ? "menu-unfold" : "menu-fold"}
+								onClick={this.toggle}
+								/>
+								*/}
+								<PageTitle pageTitle={this.props.pageTitle} />
+							</Col>
+							<Col spam={24} align="end">
+								<Icon type="user" style={{marginRight: '8px'}} />{this.props.usuarioNome} / {this.props.periodoLetivoDescricao}
+							</Col>
+						</Row>
+					</Header>
+					{routes.map((route, index) => (
+						<Route
+							key={index}
+							path={route.path}
+							exact={route.exact}
+							component={route.main}
+						/>
+					))}
+					<Footer style={{ textAlign: "center" }}>UNITOLEDO ©2018</Footer>
+				</Layout>
+			</Layout>
+		</Router>
     );
   }
 }

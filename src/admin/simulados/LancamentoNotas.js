@@ -96,36 +96,6 @@ class LancamentoNotas extends Component {
             this.setState({
                 linhas: res.data
             })
-            /*
-            this.setState({
-               linhas: [
-                    {
-                        id: 2,
-                        idAluno: "52654",
-                        nomeAluno: "IZABELLA DO NASCIMENTO CARDOSO",
-                        simulado: {
-                            Simulado: 477
-                        },
-                        notas: {
-                            notaFormacaoGeral: 3,
-                            notaConhecimentoEspecifico: 10
-                        }
-                    },
-                    {
-                        id: 4,
-                        idAluno: "99999",
-                        nomeAluno: "ALUNO TESTE",
-                        simulado: {
-                            Simulado: 477
-                        },
-                        notas: {
-                            notaFormacaoGeral: 8,
-                            notaConhecimentoEspecifico: 7
-                        }
-                    }
-                ]
-            })
-            */
 		})
 		.catch(error =>{
 			console.log(error)
@@ -250,6 +220,7 @@ class LancamentoNotas extends Component {
     }
 
     render(){
+        console.log('this.state.linhas', this.state.linhas)
         const { getFieldDecorator } = this.props.form
         return(
             <Content
@@ -290,14 +261,12 @@ class LancamentoNotas extends Component {
                     </Row>
                     
                     :
-                    <Row>
-                        <Col span={24}>
-                            Nenhum registro encontrado.
-                        </Col>
-                    </Row>
+                    null
                 }
                 {
                     this.state.linhas.map(linha => {
+                        var notaFormacaoGeralDisabled = linha.notas.formacaoGeral ? false : true
+                        var notaConhecimentoEspecificoDisabled = linha.notas.conhecimentoEspecifico ? false : true
                         return(
                             <React.Fragment key={linha.idAluno}>
                                 <Row gutter={5}>
@@ -307,14 +276,20 @@ class LancamentoNotas extends Component {
                                     <Col span={3}>
                                         <Form.Item>
                                             {getFieldDecorator(`notaFormacaoGeral_${linha.idAluno}`)(
-                                                <Input onBlur={this.handleNotaFormacaoGeralBlur} />
+                                                <Input
+                                                    onBlur={this.handleNotaFormacaoGeralBlur}
+                                                    disabled={notaFormacaoGeralDisabled}
+                                                />
                                             )}
                                         </Form.Item>
                                     </Col>
                                     <Col span={3}>
                                         <Form.Item>
                                             {getFieldDecorator(`notaConhecimentoEspecifico_${linha.idAluno}`)(
-                                                <Input onBlur={this.handleNotaConhecimentoEspecificoBlur} />
+                                                <Input
+                                                    onBlur={this.handleNotaConhecimentoEspecificoBlur}
+                                                    disabled={notaConhecimentoEspecificoDisabled}
+                                                />
                                             )}
                                         </Form.Item>
                                     </Col>

@@ -99,13 +99,35 @@ class ListMenu extends Component {
                             <span>Banco de Questões</span>
                         </Link>
                     </Menu.Item>
-                    <Menu.Item key="10">
+
+                    <SubMenu key="sub2" title={<span><Icon type="bar-chart" /><span>Relatórios</span></span>}>
+                        <Menu.Item key="10">
+                            <Link to="/app-prova/admin/relatorios/percentual-de-acertos">
+                                <Icon type="right-square" />
+                                <span>Percentual de Acertos</span>
+                            </Link>
+                        </Menu.Item>
+                        <Menu.Item key="11">
+                            <Link to="/app-prova/admin/relatorios/habilidades-e-conteudos">
+                                <Icon type="right-square" />
+                                <span>Habilidades e Conteúdos</span>
+                            </Link>
+                        </Menu.Item>
+                        <Menu.Item key="12">
+                            <Link to="/app-prova/admin/relatorios/detalhado">
+                                <Icon type="right-square" />
+                                <span>Detalhado</span>
+                            </Link>
+                        </Menu.Item>
+                    </SubMenu>
+
+                    <Menu.Item key="13">
                         <Link to="/app-prova/admin/meus-alunos">
                             <Icon type="team" />
                             <span>Meus Alunos</span>
                         </Link>
                     </Menu.Item>
-                    <Menu.Item key="11" onClick={() => this.logout()}>
+                    <Menu.Item key="14" onClick={() => this.logout()}>
                         <Icon type="export" />
                         <span>Sair</span>
                     </Menu.Item>
