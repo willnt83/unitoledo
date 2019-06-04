@@ -159,7 +159,7 @@ const MapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
 	return {
-			setUsuario: (usuarioId, usuarioNome) => { dispatch({ type: 'SET_USUARIO', usuarioId, usuarioNome }) },
+		setUsuario: (usuarioId, usuarioNome) => { dispatch({ type: 'SET_USUARIO', usuarioId, usuarioNome }) },
 	}
 }
 

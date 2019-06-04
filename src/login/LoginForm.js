@@ -23,31 +23,38 @@ class LoginForm extends Component {
 					*/
 				})
 				.then(res => {
-					console.log('response', res)
 					if(res.headers['access-token']){
 						this.props.setHeader(res.headers['access-token'])
 					}
 
+					axios.defaults.headers = {
+						'Authorization': this.props.authHeaders.token
+					}
+	
+
 					if(res.data){
 						var hit = false
-						res.data.privilegios.forEach(privilegio => {
-							if(privilegio === 'personificacao')
-								hit = true
-						})
+						if(res.data.privilegios){
+							res.data.privilegios.forEach(privilegio => {
+								if(privilegio === 'personificacao')
+									hit = true
+							})
+						}
 						
 						if(hit) {
 							// Usuário possui privilégio de personificação
 							this.props.showModal(true)
 						}
-						else
-							this.setState({ step: 2 })
+						else{
+							this.props.setUsuario(res.data.userInfo.id, res.data.userInfo.nome)
+							this.props.handleUserLogin(res.data)
+						}						
 					}
 					else
 						console.log('login invalido')
 					this.setState({
 						entrarButtonLoading: false
 					})
-
 				})
 				.catch(error =>{
 					console.log(error)
@@ -61,7 +68,6 @@ class LoginForm extends Component {
 
 	render () {
 		const { getFieldDecorator } = this.props.form;
-
 		return (
 			<Content
 				id="mainContent"
@@ -116,13 +122,15 @@ class LoginForm extends Component {
 
 const MapStateToProps = (state) => {
 	return {
-		backEndPoint: state.backEndPoint
+		backEndPoint: state.backEndPoint,
+		authHeaders: state.authHeaders
 	}
 }
 
 const mapDispatchToProps = (dispatch) => {
     return {
-			setHeader: (token) => { dispatch({ type: 'SET_HEADERS', token }) }
+			setHeader: (token) => { dispatch({ type: 'SET_HEADERS', token }) },
+			setUsuario: (usuarioId, usuarioNome) => { dispatch({ type: 'SET_USUARIO', usuarioId, usuarioNome }) }
     }
 }
 

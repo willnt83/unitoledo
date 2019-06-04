@@ -17,7 +17,11 @@ class ExecucaoSimulado extends Component {
         questoesRespondidas: 0,
         showModal: false,
         btnSalvarRespostaLoading: false,
-        btnFinalizarSimuladoLoading: false
+        btnFinalizarSimuladoLoading: false,
+        showModalPercentualAcerto: false,
+        questoesRespondidas: null,
+        questoesRespondidasCorretamente: null,
+        percentualAcerto: null
     }
     onChange = (e) => {
         this.setState({
@@ -81,11 +85,35 @@ class ExecucaoSimulado extends Component {
             this.setState({btnFinalizarSimuladoLoading: false})
             this.openNotificationFinalizado()
             this.props.setSimuladoFinalizado(true)
-            this.props.history.push('/alunos')
+            this.loadModalPercentualAcerto()
+            //this.props.history.push('/alunos')
         })
         .catch(error =>{
             console.log(error)
         })
+    }
+
+    loadModalPercentualAcerto = () => {
+        axios.get(this.props.backEndPoint+'/api/getResult/'+this.props.simulado.id+'/'+this.props.contextoAluno.idUtilizador)
+        .then(res => {
+            console.log('res.data', res.data)
+            this.setState({
+                questoesRespondidas: res.data.result[0].questoesRespondidas,
+                questoesRespondidasCorretamente: res.data.result[0].questoesCertas,
+                percentualAcerto: res.data.result[0].percentual
+            })
+            this.showModalPercentualAcertoF(true)
+        })
+        .catch(error =>{
+            console.log(error)
+        })
+    }
+
+    showModalPercentualAcertoF = (bool) => {
+        this.setState({showModalPercentualAcerto : bool})
+
+        if(!bool)
+            this.props.history.push('/alunos')
     }
 
     handleModalCancel = () => {
@@ -189,6 +217,22 @@ class ExecucaoSimulado extends Component {
                     <p>Você está prestes a finalizar o simulado e não poderá alterar suas respostas posteriormente.</p>
                     <p><strong>Questões respondidas: {this.state.questoesRespondidas} de {this.props.simulado.questoes.length}</strong></p>
                     <p>Confirmar finalização do simulado?</p>
+                </Modal>
+
+                <Modal
+                    title="Resultado"
+                    visible={this.state.showModalPercentualAcerto}
+                    onOk={this.handleModalPercentualAcertoOk}
+                    onCancel={() => this.showModalPercentualAcertoF(false)}
+                    footer={[
+                        <Button className="buttonGreen" key="submit" type="primary" onClick={() => this.showModalPercentualAcertoF(false)}>
+                            <Icon type="check" />Ok
+                        </Button>
+                    ]}
+                >
+                    <p>Questões respondidas: <strong>{this.state.questoesRespondidas}</strong></p>
+                    <p>Questões respondidas corretamente: <strong> {this.state.questoesRespondidasCorretamente}</strong></p>
+                    <p>Percentual de acerto: <strong>{this.state.percentualAcerto}%</strong></p>
                 </Modal>
             </Layout>
         )

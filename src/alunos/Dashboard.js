@@ -109,7 +109,7 @@ class Dashboard extends Component {
                 }}>
                     <h3>Dashboard</h3>
                     {
-                        this.props.mainData.dash_aluno ?
+                        (this.props.mainData && this.props.mainData.dash_aluno) ?
 
                             <Row>
                                 <Col sm={24} md={6}>
@@ -201,7 +201,7 @@ class Dashboard extends Component {
                     }
                 </Content>
                 {
-                    this.props.mainData.dash_aluno ?
+                    (this.props.mainData && this.props.mainData.dash_aluno) ?
                     <Content style={{
                         margin: "20px 25px 0 25px",
                         padding: 24,

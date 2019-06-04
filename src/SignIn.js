@@ -39,9 +39,36 @@ class SignIn extends Component {
 		})
 	}
 
+	handleUserLogin = (response) => {
+		var i = 0
+		var contextos = []
+		var gruposFiltered = response.gruposDTO.grupos.filter(grupo => {
+			return (grupo.tipo == 'ALUNO' || grupo.tipo == 'PROFESSOR')
+		})
+		console.log('grupos filtered', gruposFiltered)
+
+		gruposFiltered.forEach((contexto) => {
+			contextos.push({
+				key: i,
+				description: contexto.tipo
+			})
+			i++
+		})
+
+		this.setState({
+			userInfos: response.gruposDTO.grupos,
+			step: 2,
+			contextos: contextos
+		})
+	}
+
 	showModal = (showModal) => {
 		this.setState({ showModalBuscarUsuarios: showModal });
-    };
+	};
+	
+	setStep = (step) => {
+		this.setState({step})
+	}
 
 	handleModalOk = () => {
         this.showModal(false);
@@ -50,7 +77,7 @@ class SignIn extends Component {
     handleModalCancel = () => {
         this.showModal(false);
 	}
-
+	/*
 	componentWillUpdate(nextProps, nextState) {
 		if(this.state.contextos.length !== nextState.contextos.length && nextState.contextos.length > 0){
 			this.setState({
@@ -58,17 +85,22 @@ class SignIn extends Component {
 			})
 		}
 	}
+	*/
 	
-	render () {
-		if(this.state.step === 1) {
+	render(){
+		console.log('this.state.contextos', this.state.contextos)
+		console.log('this.state.userInfos', this.state.userInfos)
+		if(this.state.step === 1){
+			console.log('step 1')
 			return (
 				<React.Fragment>
-					<LoginForm showModal={this.showModal} />
+					<LoginForm showModal={this.showModal} setStep={this.setStep} handleUserLogin={this.handleUserLogin} />
 					<PersonificacaoSelecaoAluno visible={this.state.showModalBuscarUsuarios} showModal={this.showModal} handleUserSelection={this.handleUserSelection} />
 				</React.Fragment>
 			)
 		}
 		else{
+			console.log('step 2')
 			return (
 				<SelecaoContexto contextos={this.state.contextos} userInfos={this.state.userInfos} />
 			)
