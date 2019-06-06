@@ -6,7 +6,6 @@ import moment from 'moment'
 //import CircularProgressbar from 'react-circular-progressbar';
 import 'react-circular-progressbar/dist/styles.css';
 import axios from 'axios'
-
 import "../static/style.css"
 
 const { Content } = Layout
@@ -26,29 +25,11 @@ class Dashboard extends Component {
     }
 
     componentWillMount(){
+        this.setState({tableLoading: true})
         if(this.props.mainData === null || this.props.contexto !== 'ALUNO'){
             this.props.resetAll()
             window.location.replace("/app-prova")
         }
-
-
-        if(this.props.mainData.dash_aluno){
-            this.setState({
-                tableData: this.props.mainData.dash_aluno.list.map(simulado => {
-                    var dataInicio = simulado.dataInicio !== null ? moment(simulado.dataInicio, 'YYYY-MM-DD').format('DD/MM/YYYY') : null
-                    var dataFim = simulado.dataFinal !== null ? moment(simulado.dataFinal, 'YYYY-MM-DD').format('DD/MM/YYYY') : null
-                    return({
-                        key: simulado.idSimulado,
-                        dataInicio,
-                        dataFim,
-                        questoesRespondidas: simulado.questoesRespondidas,
-                        respostasCorretas: simulado.questoesCertas
-                    })
-                }),
-                tableLoading: true
-            })
-        }
-        
 
         axios.defaults.headers = {
             'Authorization': this.props.authHeaders.token
@@ -57,16 +38,40 @@ class Dashboard extends Component {
         axios.post(this.props.backEndPoint+'/api/getData', this.props.contextoAluno)
 		.then(res => {
             this.props.setMainData(res.data)
-            this.setState({tableLoading: false})
+            var tableData = res.data.dash_aluno.list.map(simulado => {
+                var nome = null
+                var dataInicio = null
+                var dataFim = null
+
+                res.data.simulados.forEach(row => {
+                    if(row.id === simulado.idSimulado){
+                        nome = row.nome
+                        dataInicio = moment(row.dataHoraInicial).format('DD/MM/YYYY hh:mm:ss')
+                        dataFim = moment(row.dataHoraFinal).format('DD/MM/YYYY hh:mm:ss')
+                    }
+                })
+
+                return({
+                    key: simulado.idSimulado,
+                    nome: nome,
+                    dataInicio,
+                    dataFim,
+                    questoesRespondidas: simulado.questoesRespondidas,
+                    respostasCorretas: simulado.questoesCertas
+                })
+            })
+            this.setState({
+                tableLoading: false,
+                tableData
+            })
+
 		})
 		.catch(error =>{
 			console.log(error)
         })
     }
 
-    render() {
-        console.log('this.props.mainData', this.props.mainData)
-
+    render(){
         const columns = [
             {
                 title: 'ID',
@@ -75,27 +80,31 @@ class Dashboard extends Component {
             },
             {
 				title: "Simulado",
-				dataIndex: "simulado",
+				dataIndex: "nome",
 				sorter: (a, b) => { return a.nome.localeCompare(b.nome)},
             },
             {
 				title: "Iniciou em",
-				dataIndex: "dataInicio",
+                dataIndex: "dataInicio",
+                align: "center",
 				sorter: (a, b) => this.compareByDates(a.dataInicio, b.dataInicio)
             },
             {
 				title: "Finalizou em",
-				dataIndex: "dataFim",
+                dataIndex: "dataFim",
+                align: "center",
 				sorter: (a, b) => this.compareByDates(a.dataFim, b.dataFim)
             },
             {
                 title: 'Questões Respondidas',
                 dataIndex: 'questoesRespondidas',
+                align: "center",
                 sorter: (a, b) => a.questoesRespondidas - b.questoesRespondidas
             },
             {
                 title: 'Respostas Corretas',
                 dataIndex: 'respostasCorretas',
+                align: "center",
                 sorter: (a, b) => a.respostasCorretas - b.respostasCorretas
             },
         ]
@@ -201,7 +210,7 @@ class Dashboard extends Component {
                     }
                 </Content>
                 {
-                    (this.props.mainData && this.props.mainData.dash_aluno) ?
+                (this.props.mainData && this.props.mainData.dash_aluno) ?
                     <Content style={{
                         margin: "20px 25px 0 25px",
                         padding: 24,
@@ -211,7 +220,6 @@ class Dashboard extends Component {
                             columns={ columns } 
                             dataSource={ this.state.tableData }
                             loading={this.state.tableLoading}
-                            scroll={{ y: 950 }}
                         />
                     </Content>
                     : null

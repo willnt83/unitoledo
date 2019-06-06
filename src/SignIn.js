@@ -43,7 +43,7 @@ class SignIn extends Component {
 		var i = 0
 		var contextos = []
 		var gruposFiltered = response.gruposDTO.grupos.filter(grupo => {
-			return (grupo.tipo == 'ALUNO' || grupo.tipo == 'PROFESSOR')
+			return (grupo.tipo === 'ALUNO' || grupo.tipo === 'PROFESSOR')
 		})
 		console.log('grupos filtered', gruposFiltered)
 

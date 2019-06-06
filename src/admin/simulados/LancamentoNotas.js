@@ -192,28 +192,32 @@ class LancamentoNotas extends Component {
 
     componentDidUpdate(prevProps, prevState){
         if(prevState.linhas.length !== this.state.linhas.length){
+            console.log('linhas', this.state.linhas)
             var notaFormacaoGeral = null
             var notaConhecimentoEspecifico = null
+
             var strObj = '{'
             var comma = ''
             this.state.linhas.forEach((linha, index) => {
                 notaFormacaoGeral = linha.notas.notaFormacaoGeral !== null ? linha.notas.notaFormacaoGeral : ''
-                notaConhecimentoEspecifico = linha.notas.notaConhecimentoEspecifico !== null ? linha.notas.notaConhecimentoEspecifico : ''
-
                 comma = index === 0 ? '' : ', '
                 strObj += comma+'"notaFormacaoGeral_'+linha.idAluno+'": "'+notaFormacaoGeral+'"'
             })
             strObj += '}'
+            console.log('strObj1', strObj)
             var obj  = JSON.parse(strObj)
             this.props.form.setFieldsValue(obj)
+
 
             strObj = '{'
             comma = ''
             this.state.linhas.forEach((linha, index) => {
+                notaConhecimentoEspecifico = linha.notas.notaConhecimentoEspecifico !== null ? linha.notas.notaConhecimentoEspecifico : ''
                 comma = index === 0 ? '' : ', '
                 strObj += comma+'"notaConhecimentoEspecifico_'+linha.idAluno+'": "'+notaConhecimentoEspecifico+'"'
             })
             strObj += '}'
+            console.log('strObj2', strObj)
             obj  = JSON.parse(strObj)
             this.props.form.setFieldsValue(obj)
         }
