@@ -8,7 +8,9 @@ const { Content } = Layout
 
 class Dashboard extends Component {
     componentWillMount(){
-        if(this.props.mainData === null || (this.props.contexto !== 'COORDENADOR' && this.props.contexto !== 'PROFESSOR')){
+        console.log('this.props.mainData', this.props.mainData)
+        console.log('this.props.contexto', this.props.contexto)
+        if(this.props.mainData === null || (this.props.contexto !== 'COORDENADOR' && this.props.contexto !== 'PROFESSOR' && this.props.contexto !== 'APPPROVA - ADMIN')){
             this.props.resetAll()
             window.location.replace("/app-prova")
         }

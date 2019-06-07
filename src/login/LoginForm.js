@@ -30,9 +30,25 @@ class LoginForm extends Component {
 					axios.defaults.headers = {
 						'Authorization': this.props.authHeaders.token
 					}
-	
 
 					if(res.data){
+						this.props.setPrivilegios(res.data.privilegios)
+						if(res.data.userInfo){
+							this.props.setUsuario(res.data.userInfo.id, res.data.userInfo.nome)
+						}
+						this.props.handleUserLogin(res.data)
+						/*
+						if(res.data.gruposDTO && res.data.gruposDTO.grupos){
+							this.props.setUsuario(res.data.userInfo.id, res.data.userInfo.nome)
+							this.props.handleUserLogin(res.data)
+						}
+						else{
+							console.log('não tem grupos')
+						}
+						*/
+
+
+						/*
 						var hit = false
 						if(res.data.privilegios){
 							res.data.privilegios.forEach(privilegio => {
@@ -48,7 +64,7 @@ class LoginForm extends Component {
 						else{
 							this.props.setUsuario(res.data.userInfo.id, res.data.userInfo.nome)
 							this.props.handleUserLogin(res.data)
-						}						
+						}*/
 					}
 					else
 						console.log('login invalido')
@@ -130,7 +146,8 @@ const MapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
     return {
 			setHeader: (token) => { dispatch({ type: 'SET_HEADERS', token }) },
-			setUsuario: (usuarioId, usuarioNome) => { dispatch({ type: 'SET_USUARIO', usuarioId, usuarioNome }) }
+			setUsuario: (usuarioId, usuarioNome) => { dispatch({ type: 'SET_USUARIO', usuarioId, usuarioNome }) },
+			setPrivilegios: (privilegios) => { dispatch({ type: 'SET_PRIVILEGIOS', privilegios }) }
     }
 }
 

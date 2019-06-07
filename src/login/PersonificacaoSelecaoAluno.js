@@ -12,11 +12,12 @@ class PersonificacaoSelecaoAluno extends Component {
 	}
 
     handleSearchUserSubmit = (event) => {
-			event.preventDefault();
-			this.setState({
-				buscarButtonLoading: true,
-				tableLoading: true
-			})
+		event.preventDefault();
+		this.setState({
+			buscarButtonLoading: true,
+			tableLoading: true
+		})
+
 		this.props.form.validateFieldsAndScroll((err, values) => {
             if (!err) {
 
@@ -25,13 +26,6 @@ class PersonificacaoSelecaoAluno extends Component {
 						user: encodeURI(values.usuario)
 					}
 				}
-				/*
-				var data = {
-					params: {
-						user: encodeURI('ronnie')
-					}
-				}
-				*/
 
 				axios.defaults.headers = {
 					'Authorization': this.props.authHeaders.token

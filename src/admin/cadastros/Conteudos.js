@@ -148,7 +148,7 @@ class Conteudos extends Component {
     };
 
     componentWillMount(){
-        if(this.props.mainData === null || (this.props.contexto !== 'COORDENADOR' && this.props.contexto !== 'PROFESSOR')){
+        if(this.props.mainData === null || (this.props.contexto !== 'COORDENADOR' && this.props.contexto !== 'PROFESSOR' && this.props.contexto !== 'APPPROVA - ADMIN')){
             this.props.resetAll()
             window.location.replace("/app-prova")
         }

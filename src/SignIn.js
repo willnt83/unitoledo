@@ -17,7 +17,8 @@ class SignIn extends Component {
 			buscarButtonLoading: false,
 			buscarUsuarioLoading: false,
 			responseUserLogin: null,
-			showModalBuscarUsuarios: false
+			showModalBuscarUsuarios: false,
+			clearContexto: false
 		};
 	}
 
@@ -35,28 +36,57 @@ class SignIn extends Component {
 		this.setState({
 			userInfos: response.grupos,
 			contextos: contextos,
-			step: 2
+			step: 2,
+			clearContexto: true
 		})
 	}
 
 	handleUserLogin = (response) => {
-		var i = 0
 		var contextos = []
-		var gruposFiltered = response.gruposDTO.grupos.filter(grupo => {
-			return (grupo.tipo === 'ALUNO' || grupo.tipo === 'PROFESSOR')
-		})
-		console.log('grupos filtered', gruposFiltered)
-
-		gruposFiltered.forEach((contexto) => {
-			contextos.push({
-				key: i,
-				description: contexto.tipo
+		if(response.gruposDTO && response.gruposDTO.grupos){
+			var gruposFiltered = response.gruposDTO.grupos.filter(grupo => {
+				return (grupo.tipo === 'ALUNO' || grupo.tipo === 'PROFESSOR')
 			})
-			i++
+	
+			gruposFiltered.forEach((grupo) => {
+				if(grupo.tipo === 'ALUNO'){
+					contextos.push({
+						value: 'aluno',
+						description: 'ALUNO'
+					})
+				}
+				
+				if(grupo.tipo === 'PROFESSOR'){
+					contextos.push({
+						value: 'professor',
+						description: 'PROFESSOR'
+					})
+				}
+			})
+		}
+
+		// Verificando se tem outras permissões
+		response.privilegios.forEach(privilegio => {
+			if(privilegio === 'appprova'){
+				contextos.push({
+					value: 'appProvaAdmin',
+					description: 'APPPROVA - ADMIN'
+				})
+			}
+			
+			if(privilegio === 'personificacao' || privilegio === 'appprova.personificacao'){
+				contextos.push({
+					value: 'personificacao',
+					description: 'PERSONIFICAÇÃO'
+				})
+			}
+
 		})
+
+		var userInfos = response.gruposDTO && response.gruposDTO.grupos ? response.gruposDTO.grupos : null
 
 		this.setState({
-			userInfos: response.gruposDTO.grupos,
+			userInfos,
 			step: 2,
 			contextos: contextos
 		})
@@ -70,6 +100,10 @@ class SignIn extends Component {
 		this.setState({step})
 	}
 
+	setClearContexto = (bool) => {
+		this.setState({clearContexto: bool})
+	}
+
 	handleModalOk = () => {
         this.showModal(false);
     }
@@ -77,32 +111,32 @@ class SignIn extends Component {
     handleModalCancel = () => {
         this.showModal(false);
 	}
-	/*
-	componentWillUpdate(nextProps, nextState) {
-		if(this.state.contextos.length !== nextState.contextos.length && nextState.contextos.length > 0){
-			this.setState({
-				displaycontextosSelect: 'block'
-			})
-		}
-	}
-	*/
 	
 	render(){
-		console.log('this.state.contextos', this.state.contextos)
-		console.log('this.state.userInfos', this.state.userInfos)
 		if(this.state.step === 1){
-			console.log('step 1')
 			return (
 				<React.Fragment>
 					<LoginForm showModal={this.showModal} setStep={this.setStep} handleUserLogin={this.handleUserLogin} />
-					<PersonificacaoSelecaoAluno visible={this.state.showModalBuscarUsuarios} showModal={this.showModal} handleUserSelection={this.handleUserSelection} />
 				</React.Fragment>
 			)
 		}
 		else{
-			console.log('step 2')
 			return (
-				<SelecaoContexto contextos={this.state.contextos} userInfos={this.state.userInfos} />
+				<React.Fragment>
+					<SelecaoContexto
+						contextos={this.state.contextos}
+						userInfos={this.state.userInfos}
+						showModal={this.showModal}
+						clearContexto={this.state.clearContexto}
+						setClearContexto={this.setClearContexto}
+					/>
+					<PersonificacaoSelecaoAluno
+						visible={this.state.showModalBuscarUsuarios}
+						showModal={this.showModal}
+						handleUserSelection={this.handleUserSelection}
+					/>
+				</React.Fragment>
+
 			)
 		}
 	}

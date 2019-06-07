@@ -20,7 +20,6 @@ class ListMenu extends Component {
         this.setState({showModalLogout: true})
     }
 
-
     handleConfirmLogout = () => {
         this.setState({btnConfirmarLoading: true})
         var request = {}
@@ -40,9 +39,53 @@ class ListMenu extends Component {
     }
 
     render(){
-        return(
-            <React.Fragment>
+        var menu = null
+        console.log('this.props.mainData', this.props.mainData)
+        if(this.props.mainData && this.props.mainData.user && this.props.mainData.user === 'APPProva - Admin'){
+            menu = (
                 <Menu theme="dark" mode="inline" defaultSelectedKeys={['1']}>
+                    <SubMenu key="sub1" title={<span><Icon type="bars" /><span>Cadastros</span></span>}>
+                        <Menu.Item key="1">
+                            <Link to="/app-prova/admin/cadastros/habilidades">
+                                <Icon type="right-square" />
+                                <span>Habilidade</span>
+                            </Link>
+                        </Menu.Item>
+                        <Menu.Item key="2">
+                            <Link to="/app-prova/admin/cadastros/conteudos">
+                                <Icon type="right-square" />
+                                <span>Conteúdo</span>
+                            </Link>
+                        </Menu.Item>
+                        <Menu.Item key="3">
+                            <Link to="/app-prova/admin/cadastros/areas-de-conhecimento">
+                                <Icon type="right-square" />
+                                <span>Área de Conhecimento</span>
+                            </Link>
+                        </Menu.Item>
+                        <Menu.Item key="4">
+                            <Link to="/app-prova/admin/cadastros/fontes">
+                                <Icon type="right-square" />
+                                <span>Fontes</span>
+                            </Link>
+                        </Menu.Item>
+                    </SubMenu>
+                    <Menu.Item key="5">
+                        <Link to="/app-prova/admin/banco-de-questoes">
+                            <Icon type="hdd" />
+                            <span>Banco de Questões</span>
+                        </Link>
+                    </Menu.Item>
+                    <Menu.Item key="6" onClick={() => this.logout()}>
+                        <Icon type="export" />
+                        <span>Sair</span>
+                    </Menu.Item>
+                </Menu>
+            )
+        }
+        else{
+            menu =
+                (<Menu theme="dark" mode="inline" defaultSelectedKeys={['1']}>
                     <Menu.Item key="1">
                         <Link to="/app-prova/admin">
                             <Icon type="dashboard" />
@@ -131,7 +174,12 @@ class ListMenu extends Component {
                         <Icon type="export" />
                         <span>Sair</span>
                     </Menu.Item>
-                </Menu>
+                </Menu>)
+        }
+
+        return(
+            <React.Fragment>
+                {menu}
                 <Modal
                     title="Sair do Sistema"
                     visible={this.state.showModalLogout}
@@ -154,7 +202,9 @@ class ListMenu extends Component {
 const MapStateToProps = (state) => {
 	return {
         backEndPoint: state.backEndPoint,
-        authHeaders: state.authHeaders
+        authHeaders: state.authHeaders,
+        privilegios: state.privilegios,
+        mainData: state.mainData
 	}
 }
 

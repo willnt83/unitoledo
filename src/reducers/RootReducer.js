@@ -84,6 +84,7 @@ const initState = {
     mainData: null,
     periodoLetivo: null,
     periodoLetivoDescricao: null,
+    privilegios: [],
     pageTitle: [],
     habilidades: [],
     conteudos: [],
@@ -124,6 +125,7 @@ const RootReducer = (state = initState, action) => {
             mainData: null,
             periodoLetivo: null,
             periodoLetivoDescricao: null,
+            privilegios: [],
             pageTitle: [],
             habilidades: [],
             conteudos: [],
@@ -194,6 +196,12 @@ const RootReducer = (state = initState, action) => {
         return{
             ...state,
             periodoLetivoDescricao: action.periodoDescricao
+        }
+    }
+    else if(action.type === 'SET_PRIVILEGIOS'){
+        return{
+            ...state,
+            privilegios: action.privilegios
         }
     }
     else if(action.type === 'SET_PAGETITLE'){

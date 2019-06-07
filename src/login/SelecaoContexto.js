@@ -15,11 +15,15 @@ class ContextoSelection extends Component {
 		showEnviarButton: 'none',
 		contexto: null,
 		periodo: null,
-		contextoData: null
+		contextoData: null,
+		hasPeriodo: false
 	}
 
 	handleSelectContextoChange = (value) => {
-		this.setState({contexto: value})
+		this.setState({
+			contexto: value,
+			hasPeriodo: false
+		})
 		if(value === 'COORDENADOR'){
 			var selectedContexto = null
 
@@ -40,12 +44,15 @@ class ContextoSelection extends Component {
 
 				this.setState({
 					periodos: periodos,
-					showPeriodosSelect: 'block'
+					hasPeriodo: true
 				})
 			})
 			.catch(error =>{
 				console.log(error)
 			})
+		}
+		else if(value === 'APPPROVA - ADMIN' || value === 'PERSONIFICAÇÃO'){
+			this.setState({showEnviarButton: 'block'})
 		}
 		else{
 			var periodos = []
@@ -62,7 +69,7 @@ class ContextoSelection extends Component {
 
 			this.setState({
 				periodos: periodos,
-				showPeriodosSelect: 'block'
+				hasPeriodo: true
 			})
 		}
 	}
@@ -103,36 +110,60 @@ class ContextoSelection extends Component {
 		this.setState({ enviarButtonLoading : true})
 
 		var requestData = null
-
-		if(this.state.contexto === 'COORDENADOR'){
-			requestData = {
-				...this.state.contextoData,
-				idPeriodoLetivo: this.state.periodo
-			}
+		if(this.state.contexto === 'APPPROVA - ADMIN'){
+			this.props.setMainData({user: 'APPProva - Admin'})
+			this.props.setContexto(this.state.contexto)
+			this.props.history.push('/app-prova/admin')
+		}
+		else if(this.state.contexto === 'PERSONIFICAÇÃO'){
+			this.props.showModal(true)
+			this.setState({enviarButtonLoading: false})
 		}
 		else{
-			requestData = this.state.contextoData
-		}
-
-		axios.post(this.props.backEndPoint+'/api/getData', requestData)
-		.then(res => {
-			this.props.setMainData(res.data)
-			if(this.state.periodo)
-				this.props.setPeriodoLetivo(parseInt(this.state.periodo))
-
-			this.props.setContexto(this.state.contexto)
-
-			if(this.state.contexto === 'ALUNO'){
-				this.props.history.push('/app-prova/alunos')
+			if(this.state.contexto === 'COORDENADOR'){
+				requestData = {
+					...this.state.contextoData,
+					idPeriodoLetivo: this.state.periodo
+				}
 			}
 			else{
-				this.props.history.push('/app-prova/admin')
+				requestData = this.state.contextoData
 			}
-			
-		})
-		.catch(error =>{
-			console.log(error)
-		})
+	
+			axios.post(this.props.backEndPoint+'/api/getData', requestData)
+			.then(res => {
+				this.props.setMainData(res.data)
+				if(this.state.periodo)
+					this.props.setPeriodoLetivo(parseInt(this.state.periodo))
+	
+				this.props.setContexto(this.state.contexto)
+	
+				if(this.state.contexto === 'ALUNO'){
+					this.props.history.push('/app-prova/alunos')
+				}
+				else{
+					// Acesso ao admin
+					// Se for admin app prova
+						// tratar a lista de acesso para gerar o menu
+	
+					// senao se for professor ou coordenador
+					this.props.history.push('/app-prova/admin')
+				}
+				
+			})
+			.catch(error =>{
+				console.log(error)
+			})
+		}
+	}
+
+	componentWillUpdate(nextProps, nextState){
+		if(nextProps.clearContexto && !this.props.clearContexto){
+			this.props.setClearContexto(false)
+			this.props.form.setFieldsValue({
+				contexto: ''
+			})
+		}
 	}
 
 	render () {
@@ -179,26 +210,33 @@ class ContextoSelection extends Component {
 										>
 											{
 												this.props.contextos.map((item) => {
-													return (<Option key={item.description}>{item.description}</Option>)
+													return (<Option key={item.value} value={item.description}>{item.description}</Option>)
 												})
 											}
 										</Select>
 									)}
 								</Form.Item>
-								<Form.Item style={{display: this.state.showPeriodosSelect}}>
-									<Select
-										name="periodo"
-										style={{ width: '100%' }}
-										placeholder="Selecione o período"
-										onChange={this.handleSelectPeriodoChange}
-									>
-										{
-											this.state.periodos.map((item) => {
-												return (<Option key={item.key}>{item.description}</Option>)
-											})
-										}
-									</Select>
-								</Form.Item>
+								{
+									this.state.hasPeriodo ?
+										<Form.Item>
+											<Select
+												name="periodo"
+												style={{ width: '100%' }}
+												placeholder="Selecione o período"
+												onChange={this.handleSelectPeriodoChange}
+											>
+												{
+													this.state.periodos.map((item) => {
+														return (<Option key={item.key}>{item.description}</Option>)
+													})
+												}
+											</Select>
+										</Form.Item>
+										:
+										null
+
+								}
+
 								<Form.Item style={{padding: 10}}>
 									<Button
 										type="primary"

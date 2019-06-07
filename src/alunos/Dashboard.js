@@ -188,10 +188,14 @@ class Dashboard extends Component {
                                         <Col span={14}>
                                             <Col span={24} align="start" style={{fontSize: 20, fontWeight: 800, color: '#13a54b'}}>
                                                 {
-                                                    this.props.mainData.dash_aluno ?
-                                                    parseFloat(this.props.mainData.dash_aluno.total.totalPercentual.toFixed(2))
-                                                    :
-                                                    null
+                                                    this.props.mainData.dash_aluno
+                                                    && this.props.mainData.dash_aluno.total
+                                                    && this.props.mainData.dash_aluno.total.totalPercentual
+                                                    && this.props.mainData.dash_aluno.total.totalPercentual !== 'NaN'
+                                                    ?
+                                                        parseFloat(this.props.mainData.dash_aluno.total.totalPercentual.toFixed(2))
+                                                        :
+                                                        null
                                                 }
                                             </Col>
                                             <Col span={24} align="start" style={{fontSize: 17}}>
