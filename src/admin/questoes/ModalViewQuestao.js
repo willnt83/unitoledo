@@ -10,9 +10,7 @@ const alternativasArray = ['A)', 'B)', 'C)', 'D)', 'E)']
 class ModalViewQuestao extends Component {
     state = {
         questao: null,
-        //footerButtons: null,
         buttonLoadingSalvar: false,
-        //imgData: null
         buttonLoadingGerarPDF: false
     }
 
