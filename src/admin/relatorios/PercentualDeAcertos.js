@@ -97,6 +97,7 @@ class PercentualDeAcertos extends Component {
 				axios.get(this.props.backEndPoint+'/api/percentualDeAcerto/'+values.simulado+'/'+values.tipo)
 				.then(res => {
 					var mediaSimulado = res.data.mediaSimulado !== 'NaN' ? res.data.mediaSimulado : false
+					console.log('res.data.alunos', res.data.alunos)
 					this.setState({
 						idSimulado: values.simulado,
 						xlsUrl: this.props.backEndPoint+'/api/percentualDeAcertoDownload/'+values.simulado+'/'+values.tipo,
@@ -177,15 +178,14 @@ class PercentualDeAcertos extends Component {
 			},
 			{
 				title: "Aluno",
-				dataIndex: "aluno",
-				width: 300,
-				sorter: (a, b) => { return a.aluno.localeCompare(b.aluno)}
+				dataIndex: "nome",
+				sorter: (a, b) => { return a.nome.localeCompare(b.nome)}
 			},
 			{
 				title: "",
 				colSpan: 2,
 				dataIndex: "percentual",
-				width: 400,
+				width: 600,
 				render: (text, record) => {
 					return (
 						<Progress

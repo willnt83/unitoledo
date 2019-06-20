@@ -151,6 +151,7 @@ class Detalhado extends Component {
 	}
 
 	render() {
+		console.log('tableData', this.state.tableData)
 		const { getFieldDecorator } = this.props.form
 
 		const columns = [
