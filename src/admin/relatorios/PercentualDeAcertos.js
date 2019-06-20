@@ -17,6 +17,10 @@ const tiposOptions = [
 	{
 		id: 2,
 		description: "Conhecimento Específico"
+	},
+	{
+		id: 3,
+		description: "Todos"
 	}
 ]
 
