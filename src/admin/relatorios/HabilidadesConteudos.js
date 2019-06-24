@@ -99,9 +99,10 @@ class HabilidadeConteudo extends Component {
 							key: i,
 							tipo: 'Área de Conhecimento',
 							descricao: area.descricao,
-							percentual: area.percentua
+							percentual: parseFloat(area.percentual.toFixed(2))
 						})
 						i++
+						console.log(parseFloat(area.percentual.toFixed(2)))
 					})
 
 					res.data.conteudos.forEach(conteudo => {
@@ -109,7 +110,7 @@ class HabilidadeConteudo extends Component {
 							key: i,
 							tipo: 'Conteúdo',
 							descricao: conteudo.descricao,
-							percentual: conteudo.percentua
+							percentual: parseFloat(conteudo.percentual.toFixed(2))
 						})
 						i++
 					})
@@ -119,7 +120,7 @@ class HabilidadeConteudo extends Component {
 							key: i,
 							tipo: 'Habilidade',
 							descricao: habilidade.descricao,
-							percentual: habilidade.percentua
+							percentual: parseFloat(habilidade.percentual.toFixed(2))
 						})
 						i++
 					})
@@ -197,13 +198,13 @@ class HabilidadeConteudo extends Component {
 			{
 				title: "",
 				colSpan: 2,
-				dataIndex: "percentua",
+				dataIndex: "percentual",
 				width: 400,
 				render: (text, record) => {
 					return (
 						<Progress
 							strokeColor={'#41ff45'}
-							percent={record.percentua}
+							percent={record.percentual}
 						/>
 					)
 				}

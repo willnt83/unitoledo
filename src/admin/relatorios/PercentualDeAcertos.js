@@ -96,7 +96,7 @@ class PercentualDeAcertos extends Component {
 			if(!err){
 				axios.get(this.props.backEndPoint+'/api/percentualDeAcerto/'+values.simulado+'/'+values.tipo)
 				.then(res => {
-					var mediaSimulado = res.data.mediaSimulado !== 'NaN' ? res.data.mediaSimulado : false
+					var mediaSimulado = res.data.mediaSimulado !== 'NaN' ? parseFloat(res.data.mediaSimulado.toFixed(2)) : false
 					console.log('res.data.alunos', res.data.alunos)
 					this.setState({
 						idSimulado: values.simulado,
@@ -105,7 +105,7 @@ class PercentualDeAcertos extends Component {
 							return({
 								key: aluno.idAluno,
 								nome: aluno.nomeAluno,
-								taxaAcerto: aluno.taxaAcerto
+								taxaAcerto: parseFloat(aluno.taxaAcerto.toFixed(2))
 							})
 						}),
 						mediaSimulado
