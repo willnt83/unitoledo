@@ -179,13 +179,14 @@ class PercentualDeAcertos extends Component {
 			{
 				title: "Aluno",
 				dataIndex: "nome",
+				width: 300,
 				sorter: (a, b) => { return a.nome.localeCompare(b.nome)}
 			},
 			{
-				title: "",
+				title: "%",
 				colSpan: 2,
 				dataIndex: "percentual",
-				width: 600,
+				width: 200,
 				render: (text, record) => {
 					return (
 						<Progress
@@ -325,6 +326,7 @@ class PercentualDeAcertos extends Component {
 										columns={columns}
 										dataSource={this.state.tableData}
 										loading={this.state.tableLoading}
+										scroll={{ x: 1000 }}
 									/>
 								</Col>
 							</Row>

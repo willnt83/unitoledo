@@ -186,20 +186,20 @@ class HabilidadeConteudo extends Component {
 			{
 				title: "Tipo",
 				dataIndex: "tipo",
-				width: 300,
+				width: 200,
 				sorter: (a, b) => { return a.tipo.localeCompare(b.tipo)}
 			},
 			{
 				title: "Descrição",
 				dataIndex: "descricao",
-				width: 300,
+				width: 200,
 				sorter: (a, b) => { return a.descricao.localeCompare(b.descricao)}
 			},
 			{
-				title: "",
+				title: "%",
 				colSpan: 2,
 				dataIndex: "percentual",
-				width: 400,
+				width: 200,
 				render: (text, record) => {
 					return (
 						<Progress
@@ -302,6 +302,7 @@ class HabilidadeConteudo extends Component {
 										columns={columns}
 										dataSource={this.state.tableData}
 										loading={this.state.tableLoading}
+										scroll={{ x: 1000 }}
 									/>
 								</Col>
 							</Row>

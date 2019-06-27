@@ -159,13 +159,15 @@ class Detalhado extends Component {
 				title: "Matrícula",
 				dataIndex: "matricula",
 				width: 20,
-				sorter: (a, b) => a.matricula - b.matricula
+				sorter: (a, b) => a.matricula - b.matricula,
+				fixed: 'left',
 			},
 			{
 				title: "Nome do Aluno",
 				dataIndex: "aluno",
 				width: 300,
-				sorter: (a, b) => { return a.aluno.localeCompare(b.aluno)}
+				sorter: (a, b) => { return a.aluno.localeCompare(b.aluno)},
+				fixed: 'left',
 			},
 			{
 				title: "Quantidade de acertos em FG",
@@ -315,6 +317,7 @@ class Detalhado extends Component {
 										columns={columns}
 										dataSource={this.state.tableData}
 										loading={this.state.tableLoading}
+										scroll={{ x: 1000 }}
 									/>
 								</Col>
 							</Row>

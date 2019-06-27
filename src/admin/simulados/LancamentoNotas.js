@@ -143,8 +143,8 @@ class LancamentoNotas extends Component {
         var notaConhecimentoEspecificoValor = null
         this.state.linhas.forEach(linha => {
             idAluno = linha.idAluno
-            notaFormacaoGeralValor = 0
-            notaConhecimentoEspecificoValor = 0
+            notaFormacaoGeralValor = null
+            notaConhecimentoEspecificoValor = null
 
             this.state.notasFormacaoGeral.forEach(notaFormacaoGeral => {
                 if(parseInt(notaFormacaoGeral.idAluno) === parseInt(idAluno)){
