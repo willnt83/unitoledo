@@ -351,13 +351,15 @@ class Simulados extends Component {
             {
 				title: "ID",
 				dataIndex: "key",
-				sorter: (a, b) => a.key - b.key
+                sorter: (a, b) => a.key - b.key,
+                fixed: 'left'
             },
 			{
 				title: "Nome",
                 dataIndex: "nome",
                 sorter: (a, b) => { return a.nome.localeCompare(b.nome)},
-                width: 400
+                width: 400,
+                fixed: 'left'
             },
             {
 				title: "Disponibilidade",
@@ -447,6 +449,7 @@ class Simulados extends Component {
                         columns={ columns }
                         dataSource={ this.state.tableData }
                         loading={ this.state.tableLoading }
+                        scroll = {{x : 1000}}
                     />
                     <Row>
                         <Col span={24} align="middle">

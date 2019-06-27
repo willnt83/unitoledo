@@ -109,11 +109,6 @@ const routes = [
     path: "/app-prova/admin/relatorios/detalhado",
     sidebar: () => <div>Detalhado</div>,
     main: () => <Detalhado />
-  },
-  {
-    path: "/app-prova/admin/meus-alunos",
-    sidebar: () => <div>Cadastro/Conteudo</div>,
-    main: () => <h1>Meus Alunos</h1>
   }
 ];
 

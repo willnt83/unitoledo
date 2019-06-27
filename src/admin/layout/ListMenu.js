@@ -163,13 +163,6 @@ class ListMenu extends Component {
                             </Link>
                         </Menu.Item>
                     </SubMenu>
-
-                    <Menu.Item key="13">
-                        <Link to="/app-prova/admin/meus-alunos">
-                            <Icon type="team" />
-                            <span>Meus Alunos</span>
-                        </Link>
-                    </Menu.Item>
                     <Menu.Item key="14" onClick={() => this.logout()}>
                         <Icon type="export" />
                         <span>Sair</span>
