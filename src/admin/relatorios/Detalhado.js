@@ -159,15 +159,13 @@ class Detalhado extends Component {
 				title: "Matrícula",
 				dataIndex: "matricula",
 				width: 20,
-				sorter: (a, b) => a.matricula - b.matricula,
-				fixed: 'left',
+				sorter: (a, b) => a.matricula - b.matricula
 			},
 			{
 				title: "Nome do Aluno",
 				dataIndex: "aluno",
 				width: 300,
-				sorter: (a, b) => { return a.aluno.localeCompare(b.aluno)},
-				fixed: 'left',
+				sorter: (a, b) => { return a.aluno.localeCompare(b.aluno)}
 			},
 			{
 				title: "Quantidade de acertos em FG",
