@@ -93,6 +93,7 @@ class LancamentoNotas extends Component {
 
         axios.get(this.props.backEndPoint+'/api/getAlunoDiscursiva/'+value)
 		.then(res => {
+            console.log(res);
             this.setState({
                 linhas: res.data
             })
@@ -143,8 +144,8 @@ class LancamentoNotas extends Component {
         var notaConhecimentoEspecificoValor = null
         this.state.linhas.forEach(linha => {
             idAluno = linha.idAluno
-            notaFormacaoGeralValor = null
-            notaConhecimentoEspecificoValor = null
+            notaFormacaoGeralValor = linha.notas.notaFormacaoGeral
+            notaConhecimentoEspecificoValor = linha.notas.notaConhecimentoEspecifico
 
             this.state.notasFormacaoGeral.forEach(notaFormacaoGeral => {
                 if(parseInt(notaFormacaoGeral.idAluno) === parseInt(idAluno)){

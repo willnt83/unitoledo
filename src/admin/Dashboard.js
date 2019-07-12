@@ -80,6 +80,7 @@ class Dashboard extends Component {
 
         axios.post(this.props.backEndPoint+'/api/getDashAdmin', request)
         .then(res => {
+            console.log(res)
             var dataDash = res.data;
             this.setState({dataDash})
             
