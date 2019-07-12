@@ -1,5 +1,5 @@
 import React, { Component } from "react"
-import { Layout, Button, Form, Row, Col, Select, Input, Icon, notification } from "antd"
+import { Layout, Button, Form, Row, Col, Select, Input, Icon, notification, InputNumber } from "antd"
 import { withRouter } from "react-router-dom"
 import axios from "axios"
 import { connect } from 'react-redux'
@@ -281,9 +281,11 @@ class LancamentoNotas extends Component {
                                     <Col span={3}>
                                         <Form.Item>
                                             {getFieldDecorator(`notaFormacaoGeral_${linha.idAluno}`)(
-                                                <Input
+                                                <InputNumber
                                                     onBlur={this.handleNotaFormacaoGeralBlur}
                                                     disabled={notaFormacaoGeralDisabled}
+                                                    min={0}
+                                                    max={10}
                                                 />
                                             )}
                                         </Form.Item>
@@ -291,9 +293,11 @@ class LancamentoNotas extends Component {
                                     <Col span={3}>
                                         <Form.Item>
                                             {getFieldDecorator(`notaConhecimentoEspecifico_${linha.idAluno}`)(
-                                                <Input
+                                                <InputNumber
                                                     onBlur={this.handleNotaConhecimentoEspecificoBlur}
                                                     disabled={notaConhecimentoEspecificoDisabled}
+                                                    min={0}
+                                                    max={10}
                                                 />
                                             )}
                                         </Form.Item>
