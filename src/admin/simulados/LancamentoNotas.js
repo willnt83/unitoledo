@@ -105,42 +105,61 @@ class LancamentoNotas extends Component {
     }
 
     handleNotaFormacaoGeralBlur = (element) => {
-        if(parseInt(element.target.value) > 10 || parseInt(element.target.value) < 0){
-            alert('Verificar nota digitada');
+        var valid = true;
+        if(parseFloat(element.target.value) > 10 || parseFloat(element.target.value) < 0){
+            valid = false;
+            alert('A nota deve ser de 0 a 10');
         }
-        var idAluno = parseInt(element.target.id.replace('notaFormacaoGeral_', ''))
-        var nota = parseInt(element.target.value)
-        var notasFormacaoGeral = this.state.notasFormacaoGeral
-
-        var notasFormacaoGeral2 = notasFormacaoGeral.filter(nota => {
-            return (!nota.idAluno || nota.idAluno !== idAluno)
-        })
-
-        notasFormacaoGeral2.push({
-            idAluno: idAluno,
-            nota: nota
-        })
-        this.setState({notasFormacaoGeral: notasFormacaoGeral2})
+        if((element.target.value === '') || (element.target.value === ' ')){
+            valid = false;
+            alert('O campo não pode ser vazio');
+        }
+        if(valid){
+            var idAluno = parseInt(element.target.id.replace('notaFormacaoGeral_', ''))
+            var nota = parseFloat(element.target.value.replace(',', '.'))
+            var notasFormacaoGeral = this.state.notasFormacaoGeral
+    
+            var notasFormacaoGeral2 = notasFormacaoGeral.filter(nota => {
+                return (!nota.idAluno || nota.idAluno !== idAluno)
+            })
+    
+            notasFormacaoGeral2.push({
+                idAluno: idAluno,
+                nota: nota
+            })
+            this.setState({notasFormacaoGeral: notasFormacaoGeral2})
+        }
+       
 
     }
 
     handleNotaConhecimentoEspecificoBlur = (element) => {
-        if(parseInt(element.target.value) > 10 || parseInt(element.target.value) < 0){
-            alert('Verificar nota digitada');
+        var valid = true;
+        if(parseFloat(element.target.value) > 10 || parseFloat(element.target.value) < 0){
+            valid = false;
+            alert('A nota deve ser de 0 a 10');
         }
-        var idAluno = parseInt(element.target.id.replace('notaConhecimentoEspecifico_', ''))
-        var nota = parseInt(element.target.value)
-        var notasConhecimentoEspecifico = this.state.notasConhecimentoEspecifico
+        if((element.target.value === '') || (element.target.value === ' ')){
+            valid = false;
+            alert('O campo não pode ser vazio');
+        }
 
-        var notasConhecimentoEspecifico2 = notasConhecimentoEspecifico.filter(nota => {
-            return (!nota.idAluno || nota.idAluno !== idAluno)
-        })
-
-        notasConhecimentoEspecifico2.push({
-            idAluno: idAluno,
-            nota: nota
-        })
-        this.setState({notasConhecimentoEspecifico: notasConhecimentoEspecifico2})
+        if(valid){
+            var idAluno = parseInt(element.target.id.replace('notaConhecimentoEspecifico_', ''))
+            var nota = parseFloat(element.target.value.replace(',', '.'))
+            var notasConhecimentoEspecifico = this.state.notasConhecimentoEspecifico
+    
+            var notasConhecimentoEspecifico2 = notasConhecimentoEspecifico.filter(nota => {
+                return (!nota.idAluno || nota.idAluno !== idAluno)
+            })
+    
+            notasConhecimentoEspecifico2.push({
+                idAluno: idAluno,
+                nota: nota
+            })
+            this.setState({notasConhecimentoEspecifico: notasConhecimentoEspecifico2})
+        }
+        
     }
 
     salvar = () => {
