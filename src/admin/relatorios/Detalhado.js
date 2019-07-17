@@ -18,6 +18,7 @@ class Detalhado extends Component {
 	state = {
 		idSimulado: null,
 		xlsUrl: null,
+		pdfUrl:null,
 		simuladosOptions: [],
 		buttonLoading: false,
 		tableLoading: false,
@@ -104,6 +105,7 @@ class Detalhado extends Component {
 							})
 						}),
 						xlsUrl: this.props.backEndPoint+'/api/relatorioDetalhadoDownload/'+values.simulado,
+						pdfUrl: this.props.backEndPoint+'/api/relatorioDetalhadoPDF/'+values.simulado,
 					})
 
 				})
@@ -113,38 +115,6 @@ class Detalhado extends Component {
 			}
 		})
 	}
-
-	handleImprimir = () => {
-        this.setState({buttonLoadingGerarPDF: true})
-        const input = document.getElementById('print');
-        var HTML_Width = input.offsetWidth;
-        var HTML_Height = input.offsetHeight;
-        var top_left_margin = 15;
-        var PDF_Width = HTML_Width+(top_left_margin*2);
-        var PDF_Height = (PDF_Width*1.5)+(top_left_margin*2);
-        var canvas_image_width = HTML_Width;
-        var canvas_image_height = HTML_Height;
-        var totalPDFPages = Math.ceil(HTML_Height/PDF_Height)-1;
-
-        html2canvas(input, {
-            useCORS: true,
-            scale: 3
-        })
-        .then((canvas) => {
-            canvas.getContext('2d');
-            var imgData = canvas.toDataURL("image/jpeg", 1.0);
-            var pdf = new jsPDF('p', 'pt',  [PDF_Width, PDF_Height]);
-            pdf.addImage(imgData, 'JPG', top_left_margin, top_left_margin,canvas_image_width,canvas_image_height);
-            
-            
-            for (var i = 1; i <= totalPDFPages; i++) { 
-                pdf.addPage(PDF_Width, PDF_Height);
-                pdf.addImage(imgData, 'JPG', top_left_margin, -(PDF_Height*i)+(top_left_margin*4),canvas_image_width,canvas_image_height);
-            }
-            pdf.save('detalhado.pdf');
-            this.setState({buttonLoadingGerarPDF: false})
-        })
-    }
 
 	componentWillMount(){
 		this.getSimulados()
@@ -268,16 +238,16 @@ class Detalhado extends Component {
 								{
 									this.state.dataAvail ?
 									<React.Fragment>
+										<a href={this.state.pdfUrl}>
 										<Button
 											style={{marginLeft: 10}}
 											key="print"
 											type="primary"
-											onClick={this.handleImprimir}
-											loading={this.state.buttonLoadingGerarPDF}
 										>
 											<Icon type="file-pdf" />Gerar PDF
 										</Button>
-										<a href={this.state.xlsUrl}>
+										</a>
+										{/* <a href={this.state.xlsUrl}>
 											<Button
 												style={{marginLeft: 10}}
 												key="print"
@@ -285,7 +255,7 @@ class Detalhado extends Component {
 											>
 												<Icon type="file-excel" />Gerar Planilha
 											</Button>
-										</a>
+										</a> */}
 									</React.Fragment>
 									: null
 								}

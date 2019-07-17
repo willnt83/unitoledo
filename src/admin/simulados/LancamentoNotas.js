@@ -105,6 +105,9 @@ class LancamentoNotas extends Component {
     }
 
     handleNotaFormacaoGeralBlur = (element) => {
+        if(parseInt(element.target.value) > 10 || parseInt(element.target.value) < 0){
+            alert('Verificar nota digitada');
+        }
         var idAluno = parseInt(element.target.id.replace('notaFormacaoGeral_', ''))
         var nota = parseInt(element.target.value)
         var notasFormacaoGeral = this.state.notasFormacaoGeral
@@ -122,6 +125,9 @@ class LancamentoNotas extends Component {
     }
 
     handleNotaConhecimentoEspecificoBlur = (element) => {
+        if(parseInt(element.target.value) > 10 || parseInt(element.target.value) < 0){
+            alert('Verificar nota digitada');
+        }
         var idAluno = parseInt(element.target.id.replace('notaConhecimentoEspecifico_', ''))
         var nota = parseInt(element.target.value)
         var notasConhecimentoEspecifico = this.state.notasConhecimentoEspecifico
@@ -281,11 +287,9 @@ class LancamentoNotas extends Component {
                                     <Col span={3}>
                                         <Form.Item>
                                             {getFieldDecorator(`notaFormacaoGeral_${linha.idAluno}`)(
-                                                <InputNumber
+                                                <Input
                                                     onBlur={this.handleNotaFormacaoGeralBlur}
                                                     disabled={notaFormacaoGeralDisabled}
-                                                    min={0}
-                                                    max={10}
                                                 />
                                             )}
                                         </Form.Item>
@@ -293,11 +297,9 @@ class LancamentoNotas extends Component {
                                     <Col span={3}>
                                         <Form.Item>
                                             {getFieldDecorator(`notaConhecimentoEspecifico_${linha.idAluno}`)(
-                                                <InputNumber
+                                                <Input
                                                     onBlur={this.handleNotaConhecimentoEspecificoBlur}
                                                     disabled={notaConhecimentoEspecificoDisabled}
-                                                    min={0}
-                                                    max={10}
                                                 />
                                             )}
                                         </Form.Item>

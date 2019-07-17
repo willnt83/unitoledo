@@ -29,6 +29,7 @@ class HabilidadeConteudo extends Component {
 	state = {
 		idSimulado: null,
 		xlsUrl: null,
+		pdfUrl: null,
 		simuladosOptions: [],
 		buttonLoading: false,
 		tableLoading: false,
@@ -127,7 +128,8 @@ class HabilidadeConteudo extends Component {
 
 					this.setState({
 						dataAvail: true,
-						tableData
+						tableData, 
+						pdfUrl: this.props.backEndPoint+'/api/relatorioHabilidadeEConteudoPDF/'+values.simulado,
 					})
 				})
 				.catch(error =>{
@@ -255,16 +257,16 @@ class HabilidadeConteudo extends Component {
 								{
 									this.state.dataAvail ?
 									<React.Fragment>
+										<a href={this.state.pdfUrl}>
 										<Button
 											style={{marginLeft: 10}}
 											key="print"
 											type="primary"
-											onClick={this.handleImprimir}
-											loading={this.state.buttonLoadingGerarPDF}
 										>
 											<Icon type="file-pdf" />Gerar PDF
 										</Button>
-										<a href={this.state.xlsUrl}>
+										</a>
+										{/* <a href={this.state.xlsUrl}>
 											<Button
 												style={{marginLeft: 10}}
 												key="print"
@@ -272,7 +274,7 @@ class HabilidadeConteudo extends Component {
 											>
 												<Icon type="file-excel" />Gerar Planilha
 											</Button>
-										</a>
+										</a> */}
 									</React.Fragment>
 									: null
 								}

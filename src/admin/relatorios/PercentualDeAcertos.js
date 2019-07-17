@@ -33,6 +33,7 @@ class PercentualDeAcertos extends Component {
 	state = {
 		idSimulado: null,
 		xlsUrl: null,
+		pdfUrl: null,
 		simuladosOptions: [],
 		buttonLoading: false,
 		tableLoading: false,
@@ -101,6 +102,7 @@ class PercentualDeAcertos extends Component {
 					this.setState({
 						idSimulado: values.simulado,
 						xlsUrl: this.props.backEndPoint+'/api/percentualDeAcertoDownload/'+values.simulado+'/'+values.tipo,
+						pdfUrl: this.props.backEndPoint+'/api/percentualDeAcertoPDF/'+values.simulado+'/'+values.tipo,
 						tableData: res.data.alunos.map(aluno => {
 							return({
 								key: aluno.idAluno,
@@ -263,16 +265,16 @@ class PercentualDeAcertos extends Component {
 								{
 									this.state.mediaSimulado ?
 									<React.Fragment>
-										<Button
-											style={{marginLeft: 10}}
-											key="print"
-											type="primary"
-											onClick={this.handleImprimir}
-											loading={this.state.buttonLoadingGerarPDF}
-										>
-											<Icon type="file-pdf" />Gerar PDF
-										</Button>
-										<a href={this.state.xlsUrl}>
+										<a href={this.state.pdfUrl}>
+											<Button
+												style={{marginLeft: 10}}
+												key="print"
+												type="primary"
+											>
+												<Icon type="file-pdf" />Gerar PDF
+											</Button>
+										</a>
+										{/* <a href={this.state.xlsUrl}>
 											<Button
 												style={{marginLeft: 10}}
 												key="print"
@@ -280,7 +282,7 @@ class PercentualDeAcertos extends Component {
 											>
 												<Icon type="file-excel" />Gerar Planilha
 											</Button>
-										</a>
+										</a> */}
 									</React.Fragment>
 									: null
 								}

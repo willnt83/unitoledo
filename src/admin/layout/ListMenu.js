@@ -121,7 +121,7 @@ class ListMenu extends Component {
                     <Menu.Item key="6">
                         <Link to="/app-prova/admin/area-do-gestor">
                             <Icon type="area-chart" />
-                            <span>Área do Gestor</span>
+                            <span>Tempo Real</span>
                         </Link>
                     </Menu.Item>
                     <Menu.Item key="7">

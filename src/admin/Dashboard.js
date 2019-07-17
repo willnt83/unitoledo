@@ -88,10 +88,8 @@ class Dashboard extends Component {
             var termino = null
             var tableData = []
             tableData = res.data.list.map(list => {
-                inicio = moment(list.dataInicial)
+                inicio = moment(list.dataInicio)
                 termino = moment(list.dataFinal)
-                console.log(inicio.format('DD/MM/YYYY HH:mm'))
-                console.log(termino.format('DD/MM/YYYY HH:mm'))
                 return ({
                     key: list.idSimulado,
                     nome: list.nome,
@@ -103,9 +101,6 @@ class Dashboard extends Component {
                     inicioObj: inicio,
                     terminoObj: termino
                 })
-
-                
-                
             })
 
             this.setState({tableLoading: false})
