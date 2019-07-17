@@ -106,7 +106,7 @@ class LancamentoNotas extends Component {
 
     handleNotaFormacaoGeralBlur = (element) => {
         var valid = true;
-        if(parseFloat(element.target.value) > 10 || parseFloat(element.target.value) < 0){
+        if(parseFloat(element.target.value.replace(',', '.')) > 10 || parseFloat(element.target.value.replace(',', '.')) < 0){
             valid = false;
             alert('A nota deve ser de 0 a 10');
         }
@@ -135,7 +135,7 @@ class LancamentoNotas extends Component {
 
     handleNotaConhecimentoEspecificoBlur = (element) => {
         var valid = true;
-        if(parseFloat(element.target.value) > 10 || parseFloat(element.target.value) < 0){
+        if(parseFloat(element.target.value.replace(',', '.')) > 10 || parseFloat(element.target.value.replace(',', '.')) < 0){
             valid = false;
             alert('A nota deve ser de 0 a 10');
         }
