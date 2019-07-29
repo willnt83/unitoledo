@@ -46,31 +46,39 @@ class Dashboard extends Component {
 
 
     getSimulados = () => {
-        var cursos = this.props.mainData.cursos.map(curso => {
-            return({
-                id: curso.id,
-                nome: curso.nome,
-                idPeriodoLetivo: this.props.periodoLetivo
+        if(this.props.mainData.user && this.props.mainData.user === 'APPProva - Admin')
+            window.location.replace("/app-prova/admin/banco-de-questoes")
+        if(this.props.mainData.cursos){
+            var cursos = this.props.mainData.cursos.map(curso => {
+                return({
+                    id: curso.id,
+                    nome: curso.nome,
+                    idPeriodoLetivo: this.props.periodoLetivo
+                })
             })
-        })
-        var turmas = this.props.mainData.turmas
-        .map(turma => {
-            return({
-                id: turma.id,
-                nome: turma.nome,
-                idPeriodoLetivo: turma.idPeriodoLetivo,
-                idCurso: turma.idCurso
+        }
+        if(this.props.mainData.turmas){
+            var turmas = this.props.mainData.turmas
+            .map(turma => {
+                return({
+                    id: turma.id,
+                    nome: turma.nome,
+                    idPeriodoLetivo: turma.idPeriodoLetivo,
+                    idCurso: turma.idCurso
+                })
             })
-        })
-        var disciplinas = this.props.mainData.disciplinas
-        .map(disciplina => {
-            return({
-                id: disciplina.id,
-                nome: disciplina.nome,
-                idPeriodoLetivo: disciplina.idPeriodoLetivo,
-                idTurma: disciplina.idTurma
+        }
+        if(this.props.mainData.disciplinas){
+            var disciplinas = this.props.mainData.disciplinas
+            .map(disciplina => {
+                return({
+                    id: disciplina.id,
+                    nome: disciplina.nome,
+                    idPeriodoLetivo: disciplina.idPeriodoLetivo,
+                    idTurma: disciplina.idTurma
+                })
             })
-        })
+        }
         var request = {
             cursos: cursos,
             turmas: turmas,

@@ -11,7 +11,8 @@ class ModalViewQuestao extends Component {
     state = {
         questao: null,
         buttonLoadingSalvar: false,
-        buttonLoadingGerarPDF: false
+        buttonLoadingGerarPDF: false,
+        img: null
     }
 
     handleModalClosure = () => {
@@ -32,20 +33,20 @@ class ModalViewQuestao extends Component {
 
         html2canvas(input, {
             useCORS: true,
-            scale: 3
+            scale: 1,
+            scrollY: 0
         })
         .then((canvas) => {
             canvas.getContext('2d');
-            //console.log(canvas.height+"  "+canvas.width);
 
-            var imgData = canvas.toDataURL("image/jpeg", 1.0);
+            var imgData = canvas.toDataURL('image/png');
+            this.setState({img: imgData})
             var pdf = new jsPDF('p', 'pt',  [PDF_Width, PDF_Height]);
-            pdf.addImage(imgData, 'JPG', top_left_margin, top_left_margin,canvas_image_width,canvas_image_height);
-            
-            
+            pdf.addImage(imgData, 'PNG', top_left_margin, top_left_margin,canvas_image_width,canvas_image_height);
+
             for (var i = 1; i <= totalPDFPages; i++) { 
                 pdf.addPage(PDF_Width, PDF_Height);
-                pdf.addImage(imgData, 'JPG', top_left_margin, -(PDF_Height*i)+(top_left_margin*4),canvas_image_width,canvas_image_height);
+                pdf.addImage(imgData, 'PNG', top_left_margin, -(PDF_Height*i)+(top_left_margin*4),canvas_image_width,canvas_image_height);
             }
             pdf.save('questao-'+this.props.questao.key+'.pdf');
             this.setState({buttonLoadingGerarPDF: false})
@@ -161,7 +162,7 @@ class ModalViewQuestao extends Component {
                     width={900}
                     footer={footerButtons}
                 >
-                    <div id="questao" style={{fontVariant: 'normal'}}>
+                    <div id="questao" style={{fontVariant: 'normal', marginTop: 0, paddingTop: 0}}>
                         <Row>
                             <Col className="descricaoHtml2" span={24}>
                                 Questão {this.state.questao ? this.state.questao.key : null}
@@ -180,13 +181,10 @@ class ModalViewQuestao extends Component {
                                         <span style={{marginLeft: 15}}>Dificuldade: {this.dePara(this.state.questao.dificuldade)}</span>
                                         :null
                                 }
-                                
-                                <span></span>
-                                <span></span>
                             </Col>
                         </Row>
                         <Row style={{marginTop: 10}}>
-                            <Col className="descricaoHtml" span={24} dangerouslySetInnerHTML={{__html: description}} />
+                            <Col className="descricaoHtml" span={24} dangerouslySetInnerHTML={{__html: description}} style={{display: 'block'}} />
                         </Row>
                         <Row>
                             {

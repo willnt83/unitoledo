@@ -45,6 +45,12 @@ class ListMenu extends Component {
             menu = (
                 <Menu theme="dark" mode="inline" defaultSelectedKeys={['1']}>
                     <SubMenu key="sub1" title={<span><Icon type="bars" /><span>Cadastros</span></span>}>
+                        <Menu.Item key="3">
+                            <Link to="/app-prova/admin/cadastros/areas-de-conhecimento">
+                                <Icon type="right-square" />
+                                <span>Área de Conhecimento</span>
+                            </Link>
+                        </Menu.Item>
                         <Menu.Item key="1">
                             <Link to="/app-prova/admin/cadastros/habilidades">
                                 <Icon type="right-square" />
@@ -55,12 +61,6 @@ class ListMenu extends Component {
                             <Link to="/app-prova/admin/cadastros/conteudos">
                                 <Icon type="right-square" />
                                 <span>Conteúdo</span>
-                            </Link>
-                        </Menu.Item>
-                        <Menu.Item key="3">
-                            <Link to="/app-prova/admin/cadastros/areas-de-conhecimento">
-                                <Icon type="right-square" />
-                                <span>Área de Conhecimento</span>
                             </Link>
                         </Menu.Item>
                         <Menu.Item key="4">
@@ -93,6 +93,12 @@ class ListMenu extends Component {
                         </Link>
                     </Menu.Item>
                     <SubMenu key="sub1" title={<span><Icon type="bars" /><span>Cadastros</span></span>}>
+                        <Menu.Item key="4">
+                            <Link to="/app-prova/admin/cadastros/areas-de-conhecimento">
+                                <Icon type="right-square" />
+                                <span>Área de Conhecimento</span>
+                            </Link>
+                        </Menu.Item>
                         <Menu.Item key="2">
                             <Link to="/app-prova/admin/cadastros/habilidades">
                                 <Icon type="right-square" />
@@ -103,12 +109,6 @@ class ListMenu extends Component {
                             <Link to="/app-prova/admin/cadastros/conteudos">
                                 <Icon type="right-square" />
                                 <span>Conteúdo</span>
-                            </Link>
-                        </Menu.Item>
-                        <Menu.Item key="4">
-                            <Link to="/app-prova/admin/cadastros/areas-de-conhecimento">
-                                <Icon type="right-square" />
-                                <span>Área de Conhecimento</span>
                             </Link>
                         </Menu.Item>
                         <Menu.Item key="5">

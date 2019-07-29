@@ -183,3 +183,9 @@ code {
     border-color: #e8e8e8 !important;
     padding: 5px !important
 }
+
+.linhasDiscursiva{
+    height: 20px !important;
+    border: 1px solid !important;
+    border-color: #e8e8e8 !important;
+}

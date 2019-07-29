@@ -171,21 +171,21 @@ class ModalImprimirSimulado extends Component {
                                                 </Row>
                                                 :
                                                 <Row style={{marginTop: 10, marginBottom: 10}}>
-                                                    <Col span={24} style={{height: 20, borderBottom: '1px solid #e8e8e8'}}></Col>
-                                                    <Col span={24} style={{height: 20, borderBottom: '1px solid #e8e8e8'}}></Col>
-                                                    <Col span={24} style={{height: 20, borderBottom: '1px solid #e8e8e8'}}></Col>
-                                                    <Col span={24} style={{height: 20, borderBottom: '1px solid #e8e8e8'}}></Col>
-                                                    <Col span={24} style={{height: 20, borderBottom: '1px solid #e8e8e8'}}></Col>
-                                                    <Col span={24} style={{height: 20, borderBottom: '1px solid #e8e8e8'}}></Col>
-                                                    <Col span={24} style={{height: 20, borderBottom: '1px solid #e8e8e8'}}></Col>
-                                                    <Col span={24} style={{height: 20, borderBottom: '1px solid #e8e8e8'}}></Col>
-                                                    <Col span={24} style={{height: 20, borderBottom: '1px solid #e8e8e8'}}></Col>
-                                                    <Col span={24} style={{height: 20, borderBottom: '1px solid #e8e8e8'}}></Col>
-                                                    <Col span={24} style={{height: 20, borderBottom: '1px solid #e8e8e8'}}></Col>
-                                                    <Col span={24} style={{height: 20, borderBottom: '1px solid #e8e8e8'}}></Col>
-                                                    <Col span={24} style={{height: 20, borderBottom: '1px solid #e8e8e8'}}></Col>
-                                                    <Col span={24} style={{height: 20, borderBottom: '1px solid #e8e8e8'}}></Col>
-                                                    <Col span={24} style={{height: 20, borderBottom: '1px solid #e8e8e8'}}></Col>
+                                                    <Col span={24} className="linhasDiscursiva"></Col>
+                                                    <Col span={24} className="linhasDiscursiva"></Col>
+                                                    <Col span={24} className="linhasDiscursiva"></Col>
+                                                    <Col span={24} className="linhasDiscursiva"></Col>
+                                                    <Col span={24} className="linhasDiscursiva"></Col>
+                                                    <Col span={24} className="linhasDiscursiva"></Col>
+                                                    <Col span={24} className="linhasDiscursiva"></Col>
+                                                    <Col span={24} className="linhasDiscursiva"></Col>
+                                                    <Col span={24} className="linhasDiscursiva"></Col>
+                                                    <Col span={24} className="linhasDiscursiva"></Col>
+                                                    <Col span={24} className="linhasDiscursiva"></Col>
+                                                    <Col span={24} className="linhasDiscursiva"></Col>
+                                                    <Col span={24} className="linhasDiscursiva"></Col>
+                                                    <Col span={24} className="linhasDiscursiva"></Col>
+                                                    <Col span={24} className="linhasDiscursiva"></Col>
                                                 </Row>
                                             }
                                         </div>
