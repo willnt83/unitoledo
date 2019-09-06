@@ -46,8 +46,10 @@ class Dashboard extends Component {
 
 
     getSimulados = () => {
-        if(this.props.mainData.user && this.props.mainData.user === 'APPProva - Admin')
-            window.location.replace("/app-prova/admin/banco-de-questoes")
+        if(this.props.mainData.user && this.props.mainData.user === 'APPProva - Admin'){
+            this.props.history.push('/app-prova/admin/banco-de-questoes')
+            //window.location.replace("/app-prova/admin/banco-de-questoes")
+        }
         if(this.props.mainData.cursos){
             var cursos = this.props.mainData.cursos.map(curso => {
                 return({
