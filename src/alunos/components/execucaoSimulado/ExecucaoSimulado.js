@@ -21,7 +21,8 @@ class ExecucaoSimulado extends Component {
         showModalPercentualAcerto: false,
         questoesRespondidas: null,
         questoesRespondidasCorretamente: null,
-        percentualAcerto: null
+        percentualAcerto: null,
+        btnDisabled: false
     }
     onChange = (e) => {
         this.setState({
@@ -42,7 +43,7 @@ class ExecucaoSimulado extends Component {
     }
 
     handleResponder = (idAlternativa) => {
-        this.setState({btnSalvarRespostaLoading: true})
+        this.setState({btnSalvarRespostaLoading: true, btnDisabled: true})
         var questaoId = this.props.simulado.questoes[this.state.questaoNo].id
         var request = {
             id: 0,
@@ -59,12 +60,12 @@ class ExecucaoSimulado extends Component {
             questoes[this.state.questaoNo].respondida = idAlternativa
             this.props.setQuestaoRespondida(questoes)
             this.countRespondidas()
-            this.setState({btnSalvarRespostaLoading: false})
+            this.setState({btnSalvarRespostaLoading: false, btnDisabled: false})
             this.openNotificationRespondido()
         })
         .catch(error =>{
             console.log('error: ', error)
-            this.setState({btnSalvarRespostaLoading: false})
+            this.setState({btnSalvarRespostaLoading: false, btnDisabled: false})
         })
     }
 
@@ -154,15 +155,10 @@ class ExecucaoSimulado extends Component {
             window.location.replace("/app-prova")
         }
 
-        console.log('this.props.simulado', this.props.simulado)
         this.countRespondidas()
     }
 
     render() {
-        console.log('simulado', this.props.simulado)
-        console.log('usuarioId', this.props.usuarioId)
-        console.log('contextoAluno', this.props.contextoAluno)
-        
         // Settando periodoExecucao (em minutos) com a diferença entre as dataHoras Inicial e Final
         var periodoExecucaoObj = null
         if(this.props.simulado){
@@ -201,6 +197,7 @@ class ExecucaoSimulado extends Component {
                     btnSalvarRespostaLoading={this.state.btnSalvarRespostaLoading}
                     btnFinalizarSimuladoLoading={this.state.btnFinalizarSimuladoLoading}
                     tempoTotal={this.state.tempoTotalSimulado}
+                    btnDisabled={this.state.btnDisabled}
                 />
                 <Modal
                     title="Atenção!"

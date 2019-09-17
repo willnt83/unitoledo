@@ -10,6 +10,7 @@
     "axios": "^0.19.0",
     "draftjs-to-html": "^0.8.4",
     "html2canvas": "^1.0.0-rc.3",
+    "html2pdf.js": "^0.9.1",
     "jspdf": "^1.5.3",
     "megadraft": "^0.6.5",
     "moment": "^2.24.0",

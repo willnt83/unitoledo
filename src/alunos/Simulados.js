@@ -32,7 +32,7 @@ class Simulados extends Component {
 
         axios.post(this.props.backEndPoint+'/api/statusSimulado', request)
         .then(res => {
-            axios.get(this.props.backEndPoint+'/api/getSimuladoIdAlunoQuestao/'+record.key+'/'+this.props.contextoAluno.idUtilizador+'/'+this.props.usuarioNome)
+            axios.get(encodeURI(this.props.backEndPoint+'/api/getSimuladoIdAlunoQuestao/'+record.key+'/'+this.props.contextoAluno.idUtilizador+'/'+this.props.usuarioNome))
             .then(res => {
                 this.setState({tableLoading: false})
                 var inicioObj = moment(record.inicio, 'DD/MM/YYYY HH:mm')
@@ -126,7 +126,6 @@ class Simulados extends Component {
     }
 
     render() {
-        console.log('this.props.usuarioNome', this.props.usuarioNome)
         const columns = [
             {
                 title: 'ID',

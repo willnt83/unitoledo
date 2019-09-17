@@ -42,10 +42,11 @@ class SignIn extends Component {
 	}
 
 	handleUserLogin = (response) => {
+
 		var contextos = []
 		if(response.gruposDTO && response.gruposDTO.grupos){
 			var gruposFiltered = response.gruposDTO.grupos.filter(grupo => {
-				return (grupo.tipo === 'ALUNO' || grupo.tipo === 'PROFESSOR')
+				return (grupo.tipo === 'ALUNO' || grupo.tipo === 'PROFESSOR' || grupo.tipo === 'COORDENADOR')
 			})
 	
 			gruposFiltered.forEach((grupo) => {
@@ -60,6 +61,13 @@ class SignIn extends Component {
 					contextos.push({
 						value: 'professor',
 						description: 'PROFESSOR'
+					})
+				}
+
+				if(grupo.tipo === 'COORDENADOR'){
+					contextos.push({
+						value: 'coordenador',
+						description: 'COORDENADOR'
 					})
 				}
 			})
@@ -80,8 +88,9 @@ class SignIn extends Component {
 					description: 'PERSONIFICAÇÃO'
 				})
 			}
-
 		})
+
+		console.log('contextos', contextos)
 
 		var userInfos = response.gruposDTO && response.gruposDTO.grupos ? response.gruposDTO.grupos : null
 

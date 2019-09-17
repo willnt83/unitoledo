@@ -2,8 +2,9 @@ import React, { Component } from "react"
 import { Icon, Modal, Form, Button,  Row, Col, Divider, Select } from "antd"
 import { connect } from 'react-redux'
 import BackEndRequests from '../hocs/BackEndRequests'
-import html2canvas from 'html2canvas'
-import jsPDF from 'jspdf'
+//import html2canvas from 'html2canvas'
+//import jsPDF from 'jspdf'
+import html2pdf from 'html2pdf.js'
 
 const alternativasArray = ['A)', 'B)', 'C)', 'D)', 'E)']
 
@@ -34,9 +35,25 @@ class ModalImprimirSimulado extends Component {
         this.props.handleShowModalImprimir(false)
     }
 
+
     handleImprimir = () => {
         this.setState({buttonLoadingGerarPDF: true})
-        const input = document.getElementById('simulado');
+
+        var element = document.getElementById('simulado');
+        var opt = {
+            margin:       10,
+            filename:     'simulado-'+this.props.simulado.id+'.pdf',
+            image:        { type: 'jpeg', quality: 0.98 },
+            html2canvas:  { useCORS: true, scale: 3 },
+            jsPDF:        { unit: 'pt', format: 'a4', orientation: 'portrait' },
+            pagebreak:    { mode: 'avoid-all', avoid: '.dontBreak' }
+        };
+
+        // New Promise-based usage:
+        html2pdf().set(opt).from(element).toCanvas().toImg().toPdf().save();
+
+
+        /*const input = document.getElementById('simulado');
         var HTML_Width = input.offsetWidth;
         var HTML_Height = input.offsetHeight;
         var top_left_margin = 15;
@@ -62,7 +79,7 @@ class ModalImprimirSimulado extends Component {
             }
             pdf.save('simulado-'+this.props.simulado.id+'.pdf');
             this.setState({buttonLoadingGerarPDF: false})
-        })
+        })*/
 
     }
 
@@ -144,14 +161,15 @@ class ModalImprimirSimulado extends Component {
                         <Row style={{marginBottom: 0, marginTop: 10}}>
                             <Col span={24}><h4>Simulado: {this.props.simulado ? this.props.simulado.nome : null}</h4></Col>
                         </Row>
+                        
                         <Divider style={{marginTop: 10}} />
+
                         {
                             this.state.questoes.length > 0 ?
                             this.state.questoes.map((questao, index) => {
                                 return(
-                                    <React.Fragment key={questao.id}>
-                                        <div className="questaoSimuladoImpressao">
-                                            <Row style={{marginTop: 0, marginBottom: 0}}>
+                                    <div key={questao.id} className="questaoSimuladoImpressao dontBreak">
+                                            <Row>
                                                 <Col className="descricaoHtml2" span={24} dangerouslySetInnerHTML={{__html: 'Questao '+ (index + 1) + ' ('+ questao.fonte.description + ')' + questao.descricao}} />
                                             </Row>
                                             {
@@ -188,8 +206,8 @@ class ModalImprimirSimulado extends Component {
                                                     <Col span={24} className="linhasDiscursiva"></Col>
                                                 </Row>
                                             }
-                                        </div>
-                                    </React.Fragment>
+                                    </div>
+
                                 )
                             })
                             : null

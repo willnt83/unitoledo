@@ -32,39 +32,12 @@ class LoginForm extends Component {
 					}
 
 					if(res.data){
+						console.log('res.data', res.data)
 						this.props.setPrivilegios(res.data.privilegios)
 						if(res.data.userInfo){
 							this.props.setUsuario(res.data.userInfo.id, res.data.userInfo.nome)
 						}
 						this.props.handleUserLogin(res.data)
-						/*
-						if(res.data.gruposDTO && res.data.gruposDTO.grupos){
-							this.props.setUsuario(res.data.userInfo.id, res.data.userInfo.nome)
-							this.props.handleUserLogin(res.data)
-						}
-						else{
-							console.log('não tem grupos')
-						}
-						*/
-
-
-						/*
-						var hit = false
-						if(res.data.privilegios){
-							res.data.privilegios.forEach(privilegio => {
-								if(privilegio === 'personificacao')
-									hit = true
-							})
-						}
-						
-						if(hit) {
-							// Usuário possui privilégio de personificação
-							this.props.showModal(true)
-						}
-						else{
-							this.props.setUsuario(res.data.userInfo.id, res.data.userInfo.nome)
-							this.props.handleUserLogin(res.data)
-						}*/
 					}
 					else
 						console.log('login invalido')

@@ -149,11 +149,11 @@ class QuestaoSimulado extends Component {
                         </Col>
                     </Row>
                     <Row style={{ marginTop: 30 }}>
-                        <Col span={8} align="begining"><Button type="default" onClick={() => this.props.handleAnterior()} style={{display: this.state.btnDisplayAnterior}}><Icon type="left" />Anterior</Button></Col>
+                        <Col span={8} align="begining"><Button type="default" onClick={() => this.props.handleAnterior()} style={{display: this.state.btnDisplayAnterior}} disabled={this.props.btnDisabled}><Icon type="left" />Anterior</Button></Col>
                         <Col span={8} align="center"><Button type="primary" onClick={() => this.props.handleResponder(this.state.resposta)} loading={this.state.btnSalvarRespostaLoading}><Icon type="save" />Salvar Resposta</Button></Col>
                         <Col span={8} align="end">
-                            <Button className="buttonGreen" type="success" style={{display: this.state.btnDisplayProximo}} onClick={() => this.props.handleProximo()}>Próximo<Icon type="right" /></Button>
-                            <Button className="buttonOrange" type="success" style={{display: this.state.btnDisplayFinalizarSimulado}} onClick={() => this.props.handleFinalizarSimulado()} loading={this.state.btnFinalizarSimuladoLoading} ><Icon type="check-circle" />Finalizar Simulado</Button>
+                            <Button className="buttonGreen" type="success" style={{display: this.state.btnDisplayProximo}} onClick={() => this.props.handleProximo()} disabled={this.props.btnDisabled}>Próximo<Icon type="right" /></Button>
+                            <Button className="buttonOrange" type="success" style={{display: this.state.btnDisplayFinalizarSimulado}} onClick={() => this.props.handleFinalizarSimulado()} loading={this.state.btnFinalizarSimuladoLoading} disabled={this.props.btnDisabled}><Icon type="check-circle" />Finalizar Simulado</Button>
                         </Col>
                     </Row>
                 </Content>

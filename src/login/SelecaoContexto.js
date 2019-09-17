@@ -42,6 +42,8 @@ class ContextoSelection extends Component {
 					})
 				})
 
+				periodos = periodos.reverse()
+
 				this.setState({
 					periodos: periodos,
 					hasPeriodo: true
