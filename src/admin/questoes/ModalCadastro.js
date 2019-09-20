@@ -170,6 +170,7 @@ class ModalCadastro extends Component {
                     },
                     "alternativas" : this.state.alternativas
                 }
+
                 var validation = true
 
                 // Validação Descrição
@@ -183,7 +184,6 @@ class ModalCadastro extends Component {
                     this.setState({alternativasTooltipVisible: true})
                     validation = false
                 }
-
 
                 if(validation){
                     this.setState({alternativasTooltipVisible: false})
@@ -210,9 +210,6 @@ class ModalCadastro extends Component {
                     }
                     this.props.setQuestao(questao)
                     this.props.showModalViewQuestaoF(true, 'write')
-                    
-                    //this.props.hideModalCadastro()
-                    //this.props.createUpdateQuestao(request)
                 }
                    
             }
@@ -346,7 +343,7 @@ class ModalCadastro extends Component {
             questaoContent: draftToHtml(convertToRaw(editorState.getCurrentContent())),
             descricaoTooltip: false
         })
-      }
+    }
 
     openNotificationError = (message) => {
         const args = {

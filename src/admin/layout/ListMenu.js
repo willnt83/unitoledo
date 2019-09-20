@@ -40,7 +40,7 @@ class ListMenu extends Component {
 
     render(){
         var menu = null
-        console.log('this.props.mainData', this.props.mainData)
+        //console.log('this.props.mainData', this.props.mainData)
         if(this.props.mainData && this.props.mainData.user && this.props.mainData.user === 'APPProva - Admin'){
             menu = (
                 <Menu theme="dark" mode="inline" defaultSelectedKeys={['1']}>

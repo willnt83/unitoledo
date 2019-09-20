@@ -1,10 +1,12 @@
 import React, { Component } from "react"
-import { Layout, Icon, Form, Button, Row, Col, Select, Progress, Table } from "antd"
+import { Layout, Icon, Form, Button, Row, Col, Select, Table } from "antd"
 import { connect } from 'react-redux'
 import axios from "axios"
 import { withRouter } from "react-router-dom"
+/*
 import html2canvas from 'html2canvas'
 import jsPDF from 'jspdf'
+*/
 
 const { Content } = Layout
 const Option = Select.Option

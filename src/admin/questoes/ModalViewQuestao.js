@@ -190,7 +190,10 @@ class ModalViewQuestao extends Component {
                             {
                                 alternativas.map((alternativa, index) => {
                                     return(
-                                        <p key={alternativa.descricao} className="alternativa">{alternativasArray[index]} {alternativa.descricao}</p>
+                                        <Col span={24} key={alternativa.descricao} className="alternativa">
+                                            <span className="bold">{alternativasArray[index]}</span>
+                                            <span dangerouslySetInnerHTML={{__html: alternativa.descricao}} style={{display: 'block'}}></span>
+                                        </Col>
                                     )
                                 })
                             }

@@ -9,6 +9,7 @@ import jsPDF from 'jspdf'
 const { Content } = Layout
 const Option = Select.Option
 
+/*
 const tiposOptions = [
 	{
 		id: 1,
@@ -19,6 +20,7 @@ const tiposOptions = [
 		description: "Conhecimento Específico"
 	}
 ]
+*/
 
 class HabilidadeConteudo extends Component {
 	constructor(props) {

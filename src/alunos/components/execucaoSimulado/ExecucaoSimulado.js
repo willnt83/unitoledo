@@ -19,7 +19,7 @@ class ExecucaoSimulado extends Component {
         btnSalvarRespostaLoading: false,
         btnFinalizarSimuladoLoading: false,
         showModalPercentualAcerto: false,
-        questoesRespondidas: null,
+        //questoesRespondidas: null,
         questoesRespondidasCorretamente: null,
         percentualAcerto: null,
         btnDisabled: false

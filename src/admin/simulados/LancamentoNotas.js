@@ -1,5 +1,5 @@
 import React, { Component } from "react"
-import { Layout, Button, Form, Row, Col, Select, Input, Icon, notification, InputNumber } from "antd"
+import { Layout, Button, Form, Row, Col, Select, Input, Icon, notification } from "antd"
 import { withRouter } from "react-router-dom"
 import axios from "axios"
 import { connect } from 'react-redux'
