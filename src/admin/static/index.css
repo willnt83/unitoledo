@@ -195,3 +195,8 @@ code {
 .bold{
     font-weight: 800
 }
+/*
+.ant-table-column-has-actions{
+    word-break: break-all !important
+}
+*/
