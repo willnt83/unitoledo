@@ -68,6 +68,7 @@ class ContextoSelection extends Component {
 					})
 				}
 			})
+			
 
 			this.setState({
 				periodos: periodos,
