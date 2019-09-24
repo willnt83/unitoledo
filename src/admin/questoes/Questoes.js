@@ -313,18 +313,19 @@ class Questoes extends Component {
 			{
 				title: "ID",
 				dataIndex: "key",
-				sorter: (a, b) => a.key - b.key
+				sorter: (a, b) => a.key - b.key,
+				fixed: 'left',
 			},
 			{
 				title: "Descrição",
 				dataIndex: "labelDescricao",
-				width: 500,
-				sorter: (a, b) => { return a.labelDescricao.localeCompare(b.labelDescricao)}
+				width: 200,
+				sorter: (a, b) => { return a.labelDescricao.localeCompare(b.labelDescricao)}				
 			},
 			{
 				title: "Habilidade",
 				dataIndex: "habilidade",
-				sorter: (a, b) => { return a.habilidade.localeCompare(b.habilidade)},
+				sorter: (a, b) => { return a.habilidade.localeCompare(b.habilidade)}
 				//width: 139
 			},
 			{
@@ -335,13 +336,14 @@ class Questoes extends Component {
 			{
 				title: "Área de Conhecimento",
 				dataIndex: "areaConhecimento",
-				sorter: (a, b) => { return a.areaConhecimento.localeCompare(b.areaConhecimento)},
+				sorter: (a, b) => { return a.areaConhecimento.localeCompare(b.areaConhecimento)}
 				//width: 93
 			},
 			{
 				title: "Status",
 				dataIndex: "labelStatus",
 				align: "center",
+				fixed: 'right',
 				//width: 150,
 				filters: [
 					{
@@ -362,6 +364,7 @@ class Questoes extends Component {
 				colSpan: 2,
 				dataIndex: "operacao",
 				align: "center",
+				fixed: 'right',
 				width: 150,
 				render: (text, record) => {
 					return (
@@ -492,6 +495,7 @@ class Questoes extends Component {
 					columns={ columns } 
 					dataSource={ this.props.questoes }
 					loading={ this.state.tableLoading }
+					scroll={{ x: 900 }} 
 				/>
 
 				<ModalCadastro
