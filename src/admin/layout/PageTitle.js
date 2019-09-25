@@ -6,7 +6,7 @@ const style = {
 }
 const PageTitle = (props) => {
     return(
-        <span style={style}>{props.pageTitle}</span>
+        <span className="pageTitle" style={style}>{props.pageTitle}</span>
     )
 }
 

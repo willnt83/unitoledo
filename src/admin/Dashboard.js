@@ -272,10 +272,11 @@ class Dashboard extends Component {
                     }}
                 >
                     <Table
+                        size="small"
                         columns={ columns } 
                         dataSource={ this.state.tableData }
                         loading={this.state.tableLoading}
-                        scroll={{x: 1000}}
+                        scroll={{x: 10}}
                     />
                 </Content>
             </React.Fragment>

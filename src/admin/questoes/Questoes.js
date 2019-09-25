@@ -319,7 +319,7 @@ class Questoes extends Component {
 			{
 				title: "Descrição",
 				dataIndex: "labelDescricao",
-				width: 200,
+				width: 500,
 				sorter: (a, b) => { return a.labelDescricao.localeCompare(b.labelDescricao)}				
 			},
 			{

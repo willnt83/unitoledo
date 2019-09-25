@@ -113,56 +113,68 @@ const routes = [
 ];
 
 class AdminIndex extends Component {
-  state = {
-    collapsed: false
-  };
+	constructor(props) {
+		super(props);
+		this.state = {
+			collapsed: false
+		};
+	}
 
-  toggle = () => {
-    this.setState({
-      collapsed: !this.state.collapsed
-    });
-  };
 
-  render() {
-    return (
-		<Router>
-			<Layout style={{ minHeight: "100vh" }}>
-				<Sider trigger={null} collapsible collapsed={this.state.collapsed}>
-					<div className="logo">UNITOLEDO</div>
-					<ListMenu />
-				</Sider>
-				<Layout>
-					<Header style={{ background: "#fff", padding: 0 }}>
-						<Row style={{paddingRight: '24px'}}>
-							<Col span={10} style={{paddingLeft: 20}}>
-								{/*
-								<Icon
-								className="trigger"
-								type={this.state.collapsed ? "menu-unfold" : "menu-fold"}
-								onClick={this.toggle}
-								/>
-								*/}
-								<PageTitle pageTitle={this.props.pageTitle} />
-							</Col>
-							<Col spam={24} align="end">
-								<Icon type="user" style={{marginRight: '8px'}} />{this.props.usuarioNome} / {this.props.periodoLetivoDescricao}
-							</Col>
-						</Row>
-					</Header>
-					{routes.map((route, index) => (
-						<Route
-							key={index}
-							path={route.path}
-							exact={route.exact}
-							component={route.main}
-						/>
-					))}
-					<Footer style={{ textAlign: "center" }}>UNITOLEDO ©2018</Footer>
+	toggle = () => {
+		this.setState({
+			collapsed: !this.state.collapsed
+		});
+	};
+
+	componentWillMount(){
+		if(window.innerWidth <= 1200)
+		this.setState({collapsed: true});
+	}
+
+  	render() {
+		const displayLogo = this.state.collapsed ? 'none' : 'block'
+		return (
+			<Router>
+				<Layout style={{ minHeight: "100vh" }}>
+					<Sider
+						trigger={null} collapsible collapsed={this.state.collapsed}
+						breakpoint="lg"
+						collapsedWidth="80"
+					>
+						<div className="logo" style={{display: displayLogo}}>UNITOLEDO</div>
+						<ListMenu />
+					</Sider>
+					<Layout>
+						<Header style={{ background: "#fff", padding: 0 }}>
+							<Row style={{paddingRight: '24px'}}>
+								<Col span={10} style={{paddingLeft: 20}}>
+									<Icon
+										className="trigger"
+										type={this.state.collapsed ? "menu-unfold" : "menu-fold"}
+										onClick={this.toggle}
+									/>
+									<PageTitle pageTitle={this.props.pageTitle} />
+								</Col>
+								<Col span={14} align="end" className="loggedUser">
+									<Icon type="user" style={{marginRight: '8px'}} />{this.props.usuarioNome} / {this.props.periodoLetivoDescricao}
+								</Col>
+							</Row>
+						</Header>
+						{routes.map((route, index) => (
+							<Route
+								key={index}
+								path={route.path}
+								exact={route.exact}
+								component={route.main}
+							/>
+						))}
+						<Footer style={{ textAlign: "center" }}>UNITOLEDO ©2018</Footer>
+					</Layout>
 				</Layout>
-			</Layout>
-		</Router>
-    );
-  }
+			</Router>
+		);
+  	}
 }
 
 const MapStateToProps = (state) => {

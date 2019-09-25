@@ -96,6 +96,14 @@ const img = {
 
 class ModalCadastro extends Component {
     state = {
+        habilidadeField: {
+            disabled: true,
+            loading: false
+        },
+        conteudoField: {
+            disabled: true,
+            loading: false
+        },
         buttonAlternativas: true,
         showModalAlternativas: false,
         alternativaCorreta: null,
@@ -258,6 +266,17 @@ class ModalCadastro extends Component {
             conteudo: null
         })
 
+        this.setState({
+            habilidadeField: {
+                disabled: true,
+                loading: true
+            },
+            conteudoField: {
+                disabled: true,
+                loading: true
+            }
+        })
+
         // Recuperando habilidades da área de conhecimento
         axios.get(this.props.backEndPoint+'/api/getHabilidades/'+value)
 		.then(res => {
@@ -267,7 +286,11 @@ class ModalCadastro extends Component {
                         id: habilidade.id,
                         description: habilidade.description
                     })
-                })
+                }),
+                habilidadeField: {
+                    disabled: false,
+                    loading: false
+                }
             })
 		})
 		.catch(error =>{
@@ -283,7 +306,11 @@ class ModalCadastro extends Component {
                         id: conteudo.id,
                         description: conteudo.description
                     })
-                })
+                }),
+                conteudoField: {
+                    disabled: false,
+                    loading: false
+                }
             })
 		})
 		.catch(error =>{
@@ -396,6 +423,7 @@ class ModalCadastro extends Component {
         // Populando campos do formulário
         if(nextProps.questao !== null && nextProps.questao !== this.props.questao){
             var status = nextProps.questao.valueStatus === true ? 'true' : 'false'
+            this.changeAreaDeConhecimento(nextProps.questao.areaConhecimentoId)
 
             this.props.form.setFieldsValue({
                 habilidade: nextProps.questao.habilidadeId,
@@ -523,7 +551,9 @@ class ModalCadastro extends Component {
                                         <Select
                                             name="habilidade"
                                             style={{ width: '100%' }}
-                                            placeholder="Selecione a habilidade"
+                                            //placeholder={this.state.habilidadeField.placeholder}
+                                            disabled={this.state.habilidadeField.disabled}
+                                            loading={this.state.habilidadeField.loading}
                                         >
                                             {
                                                 this.state.habilidadesOptions.map((item) => {
@@ -546,7 +576,9 @@ class ModalCadastro extends Component {
                                         <Select
                                             name="conteudo"
                                             style={{ width: '100%' }}
-                                            placeholder="Selecione o conteúdo"
+                                            //placeholder={this.state.conteudoField.placeholder}
+                                            disabled={this.state.conteudoField.disabled}
+                                            loading={this.state.conteudoField.loading}
                                         >
                                             {
                                                 this.state.conteudosOptions.map((item) => {
@@ -687,6 +719,7 @@ class ModalCadastro extends Component {
                             <Col span={24} className='textEditorLabel'><span className="textEditorRequired">*</span>Descrição</Col>
                             <Col span={24} id="textEditor" className='textEditorArea' style={{padding: '0 10px 0 10px' }}>
                                 <Tooltip
+                                        overlayClassName="tooltipError"
                                         placement="topRight"
                                         title="Informar a descrição da questão"
                                         visible={this.state.descricaoTooltip}
@@ -780,6 +813,7 @@ class ModalCadastro extends Component {
                         <Row>
                             <Col id="colAlternativas" span={24}>
                                 <Tooltip
+                                    overlayClassName="tooltipError"
                                     placement="topLeft"
                                     title="Informar alternativas"
                                     visible={this.state.alternativasTooltipVisible}

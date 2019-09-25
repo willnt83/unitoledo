@@ -19,6 +19,18 @@
     padding-top: 2%
 }
 
+@media screen and (max-width: 768px) {
+    .loggedUser, .pageTitle {
+        display: none !important
+    }
+
+    .ant-col-sm-24 .ant-row-flex{
+        display: block !important;
+        margin-top: 20px !important;
+        margin-bottom: 20px
+    }
+}
+
 .ant-menu.ant-menu-dark .ant-menu-item-selected,
 .ant-menu-submenu-popup.ant-menu-dark .ant-menu-item-selected {
   background-color: #f88b0e;
@@ -123,11 +135,11 @@ code {
     margin-bottom: 10px
 }
 
-.ant-tooltip-inner{
+.tooltipError .ant-tooltip-inner{
     background-color: #f5222d !important
 }
-.ant-tooltip-arrow{
-    border-top-color: #f5222d !important
+.tooltipError .ant-tooltip-arrow{
+    border-color: #f5222d !important
 }
 
 .textEditorLabel{
@@ -195,8 +207,3 @@ code {
 .bold{
     font-weight: 800
 }
-/*
-.ant-table-column-has-actions{
-    word-break: break-all !important
-}
-*/

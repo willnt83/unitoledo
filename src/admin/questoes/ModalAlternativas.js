@@ -1,5 +1,5 @@
 import React, { Component } from "react"
-import { Icon, Input, Modal, Form, Button, Select, Row, Col, Tooltip } from "antd"
+import { Icon, Modal, Form, Button, Select, Row, Col, Tooltip } from "antd"
 import { connect } from 'react-redux'
 
 import { EditorState, convertToRaw, ContentState } from 'draft-js'
@@ -25,13 +25,10 @@ class ModalAlternativas extends Component {
             if(!err){
                 var validation = true
                 // Validação Descrição
-                console.log('keys', this.state.keys)
                 this.state.keys.forEach((alternativa, k) => {
                     if(!this.state.editorState[k].getCurrentContent().hasText()){
-                        console.log('validacao descricao', k)
                         var descricaoTooltip = this.state.descricaoTooltip
                         descricaoTooltip.splice(k, 1, true)
-                        console.log('descricaoTooltip', descricaoTooltip)
                         this.setState({descricaoTooltip})
                         validation = false
                     }
@@ -164,7 +161,6 @@ class ModalAlternativas extends Component {
     }
 
     render(){
-        console.log('descricaoTooltip', this.state.descricaoTooltip)
         //const { editorState } = this.state
         const { getFieldDecorator, getFieldValue } = this.props.form
         getFieldDecorator('keys', { initialValue: [0, 1] })
@@ -195,11 +191,12 @@ class ModalAlternativas extends Component {
                     </Col>
                     <Col span={24} id={'alternativa'+k} className='textEditorArea' style={{padding: '0 10px 0 10px' }}>
                         <Tooltip
-                                placement="topRight"
-                                title="Informar o conteúdo da alternativa"
-                                visible={this.state.descricaoTooltip[i]}
-                                trigger="contextMenu"
-                                getPopupContainer={() => document.getElementById('alternativa'+k)}
+                            overlayClassName="tooltipError"
+                            placement="topRight"
+                            title="Informar o conteúdo da alternativa"
+                            visible={this.state.descricaoTooltip[i]}
+                            trigger="contextMenu"
+                            getPopupContainer={() => document.getElementById('alternativa'+k)}
                         >
                             <Editor
                                 editorState={this.state.editorState[k]}
