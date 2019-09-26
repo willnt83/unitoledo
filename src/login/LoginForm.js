@@ -7,7 +7,8 @@ const { Content } = Layout;
 
 class LoginForm extends Component {
 	state =  {
-		entrarButtonLoading: false
+		entrarButtonLoading: false,
+		loginSuccess: true
 	}
 	handleLoginSubmit = (event) => {
 		event.preventDefault();
@@ -46,9 +47,10 @@ class LoginForm extends Component {
 					})
 				})
 				.catch(error =>{
-					console.log(error)
+
 					this.setState({
-						entrarButtonLoading: false
+						entrarButtonLoading: false,
+						loginSuccess: false
 					})
 				})
             }
@@ -82,6 +84,14 @@ class LoginForm extends Component {
 									<Icon type="lock" />
 								</Col>
 							</Row>
+							{
+								!this.state.loginSuccess ?
+								<Row style={{marginBottom: 20}}>
+									<Col span={24} style={{color: 'red', fontWeight: 800}}>
+										Usuário ou senha inválidos
+									</Col>
+								</Row>:null
+							}
 							<Form onSubmit={this.handleLoginSubmit} className="login-form">
 								<Form.Item>
 									{getFieldDecorator('userName', {
