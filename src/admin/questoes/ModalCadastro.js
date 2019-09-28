@@ -219,6 +219,7 @@ class ModalCadastro extends Component {
                     }
                     this.props.setQuestao(questao)
                     this.props.showHideModalCadastro(false)
+                    this.setState({alternativas: []})
                     this.props.showModalViewQuestaoF(true, 'write')
                 }
                    
@@ -263,8 +264,9 @@ class ModalCadastro extends Component {
         this.setState({showModalAlternativas: bool})
         if(bool)
             this.setState({tempClose: true})
-        else
+        else{
             this.setState({tempClose: false})
+        }
         this.props.showHideModalCadastro(!bool)
     }
 
@@ -418,7 +420,6 @@ class ModalCadastro extends Component {
         // Reset do modal
 
         if(this.props.showModalCadastro === true && nextProps.showModalCadastro === false && nextState.tempClose === false){
-            console.log('==============handleModalClosure!===============')
             this.handleModalClosure()
         }
 
@@ -500,7 +501,7 @@ class ModalCadastro extends Component {
     }
 
     render(){
-        console.log('this.state.tempClose', this.state.tempClose)
+        console.log('this.state.alternativas', this.state.alternativas)
         const { editorState } = this.state
         const { getFieldDecorator } = this.props.form
 

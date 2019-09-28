@@ -56,6 +56,7 @@ class ModalViewQuestao extends Component {
     handleSubmit = () => {
         this.setState({buttonLoadingSalvar: true})
         this.props.createUpdateQuestao(this.props.request)
+        this.props.resetQuestao()
     }
 
     showNotification = (msg, success) => {
