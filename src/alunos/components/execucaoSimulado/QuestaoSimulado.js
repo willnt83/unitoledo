@@ -6,7 +6,7 @@ import "../../../static/style.css"
 
 const { Content } = Layout
 const RadioGroup = Radio.Group
-const alternativasArray = ['A)', 'B)', 'C)', 'D)', 'E)']
+const alternativasArray = ['A', 'B', 'C', 'D', 'E']
 
 
 class QuestaoSimulado extends Component {
@@ -141,9 +141,9 @@ class QuestaoSimulado extends Component {
                                 {
                                     alternativas.map(alternativa => {
                                         return(
-                                            <Radio key={alternativa.key} style={radioStyle} value={alternativa.id}>                                              
-                                                <span dangerouslySetInnerHTML={{__html: alternativa.descricao}}></span>
-                                                {/* {alternativasArray[alternativa.key]} {alternativa.descricao} */}
+                                            <Radio key={alternativa.key} style={radioStyle} value={alternativa.id} style={{display: 'block'}}>
+                                                <span className="bold">Alternativa {alternativasArray[alternativa.key]}</span>
+                                                <span className="alternativaCont" dangerouslySetInnerHTML={{__html: alternativa.descricao}} style={{display: 'block', marginLeft: 24}}></span>
                                             </Radio>
                                         )
                                     })

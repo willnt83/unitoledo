@@ -72,7 +72,6 @@ class LoginForm extends Component {
 						<Card
 							style={{ width: 400, minHeight: 461, marginTop: 50 }}
 						>
-							
 							<Row style={{marginTop: 20, paddingBottom: 20}}>
 								<Col span={24} align="center">
 									<h1>UNITOLEDO</h1>
