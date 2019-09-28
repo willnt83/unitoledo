@@ -56,6 +56,7 @@ class NovoSimulado4 extends Component {
             var request = {
                 codigos: this.props.simulado.questoes,
                 enade: '',
+                content: '',
                 discursiva: '',
                 dificuldade: '',
                 fonte: [],
@@ -183,9 +184,10 @@ class NovoSimulado4 extends Component {
                             turmas: turmas,
                             disciplinas: disciplinas,
                             status: 'Pendente',
-                            enade: this.props.simulado.enade
+                            enade: this.props.simulado.enade,
+                            content: this.props.simulado.content
                     }
-
+                    console.log(request);
                     axios.post(this.props.backEndPoint+'/api/createUpdateSimulado', request)
                     .then(res => {
                         this.successModal(this.props)

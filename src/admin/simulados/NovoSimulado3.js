@@ -253,6 +253,7 @@ class NovoSimulado3 extends Component {
             var request = {
                 codigos: this.props.simulado.questoes,
                 enade: '',
+                content: '',
                 discursiva: '',
                 dificuldade: '',
                 fonte: [],
@@ -330,6 +331,7 @@ class NovoSimulado3 extends Component {
                 request = {
                     codigos: codigo,
                     enade: '',
+                    content: '',
                     dificuldade: dificuldade,
                     discursiva: discursiva,
                     fonte: fontes,

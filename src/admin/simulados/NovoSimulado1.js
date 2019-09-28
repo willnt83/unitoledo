@@ -18,7 +18,8 @@ class NovoSimulado1 extends Component {
             console.log('values', values)
             if (!err) {
                 var enade = values.enade ? true : false
-                this.props.setSimuladoNome(values.nome, enade)
+                var content = values.content ? true : false
+                this.props.setSimuladoNome(values.nome, enade, content)
                 this.props.history.push('/app-prova/admin/simulados/novo/step-2')
             }
             else{
@@ -38,7 +39,8 @@ class NovoSimulado1 extends Component {
         if(this.props.simulado.nome !== null || this.props.simulado.nome !== ''){
             this.props.form.setFieldsValue({
                 nome: this.props.simulado.nome,
-                enade: this.props.simulado.enade
+                enade: this.props.simulado.enade,
+                content: this.props.simulado.content
             })
         }
     }
@@ -80,13 +82,24 @@ class NovoSimulado1 extends Component {
                                 </FormItem>
                             </Form>
                         </Col>
-                        <Col span={24}>
+                        <Col span={12}>
                             <Form.Item layout="vertical">
                                 {getFieldDecorator('enade', {
                                     valuePropName: 'checked',
                                 })(
                                     <Checkbox>
                                         ENADE
+                                    </Checkbox>,
+                                )}
+                            </Form.Item>
+                        </Col>
+                        <Col span={12}>
+                            <Form.Item layout="vertical">
+                                {getFieldDecorator('content', {
+                                    valuePropName: 'checked',
+                                })(
+                                    <Checkbox>
+                                        Aplicação por conteudo
                                     </Checkbox>,
                                 )}
                             </Form.Item>
@@ -127,7 +140,7 @@ const MapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
     return {
         setPageTitle: (pageTitle) => { dispatch({ type: 'SET_PAGETITLE', pageTitle }) },
-        setSimuladoNome: (simuladoNome, enade) => { dispatch({ type: 'SET_SIMULADO_NOME', simuladoNome, enade }) },
+        setSimuladoNome: (simuladoNome, enade, content) => { dispatch({ type: 'SET_SIMULADO_NOME', simuladoNome, enade, content }) },
         resetAll: () => { dispatch({ type: 'RESET_ALL' }) }
     }
 }

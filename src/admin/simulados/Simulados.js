@@ -259,7 +259,8 @@ class Simulados extends Component {
                             data: terminoObj.format('DD/MM/YYYY'),
                             hora: terminoObj.format('HH:mm')
                         },
-                        enade: response.enade
+                        enade: response.enade,
+                        content: response.content,
                     }
                     this.props.setFullSimulado(simulado)
                     this.props.history.push('/app-prova/admin/simulados/novo/step-1')
@@ -278,7 +279,8 @@ class Simulados extends Component {
                             data: null,
                             hora: null
                         },
-                        enade: response.enade
+                        enade: response.enade,
+                        content: response.content
                     }
                     this.props.setFullSimulado(simulado)
                     this.props.history.push('/app-prova/admin/simulados/novo/step-1')

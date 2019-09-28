@@ -104,7 +104,8 @@ const initState = {
             data: null,
             hora: null
         },
-        enade: null
+        enade: null,
+        content: null
     },
     selectedQuestoes: [],
     flagSimuladoFinalizado: null, //flag necessária para contornar a inconsistencia da chamada getData :(
@@ -145,7 +146,8 @@ const RootReducer = (state = initState, action) => {
                     data: null,
                     hora: null
                 },
-                enade: null
+                enade: null,
+                content: null
             },
             selectedQuestoes: [],
             flagSimuladoFinalizado: null,
@@ -256,7 +258,8 @@ const RootReducer = (state = initState, action) => {
                     data: null,
                     hora: null
                 },
-                enade: null
+                enade: null,
+                content: null
             },
             selectedQuestoes: []
         }
@@ -277,7 +280,8 @@ const RootReducer = (state = initState, action) => {
                     data: state.simulado.fim.data,
                     hora: state.simulado.fim.hora
                 },
-                enade: action.enade
+                enade: action.enade,
+                content: action.content
             }
         }
     }
@@ -297,7 +301,8 @@ const RootReducer = (state = initState, action) => {
                     data: state.simulado.fim.data,
                     hora: state.simulado.fim.hora
                 },
-                enade: state.simulado.enade
+                enade: state.simulado.enade,
+                content: state.simulado.content
             }
         }
     }
@@ -320,7 +325,8 @@ const RootReducer = (state = initState, action) => {
                     data: state.simulado.fim.data,
                     hora: state.simulado.fim.hora
                 },
-                enade: state.simulado.enade
+                enade: state.simulado.enade,
+                content: state.simulado.content
             },
             selectedQuestoes
         }
@@ -348,7 +354,8 @@ const RootReducer = (state = initState, action) => {
                     data: state.simulado.fim.data,
                     hora: state.simulado.fim.hora
                 },
-                enade: state.simulado.enade
+                enade: state.simulado.enade,
+                content: state.simulado.content
             },
             selectedQuestoes
         }
@@ -371,7 +378,8 @@ const RootReducer = (state = initState, action) => {
                 questoes: state.simulado.questoes,
                 inicio: action.startFinish.dateTimeInicial,
                 fim: action.startFinish.dateTimeFinal,
-                enade: state.simulado.enade
+                enade: state.simulado.enade,
+                content: state.simulado.content
             }
         }
     }
@@ -397,7 +405,8 @@ const RootReducer = (state = initState, action) => {
                 questoes: action.questoes,
                 inicio: state.simulado.inicio,
                 fim: state.simulado.fim,
-                enade: state.simulado.enade
+                enade: state.simulado.enade,
+                content: state.simulado.content
             }
         }
     }

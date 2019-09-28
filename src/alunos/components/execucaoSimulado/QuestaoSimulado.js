@@ -141,7 +141,10 @@ class QuestaoSimulado extends Component {
                                 {
                                     alternativas.map(alternativa => {
                                         return(
-                                            <Radio key={alternativa.key} style={radioStyle} value={alternativa.id}>{alternativasArray[alternativa.key]} {alternativa.descricao}</Radio>
+                                            <Radio key={alternativa.key} style={radioStyle} value={alternativa.id}>                                              
+                                                <span dangerouslySetInnerHTML={{__html: alternativa.descricao}}></span>
+                                                {/* {alternativasArray[alternativa.key]} {alternativa.descricao} */}
+                                            </Radio>
                                         )
                                     })
                                 }
