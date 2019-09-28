@@ -115,6 +115,7 @@ class ModalAlternativas extends Component {
         }
 
         if(this.props.alternativas.length === 0 && nextProps.alternativas.length > 0){
+            console.log('entrou 0')
             var keys = nextProps.alternativas.map((alternativa, index) => {
                 return(
                     index
@@ -136,9 +137,13 @@ class ModalAlternativas extends Component {
     }
 
     componentDidUpdate(prevProps, prevState){
+        console.log('this.props.alternativas', this.props.alternativas)
+        //console.log('prevState.fieldsLoaded', prevState.fieldsLoaded)
+        //console.log('this.state.fieldsLoaded', this.state.fieldsLoaded)
         if(prevState.fieldsLoaded === false && this.state.fieldsLoaded === true){
+            console.log('entrou...')
             const contentState = []
-
+            
             var alternativaContent = this.props.alternativas.map((alternativa) => {
                 const blocksFromHtml = htmlToDraft(alternativa.descricao)
                 const { contentBlocks, entityMap } = blocksFromHtml
@@ -148,6 +153,8 @@ class ModalAlternativas extends Component {
                     alternativa.descricao
                 )
             })
+
+            
 
             this.props.form.setFieldsValue({
                 alternativaCorreta: this.props.alternativaCorreta
@@ -161,7 +168,6 @@ class ModalAlternativas extends Component {
     }
 
     render(){
-        //const { editorState } = this.state
         const { getFieldDecorator, getFieldValue } = this.props.form
         getFieldDecorator('keys', { initialValue: [0, 1] })
         const keys = getFieldValue('keys')

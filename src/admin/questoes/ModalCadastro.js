@@ -117,7 +117,8 @@ class ModalCadastro extends Component {
         editorState: EditorState.createEmpty(),
         images: [],
         habilidadesOptions: [],
-        conteudosOptions: []
+        conteudosOptions: [],
+		tempClose: false
     }
 
     stringToBool = (str) => {
@@ -217,6 +218,7 @@ class ModalCadastro extends Component {
                         tipoRespostaId: values.tipoResposta //aaaqui
                     }
                     this.props.setQuestao(questao)
+                    this.props.showHideModalCadastro(false)
                     this.props.showModalViewQuestaoF(true, 'write')
                 }
                    
@@ -236,6 +238,7 @@ class ModalCadastro extends Component {
     }
 
     handleModalClosure = () => {
+        console.log('--==handleModalClosure==--')
         // Resetando form
         this.props.form.resetFields()
         this.props.resetQuestao()
@@ -249,7 +252,7 @@ class ModalCadastro extends Component {
             images: []
         })
 
-        this.props.hideModalCadastro()
+        this.props.showHideModalCadastro(false)
     }
 
     updateResetAlternativasFormState = (val) => {
@@ -257,7 +260,12 @@ class ModalCadastro extends Component {
     }
 
     showHideModalAlternativas = (bool) => {
-		this.setState({showModalAlternativas: bool})
+        this.setState({showModalAlternativas: bool})
+        if(bool)
+            this.setState({tempClose: true})
+        else
+            this.setState({tempClose: false})
+        this.props.showHideModalCadastro(!bool)
     }
 
     changeAreaDeConhecimento = (value) => {
@@ -408,9 +416,12 @@ class ModalCadastro extends Component {
 
     componentWillUpdate(nextProps, nextState) {
         // Reset do modal
-        if(this.props.showModalCadastro === true && nextProps.showModalCadastro === false){
+
+        if(this.props.showModalCadastro === true && nextProps.showModalCadastro === false && nextState.tempClose === false){
+            console.log('==============handleModalClosure!===============')
             this.handleModalClosure()
         }
+
         if(this.props.showModalViewQuestao === true && nextProps.showModalViewQuestao === false && nextProps.op === 'view'){
             this.handleModalClosure()
         }
@@ -489,6 +500,7 @@ class ModalCadastro extends Component {
     }
 
     render(){
+        console.log('this.state.tempClose', this.state.tempClose)
         const { editorState } = this.state
         const { getFieldDecorator } = this.props.form
 

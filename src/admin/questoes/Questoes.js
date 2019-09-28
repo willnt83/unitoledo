@@ -141,9 +141,9 @@ class Questoes extends Component {
 		}
 	}
 
-	hideModalCadastro = () => {
+	showHideModalCadastro = (bool) => {
 		this.setState({
-			showModalCadastro: false
+			showModalCadastro: bool
 		})
 	}
 
@@ -500,7 +500,7 @@ class Questoes extends Component {
 
 				<ModalCadastro
 					showModalCadastro={this.state.showModalCadastro}
-					hideModalCadastro={this.hideModalCadastro}
+					showHideModalCadastro={this.showHideModalCadastro}
 					showModalViewQuestao={this.state.showModalViewQuestao}
 					showModalViewQuestaoF={this.showModalViewQuestaoF}
 					questao={this.state.questao}
@@ -512,7 +512,7 @@ class Questoes extends Component {
 				<ModalViewQuestao
 					showModalViewQuestao={this.state.showModalViewQuestao}
 					showModalViewQuestaoF={this.showModalViewQuestaoF}
-					hideModalCadastro={this.hideModalCadastro}
+					showHideModalCadastro={this.showHideModalCadastro}
 					handleGetQuestoes={this.handleGetQuestoes}
 					questao={this.state.questao}
 					resetQuestao={this.resetQuestao}

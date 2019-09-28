@@ -90,7 +90,7 @@ class ModalViewQuestao extends Component {
                 this.showNotification('Questão salva com sucesso.', true)
                 this.setState({questao: null, buttonLoadingSalvar: false})
                 this.props.showModalViewQuestaoF(false, this.props.op)
-                this.props.hideModalCadastro()
+                this.props.showHideModalCadastro(false)
                 this.props.handleGetQuestoes()
             }
 			else{
