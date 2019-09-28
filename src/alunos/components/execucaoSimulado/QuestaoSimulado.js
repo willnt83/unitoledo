@@ -143,7 +143,9 @@ class QuestaoSimulado extends Component {
                                         return(
                                             <Radio key={alternativa.key} style={radioStyle} value={alternativa.id} style={{display: 'block'}}>
                                                 <span className="bold">Alternativa {alternativasArray[alternativa.key]}</span>
-                                                <span className="alternativaCont" dangerouslySetInnerHTML={{__html: alternativa.descricao}} style={{display: 'block', marginLeft: 24}}></span>
+                                                <Row>
+                                                    <Col span={24}dangerouslySetInnerHTML={{__html: alternativa.descricao}} style={{whiteSpace: 'normal', marginLeft: 24}} />
+                                                </Row>
                                             </Radio>
                                         )
                                     })
