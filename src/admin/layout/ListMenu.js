@@ -162,6 +162,12 @@ class ListMenu extends Component {
                                 <span>Detalhado</span>
                             </Link>
                         </Menu.Item>
+                        <Menu.Item key="13">
+                            <Link to="/app-prova/admin/relatorios/acerto-detalhado">
+                                <Icon type="right-square" />
+                                <span>Acerto Detalhado</span>
+                            </Link>
+                        </Menu.Item>
                     </SubMenu>
                     <Menu.Item key="14" onClick={() => this.logout()}>
                         <Icon type="export" />

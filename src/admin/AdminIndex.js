@@ -24,6 +24,7 @@ import LancamentoNotas from "./simulados/LancamentoNotas"
 import PercentualDeAcertos from "./relatorios/PercentualDeAcertos"
 import HabilidadesConteudos from "./relatorios/HabilidadesConteudos"
 import Detalhado from "./relatorios/Detalhado"
+import AcertoDetalhado from "./relatorios/AcertosDetalhados"
 
 const { Header, Sider, Footer } = Layout
 
@@ -109,6 +110,11 @@ const routes = [
     path: "/app-prova/admin/relatorios/detalhado",
     sidebar: () => <div>Detalhado</div>,
     main: () => <Detalhado />
+  },
+  {
+    path: "/app-prova/admin/relatorios/acerto-detalhado",
+    sidebar: () => <div>Acerto Detalhado</div>,
+    main: () => <AcertoDetalhado />
   }
 ];
 

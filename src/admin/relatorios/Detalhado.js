@@ -249,7 +249,7 @@ class Detalhado extends Component {
 											<Icon type="file-pdf" />Gerar PDF
 										</Button>
 										</a>
-										{/* <a href={this.state.xlsUrl}>
+										<a href={this.state.xlsUrl}>
 											<Button
 												style={{marginLeft: 10}}
 												key="print"
@@ -257,7 +257,7 @@ class Detalhado extends Component {
 											>
 												<Icon type="file-excel" />Gerar Planilha
 											</Button>
-										</a> */}
+										</a>
 									</React.Fragment>
 									: null
 								}

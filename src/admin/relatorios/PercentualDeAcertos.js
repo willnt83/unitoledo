@@ -98,7 +98,7 @@ class PercentualDeAcertos extends Component {
 				axios.get(this.props.backEndPoint+'/api/percentualDeAcerto/'+values.simulado+'/'+values.tipo)
 				.then(res => {
 					var mediaSimulado = res.data.mediaSimulado !== 'NaN' ? parseFloat(res.data.mediaSimulado.toFixed(2)) : false
-					console.log('res.data.alunos', res.data.alunos)
+					// console.log('res.data.alunos', res.data.alunos)
 					this.setState({
 						idSimulado: values.simulado,
 						xlsUrl: this.props.backEndPoint+'/api/percentualDeAcertoDownload/'+values.simulado+'/'+values.tipo,
@@ -113,7 +113,9 @@ class PercentualDeAcertos extends Component {
 						mediaSimulado
 					})
 				})
-				.catch(error =>{
+				.catch(error =>{							
+					alert("Não possui dados para os parâmetros informados");
+					this.setState({mediaSimulado: null})
 					console.log('error: ', error)
 				})
 			}
@@ -274,7 +276,7 @@ class PercentualDeAcertos extends Component {
 												<Icon type="file-pdf" />Gerar PDF
 											</Button>
 										</a>
-										{/* <a href={this.state.xlsUrl}>
+										<a href={this.state.xlsUrl}>
 											<Button
 												style={{marginLeft: 10}}
 												key="print"
@@ -282,7 +284,7 @@ class PercentualDeAcertos extends Component {
 											>
 												<Icon type="file-excel" />Gerar Planilha
 											</Button>
-										</a> */}
+										</a>
 									</React.Fragment>
 									: null
 								}
