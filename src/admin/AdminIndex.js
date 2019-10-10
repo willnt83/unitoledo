@@ -13,6 +13,7 @@ import Conteudos from "./cadastros/Conteudos";
 import Habilidades from "./cadastros/Habilidades"
 import AreasDeConhecimento from "./cadastros/AreasDeConhecimento"
 import Fontes from "./cadastros/Fontes"
+import PlanilhaEnade from "./cadastros/PlanilhaEnade"
 import AreaGestor from "./area-do-gestor/AreaGestor"
 import Questoes from "./questoes/Questoes"
 import Simulados from "./simulados/Simulados"
@@ -25,6 +26,7 @@ import PercentualDeAcertos from "./relatorios/PercentualDeAcertos"
 import HabilidadesConteudos from "./relatorios/HabilidadesConteudos"
 import Detalhado from "./relatorios/Detalhado"
 import AcertoDetalhado from "./relatorios/AcertosDetalhados"
+import EnadeDetalhado from "./relatorios/EnadeDetalhado"
 
 const { Header, Sider, Footer } = Layout
 
@@ -54,6 +56,11 @@ const routes = [
     path: "/app-prova/admin/cadastros/fontes",
     sidebar: () => <div>Cadastro/Fontes</div>,
     main: () => <Fontes />
+  },
+  {
+    path: "/app-prova/admin/cadastros/planilha-enade",
+    sidebar: () => <div>Cadastro/Planilha Enade</div>,
+    main: () => <PlanilhaEnade />
   },
   {
     path: "/app-prova/admin/area-do-gestor",
@@ -115,6 +122,11 @@ const routes = [
     path: "/app-prova/admin/relatorios/acerto-detalhado",
     sidebar: () => <div>Acerto Detalhado</div>,
     main: () => <AcertoDetalhado />
+  },
+  {
+    path: "/app-prova/admin/relatorios/enade-detalhado",
+    sidebar: () => <div>Enade Detalhado</div>,
+    main: () => <EnadeDetalhado />
   }
 ];
 

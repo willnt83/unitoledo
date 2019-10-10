@@ -69,6 +69,12 @@ class ListMenu extends Component {
                                 <span>Fontes</span>
                             </Link>
                         </Menu.Item>
+                        <Menu.Item key="7">
+                            <Link to="/app-prova/admin/cadastros/planilha-enade">
+                                <Icon type="right-square" />
+                                <span>Planilha Enade</span>
+                            </Link>
+                        </Menu.Item>
                     </SubMenu>
                     <Menu.Item key="5">
                         <Link to="/app-prova/admin/banco-de-questoes">
@@ -115,6 +121,12 @@ class ListMenu extends Component {
                             <Link to="/app-prova/admin/cadastros/fontes">
                                 <Icon type="right-square" />
                                 <span>Fontes</span>
+                            </Link>
+                        </Menu.Item>
+                        <Menu.Item key="15">
+                            <Link to="/app-prova/admin/cadastros/planilha-enade">
+                                <Icon type="right-square" />
+                                <span>Planilha Enade</span>
                             </Link>
                         </Menu.Item>
                     </SubMenu>
@@ -166,6 +178,12 @@ class ListMenu extends Component {
                             <Link to="/app-prova/admin/relatorios/acerto-detalhado">
                                 <Icon type="right-square" />
                                 <span>Acerto Detalhado</span>
+                            </Link>
+                        </Menu.Item>
+                        <Menu.Item key="16">
+                            <Link to="/app-prova/admin/relatorios/enade-detalhado">
+                                <Icon type="right-square" />
+                                <span>Enade Detalhado</span>
                             </Link>
                         </Menu.Item>
                     </SubMenu>
