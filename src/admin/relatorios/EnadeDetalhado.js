@@ -17,7 +17,9 @@ class EnadeDetalhado extends Component {
     state = {
 		idSimulado: null,
 		xlsUrl: null,		
-		simuladosOptions: [],
+        simuladosOptions: [],
+        idsSimulados:[],
+		enadeOptions: [],
 		buttonLoading: false,
 		tableLoading: false,		
 		dataAvail: false,
@@ -74,15 +76,84 @@ class EnadeDetalhado extends Component {
         })
     }
 
+    getPlanilhasEnade = () => {				
+		axios.get(this.props.backEndPoint+'/api/getPlanilhaEnade')
+        .then(res => {
+            console.log(res)
+            this.setState({
+				enadeOptions: res.data.map(enade => {
+					return({
+                        id: enade.ano +''+enade.codArea,
+						description: 'Enade: ' + enade.ano + ' | Área: ' + enade.area
+					})
+                })               
+			})
+        })
+        .catch(error =>{
+            console.log('error: ', error)
+        })
+    }
+
     gerarRelatorio = () => {
 		this.props.form.validateFieldsAndScroll((err, values) => {
 			if(!err){
                 window.open(this.props.backEndPoint+'/api/excel/acertoDetalhado/'+values.simulado, '_blank');				
 			}
 		})
+    }
+    
+    changeSimulado = (values) => {
+        var simulados = []
+        
+        simulados = values.map(value =>{
+            return({id: value})
+        })
+        console.log(simulados);
+        this.setState({idsSimulados: simulados})
+		console.log(this.state.idsSimulados);
+    }
+    
+    handleSearchSubmit = (event) => {
+		event.preventDefault()
+		this.setState({buttonLoadingBuscar: true, tableLoading: true})
+		var request = null
+		var simulados = []
+		var conteudos = []
+		var areasDeConhecimento = []
+		var fontes = []
+
+		this.props.form.validateFieldsAndScroll((err, values) => {
+			if(values.simulados){
+				simulados = values.simulados.map(simulado =>{
+					return({id: parseInt(simulados)})
+				})
+			}
+			
+			// request = {
+			// 	codigos: [],
+			// 	dificuldade: '',
+			// 	enade: '',
+			// 	discursiva: '',
+			// 	fonte: fontes,
+			// 	habilidades: habilidades,
+			// 	conteudos: conteudos,
+			// 	areaConhecimentos: areasDeConhecimento,
+			// 	anos: [],
+			// 	tipo: {
+			// 		id: 0
+			// 	}
+			// }
+
+			// this.setState({getQuestoesRequest: request})
+
+			// this.props.getQuestoes(request)
+        })
+        
+        console.log(simulados);
 	}
 	componentWillMount(){
-		this.getSimulados()
+        this.getSimulados()
+        this.getPlanilhasEnade()
     }
     
     render() {
@@ -106,9 +177,30 @@ class EnadeDetalhado extends Component {
 					</Row>
 					<Row>
 						<Col span={24}>
-							<Form layout="vertical">
-								<Form.Item label="Simulados">
-									{getFieldDecorator('simulado', {
+                            <Form layout="vertical" onSubmit={this.handleSearchSubmit}>
+                                <Form.Item label="Planillha Enade">
+									{getFieldDecorator('enade', {
+										rules: [
+											{
+												required: true, message: 'Por favor selecione o ano do enade',
+											}
+										]
+									})(
+										<Select
+											style={{ width: '100%' }}
+											placeholder="Selecione o ano do enade"
+											onChange={this.change}
+										>
+											{
+												this.state.enadeOptions.map((item) => {
+													return (<Option key={item.id}>{item.description}</Option>)
+												})
+											}
+										</Select>
+									)}
+								</Form.Item> 
+								<Form.Item label="simulados">
+									{getFieldDecorator('simulados', {
 										rules: [
 											{
 												required: true, message: 'Por favor selecione o simulado',
@@ -116,9 +208,10 @@ class EnadeDetalhado extends Component {
 										]
 									})(
 										<Select
+                                            mode="multiple"
 											style={{ width: '100%' }}
 											placeholder="Selecione o simulado"
-											onChange={this.change}
+											onChange={this.changeSimulado}
 										>
 											{
 												this.state.simuladosOptions.map((item) => {
@@ -132,7 +225,8 @@ class EnadeDetalhado extends Component {
 							    	style={{marginLeft: 10}}
 							    	key="print"
                                     className="buttonOrange"
-                                    onClick={this.gerarRelatorio}
+                                    htmlType="submit"
+                                    //onClick={this.gerarRelatorio}
 							    >
 							    	<Icon type="file-excel" />Gerar Planilha
 							    </Button>								
