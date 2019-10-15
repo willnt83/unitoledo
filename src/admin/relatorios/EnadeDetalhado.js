@@ -101,7 +101,7 @@ class EnadeDetalhado extends Component {
 			}
 		})
     }
-    
+    /*
     changeSimulado = (values) => {
         var simulados = []
         
@@ -111,7 +111,8 @@ class EnadeDetalhado extends Component {
         console.log(simulados);
         this.setState({idsSimulados: simulados})
 		console.log(this.state.idsSimulados);
-    }
+	}
+	*/
     
     handleSearchSubmit = (event) => {
 		event.preventDefault()
@@ -125,10 +126,10 @@ class EnadeDetalhado extends Component {
 		this.props.form.validateFieldsAndScroll((err, values) => {
 			if(values.simulados){
 				simulados = values.simulados.map(simulado =>{
-					return({id: parseInt(simulados)})
+					return({id: parseInt(simulado)})
 				})
 			}
-			
+			console.log('Diegão, aqui estão os ids dos simulados', simulados)
 			// request = {
 			// 	codigos: [],
 			// 	dificuldade: '',
@@ -148,8 +149,6 @@ class EnadeDetalhado extends Component {
 
 			// this.props.getQuestoes(request)
         })
-        
-        console.log(simulados);
 	}
 	componentWillMount(){
         this.getSimulados()
@@ -157,7 +156,6 @@ class EnadeDetalhado extends Component {
     }
     
     render() {
-		console.log('tableData', this.state.tableData)
 		const { getFieldDecorator } = this.props.form
 
 		return (
@@ -178,7 +176,7 @@ class EnadeDetalhado extends Component {
 					<Row>
 						<Col span={24}>
                             <Form layout="vertical" onSubmit={this.handleSearchSubmit}>
-                                <Form.Item label="Planillha Enade">
+                                <Form.Item label="Planilha Enade">
 									{getFieldDecorator('enade', {
 										rules: [
 											{
@@ -198,8 +196,8 @@ class EnadeDetalhado extends Component {
 											}
 										</Select>
 									)}
-								</Form.Item> 
-								<Form.Item label="simulados">
+								</Form.Item>
+								<Form.Item label="Simulados">
 									{getFieldDecorator('simulados', {
 										rules: [
 											{
