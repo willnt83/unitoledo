@@ -183,7 +183,13 @@ class ListMenu extends Component {
                         <Menu.Item key="16">
                             <Link to="/app-prova/admin/relatorios/enade-detalhado">
                                 <Icon type="right-square" />
-                                <span>Enade Detalhado</span>
+                                <span>Conceito Enade</span>
+                            </Link>
+                        </Menu.Item>
+                        <Menu.Item key="17">
+                            <Link to="/app-prova/admin/relatorios/conceito-enade-por-aluno">
+                                <Icon type="right-square" />
+                                <span>Conceito Enade Aluno</span>
                             </Link>
                         </Menu.Item>
                     </SubMenu>

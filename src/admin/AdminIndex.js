@@ -27,6 +27,7 @@ import HabilidadesConteudos from "./relatorios/HabilidadesConteudos"
 import Detalhado from "./relatorios/Detalhado"
 import AcertoDetalhado from "./relatorios/AcertosDetalhados"
 import EnadeDetalhado from "./relatorios/EnadeDetalhado"
+import EnadePorAluno from "./relatorios/EnadePorAluno"
 
 const { Header, Sider, Footer } = Layout
 
@@ -125,8 +126,13 @@ const routes = [
   },
   {
     path: "/app-prova/admin/relatorios/enade-detalhado",
-    sidebar: () => <div>Enade Detalhado</div>,
+    sidebar: () => <div>Conceito Enade</div>,
     main: () => <EnadeDetalhado />
+  },
+  {
+    path: "/app-prova/admin/relatorios/conceito-enade-por-aluno",
+    sidebar: () => <div>Conceito Enade</div>,
+    main: () => <EnadePorAluno />
   }
 ];
 

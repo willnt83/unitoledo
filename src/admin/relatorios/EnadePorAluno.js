@@ -8,10 +8,10 @@ import { withRouter } from "react-router-dom"
 const { Content } = Layout
 const Option = Select.Option
 
-class EnadeDetalhado extends Component {
+class EnadePorAluno extends Component {
     constructor(props) {
         super()
-		props.setPageTitle('Relatório Conceito Enade por Curso')
+		props.setPageTitle('Relatório Conceito Enade por Aluno')
     }
     
     state = {
@@ -83,7 +83,7 @@ class EnadeDetalhado extends Component {
             this.setState({
 				enadeOptions: res.data.map(enade => {
 					return({
-                        id: enade.ano +'-'+enade.codArea,
+                        id: enade.ano +''+enade.codArea,
 						description: 'Enade: ' + enade.ano + ' | Área: ' + enade.area
 					})
                 })               
@@ -108,7 +108,7 @@ class EnadeDetalhado extends Component {
     
     handleSearchSubmit = (event) => {
 		event.preventDefault()
-		this.setState({buttonLoading: true, tableLoading: true})
+		this.setState({buttonLoading: true})
 		var request = null
 		var simulados = []
 		var enadeAno = []
@@ -118,8 +118,8 @@ class EnadeDetalhado extends Component {
 				simulados = values.simulados.map(simulado =>{
 					return({id: parseInt(simulado)})
 				})
-			}
-			if(values.enade){
+            }
+            if(values.enade){
 				enadeAno = values.enade.split('-');
 				console.log(enadeAno);
 			}
@@ -138,10 +138,10 @@ class EnadeDetalhado extends Component {
 	getReports = (request) => {
 		console.log(request);
 		//axios.post(this.props.backEndPoint+'/api/getGestor', request)
-		axios.post(this.props.backEndPoint+'/api/relatorio/conceitoEnade', request)
+		axios.post(this.props.backEndPoint+'/api/relatorio/conceitoEnadeAluno', request)
 			.then(res => {
 				console.log(res);
-				window.open(this.props.backEndPoint+'/api/relatorio/conceitoEnade/'+res.data.file, '_blank');	
+				window.open(this.props.backEndPoint+'/api/relatorio/conceitoEnadeAluno/'+res.data.file, '_blank');	
 				this.setState({buttonLoading: false})		
 			})
 			.catch(error =>{							
@@ -225,6 +225,7 @@ class EnadeDetalhado extends Component {
                                     htmlType="submit"
                                     type="primary"
                                     size={'large'}
+                                    //onClick={this.gerarRelatorio}
 							    >
 									{this.state.buttonLoading ? <Icon type="loading" /> : <Icon type="file-excel"/> }
 									{this.state.buttonLoading ? 'Gerando Planilha' : 'Gerar Planilha' }
@@ -253,4 +254,4 @@ const mapDispatchToProps = (dispatch) => {
     }
 }
 
-export default connect(MapStateToProps, mapDispatchToProps)(Form.create()(withRouter(EnadeDetalhado)))
+export default connect(MapStateToProps, mapDispatchToProps)(Form.create()(withRouter(EnadePorAluno)))
