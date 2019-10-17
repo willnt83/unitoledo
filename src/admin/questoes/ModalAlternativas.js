@@ -6,9 +6,42 @@ import { EditorState, convertToRaw, ContentState } from 'draft-js'
 import { Editor } from 'react-draft-wysiwyg'
 import '../../../node_modules/react-draft-wysiwyg/dist/react-draft-wysiwyg.css'
 import draftToHtml from 'draftjs-to-html'
-import htmlToDraft from 'html-to-draftjs';
+import htmlToDraft from 'html-to-draftjs'
+import classNames from 'classnames'
+import Dropzone from 'react-dropzone'
+import axios from "axios"
 
 const letrasAlternativas = ['A', 'B', 'C', 'D', 'E']
+
+const thumbsContainer = {
+    display: 'flex',
+    flexDirection: 'row',
+    flexWrap: 'wrap'
+}
+const thumb = {
+    display: 'inline-flex',
+    borderRadius: 2,
+    border: '1px solid #eaeaea',
+    marginBottom: 8,
+    marginRight: 8,
+    maxWidth: '100%',
+    height: 100,
+    padding: 4,
+    boxSizing: 'border-box'
+}
+
+const thumbInner = {
+    display: 'flex',
+    minWidth: 0,
+    overflow: 'hidden'
+}
+
+const img = {
+    objectFit: 'cover',
+    display: 'block',
+    width: '100%',
+    height: 'auto'
+}
 
 class ModalAlternativas extends Component {
     state = {
@@ -16,7 +49,73 @@ class ModalAlternativas extends Component {
         keys: [0, 1],
         editorState: [EditorState.createEmpty(), EditorState.createEmpty(), EditorState.createEmpty(), EditorState.createEmpty(), EditorState.createEmpty()],
         descricaoTooltip: [false, false, false, false, false],
-        alternativaContent: []
+        alternativaContent: [],
+        images: []
+    }
+
+    onDrop = (acceptedFiles, rejectedFiles) => {
+        var reader = new FileReader()
+        reader.readAsDataURL(acceptedFiles[0])
+        reader.onload = (event) => {
+            var bodyFormData = new FormData()
+            bodyFormData.append('files', acceptedFiles[0]) 
+            axios({
+                method: 'post',
+                url: this.props.backEndPoint+'/api/upload/imgs',
+                data: bodyFormData,
+                config: { headers: {'Content-Type': 'multipart/form-data' }}
+            })
+            .then(res => {
+                this.setState({
+                    images: [...this.state.images, {
+                        nome: res.data.nome,
+                        url: res.data.url
+                    }]
+                })
+            })
+            .catch(error =>{
+                console.log(error)
+            })
+
+        }
+        reader.onerror = function (error) {
+            console.log('Error: ', error)
+            return false
+        }
+    }
+
+    removeImage = (index) => {
+        var images = this.state.images
+        images.splice(index, 1)
+        this.setState({images})
+    }
+
+    openImage = (image) => {
+        window.open(image, '_blank')
+    }
+
+    fallbackCopyTextToClipboard = (text) => {
+        var textArea = document.createElement("textarea")
+        textArea.value = text
+        document.body.appendChild(textArea)
+        textArea.focus()
+        textArea.select()
+        document.body.removeChild(textArea)
+    }
+
+    copyToClipboard = (text) => {
+        if (!navigator.clipboard) {
+            this.fallbackCopyTextToClipboard(text)
+            return
+        }
+        navigator.clipboard.writeText(text).then(
+            function() {
+            //console.log("Async: Copying to clipboard was successful!")
+            },
+            function(err) {
+            //console.error("Async: Could not copy text: ", err)
+            }
+        )
     }
 
     submitAlternativasForm = (event) => {
@@ -115,7 +214,6 @@ class ModalAlternativas extends Component {
         }
 
         if(this.props.alternativas.length === 0 && nextProps.alternativas.length > 0){
-            console.log('entrou 0')
             var keys = nextProps.alternativas.map((alternativa, index) => {
                 return(
                     index
@@ -137,11 +235,7 @@ class ModalAlternativas extends Component {
     }
 
     componentDidUpdate(prevProps, prevState){
-        console.log('this.props.alternativas', this.props.alternativas)
-        //console.log('prevState.fieldsLoaded', prevState.fieldsLoaded)
-        //console.log('this.state.fieldsLoaded', this.state.fieldsLoaded)
         if(prevState.fieldsLoaded === false && this.state.fieldsLoaded === true){
-            console.log('entrou...')
             const contentState = []
             
             var alternativaContent = this.props.alternativas.map((alternativa) => {
@@ -245,6 +339,63 @@ class ModalAlternativas extends Component {
             >
                 <Row>
                     <Col span={24}>
+                        <Dropzone 
+                            accept="image/jpeg, image/png, image/gif"
+                            onDrop={this.onDrop}
+                        >
+                            {({getRootProps, getInputProps, isDragActive}) => {
+                                return (
+                                    <div
+                                        {...getRootProps()}
+                                        className={classNames('dropzone', {'dropzone--isActive': isDragActive})}
+                                    >
+                                        <input {...getInputProps()} />
+                                        {
+                                            <Button><Icon type="upload" />Imagens</Button>
+                                        }
+                                    </div>
+                                )
+                            }}
+                        </Dropzone>
+                        {
+                            this.state.images.map((image, index) => {
+                                var url = this.props.backEndPoint+"/api/getFile?name="+image.nome
+                                return(
+                                    <Row style={{marginTop: 16}} key={image.nome}>
+                                        <Col span={12}>
+                                            <aside style={thumbsContainer}>
+                                                <div style={thumb}>
+                                                    <div style={thumbInner}>
+                                                        <img
+                                                            src={url}
+                                                            style={img}
+                                                            alt=""
+                                                            onClick={() => this.openImage(url)}
+                                                        />
+                                                    </div>
+                                                </div>
+                                            </aside>
+                                        </Col>
+                                        <Col span={12}>
+                                            <Row>
+                                                <Col span={24}>
+                                                    <Button className="buttonGreen" onClick={() => this.copyToClipboard(url)}><Icon type="copy" />Copiar Link da Imagem</Button>
+                                                </Col>
+                                            </Row>
+                                            <Row style={{marginTop: 5}}>
+                                                <Col span={24}>
+                                                    <Button className="buttonRed" onClick={() => this.removeImage(index)}><Icon type="delete" />Remover Imagem</Button>
+                                                </Col>
+                                            </Row>
+                                        </Col>
+                                    </Row>
+                                )
+                            })
+                        }
+                    </Col>
+                </Row>
+                <Row>
+                    <Col span={24}>
                         {alternativaItens}
                         {keys.length < 5 ?
                             (
@@ -290,6 +441,7 @@ class ModalAlternativas extends Component {
 
 const MapStateToProps = (state) => {
 	return {
+        backEndPoint: state.backEndPoint,
 		habilidades: state.habilidades,
 		conteudos: state.conteudos,
 		areasDeConhecimento: state.areasDeConhecimento

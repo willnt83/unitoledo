@@ -239,7 +239,6 @@ class ModalCadastro extends Component {
     }
 
     handleModalClosure = () => {
-        console.log('--==handleModalClosure==--')
         // Resetando form
         this.props.form.resetFields()
         this.props.resetQuestao()
@@ -501,7 +500,6 @@ class ModalCadastro extends Component {
     }
 
     render(){
-        console.log('this.state.alternativas', this.state.alternativas)
         const { editorState } = this.state
         const { getFieldDecorator } = this.props.form
 
@@ -857,7 +855,6 @@ class ModalCadastro extends Component {
                     resetAlternativasForm={this.state.resetAlternativasForm}
                     updateResetAlternativasFormState={this.updateResetAlternativasFormState}
                     limpaAlternativaCorreta={this.limpaAlternativaCorreta}
-
                 />
             </React.Fragment>
         )
