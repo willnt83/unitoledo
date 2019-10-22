@@ -90,8 +90,6 @@ class SignIn extends Component {
 			}
 		})
 
-		console.log('contextos', contextos)
-
 		var userInfos = response.gruposDTO && response.gruposDTO.grupos ? response.gruposDTO.grupos : null
 
 		this.setState({

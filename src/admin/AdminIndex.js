@@ -181,7 +181,13 @@ class AdminIndex extends Component {
 									<PageTitle pageTitle={this.props.pageTitle} />
 								</Col>
 								<Col span={14} align="end" className="loggedUser">
-									<Icon type="user" style={{marginRight: '8px'}} />{this.props.usuarioNome} / {this.props.periodoLetivoDescricao}
+                  <Icon type="user" style={{marginRight: '8px'}} />{this.props.usuarioNome} 
+                  {
+                    this.props.periodoLetivoDescricao?
+                    <span>/ {this.props.periodoLetivoDescricao}</span>
+                    :
+                    null
+                  }
 								</Col>
 							</Row>
 						</Header>

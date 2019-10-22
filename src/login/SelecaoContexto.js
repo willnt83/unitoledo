@@ -54,6 +54,9 @@ class ContextoSelection extends Component {
 			})
 		}
 		else if(value === 'APPPROVA - ADMIN' || value === 'PERSONIFICAÇÃO'){
+			if(value === 'APPPROVA - ADMIN'){
+				this.props.setUsuario(0, 'APPPROVA - ADMIN')
+			}
 			this.setState({showEnviarButton: 'block'})
 		}
 		else{
@@ -272,6 +275,7 @@ const mapDispatchToProps = (dispatch) => {
 			setPeriodoLetivo: (periodo) => { dispatch({ type: 'SET_PERIODOLETIVO', periodo }) },
 			setContextoAluno: (contexto) => { dispatch({ type: 'SET_CONTEXTOALUNO', contexto }) },
 			setPeriodoLetivoDescricao: (periodoDescricao) => { dispatch({ type: 'SET_PERIODOLETIVODESCRICAO', periodoDescricao }) },
+			setUsuario: (usuarioId, usuarioNome) => { dispatch({ type: 'SET_USUARIO', usuarioId, usuarioNome }) }
     }
 }
 
