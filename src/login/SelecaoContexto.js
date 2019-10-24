@@ -56,6 +56,7 @@ class ContextoSelection extends Component {
 		else if(value === 'APPPROVA - ADMIN' || value === 'PERSONIFICAÇÃO'){
 			if(value === 'APPPROVA - ADMIN'){
 				this.props.setUsuario(0, 'APPPROVA - ADMIN')
+				this.props.setPeriodoLetivoDescricao(null)
 			}
 			this.setState({showEnviarButton: 'block'})
 		}
