@@ -163,7 +163,14 @@ class ModalAlternativas extends Component {
         editorState.splice(k, 1, inData)
 
         var alternativaContent = this.state.alternativaContent
-        alternativaContent.splice(k, 1, draftToHtml(convertToRaw(inData.getCurrentContent())))
+
+        var content = draftToHtml(convertToRaw(inData.getCurrentContent()))
+        content = content.replace(/\n/g, '')
+        content = content.replace('<p style="text-align:center;"></p><img', '<img')
+        var img = content.match(/<img([\w\W]+?)\/>(?!<\/p>)/g)
+        content = content.replace(/<img([\w\W]+?)\/>(?!<\/p>)/g, '<p style="text-align: center">'+img+'</p>')
+
+        alternativaContent.splice(k, 1, content)
 
         this.setState({
             editorState,

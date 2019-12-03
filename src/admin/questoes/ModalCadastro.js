@@ -374,9 +374,17 @@ class ModalCadastro extends Component {
     }
 
     onEditorStateChange = (editorState) => {
+        var content = draftToHtml(convertToRaw(editorState.getCurrentContent()));
+        content = content.replace(/\n/g, '')
+        console.log('content', content)
+        content = content.replace('<p style="text-align:center;"></p><img', '<img')
+        var img = content.match(/<img([\w\W]+?)\/>(?!<\/p>)/g)
+        console.log('match', img)
+        content = content.replace(/<img([\w\W]+?)\/>(?!<\/p>)/g, '<p style="text-align: center">'+img+'</p>')
+        console.log('content after', content)
         this.setState({
             editorState,
-            questaoContent: draftToHtml(convertToRaw(editorState.getCurrentContent())),
+            questaoContent: content,
             descricaoTooltip: false
         })
     }

@@ -137,7 +137,7 @@ class QuestaoSimulado extends Component {
                     </Row>
                     <Row>
                         <Col span={24}>
-                            <RadioGroup size={'large'} onChange={this.onChangeRadio} value={this.state.resposta}>
+                            <RadioGroup style={{width: '80%'}} size={'large'} onChange={this.onChangeRadio} value={this.state.resposta}>
                                 {
                                     alternativas.map(alternativa => {
                                         return(

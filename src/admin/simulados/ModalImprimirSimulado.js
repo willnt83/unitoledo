@@ -180,7 +180,7 @@ class ModalImprimirSimulado extends Component {
                                                             questao.alternativas ?
                                                             questao.alternativas.map((alternativa, index) => {
                                                                 return(
-                                                                    <p key={alternativa.descricao} className="alternativa">{alternativasArray[index]} {alternativa.descricao}</p>
+                                                                    <p key={alternativa.descricao} className="alternativa" dangerouslySetInnerHTML={{__html: alternativasArray[index] + ' ' + alternativa.descricao}} />
                                                                 )
                                                             })
                                                             :null

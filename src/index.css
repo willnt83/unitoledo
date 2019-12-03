@@ -16,3 +16,7 @@ code {
 #root {
   height: 100%
 }
+
+ant-radio-group{
+  width: 80% !important
+}
