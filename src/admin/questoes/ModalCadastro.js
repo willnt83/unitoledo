@@ -118,7 +118,7 @@ class ModalCadastro extends Component {
         images: [],
         habilidadesOptions: [],
         conteudosOptions: [],
-		tempClose: false
+        tempClose: false
     }
 
     stringToBool = (str) => {
@@ -239,6 +239,7 @@ class ModalCadastro extends Component {
     }
 
     handleModalClosure = () => {
+        console.log('--==handleModalClosure==--')
         // Resetando form
         this.props.form.resetFields()
         this.props.resetQuestao()
@@ -251,6 +252,7 @@ class ModalCadastro extends Component {
             editorState: EditorState.createEmpty(),
             images: []
         })
+
 
         this.props.showHideModalCadastro(false)
     }
@@ -440,10 +442,13 @@ class ModalCadastro extends Component {
         }
 
         // Populando campos do formulário
-        if(nextProps.questao !== null && nextProps.questao !== this.props.questao){
+        console.log('this.props.showModalCadastro', this.props.showModalCadastro)
+        console.log('nextProps.showModalCadastro', nextProps.showModalCadastro)
+        if(nextProps.questao !== null && nextProps.questao !== this.props.questao && nextProps.showModalCadastro){
+            console.log('--==Populando Campos==--')
+
             var status = nextProps.questao.valueStatus === true ? 'true' : 'false'
             this.changeAreaDeConhecimento(nextProps.questao.areaConhecimentoId)
-
             this.props.form.setFieldsValue({
                 habilidade: nextProps.questao.habilidadeId,
                 conteudo: nextProps.questao.conteudoId,
@@ -460,6 +465,7 @@ class ModalCadastro extends Component {
             const blocksFromHtml = htmlToDraft(nextProps.questao.description);
             const { contentBlocks, entityMap } = blocksFromHtml;
             const contentState = ContentState.createFromBlockArray(contentBlocks, entityMap);
+            
 
             var buttonAlternativas = nextProps.questao.tipoRespostaId === 2 ? true : false
 

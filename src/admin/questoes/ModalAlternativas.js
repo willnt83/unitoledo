@@ -169,9 +169,11 @@ class ModalAlternativas extends Component {
         content = content.replace(/\n/g, '')
         content = content.replace('<p style="text-align:center;"></p><img', '<img')
         var imgArr = content.match(/<img([\w\W]+?)\/>(?!<\/p>)/g)
-        imgArr.forEach(img => {
-            content = content.replace(img, '<div class="ant-col ant-col-24" style="text-align: center">'+img+'</div>')
-        })
+        if(imgArr != null && imgArr !== undefined){
+            imgArr.forEach(img => {
+                content = content.replace(img, '<div class="ant-col ant-col-24" style="text-align: center; margin-top: 40px;">'+img+'</div>')
+            })
+        }
 
         alternativaContent.splice(k, 1, content)
 
@@ -221,7 +223,8 @@ class ModalAlternativas extends Component {
     handleModalClosure = () => {
         this.setState({
             fieldsLoaded: false,
-            descricaoTooltip: [false, false, false, false, false]
+            descricaoTooltip: [false, false, false, false, false],
+            images: []
         })
         this.props.showHideModalAlternativas(false)
     }
@@ -284,6 +287,7 @@ class ModalAlternativas extends Component {
     }
 
     render(){
+        console.log('this.state.images', this.state.images)
         const { getFieldDecorator, getFieldValue } = this.props.form
         getFieldDecorator('keys', { initialValue: [0, 1] })
         const keys = getFieldValue('keys')

@@ -75,7 +75,8 @@ class Questoes extends Component {
 		},
 		op: null,
 		habilidadesOptions: [],
-		conteudosOptions: []
+		conteudosOptions: [],
+		modalCadastroClosing: false
 	}
 
 	requestGetAlternativas = (row) => {
