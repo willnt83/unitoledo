@@ -50,7 +50,8 @@ class ModalAlternativas extends Component {
         editorState: [EditorState.createEmpty(), EditorState.createEmpty(), EditorState.createEmpty(), EditorState.createEmpty(), EditorState.createEmpty()],
         descricaoTooltip: [false, false, false, false, false],
         alternativaContent: [],
-        images: []
+        images: [],
+        change: false
     }
 
     onDrop = (acceptedFiles, rejectedFiles) => {
@@ -192,7 +193,6 @@ class ModalAlternativas extends Component {
     removeComposicaoRow = (k) => {
         const keys = this.props.form.getFieldValue('keys')
         var alternativaCorreta = this.props.form.getFieldValue('alternativaCorreta')
-        console.log('alternativaCorreta', alternativaCorreta)
         if(keys.length === 1){
             return
         }
@@ -207,7 +207,7 @@ class ModalAlternativas extends Component {
 
         //console.log('tempAlternativas', tempAlternativas)
 
-        this.setState({keys: newKeys, alternativaContent})
+        this.setState({keys: newKeys, alternativaContent, change: true})
         this.props.updateAlternativas(alternativaCorreta, alternativasRaw)
 
         this.props.limpaAlternativaCorreta()
@@ -255,9 +255,8 @@ class ModalAlternativas extends Component {
     }
 
     componentDidUpdate(prevProps, prevState){
-        if(prevState.fieldsLoaded === false && this.state.fieldsLoaded === true){
+        if(prevState.fieldsLoaded === false && this.state.fieldsLoaded === true || this.state.change === true){
             const contentState = []
-            
             var alternativaContent = this.props.alternativas.map((alternativa) => {
                 const blocksFromHtml = htmlToDraft(alternativa.descricao)
                 const { contentBlocks, entityMap } = blocksFromHtml
@@ -274,14 +273,13 @@ class ModalAlternativas extends Component {
 
             this.setState({
                 editorState: contentState,
-                alternativaContent
+                alternativaContent,
+                change: false
             })
         }
     }
 
     render(){
-        console.log('this.state.alternativaContent', this.state.alternativaContent)
-        console.log('this.props.alternativas', this.props.alternativas)
         const { getFieldDecorator, getFieldValue } = this.props.form
         getFieldDecorator('keys', { initialValue: [0, 1] })
         const keys = getFieldValue('keys')
