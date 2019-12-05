@@ -171,7 +171,7 @@ class ModalAlternativas extends Component {
         var imgArr = content.match(/<img([\w\W]+?)\/>(?!<\/p>)/g)
         if(imgArr != null && imgArr !== undefined){
             imgArr.forEach(img => {
-                content = content.replace(img, '<div class="ant-col ant-col-24" style="text-align: center">'+img+'</div>')
+                content = content.replace(img, '<div class="ant-col ant-col-24" style="text-align: center; margin-top: 40px;">'+img+'</div>')
             })
         }
 
