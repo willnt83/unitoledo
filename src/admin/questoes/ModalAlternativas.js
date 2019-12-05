@@ -191,12 +191,25 @@ class ModalAlternativas extends Component {
 
     removeComposicaoRow = (k) => {
         const keys = this.props.form.getFieldValue('keys')
+        var alternativaCorreta = this.props.form.getFieldValue('alternativaCorreta')
+        console.log('alternativaCorreta', alternativaCorreta)
         if(keys.length === 1){
             return
         }
 
         var newKeys = keys.filter(key => key !== k)
-        this.setState({keys: newKeys})
+
+        //removendo alternativa
+        var alternativaContent = this.state.alternativaContent
+        var alternativasRaw = this.props.alternativas
+        alternativaContent.splice(k, 1)
+        alternativasRaw.splice(k, 1)
+
+        //console.log('tempAlternativas', tempAlternativas)
+
+        this.setState({keys: newKeys, alternativaContent})
+        this.props.updateAlternativas(alternativaCorreta, alternativasRaw)
+
         this.props.limpaAlternativaCorreta()
         this.props.form.setFieldsValue({alternativaCorreta: null})
     }
@@ -255,8 +268,6 @@ class ModalAlternativas extends Component {
                 )
             })
 
-            
-
             this.props.form.setFieldsValue({
                 alternativaCorreta: this.props.alternativaCorreta
             })
@@ -269,6 +280,8 @@ class ModalAlternativas extends Component {
     }
 
     render(){
+        console.log('this.state.alternativaContent', this.state.alternativaContent)
+        console.log('this.props.alternativas', this.props.alternativas)
         const { getFieldDecorator, getFieldValue } = this.props.form
         getFieldDecorator('keys', { initialValue: [0, 1] })
         const keys = getFieldValue('keys')

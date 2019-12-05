@@ -116,8 +116,6 @@ class ModalViewQuestao extends Component {
         var footerButtons = null
 
         if(this.state.questao !== null){
-            /*if(this.state.questao.key !== null)
-                title += ' '+this.state.questao.key*/
             description = this.state.questao.description
             alternativas = this.state.questao.alternativas
         }
