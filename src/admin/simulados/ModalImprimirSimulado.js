@@ -37,20 +37,40 @@ class ModalImprimirSimulado extends Component {
 
 
     handleImprimir = () => {
-        this.setState({buttonLoadingGerarPDF: true})
+        //this.setState({buttonLoadingGerarPDF: true})
+        var alter = false;
+        var disc = false;
+        this.state.questoes.forEach((record, index) => {
+            if(record.tipoResposta.id === 1){
+                alter = true;
+            }else if(record.tipoResposta.id === 2){
+                disc = true;
+            }            
+        })
 
-        var element = document.getElementById('simulado');
-        var opt = {
-            margin:       10,
-            filename:     'simulado-'+this.props.simulado.id+'.pdf',
-            image:        { type: 'jpeg', quality: 0.98 },
-            html2canvas:  { useCORS: true, scale: 3 },
-            jsPDF:        { unit: 'pt', format: 'a4', orientation: 'portrait' },
-            pagebreak:    { mode: 'avoid-all', avoid: '.dontBreak' }
-        };
+        var tipo = 3;
+        if(alter === true && disc === false){
+            tipo = 1;
+        }else if(alter === false && disc === true){
+            tipo = 2;
+        }
+        // console.log('tipo ' + tipo);
+        // console.log('idSimulado ' + this.props.simulado.id);
+        window.open(this.props.backEndPoint+'/api/print/simulado/'+this.props.simulado.id+'/'+tipo);
+
+      
+        // var element = document.getElementById('simulado');
+        // var opt = {
+        //     margin:       10,
+        //     filename:     'simulado-'+this.props.simulado.id+'.pdf',
+        //     image:        { type: 'jpeg', quality: 0.98 },
+        //     html2canvas:  { useCORS: true, scale: 3 },
+        //     jsPDF:        { unit: 'pt', format: 'a4', orientation: 'portrait' },
+        //     pagebreak:    { mode: 'avoid-all', avoid: '.dontBreak' }
+        // };
 
         // New Promise-based usage:
-        html2pdf().set(opt).from(element).toCanvas().toImg().toPdf().save();
+        //html2pdf().set(opt).from(element).toCanvas().toImg().toPdf().save();
 
 
         /*const input = document.getElementById('simulado');
