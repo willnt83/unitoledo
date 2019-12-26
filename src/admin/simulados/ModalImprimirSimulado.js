@@ -183,7 +183,6 @@ class ModalImprimirSimulado extends Component {
                         </Row>
                         
                         <Divider style={{marginTop: 10}} />
-
                         {
                             this.state.questoes.length > 0 ?
                             this.state.questoes.map((questao, index) => {
