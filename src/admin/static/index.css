@@ -207,3 +207,15 @@ code {
 .bold{
     font-weight: 800
 }
+
+.ant-menu-inline .ant-menu-item, .ant-menu-dark.ant-menu-inline .ant-menu-submenu-title{
+    font-size: 12px !important
+}
+
+.ant-menu .ant-menu-item, .ant-menu-submenu .ant-menu-submenu-title{
+    padding-left: 12px !important
+}
+
+.ant-menu-sub .ant-menu-item{
+    padding-left: 24px !important
+}

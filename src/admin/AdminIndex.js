@@ -164,7 +164,8 @@ class AdminIndex extends Component {
 					<Sider
 						trigger={null} collapsible collapsed={this.state.collapsed}
 						breakpoint="lg"
-						collapsedWidth="80"
+            collapsedWidth="80"
+            className="Teste"
 					>
 						<div className="logo" style={{display: displayLogo}}>UNITOLEDO</div>
 						<ListMenu />
