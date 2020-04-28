@@ -71,12 +71,10 @@ class Simulados extends Component {
             var inicio = inicioObj.format('DD/MM/YYYY HH:mm')
             var terminoObj = moment(simulado.dataHoraFinal)
             var termino = terminoObj.format('DD/MM/YYYY HH:mm')
-
-
             var status = simulado.status
             var btnExecutarDisabled = false
             var currDate = moment()
-            
+
             if(terminoObj <= currDate)
                 status = 'Expirado'
 
@@ -102,27 +100,22 @@ class Simulados extends Component {
         }
 
         var requestData = this.props.contextoAluno
-
         axios.defaults.headers = {
             'Authorization': this.props.authHeaders.token
         }
 
-        //if(this.props.flagSimuladoFinalizado){
-            this.setState({tableLoading: true})
-            axios.post(this.props.backEndPoint+'/api/getData', requestData)
-            .then(res => {
-                this.props.setMainData(res.data)
-                this.buildTableData()
-                this.setState({tableLoading: false})
-            })
-            .catch(error =>{
-                console.log(error)
-            })
-        //}
-        //else{
+        this.setState({tableLoading: true})
+        axios.post(this.props.backEndPoint+'/api/getData', requestData)
+        .then(res => {
+            this.props.setMainData(res.data)
             this.buildTableData()
-        //}
-        
+            this.setState({tableLoading: false})
+        })
+        .catch(error =>{
+            console.log(error)
+        })
+
+        this.buildTableData()
     }
 
     render() {

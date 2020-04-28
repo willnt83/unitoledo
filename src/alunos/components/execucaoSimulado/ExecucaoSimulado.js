@@ -43,30 +43,34 @@ class ExecucaoSimulado extends Component {
     }
 
     handleResponder = (idAlternativa) => {
-        this.setState({btnSalvarRespostaLoading: true, btnDisabled: true})
-        var questaoId = this.props.simulado.questoes[this.state.questaoNo].id
-        var request = {
-            id: 0,
-            idSimulado: this.props.simulado.id,
-            idQuestao: questaoId,
-            idAlternativa: idAlternativa,
-            idUltilizador: this.props.contextoAluno.idUtilizador
-        }
+        if(idAlternativa){
+            this.setState({btnSalvarRespostaLoading: true, btnDisabled: true})
+            var questaoId = this.props.simulado.questoes[this.state.questaoNo].id
+            var request = {
+                id: 0,
+                idSimulado: this.props.simulado.id,
+                idQuestao: questaoId,
+                idAlternativa: idAlternativa,
+                idUltilizador: this.props.contextoAluno.idUtilizador
+            }
 
-        axios.post(this.props.backEndPoint+'/api/simuladoResposta', request)
-        .then(res => {
-            // Atualizando redux simulado.questoes com a alternativa respondida na questão
-            var questoes = this.props.simulado.questoes
-            questoes[this.state.questaoNo].respondida = idAlternativa
-            this.props.setQuestaoRespondida(questoes)
-            this.countRespondidas()
-            this.setState({btnSalvarRespostaLoading: false, btnDisabled: false})
-            this.openNotificationRespondido()
-        })
-        .catch(error =>{
-            console.log('error: ', error)
-            this.setState({btnSalvarRespostaLoading: false, btnDisabled: false})
-        })
+            axios.post(this.props.backEndPoint+'/api/simuladoResposta', request)
+            .then(res => {
+                // Atualizando redux simulado.questoes com a alternativa respondida na questão
+                var questoes = this.props.simulado.questoes
+                questoes[this.state.questaoNo].respondida = idAlternativa
+                this.props.setQuestaoRespondida(questoes)
+                this.countRespondidas()
+                this.setState({btnSalvarRespostaLoading: false, btnDisabled: false})
+                this.openNotificationRespondido()
+            })
+            .catch(error =>{
+                console.log('error: ', error)
+                this.setState({btnSalvarRespostaLoading: false, btnDisabled: false})
+            })
+        }
+        else
+            this.openNotificationSemResposta()
     }
 
     handleFinalizarSimulado = () => {
@@ -114,7 +118,7 @@ class ExecucaoSimulado extends Component {
         this.setState({showModalPercentualAcerto : bool})
 
         if(!bool)
-            this.props.history.push('/alunos')
+            this.props.history.push('/app-prova/alunos')
     }
 
     handleModalCancel = () => {
@@ -135,6 +139,15 @@ class ExecucaoSimulado extends Component {
         const args = {
             message: 'Resposta registrada',
             icon: <Icon type="check-circle" style={{color: '#13a54b', fontWeight: '800'}} />,
+            duration: 2
+        }
+        notification.open(args)
+    }
+
+    openNotificationSemResposta = () => {
+        const args = {
+            message: 'Nenhuma alternativa selecionada',
+            icon: <Icon type="stop" style={{color: '#f5222d', fontWeight: '800'}} />,
             duration: 2
         }
         notification.open(args)

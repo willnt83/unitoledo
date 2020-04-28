@@ -135,6 +135,8 @@ class ModalAlternativas extends Component {
                 })
 
                 if(validation){
+                    console.log('this.props.questao', this.props.questao)
+                    console.log('this.state.alternativaContent', this.state.alternativaContent)
                     var corretaIndex = null, correta = false
                     //var tempAlternativas = values.alternativas.filter(Boolean)
                     var tempAlternativas = this.state.alternativaContent
@@ -143,11 +145,13 @@ class ModalAlternativas extends Component {
                         correta = corretaIndex === index ? true : false
 
                         return({
-                            id: '',
+                            id: this.props.questao.alternativas[index].id,
                             descricao: alternativa,
                             correta: correta
                         })
                     })
+
+                    console.log('alternativas', alternativas)
 
                     this.props.updateAlternativas(values.alternativaCorreta, alternativas)
                     this.handleModalClosure()
@@ -287,7 +291,6 @@ class ModalAlternativas extends Component {
     }
 
     render(){
-        console.log('this.state.images', this.state.images)
         const { getFieldDecorator, getFieldValue } = this.props.form
         getFieldDecorator('keys', { initialValue: [0, 1] })
         const keys = getFieldValue('keys')
@@ -298,6 +301,9 @@ class ModalAlternativas extends Component {
                 label: letrasAlternativas[index]
             })
         })
+        var blocked = false
+        if(this.props.questao)
+            blocked = this.props.questao.blocked
 
         const alternativaItens = keys.map((k, i) => {
             var label = 'Alternativa '+letrasAlternativas[(i)]
@@ -305,7 +311,7 @@ class ModalAlternativas extends Component {
                 <Row style={{marginTop: 15}} key={k}>
                     <Col span={24} className='textEditorLabel'>
                         <span className="textEditorRequired">*</span>{label}
-                        {keys.length >= 3 ? (
+                        {keys.length >= 3 && !blocked ? (
                             <Icon
                                 className="dynamic-delete-button"
                                 type="minus-circle-o"
@@ -423,7 +429,7 @@ class ModalAlternativas extends Component {
                 <Row>
                     <Col span={24}>
                         {alternativaItens}
-                        {keys.length < 5 ?
+                        {keys.length < 5 && !blocked ?
                             (
                                 <Row style={{marginBottom: 10}}>
                                     <Col span={24}>

@@ -85,9 +85,12 @@ class Questoes extends Component {
 			this.setState({mode: 'edit'})
 			var alternativaLetras = ['A', 'B', 'C', 'D', 'E']
 			var alternativaCorreta = null
+			var blocked = false
 			var alternativas = res.data.map((alternativa, index) => {
 				if(alternativa.correta)
 					alternativaCorreta = alternativaLetras[index]
+				if(alternativa.blocked)
+					blocked = true
 				return({
 					id: alternativa.id,
 					correta: alternativa.correta,
@@ -95,6 +98,7 @@ class Questoes extends Component {
 				})
 			})
 
+			row.blocked = blocked
 			row.valueAlternativaCorreta = alternativaCorreta
 			row.alternativas = alternativas
 			this.setState({questao: row, tableLoading: false})

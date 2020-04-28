@@ -64,6 +64,17 @@ class AlunosIndex extends Component {
         })
 	}
 
+	componentWillMount = () => {
+		console.log('will mount')
+		axios.get(this.props.backEndPoint+'/api/getDateTime')
+        .then(res => {
+            console.log('res.data', res.data)
+        })
+        .catch(error =>{
+            console.log(error)
+        })
+	}
+
 	render() {
 		var periodoLetivo = ''
 		if(this.props.contextoAluno)

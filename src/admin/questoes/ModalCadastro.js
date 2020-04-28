@@ -239,7 +239,6 @@ class ModalCadastro extends Component {
     }
 
     handleModalClosure = () => {
-        console.log('--==handleModalClosure==--')
         // Resetando form
         this.props.form.resetFields()
         this.props.resetQuestao()
@@ -378,12 +377,9 @@ class ModalCadastro extends Component {
     onEditorStateChange = (editorState) => {
         var content = draftToHtml(convertToRaw(editorState.getCurrentContent()));
         content = content.replace(/\n/g, '')
-        console.log('content', content)
         content = content.replace('<p style="text-align:center;"></p><img', '<img')
         var img = content.match(/<img([\w\W]+?)\/>(?!<\/p>)/g)
-        console.log('match', img)
         content = content.replace(/<img([\w\W]+?)\/>(?!<\/p>)/g, '<p style="text-align: center">'+img+'</p>')
-        console.log('content after', content)
         this.setState({
             editorState,
             questaoContent: content,
@@ -442,11 +438,7 @@ class ModalCadastro extends Component {
         }
 
         // Populando campos do formulário
-        console.log('this.props.showModalCadastro', this.props.showModalCadastro)
-        console.log('nextProps.showModalCadastro', nextProps.showModalCadastro)
         if(nextProps.questao !== null && nextProps.questao !== this.props.questao && nextProps.showModalCadastro){
-            console.log('--==Populando Campos==--')
-
             var status = nextProps.questao.valueStatus === true ? 'true' : 'false'
             this.changeAreaDeConhecimento(nextProps.questao.areaConhecimentoId)
             this.props.form.setFieldsValue({
@@ -697,7 +689,7 @@ class ModalCadastro extends Component {
                                             >
                                                 <input {...getInputProps()} />
                                                 {
-                                                    <Button><Icon type="upload" />Imagens</Button>
+                                                    <Button><Icon type="upload" />Importar Planilha</Button>
                                                 }
                                             </div>
                                         )
@@ -869,6 +861,7 @@ class ModalCadastro extends Component {
                     resetAlternativasForm={this.state.resetAlternativasForm}
                     updateResetAlternativasFormState={this.updateResetAlternativasFormState}
                     limpaAlternativaCorreta={this.limpaAlternativaCorreta}
+                    questao={this.props.questao}
                 />
             </React.Fragment>
         )
