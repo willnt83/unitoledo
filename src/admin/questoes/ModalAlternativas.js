@@ -141,7 +141,7 @@ class ModalAlternativas extends Component {
                         corretaIndex = letrasAlternativas.indexOf(values.alternativaCorreta)
                         correta = corretaIndex === index ? true : false
                         var id = 0
-                        if(this.props.questao.alternativas[index].id)
+                        if(this.props.questao.alternativas[index])
                             id = this.props.questao.alternativas[index].id
 
                         return({
