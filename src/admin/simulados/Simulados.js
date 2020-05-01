@@ -49,17 +49,6 @@ class Simulados extends Component {
                 idCurso: turma.idCurso
             })
         })
-        /*
-        .filter(turma => {
-            var hit = true
-            this.props.mainData.cursos.forEach(curso => {
-                if(turma.idCurso === curso.id)
-                    hit = false
-            })
-            return hit
-        })
-        */
-
 
         var disciplinas = this.props.mainData.disciplinas
         .map(disciplina => {
@@ -70,16 +59,6 @@ class Simulados extends Component {
                 idTurma: disciplina.idTurma
             })
         })
-        /*
-        .filter(disciplina => {
-            var hit = true
-            this.props.mainData.turmas.forEach(turma => {
-                if(disciplina.idTurma === turma.id)
-                    hit = false
-            })
-            return hit
-        })
-        */
 
         var request = {
             cursos: cursos,
@@ -177,6 +156,7 @@ class Simulados extends Component {
     }
 
     editRepublicarSimulados = (record, op) => {
+        this.setState({tableLoading: true})
         axios.get(this.props.backEndPoint+'/api/getSimuladoId/'+record.key)
         .then(res => {
             var response = res.data[0]
@@ -289,9 +269,11 @@ class Simulados extends Component {
                     this.props.setFullSimulado(simulado)
                     
                 }
+                this.setState({tableLoading: false})
         })
         .catch(error =>{
             console.log(error)
+            this.setState({tableLoading: false})
         })
     }
 

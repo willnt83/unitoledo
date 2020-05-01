@@ -22,7 +22,8 @@ class ExecucaoSimulado extends Component {
         //questoesRespondidas: null,
         questoesRespondidasCorretamente: null,
         percentualAcerto: null,
-        btnDisabled: false
+        btnDisabled: false,
+        showModalTempoExpirado: false
     }
     onChange = (e) => {
         this.setState({
@@ -81,6 +82,12 @@ class ExecucaoSimulado extends Component {
         this.setState({showModal: bool})
     }
 
+    showModalTempoExpiradoF = (bool) => {
+        this.setState({showModalTempoExpirado: bool})
+        if(!bool)
+            this.loadModalPercentualAcerto()
+    }
+
     handleModalOk = () => {
         this.setState({btnFinalizarSimuladoLoading: true})
         this.displayModal(false)
@@ -91,7 +98,6 @@ class ExecucaoSimulado extends Component {
             this.openNotificationFinalizado()
             this.props.setSimuladoFinalizado(true)
             this.loadModalPercentualAcerto()
-            //this.props.history.push('/alunos')
         })
         .catch(error =>{
             console.log(error)
@@ -101,7 +107,6 @@ class ExecucaoSimulado extends Component {
     loadModalPercentualAcerto = () => {
         axios.get(this.props.backEndPoint+'/api/getResult/'+this.props.simulado.id+'/'+this.props.contextoAluno.idUtilizador)
         .then(res => {
-            console.log('res.data', res.data)
             this.setState({
                 questoesRespondidas: res.data.result[0].questoesRespondidas,
                 questoesRespondidasCorretamente: res.data.result[0].questoesCertas,
@@ -155,10 +160,12 @@ class ExecucaoSimulado extends Component {
 
     countRespondidas = () => {
         var questoesRespondidas = 0
-        this.props.simulado.questoes.forEach(questao => {
-            if(questao.respondida !== 0)
-                questoesRespondidas++
-        })
+        //if(this.props.simulado.questoes){
+            this.props.simulado.questoes.forEach(questao => {
+                if(questao.respondida !== 0)
+                    questoesRespondidas++
+            })
+        //}
         this.setState({questoesRespondidas})
     }
 
@@ -169,6 +176,20 @@ class ExecucaoSimulado extends Component {
         }
 
         this.countRespondidas()
+    }
+
+    onComplete(){
+        this.setState({teste: true})
+        this.showModalTempoExpiradoF(true)
+        axios.get(this.props.backEndPoint+'/api/finalizaSimulado/'+this.props.simulado.id+'/'+this.props.contextoAluno.idUtilizador)
+        .then(res => {
+            this.setState({btnFinalizarSimuladoLoading: false})
+            this.openNotificationFinalizado()
+            this.props.setSimuladoFinalizado(true)
+        })
+        .catch(error =>{
+            console.log(error)
+        })
     }
 
     render() {
@@ -196,7 +217,11 @@ class ExecucaoSimulado extends Component {
                         <Col span={24} align="end" style={{fontWeight: 500}}>
                             <Icon type="clock-circle"  style={{ marginRight: 10 }}/>
                             <span style={{ marginRight: 10 }}>Tempo restante:</span>
-                            <Countdown date={Date.now() + periodoExecucaoObj * 60000} daysInHours={true} />
+                            <Countdown
+                                date={Date.now() + periodoExecucaoObj * 60000}
+                                daysInHours={true}
+                                onComplete={() => this.onComplete(this)}
+                            />
                         </Col>
                     </Row>
                 </Content>
@@ -227,6 +252,22 @@ class ExecucaoSimulado extends Component {
                     <p>Você está prestes a finalizar o simulado e não poderá alterar suas respostas posteriormente.</p>
                     <p><strong>Questões respondidas: {this.state.questoesRespondidas} de {this.props.simulado.questoes.length}</strong></p>
                     <p>Confirmar finalização do simulado?</p>
+                </Modal>
+
+                <Modal
+                    title="Tempo expirado!"
+                    visible={this.state.showModalTempoExpirado}
+                    maskClosable={false}
+                    onCancel={() => this.showModalTempoExpiradoF(false)}
+                    footer={[
+                        <Button className="buttonGreen" key="submit" type="primary" onClick={() => this.showModalTempoExpiradoF(false)}>
+                            <Icon type="check" />OK
+                        </Button>,
+                    ]}
+                >
+                    <p>O tempo para realização do simulado terminou.</p>
+                    <p>Apenas as questões respondidas serão consideradas.</p>
+                    <p><strong>Questões respondidas: {this.state.questoesRespondidas} de {this.props.simulado.questoes.length}</strong></p>
                 </Modal>
 
                 <Modal

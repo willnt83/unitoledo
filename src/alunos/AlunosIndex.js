@@ -3,10 +3,10 @@ import { Layout, Icon, Row, Col, Button, Modal, Menu } from "antd"
 import { BrowserRouter as Router, Route, withRouter, Link } from "react-router-dom"
 import { connect } from 'react-redux'
 import axios from "axios"
-//import PageTitle from "./layout/PageTitle"
 import Dashboard from './Dashboard'
 import Simulados from './Simulados'
 import ExecucaoSimulado from './components/execucaoSimulado/ExecucaoSimulado'
+import moment from 'moment'
 
 import "antd/dist/antd.css"
 import "../static/style.css"
@@ -65,10 +65,11 @@ class AlunosIndex extends Component {
 	}
 
 	componentWillMount = () => {
-		console.log('will mount')
 		axios.get(this.props.backEndPoint+'/api/getDateTime')
         .then(res => {
-            console.log('res.data', res.data)
+			var currentDTObj = moment(res.data, 'YYYY-MM-DDTHH:mm:ss')
+			var currentDT = currentDTObj.format('DD/MM/YYYY HH:mm:ss')
+			this.props.setCurrentDateTime(currentDT)
         })
         .catch(error =>{
             console.log(error)
@@ -168,14 +169,16 @@ const MapStateToProps = (state) => {
 		pageTitle: state.pageTitle,
 		usuarioNome: state.usuarioNome,
 		authHeaders: state.authHeaders,
-		contextoAluno: state.contextoAluno
+		contextoAluno: state.contextoAluno,
+		currentDT: state.currentDT
 	}
 }
 
 const mapDispatchToProps = (dispatch) => {
     return {
         setPageTitle: (pageTitle) => { dispatch({ type: 'SET_PAGETITLE', pageTitle }) },
-        resetAll: () => { dispatch({ type: 'RESET_ALL' }) }
+		resetAll: () => { dispatch({ type: 'RESET_ALL' }) },
+		setCurrentDateTime: (currentDT) => { dispatch({ type: 'SET_CURRENTDATETIME', currentDT }) }
     }
 }
 

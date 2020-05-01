@@ -23,7 +23,6 @@ class Simulados extends Component {
     }
 
     getSimulado = (record) => {
-        console.log('record', record)
         this.setState({tableLoading: true})
         var request = {
             "id": record.key,
@@ -51,7 +50,6 @@ class Simulados extends Component {
                     },
                     questoes: res.data
                 }
-                console.log('setSimulado', simulado)
                 this.props.setSimulado(simulado)
                 this.props.history.push('/app-prova/alunos/execucao-simulado')
             })
@@ -73,7 +71,7 @@ class Simulados extends Component {
             var termino = terminoObj.format('DD/MM/YYYY HH:mm')
             var status = simulado.status
             var btnExecutarDisabled = false
-            var currDate = moment()
+            var currDate = moment(this.props.currentDT, "DD/MM/YYYY HH:mm:ss")
 
             if(terminoObj <= currDate)
                 status = 'Expirado'
@@ -191,7 +189,8 @@ const MapStateToProps = (state) => {
         contextoAluno: state.contextoAluno,
         usuarioNome: state.usuarioNome,
         contexto: state.contexto,
-        authHeaders: state.authHeaders
+        authHeaders: state.authHeaders,
+        currentDT: state.currentDT
 	}
 }
 
