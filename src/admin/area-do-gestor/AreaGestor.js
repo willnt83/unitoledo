@@ -24,7 +24,8 @@ class AreaGestor extends Component {
 		tableData: [],
 		dataAvail: false,
         buttonLoadingGerarPDF: false,
-        dataDash: []
+        dataDash: [],
+        comboBoxDisabled: true
 	}
     compareByDates = (a, b) => {
         a = moment(a, 'DD/MM/YYYY HH:mm')
@@ -35,6 +36,7 @@ class AreaGestor extends Component {
     }
 
 	getSimulados = () => {
+        this.setState({comboBoxDisabled: true})
 		var cursos = this.props.mainData.cursos.map(curso => {
             return({
                 id: curso.id,
@@ -76,7 +78,8 @@ class AreaGestor extends Component {
 						id: simulado.id,
 						description: simulado.nome
 					})
-				})
+                }),
+                comboBoxDisabled: false
 			})
         })
         .catch(error =>{
@@ -208,7 +211,8 @@ class AreaGestor extends Component {
 										<Select
 											style={{ width: '100%' }}
 											placeholder="Selecione o simulado"
-											onChange={this.change}
+                                            onChange={this.change}
+                                            disabled={this.state.comboBoxDisabled}
 										>
 											{
 												this.state.simuladosOptions.map((item) => {
