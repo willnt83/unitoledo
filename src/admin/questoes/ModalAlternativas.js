@@ -135,10 +135,7 @@ class ModalAlternativas extends Component {
                 })
 
                 if(validation){
-                    console.log('this.props.questao', this.props.questao)
-                    console.log('this.state.alternativaContent', this.state.alternativaContent)
                     var corretaIndex = null, correta = false
-                    //var tempAlternativas = values.alternativas.filter(Boolean)
                     var tempAlternativas = this.state.alternativaContent
                     var alternativas = tempAlternativas.map((alternativa, index) => {
                         corretaIndex = letrasAlternativas.indexOf(values.alternativaCorreta)
