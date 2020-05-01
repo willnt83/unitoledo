@@ -143,9 +143,12 @@ class ModalAlternativas extends Component {
                     var alternativas = tempAlternativas.map((alternativa, index) => {
                         corretaIndex = letrasAlternativas.indexOf(values.alternativaCorreta)
                         correta = corretaIndex === index ? true : false
+                        var id = 0
+                        if(this.props.questao.alternativas[index].id)
+                            id = this.props.questao.alternativas[index].id
 
                         return({
-                            id: this.props.questao.alternativas[index].id,
+                            id: id,
                             descricao: alternativa,
                             correta: correta
                         })
