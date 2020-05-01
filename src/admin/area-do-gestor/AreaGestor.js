@@ -134,6 +134,7 @@ class AreaGestor extends Component {
 	}
 
 	render() {
+        console.log('tableData', this.state.tableData)
 		const { getFieldDecorator } = this.props.form
 
 		const columns = [
@@ -153,13 +154,13 @@ class AreaGestor extends Component {
 				title: "Questões Respondidas",
 				dataIndex: "questoesRespondidas",
 				width: 200,
-				sorter: (a, b) => { return a.questoesRespondidas.localeCompare(b.questoesRespondidas)}
+				sorter: (a, b) => a.questoesRespondidas - b.questoesRespondidas
             },
             {
 				title: "Questões Certas",
 				dataIndex: "respostasCorretas",
 				width: 200,
-				sorter: (a, b) => { return a.respostasCorretas.localeCompare(b.respostasCorretas)}
+				sorter: (a, b) => a.respostasCorretas - b.respostasCorretas
 			},
 			{
 				title: "%",
