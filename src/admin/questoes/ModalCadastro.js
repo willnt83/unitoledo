@@ -7,9 +7,6 @@ import classNames from 'classnames'
 import Dropzone from 'react-dropzone'
 import moment from 'moment'
 import axios from "axios"
-/*import {MegadraftEditor, editorStateFromRaw, editorStateToJSON} from "megadraft"
-import "../../../node_modules/megadraft/dist/css/megadraft.css"*/
-
 import { EditorState, convertToRaw, ContentState } from 'draft-js'
 import { Editor } from 'react-draft-wysiwyg'
 import '../../../node_modules/react-draft-wysiwyg/dist/react-draft-wysiwyg.css'

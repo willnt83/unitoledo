@@ -51,7 +51,8 @@ class ModalAlternativas extends Component {
         descricaoTooltip: [false, false, false, false, false],
         alternativaContent: [],
         images: [],
-        change: false
+        change: false,
+        remocao: false
     }
 
     onDrop = (acceptedFiles, rejectedFiles) => {
@@ -140,9 +141,15 @@ class ModalAlternativas extends Component {
                     var alternativas = tempAlternativas.map((alternativa, index) => {
                         corretaIndex = letrasAlternativas.indexOf(values.alternativaCorreta)
                         correta = corretaIndex === index ? true : false
-                        var id = 0
-                        if(this.props.questao.alternativas[index])
-                            id = this.props.questao.alternativas[index].id
+                        var id = ''
+                        if(this.props.questao){
+                            if(this.props.questao.alternativas[index])
+                                id = this.props.questao.alternativas[index].id
+                            else
+                                id = 0
+                        }
+                        
+                        
 
                         return({
                             id: id,
@@ -150,8 +157,6 @@ class ModalAlternativas extends Component {
                             correta: correta
                         })
                     })
-
-                    console.log('alternativas', alternativas)
 
                     this.props.updateAlternativas(values.alternativaCorreta, alternativas)
                     this.handleModalClosure()
@@ -215,9 +220,7 @@ class ModalAlternativas extends Component {
         alternativaContent.splice(k, 1)
         alternativasRaw.splice(k, 1)
 
-        //console.log('tempAlternativas', tempAlternativas)
-
-        this.setState({keys: newKeys, alternativaContent, change: true})
+        this.setState({keys: newKeys, alternativaContent, change: true, remocao: true})
         this.props.updateAlternativas(alternativaCorreta, alternativasRaw)
 
         this.props.limpaAlternativaCorreta()
@@ -267,25 +270,30 @@ class ModalAlternativas extends Component {
 
     componentDidUpdate(prevProps, prevState){
         if(prevState.fieldsLoaded === false && this.state.fieldsLoaded === true || this.state.change === true){
-            const contentState = []
-            var alternativaContent = this.props.alternativas.map((alternativa) => {
-                const blocksFromHtml = htmlToDraft(alternativa.descricao)
-                const { contentBlocks, entityMap } = blocksFromHtml
-                contentState.push(EditorState.createWithContent(ContentState.createFromBlockArray(contentBlocks, entityMap)))
+            if(!this.state.remocao){
+                const contentState = []
+                var alternativaContent = this.props.alternativas.map((alternativa) => {
+                    const blocksFromHtml = htmlToDraft(alternativa.descricao)
+                    const { contentBlocks, entityMap } = blocksFromHtml
+                    contentState.push(EditorState.createWithContent(ContentState.createFromBlockArray(contentBlocks, entityMap)))
 
-                return(
-                    alternativa.descricao
-                )
-            })
+                    return(
+                        alternativa.descricao
+                    )
+                })
+                this.setState({
+                    editorState: contentState,
+                    alternativaContent
+                })
+            }
 
             this.props.form.setFieldsValue({
                 alternativaCorreta: this.props.alternativaCorreta
             })
 
             this.setState({
-                editorState: contentState,
-                alternativaContent,
-                change: false
+                change: false,
+                remocao: false
             })
         }
     }
