@@ -336,14 +336,14 @@ class Simulados extends Component {
 				title: "ID",
 				dataIndex: "key",
                 sorter: (a, b) => a.key - b.key,
-                fixed: 'left'
+                /*fixed: 'left'*/
             },
 			{
 				title: "Nome",
                 dataIndex: "nome",
                 sorter: (a, b) => { return a.nome.localeCompare(b.nome)},
                 width: 400,
-                fixed: 'left'
+                /*fixed: 'left'*/
             },
             {
 				title: "Disponibilidade",
