@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Layout, Table, Button, Icon } from 'antd'
+import { Layout, Table, Button, Icon, notification } from 'antd'
 import { withRouter } from "react-router-dom"
 import { connect } from 'react-redux'
 import moment from 'moment'
@@ -22,6 +22,25 @@ class Simulados extends Component {
         return 0
     }
 
+    showNotification = (msg, success) => {
+        var type = null
+        var style = null
+        if(success){
+            type = 'check-circle'
+            style = {color: '#4ac955', fontWeight: '800'}
+        }
+        else {
+            type = 'exclamation-circle'
+            style = {color: '#f5222d', fontWeight: '800'}
+        }
+        const args = {
+            message: msg,
+            icon:  <Icon type={type} style={style} />,
+            duration: 5
+        }
+        notification.open(args)
+    }
+
     getSimulado = (record) => {
         this.setState({tableLoading: true})
         var request = {
@@ -31,37 +50,44 @@ class Simulados extends Component {
 
         axios.post(this.props.backEndPoint+'/api/statusSimulado', request)
         .then(res => {
-            axios.get(encodeURI(this.props.backEndPoint+'/api/getSimuladoIdAlunoQuestao/'+record.key+'/'+this.props.contextoAluno.idUtilizador+'/'+this.props.usuarioNome))
-            .then(res => {
+            if(!res.data.success){
+                this.showNotification(res.data.message, res.data.success)
                 this.setState({tableLoading: false})
-                var inicioObj = moment(record.inicio, 'DD/MM/YYYY HH:mm')
-                var fimObj = moment(record.fim, 'DD/MM/YYYY HH:mm')
-
-                var simulado = {
-                    id: record.key,
-                    nome: record.nome,
-                    inicio: {
-                        data: inicioObj.format('DD/MM/YYYY'),
-                        hora: inicioObj.format('HH:mm')
-                    },
-                    fim: {
-                        data: fimObj.format('DD/MM/YYYY'),
-                        hora: fimObj.format('HH:mm')
-                    },
-                    questoes: res.data
-                }
-                this.props.setSimulado(simulado)
-                this.props.history.push('/app-prova/alunos/execucao-simulado')
-            })
-            .catch(error =>{
-                this.setState({tableLoading: false})
-                console.log(error)
-            })
+            }
+            else{
+                axios.get(encodeURI(this.props.backEndPoint+'/api/getSimuladoIdAlunoQuestao/'+record.key+'/'+this.props.contextoAluno.idUtilizador+'/'+this.props.usuarioNome))
+                .then(res => {
+                    this.setState({tableLoading: false})
+                    var inicioObj = moment(record.inicio, 'DD/MM/YYYY HH:mm')
+                    var fimObj = moment(record.fim, 'DD/MM/YYYY HH:mm')
+                    var simulado = {
+                        id: record.key,
+                        nome: record.nome,
+                        inicio: {
+                            data: inicioObj.format('DD/MM/YYYY'),
+                            hora: inicioObj.format('HH:mm')
+                        },
+                        fim: {
+                            data: fimObj.format('DD/MM/YYYY'),
+                            hora: fimObj.format('HH:mm')
+                        },
+                        questoes: res.data
+                    }
+                    this.props.setSimulado(simulado)
+                    this.props.history.push('/app-prova/alunos/execucao-simulado')
+                })
+                .catch(error =>{
+                    this.setState({tableLoading: false})
+                    console.log(error)
+                })
+            }
         })
         .catch(error =>{
             console.log(error)
         })
     }
+
+    
 
     buildTableData = () => {
         var tableData = this.props.mainData.simulados.map(simulado => {
@@ -169,8 +195,8 @@ class Simulados extends Component {
                 }}>
                     <h3>Simulados Disponíveis</h3>
                     <Table 
-                        columns={ columns } 
-                        dataSource={ this.state.tableData }
+                        columns={columns} 
+                        dataSource={this.state.tableData}
                         loading={this.state.tableLoading}
                         scroll={{ y: 950 }}
                     />

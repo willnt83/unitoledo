@@ -19,12 +19,31 @@ class ExecucaoSimulado extends Component {
         btnSalvarRespostaLoading: false,
         btnFinalizarSimuladoLoading: false,
         showModalPercentualAcerto: false,
-        //questoesRespondidas: null,
         questoesRespondidasCorretamente: null,
         percentualAcerto: null,
         btnDisabled: false,
         showModalTempoExpirado: false
     }
+
+    showNotification = (msg, success) => {
+        var type = null
+        var style = null
+        if(success){
+            type = 'check-circle'
+            style = {color: '#4ac955', fontWeight: '800'}
+        }
+        else {
+            type = 'exclamation-circle'
+            style = {color: '#f5222d', fontWeight: '800'}
+        }
+        const args = {
+            message: msg,
+            icon:  <Icon type={type} style={style} />,
+            duration: 10
+        }
+        notification.open(args)
+    }
+
     onChange = (e) => {
         this.setState({
             value: e.target.value,
@@ -57,13 +76,19 @@ class ExecucaoSimulado extends Component {
 
             axios.post(this.props.backEndPoint+'/api/simuladoResposta', request)
             .then(res => {
-                // Atualizando redux simulado.questoes com a alternativa respondida na questão
-                var questoes = this.props.simulado.questoes
-                questoes[this.state.questaoNo].respondida = idAlternativa
-                this.props.setQuestaoRespondida(questoes)
-                this.countRespondidas()
-                this.setState({btnSalvarRespostaLoading: false, btnDisabled: false})
-                this.openNotificationRespondido()
+                if(!res.data.success){
+                    this.showNotification(res.data.message, res.data.success)
+                    this.props.history.push('/app-prova/alunos')
+                }
+                else{
+                    // Atualizando redux simulado.questoes com a alternativa respondida na questão
+                    var questoes = this.props.simulado.questoes
+                    questoes[this.state.questaoNo].respondida = idAlternativa
+                    this.props.setQuestaoRespondida(questoes)
+                    this.countRespondidas()
+                    this.setState({btnSalvarRespostaLoading: false, btnDisabled: false})
+                    this.openNotificationRespondido()
+                }
             })
             .catch(error =>{
                 console.log('error: ', error)
@@ -94,10 +119,16 @@ class ExecucaoSimulado extends Component {
 
         axios.get(this.props.backEndPoint+'/api/finalizaSimulado/'+this.props.simulado.id+'/'+this.props.contextoAluno.idUtilizador)
         .then(res => {
-            this.setState({btnFinalizarSimuladoLoading: false})
-            this.openNotificationFinalizado()
-            this.props.setSimuladoFinalizado(true)
-            this.loadModalPercentualAcerto()
+            if(!res.data.success){
+                this.showNotification(res.data.message, res.data.success)
+                this.props.history.push('/app-prova/alunos')
+            }
+            else{
+                this.setState({btnFinalizarSimuladoLoading: false})
+                this.openNotificationFinalizado()
+                this.props.setSimuladoFinalizado(true)
+                this.loadModalPercentualAcerto()
+            }
         })
         .catch(error =>{
             console.log(error)
