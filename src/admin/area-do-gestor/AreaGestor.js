@@ -144,7 +144,7 @@ class AreaGestor extends Component {
 			{
 				title: "ID",
 				dataIndex: "key",
-				width: 20,
+				width: 100,
 				sorter: (a, b) => a.key - b.key
 			},
 			{

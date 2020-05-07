@@ -122,13 +122,13 @@ class PlanilhaEnade extends Component {
 			{
 				title: "ANO",
 				dataIndex: "ano",
-				width: 20,
+				width: 100,
 				sorter: (a, b) => a.key - b.key
 			},
 			{
 				title: "Código Área",
 				dataIndex: "codigoArea",
-				width: 100,
+				width: 150,
 				sorter: (a, b) => { return a.codigoArea.localeCompare(b.codigoArea)}
 			},
 			{
@@ -140,7 +140,7 @@ class PlanilhaEnade extends Component {
             {
 				title: "Data de Atualização",
 				dataIndex: "dataAtualizacao",
-				width: 100,
+				width: 200,
 				sorter: (a, b) => { return a.dataAtualizacao.localeCompare(b.dataAtualizacao)}
             },
             {
@@ -148,7 +148,7 @@ class PlanilhaEnade extends Component {
 				colSpan: 2,
 				dataIndex: "excluirPlanilha",
 				align: "center",
-                width: 100,
+                width: 150,
                
 				render: (text, record) => {                                       
 					return (

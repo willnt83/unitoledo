@@ -334,7 +334,8 @@ class Simulados extends Component {
         const columns = [
             {
 				title: "ID",
-				dataIndex: "key",
+                dataIndex: "key",
+                width: 100,
                 sorter: (a, b) => a.key - b.key,
                 /*fixed: 'left'*/
             },
@@ -347,27 +348,35 @@ class Simulados extends Component {
             },
             {
 				title: "Disponibilidade",
-				dataIndex: "situacao",
+                dataIndex: "situacao",
+                align: "center",
+                width: 160,
 				sorter: (a, b) => { return a.situacao.localeCompare(b.situacao)}
             },
             {
 				title: "Status",
-				dataIndex: "status",
+                dataIndex: "status",
+                align: "center",
+                width: 150,
 				sorter: (a, b) => { return a.status.localeCompare(b.status)}
             },
 			{
 				title: "Início em",
-				dataIndex: "inicio",
+                dataIndex: "inicio",
+                align: "center",
+                width: 200,
 				sorter: (a, b) => this.compareByDates(a.inicio, b.inicio)
 			},
 			{
 				title: "Término em",
-				dataIndex: "termino",
+                dataIndex: "termino",
+                align: "center",
+                width: 200,
 				sorter: (a, b) => this.compareByDates(a.termino, b.termino)
             },
             {
 				title: "Ações",
-				colSpan: 2,
+				colSpan: 1,
 				dataIndex: "actions",
 				align: "center",
                 width: 300,
@@ -407,7 +416,7 @@ class Simulados extends Component {
                                     <Button className="actionButton" title="Editar" type="primary" onClick={() => this.editRepublicarSimulados(record, 'editar')} disabled={editarButtonDisabled}><Icon type="edit" /></Button>
                                 </Col>
                             </Row>
-                            <Row style={{marginTop: 5}}>
+                            <Row  style={{marginTop: 5}}>
                                 <Col span={24}>
                                     <Button className="actionButton buttonRed" title="Excluir" onClick={() => this.showModal(true, record.key)} disabled={exlcuirButtonDisabled}><Icon type="delete" /></Button>
                                     <Button className="actionButton buttonPurple" title="Republicar" onClick={() => this.editRepublicarSimulados(record, 'republicar')} disabled={republicarButtonDisabled}><Icon type="redo" /></Button>

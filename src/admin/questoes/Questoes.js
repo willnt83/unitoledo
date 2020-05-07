@@ -318,6 +318,7 @@ class Questoes extends Component {
 			{
 				title: "ID",
 				dataIndex: "key",
+				width: 100,
 				sorter: (a, b) => a.key - b.key,
 				fixed: 'left',
 			},
@@ -330,17 +331,20 @@ class Questoes extends Component {
 			{
 				title: "Habilidade",
 				dataIndex: "habilidade",
+				width: 300,
 				sorter: (a, b) => { return a.habilidade.localeCompare(b.habilidade)}
 				//width: 139
 			},
 			{
 				title: "Conteúdo",
 				dataIndex: "conteudo",
+				width: 300,
 				sorter: (a, b) => { return a.conteudo.localeCompare(b.conteudo)}
 			},
 			{
 				title: "Área de Conhecimento",
 				dataIndex: "areaConhecimento",
+				width: 400,
 				sorter: (a, b) => { return a.areaConhecimento.localeCompare(b.areaConhecimento)}
 				//width: 93
 			},
