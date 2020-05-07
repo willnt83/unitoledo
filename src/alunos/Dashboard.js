@@ -46,8 +46,8 @@ class Dashboard extends Component {
                 res.data.simulados.forEach(row => {
                     if(row.id === simulado.idSimulado){
                         nome = row.nome
-                        dataInicio = moment(row.dataHoraInicial).format('DD/MM/YYYY hh:mm:ss')
-                        dataFim = moment(row.dataHoraFinal).format('DD/MM/YYYY hh:mm:ss')
+                        dataInicio = moment(row.dataHoraInicial).format('DD/MM/YYYY HH:mm:ss')
+                        dataFim = moment(row.dataHoraFinal).format('DD/MM/YYYY HH:mm:ss')
                     }
                 })
 
