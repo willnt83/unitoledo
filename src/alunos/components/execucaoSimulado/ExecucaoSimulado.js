@@ -22,7 +22,8 @@ class ExecucaoSimulado extends Component {
         questoesRespondidasCorretamente: null,
         percentualAcerto: null,
         btnDisabled: false,
-        showModalTempoExpirado: false
+        showModalTempoExpirado: false,
+        serverTimeObj: null
     }
 
     showNotification = (msg, success) => {
@@ -205,8 +206,17 @@ class ExecucaoSimulado extends Component {
             this.props.resetAll()
             window.location.replace("/app-prova")
         }
-
         this.countRespondidas()
+
+        // Recuperando horário do servidor
+        axios.get(this.props.backEndPoint+'/api/getDateTime')
+        .then(res => {
+            var currentDTObj = moment(res.data, 'YYYY-MM-DDTHH:mm:ss')
+			this.setState({serverTimeObj: currentDTObj})
+        })
+        .catch(error =>{
+            console.log(error)
+        })
     }
 
     onComplete(){
@@ -226,12 +236,18 @@ class ExecucaoSimulado extends Component {
     render() {
         // Settando periodoExecucao (em minutos) com a diferença entre as dataHoras Inicial e Final
         var periodoExecucaoObj = null
-        if(this.props.simulado){
-            
-            var inicioObj = moment()
+        if(this.props.simulado && this.state.serverTimeObj !== null){
+            var inicioObj = this.state.serverTimeObj
             var terminoObj = moment(this.props.simulado.fim.data+ ' '+this.props.simulado.fim.hora, 'DD/MM/YYYY HH:mm')
             periodoExecucaoObj = terminoObj.diff(inicioObj, 'minutes')
+            /*
+            console.log('Server time: ', this.state.serverTimeObj.format("H:m:s"))
+            console.log('Finish time: ', terminoObj.format("H:m:s"))
+            console.log('Periodo de execucao minutos: ', periodoExecucaoObj)
+            */
         }
+
+        //console.log('periodoExecucaoObj', periodoExecucaoObj)
 
         return (
             <Layout className="layout">
@@ -248,11 +264,14 @@ class ExecucaoSimulado extends Component {
                         <Col span={24} align="end" style={{fontWeight: 500}}>
                             <Icon type="clock-circle"  style={{ marginRight: 10 }}/>
                             <span style={{ marginRight: 10 }}>Tempo restante:</span>
-                            <Countdown
-                                date={Date.now() + periodoExecucaoObj * 60000}
-                                daysInHours={true}
-                                onComplete={() => this.onComplete(this)}
-                            />
+                            {
+                                this.state.serverTimeObj !== null ?
+                                <Countdown
+                                    date={Date.now() + periodoExecucaoObj * 60000}
+                                    daysInHours={true}
+                                    onComplete={() => this.onComplete(this)}
+                                />:null
+                            }
                         </Col>
                     </Row>
                 </Content>
