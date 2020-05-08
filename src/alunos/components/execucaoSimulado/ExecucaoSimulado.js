@@ -54,12 +54,14 @@ class ExecucaoSimulado extends Component {
     handleProximo = () => {
         var questaoNo = this.state.questaoNo + 1
         this.countRespondidas()
+        this.getCurrentServerTime();
         this.setState({questaoNo})
     }
 
     handleAnterior = () => {
         var questaoNo = this.state.questaoNo - 1
         this.countRespondidas()
+        this.getCurrentServerTime();
         this.setState({questaoNo})
     }
 
@@ -87,6 +89,7 @@ class ExecucaoSimulado extends Component {
                     questoes[this.state.questaoNo].respondida = idAlternativa
                     this.props.setQuestaoRespondida(questoes)
                     this.countRespondidas()
+                    this.getCurrentServerTime();
                     this.setState({btnSalvarRespostaLoading: false, btnDisabled: false})
                     this.openNotificationRespondido()
                 }
@@ -207,16 +210,20 @@ class ExecucaoSimulado extends Component {
             window.location.replace("/app-prova")
         }
         this.countRespondidas()
+        this.getCurrentServerTime();
+       
+    }
 
-        // Recuperando horário do servidor
-        axios.get(this.props.backEndPoint+'/api/getDateTime')
-        .then(res => {
-            var currentDTObj = moment(res.data, 'YYYY-MM-DDTHH:mm:ss')
-			this.setState({serverTimeObj: currentDTObj})
-        })
-        .catch(error =>{
-            console.log(error)
-        })
+    getCurrentServerTime = () => {
+         // Recuperando horário do servidor
+         axios.get(this.props.backEndPoint+'/api/getDateTime')
+         .then(res => {             
+             var currentDTObj = moment(res.data, 'YYYY-MM-DDTHH:mm:ss')
+             this.setState({serverTimeObj: currentDTObj})
+         })
+         .catch(error =>{
+             console.log(error)
+         })
     }
 
     onComplete(){
@@ -239,12 +246,12 @@ class ExecucaoSimulado extends Component {
         if(this.props.simulado && this.state.serverTimeObj !== null){
             var inicioObj = this.state.serverTimeObj
             var terminoObj = moment(this.props.simulado.fim.data+ ' '+this.props.simulado.fim.hora, 'DD/MM/YYYY HH:mm')
-            periodoExecucaoObj = terminoObj.diff(inicioObj, 'minutes')
-            /*
-            console.log('Server time: ', this.state.serverTimeObj.format("H:m:s"))
-            console.log('Finish time: ', terminoObj.format("H:m:s"))
-            console.log('Periodo de execucao minutos: ', periodoExecucaoObj)
-            */
+            periodoExecucaoObj = terminoObj.diff(inicioObj, 'milliseconds')
+            
+            // console.log('Server time: ', this.state.serverTimeObj.format("H:m:s"))
+            // console.log('Finish time: ', terminoObj.format("H:m:s"))
+            // console.log('Periodo de execucao minutos: ', periodoExecucaoObj)                        
+            
         }
 
         //console.log('periodoExecucaoObj', periodoExecucaoObj)
@@ -267,7 +274,7 @@ class ExecucaoSimulado extends Component {
                             {
                                 this.state.serverTimeObj !== null ?
                                 <Countdown
-                                    date={Date.now() + periodoExecucaoObj * 60000}
+                                    date={Date.now() + periodoExecucaoObj}
                                     daysInHours={true}
                                     onComplete={() => this.onComplete(this)}
                                 />:null
