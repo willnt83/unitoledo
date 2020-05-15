@@ -200,7 +200,7 @@ class AdminIndex extends Component {
 								component={route.main}
 							/>
 						))}
-						<Footer style={{ textAlign: "center" }}>UNITOLEDO ©2018</Footer>
+						<Footer style={{ textAlign: "center" }}>UNITOLEDO ©2020 | versão 1.00</Footer>
 					</Layout>
 				</Layout>
 			</Router>
