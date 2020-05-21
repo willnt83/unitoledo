@@ -1,8 +1,8 @@
 const initState = {
     // Original
     //backEndPoint: 'http://localhost:5000',
-    backEndPoint: 'https://app-prova.unitoledo.br',
-    //backEndPoint: 'https://ut-prova-api.herokuapp.com',
+    //backEndPoint: 'https://app-prova.unitoledo.br',
+    backEndPoint: 'https://ut-prova-api.herokuapp.com',
     currentDT: null,
     contexto: null,
     contextoData: null,
@@ -45,8 +45,8 @@ const RootReducer = (state = initState, action) => {
     if(action.type === 'RESET_ALL'){
         return {
             //backEndPoint: 'http://localhost:5000',
-            backEndPoint: 'https://app-prova.unitoledo.br',
-            //backEndPoint: 'https://ut-prova-api.herokuapp.com',
+            //backEndPoint: 'https://app-prova.unitoledo.br',
+            backEndPoint: 'https://ut-prova-api.herokuapp.com',
             currentDT: null,
             contexto: null,
             contextoData: null,

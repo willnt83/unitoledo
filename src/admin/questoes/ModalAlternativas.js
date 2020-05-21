@@ -136,6 +136,7 @@ class ModalAlternativas extends Component {
                 })
 
                 if(validation){
+                    console.log('this.state.alternativaContent', this.state.alternativaContent)
                     var corretaIndex = null, correta = false
                     var tempAlternativas = this.state.alternativaContent
                     var alternativas = tempAlternativas.map((alternativa, index) => {
@@ -148,16 +149,13 @@ class ModalAlternativas extends Component {
                             else
                                 id = 0
                         }
-                        
-                        
-
                         return({
                             id: id,
                             descricao: alternativa,
                             correta: correta
                         })
                     })
-
+                    console.log('alternativas', alternativas)
                     this.props.updateAlternativas(values.alternativaCorreta, alternativas)
                     this.handleModalClosure()
                 }
@@ -186,8 +184,6 @@ class ModalAlternativas extends Component {
 
         alternativaContent.splice(k, 1, content)
 
-        
-
         this.setState({
             editorState,
             alternativaContent,
@@ -202,7 +198,12 @@ class ModalAlternativas extends Component {
         var lastIndex = (Math.max.apply(null, keys) + 1)
         const nextKeys = keys.concat(lastIndex)
 
-        this.setState({keys: nextKeys})
+        var newKeysNew = []
+        nextKeys.forEach((key, index) => {
+            newKeysNew.push(index)
+        })
+
+        this.setState({keys: newKeysNew})
     }
 
     removeComposicaoRow = (k) => {
@@ -211,7 +212,6 @@ class ModalAlternativas extends Component {
         if(keys.length === 1){
             return
         }
-
         var newKeys = keys.filter(key => key !== k)
 
         //removendo alternativa
@@ -220,7 +220,16 @@ class ModalAlternativas extends Component {
         alternativaContent.splice(k, 1)
         alternativasRaw.splice(k, 1)
 
-        this.setState({keys: newKeys, alternativaContent, change: true, remocao: true})
+        var editorState = this.state.editorState
+        editorState.splice(k, 1)
+        editorState.push(EditorState.createEmpty())
+
+        var newKeysNew = []
+        newKeys.forEach((key, index) => {
+            newKeysNew.push(index)
+        })
+
+        this.setState({keys: newKeysNew, alternativaContent, editorState, change: true, remocao: true})
         this.props.updateAlternativas(alternativaCorreta, alternativasRaw)
 
         this.props.limpaAlternativaCorreta()
@@ -299,6 +308,16 @@ class ModalAlternativas extends Component {
     }
 
     render(){
+        console.log('----------------------------------------------------------------')
+        console.log('this.state.keys', this.state.keys)
+        console.log('this.state.alternativaContent', this.state.alternativaContent)
+        
+        console.log('this.state.editorState[0]', draftToHtml(convertToRaw(this.state.editorState[0].getCurrentContent())))
+        console.log('this.state.editorState[1]', draftToHtml(convertToRaw(this.state.editorState[1].getCurrentContent())))
+        console.log('this.state.editorState[2]', draftToHtml(convertToRaw(this.state.editorState[2].getCurrentContent())))
+        console.log('this.state.editorState[3]', draftToHtml(convertToRaw(this.state.editorState[3].getCurrentContent())))
+        console.log('this.state.editorState[4]', draftToHtml(convertToRaw(this.state.editorState[4].getCurrentContent())))
+
         const { getFieldDecorator, getFieldValue } = this.props.form
         getFieldDecorator('keys', { initialValue: [0, 1] })
         const keys = getFieldValue('keys')
