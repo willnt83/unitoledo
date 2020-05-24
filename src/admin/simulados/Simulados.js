@@ -21,7 +21,8 @@ class Simulados extends Component {
         simuladoId: null,
         confirmarRemocaoLoading: false,
         showModalImprimir: false,
-        simulado: null
+        simulado: null,
+        serverTimeObj: null
     }
 
     compareByDates = (a, b) => {
@@ -148,6 +149,7 @@ class Simulados extends Component {
         axios.post(this.props.backEndPoint+'/api/updateStatus', request)
         .then(res => {
             this.getSimulados()
+            this.getCurrentServerTime()
         })
         .catch(error =>{
             console.log('error: ', error)
@@ -284,6 +286,7 @@ class Simulados extends Component {
             this.showModal(false, '')
             this.setState({confirmarRemocaoLoading: false})
             this.getSimulados()
+            this.getCurrentServerTime()
         })
         .catch(error =>{
             console.log('error: ', error)
@@ -328,6 +331,19 @@ class Simulados extends Component {
         this.props.resetSimulado()
         this.setState({tableLoading: true})
         this.getSimulados()
+        this.getCurrentServerTime()
+    }
+
+    getCurrentServerTime = () => {
+        // Recuperando horário do servidor
+        axios.get(this.props.backEndPoint+'/api/getDateTime')
+        .then(res => {             
+            var currentDTObj = moment(res.data, 'YYYY-MM-DDTHH:mm:ss')
+            this.setState({serverTimeObj: currentDTObj})
+        })
+        .catch(error =>{
+            console.log(error)
+        })
     }
 
     render(){
@@ -390,8 +406,10 @@ class Simulados extends Component {
 
                     publicarButtonDisabled = record.rascunho ? false : true
                     moverRascunhoButtonDisabled = record.rascunho ? true : false
-
-                    var currDateTime = moment()
+                    
+                    var currDateTime = moment(this.state.serverTimeObj, "DD/MM/YYYY HH:mm:ss")
+                    //var currDateTime = moment()
+                    console.log('Data e hora servidor ' + currDateTime)
                     
                     if(
                         (record.inicioObj <= currDateTime && currDateTime <= record.terminoObj && record.situacao !== 'Rascunho') ||
