@@ -13,7 +13,7 @@
     "html2pdf.js": "^0.9.1",
     "jspdf": "^1.5.3",
     "megadraft": "^0.6.5",
-    "moment": "^2.24.0",
+    "moment": "^2.29.2",
     "prop-types": "^15.7.2",
     "react": "^16.8.6",
     "react-circular-progressbar": "^1.2.1",
